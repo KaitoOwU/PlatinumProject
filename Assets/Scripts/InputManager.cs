@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using UnityEngine.Windows;
 
 public class InputManager : MonoBehaviour
@@ -20,7 +21,7 @@ public class InputManager : MonoBehaviour
 
     private PlayerInput _inputs;
     [SerializeField]
-    private int index;
+    private int _index;
 
 
     private void Start()
@@ -36,14 +37,15 @@ public class InputManager : MonoBehaviour
     private void _AddController()
     {
         PlayerController[] allPlayers = FindObjectsOfType<PlayerController>();
+        /*
         InputManager[] allControllers = FindObjectsOfType<InputManager>();
 
-        index = allControllers.Length;
+        _index = allControllers.Length;
 
-        if (index > 4)
-            Debug.Log("Too many controllers : " + index);
-
-        PlayerController player = allPlayers.FirstOrDefault(m => m.PlayerIndex == index);
+        if (_index > 4)
+            Debug.Log("Too many controllers : " + _index);
+*/
+        PlayerController player = allPlayers.FirstOrDefault(m => m.PlayerIndex == _inputs.playerIndex+1);
 
         player.SetUp(this, _inputs, transform);
     }
