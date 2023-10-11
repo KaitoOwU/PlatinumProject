@@ -59,17 +59,17 @@ public class PlayerController : MonoBehaviour
         _rigidbody.AddForce((Quaternion.AngleAxis(90, Vector3.right) * dir) * _moveSpeed);
     }
 
-    public void _Interact()
+    private void _Interact()
     {
         
     }
 
-    public void _UseTool()
+    private void _UseTool()
     {
         
     }
 
-    public void _Pause()
+    private void _Pause()
     {
         
     }
