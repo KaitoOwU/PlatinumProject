@@ -11,11 +11,11 @@ using UnityEngine.Windows;
 public class InputManager : MonoBehaviour
 {
     [Header("Events for each input")]
-    public UnityEvent _OnMoveStarted;
-    public UnityEvent _OnMoveCanceled;
-    public UnityEvent _OnInteract;
-    public UnityEvent _OnUseTool;
-    public UnityEvent _OnPause;
+    public UnityEvent OnMoveStarted;
+    public UnityEvent OnMoveCanceled;
+    public UnityEvent OnInteract;
+    public UnityEvent OnUseTool;
+    public UnityEvent OnPause;
 
 
     private PlayerInput _inputs;
@@ -73,10 +73,10 @@ public class InputManager : MonoBehaviour
     #endregion
 
     #region Invoking Methods
-    private void _Move_started(InputAction.CallbackContext obj) => _OnMoveStarted?.Invoke();
-    private void _Move_canceled(InputAction.CallbackContext obj) => _OnMoveCanceled?.Invoke();
-    private void _Interact_performed(InputAction.CallbackContext obj) => _OnInteract?.Invoke();
-    private void _Tool_performed(InputAction.CallbackContext obj) => _OnUseTool?.Invoke();
-    private void _Pause_performed(InputAction.CallbackContext obj) => _OnPause?.Invoke();
+    private void _Move_started(InputAction.CallbackContext obj) => OnMoveStarted?.Invoke();
+    private void _Move_canceled(InputAction.CallbackContext obj) => OnMoveCanceled?.Invoke();
+    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke();
+    private void _Tool_performed(InputAction.CallbackContext obj) => OnUseTool?.Invoke();
+    private void _Pause_performed(InputAction.CallbackContext obj) => OnPause?.Invoke();
     #endregion
 }

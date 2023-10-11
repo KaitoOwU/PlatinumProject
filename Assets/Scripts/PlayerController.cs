@@ -29,17 +29,17 @@ public class PlayerController : MonoBehaviour
 
         _rigidbody = GetComponent<Rigidbody>();
 
-        _inputManager._OnInteract.AddListener(_Interact);
-        _inputManager._OnUseTool.AddListener(_UseTool);
-        _inputManager._OnPause.AddListener(_Pause);
+        _inputManager.OnInteract.AddListener(_Interact);
+        _inputManager.OnUseTool.AddListener(_UseTool);
+        _inputManager.OnPause.AddListener(_Pause);
     }
     private void _CleanUp()
     {
         if(_inputManager != null)
         {
-            _inputManager._OnInteract.RemoveListener(_Interact);
-            _inputManager._OnUseTool.RemoveListener(_UseTool);
-            _inputManager._OnPause.RemoveListener(_Pause);
+            _inputManager.OnInteract.RemoveListener(_Interact);
+            _inputManager.OnUseTool.RemoveListener(_UseTool);
+            _inputManager.OnPause.RemoveListener(_Pause);
         }
     }
     #endregion
