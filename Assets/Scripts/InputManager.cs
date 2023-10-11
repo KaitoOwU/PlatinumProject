@@ -1,14 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class InputManager : MonoBehaviour
 {
-    private PlayerInput _inputs;
-
     [Header("Events for each input")]
     public UnityEvent _OnMoveStarted;
     public UnityEvent _OnMoveCanceled;
@@ -16,42 +17,54 @@ public class InputManager : MonoBehaviour
     public UnityEvent _OnUseTool;
     public UnityEvent _OnPause;
 
-    public PlayerInput Inputs => _inputs;
+
+    private PlayerInput _inputs;
+    [SerializeField]
+    private int index;
 
 
     private void Start()
     {
-        SetupEvents();
+        _inputs = GetComponent<PlayerInput>();
+
+        _SetupEvents();
+        _AddController();
     }
 
-    private void OnDisable()
+    private void OnDisable() => _CleanEvents();
+    
+    private void _AddController()
     {
-        WipeEvents();
+        PlayerController[] allPlayers = FindObjectsOfType<PlayerController>();
+        InputManager[] allControllers = FindObjectsOfType<InputManager>();
+
+        index = allControllers.Length;
+
+        if (index > 4)
+            Debug.Log("Too many controllers : " + index);
+
+        PlayerController player = allPlayers.FirstOrDefault(m => m.PlayerIndex == index);
+
+        player.SetUp(this, _inputs, transform);
     }
 
-    #region Subscription Setup
-    void SetupEvents()
+    #region Subscription Setup & Cleanup
+    private void _SetupEvents()
     {
-        _inputs = new PlayerInput();
-
-        _inputs.Gameplay.Move.started += Move_performed;
-        _inputs.Gameplay.Move.canceled += Move_canceled;
-        _inputs.Gameplay.Interact.performed += Interact_performed;
-        _inputs.Gameplay.Tool.performed += Tool_performed;
-        _inputs.Gameplay.Pause.performed += Pause_performed;
-
-        _inputs.Enable();
+        _inputs.actions["Move"].started += _Move_started;
+        _inputs.actions["Move"].canceled += _Move_canceled;
+        _inputs.actions["Move"].started += _Interact_performed;
+        _inputs.actions["Tool"].started += _Tool_performed;
+        _inputs.actions["Pause"].started += _Pause_performed;
     }
 
-    void WipeEvents()
+    private void _CleanEvents()
     {
-        _inputs.Gameplay.Move.performed -= Move_performed;
-        _inputs.Gameplay.Move.canceled -= Move_canceled;
-        _inputs.Gameplay.Interact.performed -= Interact_performed;
-        _inputs.Gameplay.Tool.performed -= Tool_performed;
-        _inputs.Gameplay.Pause.performed -= Pause_performed;
-
-        _inputs.Disable();
+        _inputs.actions["Move"].started -= _Move_started;
+        _inputs.actions["Move"].canceled -= _Move_canceled;
+        _inputs.actions["Move"].started -= _Interact_performed;
+        _inputs.actions["Tool"].started -= _Tool_performed;
+        _inputs.actions["Pause"].started -= _Pause_performed;
     }
     #endregion
 
@@ -60,11 +73,10 @@ public class InputManager : MonoBehaviour
     #endregion
 
     #region Invoking Methods
-
-    private void Move_performed(InputAction.CallbackContext obj) => _OnMoveStarted?.Invoke();
-    private void Move_canceled(InputAction.CallbackContext obj) => _OnMoveCanceled?.Invoke();
-    private void Interact_performed(InputAction.CallbackContext obj) => _OnInteract?.Invoke();
-    private void Tool_performed(InputAction.CallbackContext obj) => _OnUseTool?.Invoke();
-    private void Pause_performed(InputAction.CallbackContext obj) => _OnPause?.Invoke();
+    private void _Move_started(InputAction.CallbackContext obj) => _OnMoveStarted?.Invoke();
+    private void _Move_canceled(InputAction.CallbackContext obj) => _OnMoveCanceled?.Invoke();
+    private void _Interact_performed(InputAction.CallbackContext obj) => _OnInteract?.Invoke();
+    private void _Tool_performed(InputAction.CallbackContext obj) => _OnUseTool?.Invoke();
+    private void _Pause_performed(InputAction.CallbackContext obj) => _OnPause?.Invoke();
     #endregion
 }

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4225384284503517056}
   - component: {fileID: 5511993704468072213}
   - component: {fileID: 2423820674682253852}
-  - component: {fileID: 6513548060523731366}
   - component: {fileID: 7194705274358064913}
   - component: {fileID: 1229175423087836582}
   m_Layer: 0
@@ -110,69 +109,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6513548060523731366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8471462756668250507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50f019281a3625b419524dc4d8c1ec1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _OnMoveStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  _OnMoveCanceled:
-    m_PersistentCalls:
-      m_Calls: []
-  _OnInteract:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6513548060523731366}
-        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
-        m_MethodName: DebugString
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Interact
-          m_BoolArgument: 0
-        m_CallState: 2
-  _OnUseTool:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6513548060523731366}
-        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
-        m_MethodName: DebugString
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Use Tool
-          m_BoolArgument: 0
-        m_CallState: 2
-  _OnPause:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6513548060523731366}
-        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
-        m_MethodName: DebugString
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Pause
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &7194705274358064913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 15
+  _playerIndex: 0
 --- !u!54 &1229175423087836582
 Rigidbody:
   m_ObjectHideFlags: 0
