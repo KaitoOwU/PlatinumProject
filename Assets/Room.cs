@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Room : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
+    [SerializeField] private Room _nextRoom;
+    [SerializeField] private Room _previousRoom;
+    [SerializeField] private Vector3 position;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Room NextRoom { get => _nextRoom; set => _nextRoom = value; }
+    public Room PreviousRoom { get => _previousRoom; set => _previousRoom = value; }
+    public Vector3 Position { get => position; set => position = value; }
 }

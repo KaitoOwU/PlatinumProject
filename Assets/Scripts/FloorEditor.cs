@@ -12,11 +12,10 @@ public class PathCreator : EditorWindow
 {
     private string FolderPath = "Assets/Resources/ScriptableObject/";
     private string _extention = ".asset";
-    private DefaultAsset targetFolder = null;
     private Vector2 _windowSize;
     private SCRoomsLists _floors;
     private Floor _editedRooms;
-    Vector2 scrollPos;
+    Vector2 _scrollPos;
 
 
     [MenuItem("Platinium/FloorCreator")]
@@ -40,11 +39,7 @@ public class PathCreator : EditorWindow
     private void InitGUI()
     {
         _windowSize = new Vector2(position.width, position.height);
-        targetFolder = (DefaultAsset)EditorGUILayout.ObjectField(
-            "Select Folder",
-            targetFolder,
-            typeof(DefaultAsset),
-            false);
+
     }
 
     private void OnGUIUpdate()
@@ -84,16 +79,16 @@ public class PathCreator : EditorWindow
         GUILayout.Label("Path:", EditorStyles.boldLabel);
         if (_editedRooms.Rooms.Count > 30)
         {
-            scrollPos =EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(500), GUILayout.Height(800));
+            _scrollPos =EditorGUILayout.BeginScrollView(_scrollPos, GUILayout.Width(500), GUILayout.Height(800));
         }
         if (_editedRooms.Rooms.Count > 0)
         {
             for (int i = 0; i < _editedRooms.Rooms.Count; i++)
             {
-                EditorGUILayout.BeginHorizontal(SetOptionSize(200, 200, 20, 20));
+                EditorGUILayout.BeginHorizontal(SetOptionSize(100, 100, 20, 20));
                 EditorGUILayout.LabelField("Room: ");
                 
-                //_editedRooms.Rooms[i]= EditorGUILayout.ObjectField("Prefab", _editedRooms.Rooms[i], typeof(GameObject),false) as GameObject;
+                _editedRooms.Rooms[i]= EditorGUILayout.ObjectField( _editedRooms.Rooms[i], typeof(GameObject),false, SetOptionSize(100, 100, 20, 20)) as GameObject;
 
                 if (GUILayout.Button("X", SetOptionSize(20, 20, 20, 20)))
                 {
