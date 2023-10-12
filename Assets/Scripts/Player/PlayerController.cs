@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public int PlayerIndex => _playerIndex;
+    public InputManager Inputs => _inputManager;
 
     [Header("Parameters")]
     [SerializeField]
