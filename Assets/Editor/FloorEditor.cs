@@ -17,7 +17,7 @@ public class PathCreator : EditorWindow
     private Floor _editedRooms;
     Vector2 _scrollPos;
 
-
+    #region SetUp
     [MenuItem("Platinium/FloorCreator")]
     public static void ShowWindow()
     {
@@ -49,6 +49,8 @@ public class PathCreator : EditorWindow
         DisplayRooms();
         EditorGUILayout.EndHorizontal();
     }
+    #endregion
+    #region Display
     private void DisplayFloorList()
     {
         EditorGUILayout.BeginVertical(SetOptionSize(200, 200, _windowSize.y, _windowSize.y));
@@ -112,6 +114,7 @@ public class PathCreator : EditorWindow
 
         EditorGUILayout.EndVertical();
     }
+    #endregion
     private void SaveInputs()
     {
         string path = $"{FolderPath}Paths{_extention}";
