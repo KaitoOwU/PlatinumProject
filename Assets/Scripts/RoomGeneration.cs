@@ -14,18 +14,6 @@ public class RoomGeneration : MonoBehaviour
     {
         _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
         _reseting = false;
-        Shuffle();
-    }
-    private void Update()
-    {
-        if (_reseting)
-        {
-            Shuffle();
-            _reseting = false;
-        }
-    }
-    private void Shuffle()
-    {
         int i = 0;
         if (_roomsInPlay.Count > 0)
         {
@@ -52,6 +40,29 @@ public class RoomGeneration : MonoBehaviour
             _roomsInPlay.Add(room2);
             i++;
             _currentFloor.Clear();
+        }
+    }
+    private void Update()
+    {
+        if (_reseting)
+        {
+            Shuffle();
+            _reseting = false;
+        }
+    }
+    private void Shuffle()
+    {
+        List<Vector3> roomsPos = new List<Vector3>();
+        for(int i = 0; i < _floor.Count; i++)
+        {
+            roomsPos.Add(_floor[i].FloorA.transform.position);
+            roomsPos.Add(_floor[i].FloorB.transform.position);
+        }
+        foreach(GameObject room in _roomsInPlay)
+        {
+            int rand = Random.Range(0, roomsPos.Count);
+            room.transform.position = roomsPos[rand];
+            roomsPos.RemoveAt(rand);
         }
     }
 }
