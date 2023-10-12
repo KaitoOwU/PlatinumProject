@@ -36,18 +36,8 @@ public class InputManager : MonoBehaviour
     
     private void _AddController()
     {
-        PlayerController[] allPlayers = FindObjectsOfType<PlayerController>();
-        /*
-        InputManager[] allControllers = FindObjectsOfType<InputManager>();
-
-        _index = allControllers.Length;
-
-        if (_index > 4)
-            Debug.Log("Too many controllers : " + _index);
-*/
-        PlayerController player = allPlayers.FirstOrDefault(m => m.PlayerIndex == _inputs.playerIndex+1);
-
-        player.SetUp(this, _inputs, transform);
+        //Get right character depending on controller index and launch set up (= control corresponding character)
+        GameManager.Instance.PlayerList[_inputs.playerIndex + 1].PlayerController.SetUp(this, _inputs, transform);
     }
 
     #region Subscription Setup & Cleanup
