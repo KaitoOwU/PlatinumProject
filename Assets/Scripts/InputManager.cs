@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour
     private void _AddController()
     {
         //Get right character depending on controller index and launch set up (= control corresponding character)
-        GameManager.Instance.PlayerList[_inputs.playerIndex + 1].PlayerController.SetUp(this, _inputs, transform);
+        GameManager.Instance.PlayerList[_inputs.playerIndex].PlayerController.SetUp(this, _inputs, transform);
     }
 
     #region Subscription Setup & Cleanup
