@@ -115,13 +115,13 @@ public class PathCreator : EditorWindow
         EditorGUILayout.EndVertical();
     }
     #endregion
-    private void SaveInputs()
+    private void SaveInputs()//doesn't really work but the whole things works without it
     {
         string path = $"{FolderPath}Paths{_extention}";
 
         if (!File.Exists(path))
         {
-            Debug.Log("Input doesn't exists");
+            Debug.Log("ça marche?");
             AssetDatabase.CreateAsset(_floors, path);
         }
         AssetDatabase.SaveAssets();
