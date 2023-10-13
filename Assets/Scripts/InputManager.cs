@@ -14,15 +14,20 @@ public class InputManager : MonoBehaviour
     [Header("Events for each input")]
     public UnityEvent OnMoveStarted;
     public UnityEvent OnMoveCanceled;
-    public UnityEvent OnInteract;
+    public UnityEvent<Player> OnInteract;
     public UnityEvent OnUseTool;
     public UnityEvent OnPause;
 
 
     private PlayerInput _inputs;
+    private Player _player;
     [SerializeField]
     private int _index;
 
+    private void Awake()
+    {
+        _player = GetComponentInParent<Player>();
+    }
 
     private void Start()
     {
@@ -67,7 +72,7 @@ public class InputManager : MonoBehaviour
     #region Invoking Methods
     private void _Move_started(InputAction.CallbackContext obj) => OnMoveStarted?.Invoke();
     private void _Move_canceled(InputAction.CallbackContext obj) => OnMoveCanceled?.Invoke();
-    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke();
+    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke(_player);
     private void _Tool_performed(InputAction.CallbackContext obj) => OnUseTool?.Invoke();
     private void _Pause_performed(InputAction.CallbackContext obj) => OnPause?.Invoke();
     #endregion

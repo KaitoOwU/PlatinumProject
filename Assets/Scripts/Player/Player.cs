@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 public class Player : MonoBehaviour
 {
 
-    [FormerlySerializedAs("_holdedItem")] [SerializeField] private ItemData _heldItem;
+    [SerializeField] private ItemData _heldItem;
     private PlayerController _playerController;
 
     public PlayerController PlayerController => _playerController;

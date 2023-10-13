@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rigidbody;
     private InputManager _inputManager;
     private PlayerInput _inputs;
+    private Player _player;
 
     private void OnDisable() => _CleanUp();
 
@@ -26,11 +27,12 @@ public class PlayerController : MonoBehaviour
     {
         _inputManager = inputManager;
         _inputs = inputs;
+        _player = _inputs.GetComponent<Player>();
         playerController.SetParent(transform); 
 
         _rigidbody = GetComponent<Rigidbody>();
 
-        _inputManager.OnInteract.AddListener(_Interact);
+        _inputManager.OnInteract.AddListener(_Interact(_player));
         _inputManager.OnUseTool.AddListener(_UseTool);
         _inputManager.OnPause.AddListener(_Pause);
     }
@@ -38,7 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         if(_inputManager != null)
         {
-            _inputManager.OnInteract.RemoveListener(_Interact);
+            _inputManager.OnInteract.RemoveListener(_Interact(_player));
             _inputManager.OnUseTool.RemoveListener(_UseTool);
             _inputManager.OnPause.RemoveListener(_Pause);
         }

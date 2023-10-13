@@ -13,6 +13,9 @@ public class Item : Interactable
 
     protected override void OnInteract(Player player)
     {
+        if (player.HeldItem != null)
+            return;
+        
         player.HeldItem = _itemData;
         Destroy(gameObject);
     }
