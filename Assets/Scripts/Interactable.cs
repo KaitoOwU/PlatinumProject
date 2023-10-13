@@ -26,7 +26,7 @@ public class Interactable : MonoBehaviour
         Player p = other.GetComponent<Player>();
         _playersInRange.Add(p);
 
-        p.PlayerController.Inputs.OnInteractStarted.AddListener(() => OnInteract(p));
+        p.PlayerController.Inputs.OnInteractStarted.AddListener(OnInteract);
             
         _onPlayerEnterRange?.Invoke();
     }
@@ -39,7 +39,7 @@ public class Interactable : MonoBehaviour
         Player p = other.GetComponent<Player>();
         _playersInRange.Remove(p);
         
-        p.PlayerController.Inputs.OnInteractStarted.RemoveListener(() => OnInteract(p));
+        p.PlayerController.Inputs.OnInteractStarted.RemoveListener(OnInteract);
         
         _onPlayerExitRange?.Invoke();
     }

@@ -30,6 +30,7 @@ public class Statue : Interactable
                 {
                     _statueArm.transform.DOLocalMoveZ(.6f, .5f);
                     _reparationState = ReparationState.REPAIRED;
+                    Debug.Log("Quête complétée !!!!!");
                 }
                 
                 break;

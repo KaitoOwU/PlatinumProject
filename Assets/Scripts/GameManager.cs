@@ -111,5 +111,8 @@ public class GameManager : MonoBehaviour
         public int Id => id;
         [SerializeField]
         private int id;
+
+        public Player PlayerRef => _playerRef;
+        [SerializeField] private Player _playerRef;
     }
 }

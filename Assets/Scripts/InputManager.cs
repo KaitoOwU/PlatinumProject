@@ -14,20 +14,14 @@ public class InputManager : MonoBehaviour
     [Header("Events for each input")]
     public UnityEvent OnMoveStarted;
     public UnityEvent OnMoveCanceled;
-    public UnityEvent OnInteractStarted;
-    public UnityEvent OnInteractCanceled;
+    public UnityEvent<Player> OnInteractStarted;
+    public UnityEvent<Player> OnInteractCanceled;
     public UnityEvent OnUseTool;
     public UnityEvent OnPause;
 
     private PlayerInput _inputs;
-    private Player _player;
     [SerializeField]
     private int _index;
-
-    private void Awake()
-    {
-        _player = GetComponentInParent<Player>();
-    }
 
     private void Start()
     {
@@ -74,8 +68,8 @@ public class InputManager : MonoBehaviour
     #region Invoking Methods
     private void _Move_started(InputAction.CallbackContext obj) => OnMoveStarted?.Invoke();
     private void _Move_canceled(InputAction.CallbackContext obj) => OnMoveCanceled?.Invoke();
-    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteractStarted?.Invoke();
-    private void _Interact_canceled(InputAction.CallbackContext obj) => OnInteractCanceled?.Invoke();
+    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteractStarted?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
+    private void _Interact_canceled(InputAction.CallbackContext obj) => OnInteractCanceled?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
     private void _Tool_performed(InputAction.CallbackContext obj) => OnUseTool?.Invoke();
     private void _Pause_performed(InputAction.CallbackContext obj) => OnPause?.Invoke();
     #endregion

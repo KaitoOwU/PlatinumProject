@@ -28,7 +28,6 @@ public class PlayerController : MonoBehaviour
     {
         _inputManager = inputManager;
         _inputs = inputs;
-        _player = _inputs.GetComponent<Player>();
         playerController.SetParent(transform); 
 
         _rigidbody = GetComponent<Rigidbody>();
@@ -65,8 +64,8 @@ public class PlayerController : MonoBehaviour
         _rigidbody.AddForce((Quaternion.AngleAxis(90, Vector3.right) * dir) * _moveSpeed);
     }
 
-    private void _Interact() => _isInteractHeld = true;
-    private void _StopInteract() => _isInteractHeld = false;
+    private void _Interact(Player player) => _isInteractHeld = true;
+    private void _StopInteract(Player player) => _isInteractHeld = false;
 
     private void _UseTool()
     {
