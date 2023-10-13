@@ -5,15 +5,34 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GamePhase CurrentGamePhase;
-    public List<Player> PlayerList
+    public GamePhase CurrentGamePhase
+    {
+        get => _currentGamePhase; 
+        set => _currentGamePhase = value;
+    }
+    private GamePhase _currentGamePhase;
+
+    public CameraState CurrentCameraState
+    {
+        get; private set;
+    }
+    private CameraState _currentCameraState;
+
+    public List<PlayerInfo> PlayerList
     {
         get => _playerList;
         set => _playerList = value;
     }
 
     [SerializeField]
-    private List<Player> _playerList = new(4);
+    private List<PlayerInfo> _playerList = new(4);
+
+    [SerializeField]
+    private GameObject _fullCamera;
+    [SerializeField]
+    private GameObject _splitCameraLeft;
+    [SerializeField]
+    private GameObject _splitCameraRight;
 
     public enum GamePhase
     {
@@ -22,6 +41,11 @@ public class GameManager : MonoBehaviour
         GAME,
         GUESS,
         END,
+    }    
+    public enum CameraState
+    {
+        FULL,
+        SPLIT,
     }
 
     #region Singleton
@@ -56,8 +80,29 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void SwitchCameraState(CameraState targetState)
+    {
+        if(_currentCameraState == targetState)
+            return;
+        switch(targetState)
+        {
+            case CameraState.FULL:
+                _fullCamera.SetActive(true);
+                _splitCameraLeft.SetActive(false);
+                _splitCameraRight.SetActive(false);
+                CurrentCameraState = targetState;
+                return;
+            case CameraState.SPLIT:
+                _fullCamera.SetActive(false);
+                _splitCameraLeft.SetActive(true);
+                _splitCameraRight.SetActive(true);
+                CurrentCameraState = targetState;
+                return;
+        }
+    }
+
     [Serializable]
-    public struct Player 
+    public struct PlayerInfo
     { 
         public PlayerController PlayerController => playerController;
         [SerializeField]

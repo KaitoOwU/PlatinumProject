@@ -14,10 +14,10 @@ public class InputManager : MonoBehaviour
     [Header("Events for each input")]
     public UnityEvent OnMoveStarted;
     public UnityEvent OnMoveCanceled;
-    public UnityEvent OnInteract;
+    public UnityEvent OnInteractStarted;
+    public UnityEvent OnInteractCanceled;
     public UnityEvent OnUseTool;
     public UnityEvent OnPause;
-
 
     private PlayerInput _inputs;
     [SerializeField]
@@ -46,6 +46,7 @@ public class InputManager : MonoBehaviour
         _inputs.actions["Move"].started += _Move_started;
         _inputs.actions["Move"].canceled += _Move_canceled;
         _inputs.actions["Interact"].started += _Interact_performed;
+        _inputs.actions["Interact"].canceled += _Interact_canceled;
         _inputs.actions["Tool"].started += _Tool_performed;
         _inputs.actions["Pause"].started += _Pause_performed;
     }
@@ -67,7 +68,8 @@ public class InputManager : MonoBehaviour
     #region Invoking Methods
     private void _Move_started(InputAction.CallbackContext obj) => OnMoveStarted?.Invoke();
     private void _Move_canceled(InputAction.CallbackContext obj) => OnMoveCanceled?.Invoke();
-    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke();
+    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteractStarted?.Invoke();
+    private void _Interact_canceled(InputAction.CallbackContext obj) => OnInteractCanceled?.Invoke();
     private void _Tool_performed(InputAction.CallbackContext obj) => OnUseTool?.Invoke();
     private void _Pause_performed(InputAction.CallbackContext obj) => OnPause?.Invoke();
     #endregion
