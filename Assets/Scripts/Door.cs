@@ -5,7 +5,16 @@ using static GameManager;
 
 public class Door : Interactable
 {
-    [SerializeField] Transform _tpPoint;
+    [SerializeField] private Transform _tpPoint;
+    [SerializeField] private DoorType _doorTypeValue;
+
+    public DoorType DoorTypeValue => _doorTypeValue;
+    public enum DoorType
+    {
+        ENTRY,
+        EXIT,
+    }
+
     protected override void OnInteract(Player player)
     {
         Debug.Log(gameObject.name + " interacted with");
@@ -23,12 +32,16 @@ public class Door : Interactable
                 }
                 if (count == 2) // 2 POUR TEST ==> 4 !!!
                 {
-                    //TP cameras to camera point in next room !!!
+                    Hub hub = (Hub)player.CurrentRoom;
                     GameManager.Instance.SwitchCameraState(CameraState.SPLIT);
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
-                    Door[] doors = FindObjectsOfType<Door>(); // A FAIRE AVEC INFOS DE ROOM
-                    foreach (Door d in doors)
-                        d.TP_Players();
+
+                    //TP All players to next room depending on the door they're interacting with (after they all hold button)
+                    hub.RoomDoorLeft.TP_Players();
+                    hub.RoomDoorRight.TP_Players();
+
+                    hub.RoomDoorLeft.TP_Camera(hub.RoomLeft);
+                    hub.RoomDoorRight.TP_Camera(hub.RoomRight);
                 }
                 return;
         }
@@ -38,6 +51,18 @@ public class Door : Interactable
         foreach(Player p in _playersInRange)
         {
             p.gameObject.transform.position = _tpPoint.position;
+        }
+    }
+    public void TP_Camera(Room room)
+    {
+        switch (room.RoomSide)
+        {
+            case Room.Side.LEFT:
+                GameManager.Instance.TP_LeftCamera(room.CameraPoint);
+                break;
+            case Room.Side.RIGHT:
+                GameManager.Instance.TP_RightCamera(room.CameraPoint);
+                break;
         }
     }
 

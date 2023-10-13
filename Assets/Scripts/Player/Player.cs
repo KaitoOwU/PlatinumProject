@@ -12,6 +12,10 @@ public class Player : MonoBehaviour
     private PlayerController _playerController;
 
     public PlayerController PlayerController => _playerController;
+    public Room CurrentRoom => _currentRoom;
+
+    [SerializeField]
+    private Room _currentRoom;
 
     public ItemData HeldItem
     {

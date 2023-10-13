@@ -8,6 +8,39 @@ public class Room : MonoBehaviour
     [SerializeField] private Room _nextRoom;
     [SerializeField] private Room _previousRoom;
 
+    [SerializeField] private Door _nextRoomDoor;
+    [SerializeField] private Door _previousRoomDoor;
+
+    [SerializeField] private Side _roomSide;
+
+    [SerializeField] protected Transform _cameraPoint;
+
+    public enum Side
+    {
+        LEFT,
+        RIGHT,
+    }
+
     public Room NextRoom { get => _nextRoom; set => _nextRoom = value; }
-    public Room PreviousRoom { get => _previousRoom; set => _previousRoom = value; }
+    public Room PreviousRoom { get => _previousRoom; set => _previousRoom = value; }    
+    
+    public Door NextRoomDoor { get => _nextRoomDoor; set => _nextRoomDoor = value; }
+    public Door PreviousRoomDoor { get => _previousRoomDoor; set => _previousRoomDoor = value; }
+    public Side RoomSide { get => _roomSide; set => _roomSide = value; }
+    public Transform CameraPoint { get => _cameraPoint; set => _cameraPoint = value; }
+}
+
+public class Hub : Room
+{
+    [SerializeField] private Room _roomLeft;
+    [SerializeField] private Room _roomRight;
+
+    [SerializeField] private Door _roomDoorLeft;
+    [SerializeField] private Door _roomDoorRight;
+
+    public Room RoomLeft { get => _roomLeft; set => _roomLeft = value; }
+    public Room RoomRight { get => _roomRight; set => _roomRight = value; }    
+    public Door RoomDoorLeft { get => _roomDoorLeft; set => _roomDoorLeft = value; }
+    public Door RoomDoorRight { get => _roomDoorRight; set => _roomDoorRight = value; }
+
 }

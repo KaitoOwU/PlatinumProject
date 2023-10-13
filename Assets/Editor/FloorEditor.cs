@@ -57,8 +57,9 @@ public class PathCreator : EditorWindow
         GUILayout.Label("Floor List:", EditorStyles.boldLabel);
         if (GUILayout.Button("New Entry", SetOptionSize(200, 200, 20, 20)))
         {
-            _editedRooms.Rooms = new List<GameObject>();
+            _editedRooms = new Floor();
             _floors.Floors.Add(_editedRooms);
+            _editedRooms.Rooms = new List<GameObject>();
         }
         for (int i = 0; i < _floors.Floors.Count; i++)
         {
