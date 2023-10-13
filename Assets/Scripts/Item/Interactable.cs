@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Collider))]
 public class Interactable : MonoBehaviour
@@ -26,8 +28,8 @@ public class Interactable : MonoBehaviour
         Player p = other.GetComponent<Player>();
         _playersInRange.Add(p);
 
-        p.PlayerController.Inputs.OnInteract.AddListener(() => OnInteract(p));
-            
+        p.PlayerController.Inputs.OnInteract.AddListener(OnInteract);
+        
         _onPlayerEnterRange?.Invoke();
     }
 
@@ -39,9 +41,18 @@ public class Interactable : MonoBehaviour
         Player p = other.GetComponent<Player>();
         _playersInRange.Remove(p);
         
-        p.PlayerController.Inputs.OnInteract.RemoveListener(() => OnInteract(p));
+        p.PlayerController.Inputs.OnInteract.RemoveListener(OnInteract);
         
         _onPlayerExitRange?.Invoke();
+    }
+
+    protected void OnDestroy()
+    {
+        foreach (Player p in _playersInRange)
+        {
+            p.PlayerController.Inputs.OnInteract.RemoveListener(OnInteract);
+        }
+            
     }
 
     protected virtual void OnInteract(Player player){}

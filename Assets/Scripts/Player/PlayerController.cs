@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public int PlayerIndex => _playerIndex;
+    public bool IsInteractHeld => _isInteractHeld;
     public InputManager Inputs => _inputManager;
 
     [Header("Parameters")]
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rigidbody;
     private InputManager _inputManager;
     private PlayerInput _inputs;
+    private bool _isInteractHeld;
 
     private void OnDisable() => _CleanUp();
 
@@ -30,7 +32,8 @@ public class PlayerController : MonoBehaviour
 
         _rigidbody = GetComponent<Rigidbody>();
 
-        _inputManager.OnInteract.AddListener(_Interact);
+        _inputManager.OnInteractStarted.AddListener(_Interact);
+        _inputManager.OnInteractCanceled.AddListener(_StopInteract);
         _inputManager.OnUseTool.AddListener(_UseTool);
         _inputManager.OnPause.AddListener(_Pause);
     }
@@ -38,7 +41,8 @@ public class PlayerController : MonoBehaviour
     {
         if(_inputManager != null)
         {
-            _inputManager.OnInteract.RemoveListener(_Interact);
+            _inputManager.OnInteractStarted.RemoveListener(_Interact);
+            _inputManager.OnInteractCanceled.RemoveListener(_StopInteract);
             _inputManager.OnUseTool.RemoveListener(_UseTool);
             _inputManager.OnPause.RemoveListener(_Pause);
         }
@@ -60,10 +64,8 @@ public class PlayerController : MonoBehaviour
         _rigidbody.AddForce((Quaternion.AngleAxis(90, Vector3.right) * dir) * _moveSpeed);
     }
 
-    private void _Interact()
-    {
-        
-    }
+    private void _Interact(Player player) => _isInteractHeld = true;
+    private void _StopInteract(Player player) => _isInteractHeld = false;
 
     private void _UseTool()
     {
