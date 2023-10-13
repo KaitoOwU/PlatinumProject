@@ -56,6 +56,7 @@ public class InputManager : MonoBehaviour
         _inputs.actions["Move"].started -= _Move_started;
         _inputs.actions["Move"].canceled -= _Move_canceled;
         _inputs.actions["Interact"].started -= _Interact_performed;
+        _inputs.actions["Interact"].canceled -= _Interact_canceled;
         _inputs.actions["Tool"].started -= _Tool_performed;
         _inputs.actions["Pause"].started -= _Pause_performed;
     }
