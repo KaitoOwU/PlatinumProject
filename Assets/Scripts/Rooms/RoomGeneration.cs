@@ -5,10 +5,10 @@ public class RoomGeneration : MonoBehaviour
 {
     [SerializeField] private List<RoomRegion> _floor = new List<RoomRegion>();
     [SerializeField] private bool _reseting;
+    [SerializeField] private Room _hall;
     private List<Room> _roomsInPlay = new List<Room>();
     SCRoomsLists _roomsLists;
     List<GameObject> _currentFloor = new List<GameObject>();
-    [SerializeField] private Room _hall;
     #region Generation
     private void Start()
     {

@@ -115,7 +115,7 @@ public class PathCreator : EditorWindow
         EditorGUILayout.EndVertical();
     }
     #endregion
-    private void SaveInputs()
+    private void SaveInputs()//doesn't really work but the whole things works without it
     {
         string path = $"{FolderPath}Paths{_extention}";
 
