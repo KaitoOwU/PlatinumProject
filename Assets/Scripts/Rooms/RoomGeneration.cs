@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class RoomGeneration : MonoBehaviour
 {
     [SerializeField] private List<RoomRegion> _floor = new List<RoomRegion>();
     [SerializeField] private bool _reseting;
+    [SerializeField] private Room _hall;
     private List<Room> _roomsInPlay = new List<Room>();
     SCRoomsLists _roomsLists;
     List<GameObject> _currentFloor = new List<GameObject>();
-
     #region Generation
     private void Start()
     {
@@ -30,6 +29,7 @@ public class RoomGeneration : MonoBehaviour
         _roomsInPlay = new List<Room>();
         foreach (RoomRegion floor in _floor)
         {
+           
             foreach (GameObject room in _roomsLists.Floors[i].Rooms)
             {
                 _currentFloor.Add(room);
@@ -41,6 +41,7 @@ public class RoomGeneration : MonoBehaviour
             int rand2 = Random.Range(0, _currentFloor.Count);
             GameObject room2 = Instantiate(_currentFloor[rand2], floor.FloorB.transform.position, floor.FloorB.transform.rotation);
             _currentFloor.RemoveAt(rand2);
+
             _roomsInPlay.Add(room1.GetComponent<Room>());
             _roomsInPlay.Add(room2.GetComponent<Room>());
             i++;
@@ -61,16 +62,19 @@ public class RoomGeneration : MonoBehaviour
     private void Shuffle()
     {
         List<Vector3> roomsPos = new List<Vector3>();
-        for(int i = 0; i < _floor.Count; i++)
+        for(int i = 0; i < _floor.Count-1; i++)
         {
             roomsPos.Add(_floor[i].FloorA.transform.position);
             roomsPos.Add(_floor[i].FloorB.transform.position);
         }
         foreach(Room room in _roomsInPlay)
         {
-            int rand = Random.Range(0, roomsPos.Count);
-            room.transform.position = roomsPos[rand];
-            roomsPos.RemoveAt(rand);
+            if (room != _roomsInPlay[_roomsInPlay.Count - 1] && room != _roomsInPlay[_roomsInPlay.Count - 2])
+            {
+                int rand = Random.Range(0, roomsPos.Count);
+                room.transform.position = roomsPos[rand];
+                roomsPos.RemoveAt(rand);
+            }
         }
         SetRooms();
     }
@@ -87,14 +91,16 @@ public class RoomGeneration : MonoBehaviour
                     {
                         if (room.transform.position == _floor[i].FloorA.transform.position)
                         {
-                            room.PreviousRoom = null;
+                            room.PreviousRoom = _hall;
                             room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorA.transform.position);
+                            _hall.NextRoom = room;
 
                         }
                         if (room.transform.position == _floor[i].FloorB.transform.position)
                         {
-                            room.PreviousRoom = null;
+                            room.PreviousRoom = _hall;
                             room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorB.transform.position);
+                            _hall.PreviousRoom = room;
                         }
                     }
                     else if (i == _floor.Count - 1)
