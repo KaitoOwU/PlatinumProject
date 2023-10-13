@@ -121,7 +121,7 @@ public class PathCreator : EditorWindow
 
         if (!File.Exists(path))
         {
-            Debug.Log("Input doesn't exists");
+            Debug.Log("ça marche?");
             AssetDatabase.CreateAsset(_floors, path);
         }
         AssetDatabase.SaveAssets();
