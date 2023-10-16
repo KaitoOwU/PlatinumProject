@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "Item Data", menuName = "Platinum Project/Create new Item")]
 public class ItemData : ScriptableObject
@@ -43,8 +41,8 @@ public class ItemData : ScriptableObject
 [Flags]
 public enum GenerationZone
 {
-    ZONE_1 = 1,
-    ZONE_2 = 2,
-    ZONE_3 = 4,
-    ZONE_4 = 8
+    ZONE_1 = 1, //00000001
+    ZONE_2 = 2, //00000010
+    ZONE_3 = 4, //00000100
+    ZONE_4 = 8  //00001000
 }
