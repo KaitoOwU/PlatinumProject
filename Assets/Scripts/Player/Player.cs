@@ -9,9 +9,6 @@ public class Player : MonoBehaviour
 {
 
     [SerializeField] private ItemData _heldItem;
-    private PlayerController _playerController;
-
-    public PlayerController PlayerController => _playerController;
 
     public ItemData HeldItem
     {
@@ -19,8 +16,9 @@ public class Player : MonoBehaviour
         set => _heldItem = value;
     }
 
-    private void Awake()
+    public int Index
     {
-        _playerController = GetComponent<PlayerController>();
+        get;
+        set;
     }
 }

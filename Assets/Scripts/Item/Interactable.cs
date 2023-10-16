@@ -22,26 +22,26 @@ public class Interactable : MonoBehaviour
     
     protected void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Player>() == null)
+        if (other.GetComponent<PlayerController>() == null)
             return;
 
-        Player p = other.GetComponent<Player>();
-        _playersInRange.Add(p);
+        PlayerController p = other.GetComponent<PlayerController>();
+        _playersInRange.Add(GameManager.Instance.PlayerList[p.PlayerIndex].PlayerRef);
 
-        p.PlayerController.Inputs.OnInteract.AddListener(OnInteract);
+        p.Inputs.OnInteractStarted.AddListener(OnInteract);
         
         _onPlayerEnterRange?.Invoke();
     }
 
     protected void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Player>() == null)
+        if (other.GetComponent<PlayerController>() == null)
             return;
         
-        Player p = other.GetComponent<Player>();
-        _playersInRange.Remove(p);
+        PlayerController p = other.GetComponent<PlayerController>();
+        _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex].PlayerRef);
         
-        p.PlayerController.Inputs.OnInteract.RemoveListener(OnInteract);
+        p.Inputs.OnInteractStarted.RemoveListener(OnInteract);
         
         _onPlayerExitRange?.Invoke();
     }
@@ -50,7 +50,7 @@ public class Interactable : MonoBehaviour
     {
         foreach (Player p in _playersInRange)
         {
-            p.PlayerController.Inputs.OnInteract.RemoveListener(OnInteract);
+            GameManager.Instance.PlayerList[p.Index].PlayerController.Inputs.OnInteractStarted.AddListener(OnInteract);
         }
             
     }
