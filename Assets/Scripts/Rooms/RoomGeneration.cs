@@ -94,6 +94,7 @@ public class RoomGeneration : MonoBehaviour
                             room.PreviousRoom = _hall;
                             room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorA.transform.position);
                             _hall.NextRoom = room;
+                            room.RoomSide = Room.Side.LEFT;
 
                         }
                         if (room.transform.position == _floor[i].FloorB.transform.position)
@@ -101,6 +102,7 @@ public class RoomGeneration : MonoBehaviour
                             room.PreviousRoom = _hall;
                             room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorB.transform.position);
                             _hall.PreviousRoom = room;
+                            room.RoomSide = Room.Side.RIGHT;
                         }
                     }
                     else if (i == _floor.Count - 1)
@@ -109,12 +111,14 @@ public class RoomGeneration : MonoBehaviour
                         {
                             room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorA.transform.position);
                             room.NextRoom = null;
+                            room.RoomSide = Room.Side.LEFT;
 
                         }
                         if (room.transform.position == _floor[i].FloorB.transform.position)
                         {
                             room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorB.transform.position); ;
                             room.NextRoom = null;
+                            room.RoomSide = Room.Side.RIGHT;
                         }
                     }
                     else
@@ -123,12 +127,14 @@ public class RoomGeneration : MonoBehaviour
                         {
                             room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorA.transform.position);
                             room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorA.transform.position);
+                            room.RoomSide = Room.Side.LEFT;
 
                         }
                         if (room.transform.position == _floor[i].FloorB.transform.position)
                         {
                             room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorB.transform.position); ;
                             room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorB.transform.position);
+                            room.RoomSide = Room.Side.RIGHT;
                         }
                     }
                 }

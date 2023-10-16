@@ -58,13 +58,49 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: _nextRoomDoor
+      value: 
+      objectReference: {fileID: 7609940457576197441}
+    - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: _previousRoomDoor
+      value: 
+      objectReference: {fileID: 5865066919705312993}
     - target: {fileID: 5575927400965426629, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_Name
-      value: RoomBase Variant
+      value: Room3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8195819234883356362, guid: c870671ee6471bb49827e26d1cbc2960, type: 3}
+    - {fileID: 8632002154382529063, guid: c870671ee6471bb49827e26d1cbc2960, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c870671ee6471bb49827e26d1cbc2960, type: 3}
+--- !u!114 &5865066919705312993 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5340724561311387027, guid: c870671ee6471bb49827e26d1cbc2960,
+    type: 3}
+  m_PrefabInstance: {fileID: 1980167634142278514}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c4674fc96f2017419152c9e1544b6d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7609940457576197441 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8277905828560068147, guid: c870671ee6471bb49827e26d1cbc2960,
+    type: 3}
+  m_PrefabInstance: {fileID: 1980167634142278514}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c4674fc96f2017419152c9e1544b6d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
