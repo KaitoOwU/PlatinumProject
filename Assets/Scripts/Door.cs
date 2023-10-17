@@ -19,7 +19,6 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
-        Debug.Log(player.CurrentRoom is Hub);
         if(player.CurrentRoom is Hub)
         {
             int count = 0;
@@ -49,6 +48,7 @@ public class Door : Interactable
         else
         {
             Room room = player.CurrentRoom;
+            Debug.Log("PLAYER  "+ player.Index );
             switch (DoorTypeValue)
             {
                 case DoorType.ENTRY:
@@ -79,7 +79,7 @@ public class Door : Interactable
         }
     }
 
-    public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
+    public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intï¿½ragissent avec this porte
     { 
         //GARDER EN MEMOIRE LE NOMBRE DE JOUEUR POUR SAVOIR COMBIEN IL EN FAUT POUR PASSER A LA SALLE SUIVANTE DANS CHAQUE BRANCHE
         foreach(Player p in _playersInRange)

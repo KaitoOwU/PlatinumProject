@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private int _playerIndex;
     private Rigidbody _rigidbody;
+    [SerializeField]
     private InputManager _inputManager;
     private PlayerInput _inputs;
     private bool _isInteractHeld;
