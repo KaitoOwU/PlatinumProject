@@ -63,7 +63,8 @@ public class PlayerController : MonoBehaviour
     #region Player Actions Methods
     private void _Move(Vector3 dir)
     {
-        _rigidbody.AddForce((Quaternion.AngleAxis(90, Vector3.right) * dir) * _moveSpeed);
+        //_rigidbody.AddForce((Quaternion.AngleAxis(90, Vector3.right) * dir) * _moveSpeed);
+        _rigidbody.velocity = new Vector3(dir.x * _moveSpeed, _rigidbody.velocity.y, dir.y * _moveSpeed);
     }
 
     private void _Interact(Player player) => _isInteractHeld = true;
