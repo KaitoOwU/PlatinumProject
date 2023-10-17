@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
 
     [SerializeField] private ItemData _heldItem;
-
+    [SerializeField] private PlayerController _playerController;
     public PlayerController PlayerController => _playerController;
     
 
