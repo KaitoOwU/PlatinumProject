@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     private PlayerController _playerController;
 
     public PlayerController PlayerController => _playerController;
-    public Room CurrentRoom => _currentRoom;
+    
 
     [SerializeField]
     private Room _currentRoom;
@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
         get => _heldItem;
         set => _heldItem = value;
     }
+    public Room CurrentRoom { get => _currentRoom; set => _currentRoom = value; }
 
     private void Awake()
     {

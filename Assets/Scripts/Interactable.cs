@@ -20,6 +20,7 @@ public class Interactable : MonoBehaviour
     
     protected void OnTriggerEnter(Collider other)
     {
+        
         if (other.GetComponent<Player>() == null)
             return;
 

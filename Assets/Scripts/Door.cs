@@ -19,6 +19,7 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
+        Debug.Log(player.CurrentRoom is Hub);
         if(player.CurrentRoom is Hub)
         {
             int count = 0;
@@ -37,8 +38,12 @@ public class Door : Interactable
                 hub.RoomDoorLeft.TP_Players(hub.RoomLeft.PreviousRoomDoor.TpPoint);
                 hub.RoomDoorRight.TP_Players(hub.RoomRight.PreviousRoomDoor.TpPoint);
 
+                hub.RoomDoorLeft.UpdateRoom(hub.RoomLeft);
+                hub.RoomDoorRight.UpdateRoom(hub.RoomRight);
+
                 hub.RoomDoorLeft.TP_Camera(hub.RoomLeft);
                 hub.RoomDoorRight.TP_Camera(hub.RoomRight);
+                
             }
         }
         else
@@ -56,16 +61,19 @@ public class Door : Interactable
                         else
                             TP_Players(hub.RoomDoorRight.TpPoint);
                         TP_Camera(room.PreviousRoom);
+                        UpdateRoom(room.PreviousRoom);
                     }
                     else
                     {
                         TP_Players(room.PreviousRoom.NextRoomDoor.TpPoint);
                         TP_Camera(room.PreviousRoom);
+                        UpdateRoom(room.PreviousRoom);
                     }
                     break;
                 case DoorType.EXIT:
                     TP_Players(room.NextRoom.PreviousRoomDoor.TpPoint);
                     TP_Camera(room.NextRoom);
+                    UpdateRoom(room.NextRoom);
                     break;
             }                     
         }
@@ -92,5 +100,11 @@ public class Door : Interactable
                 break;
         }
     }
-
+    public void UpdateRoom(Room room)
+    {
+        foreach(Player p in _playersInRange)
+        {
+            p.CurrentRoom = room;
+        }
+    }
 }

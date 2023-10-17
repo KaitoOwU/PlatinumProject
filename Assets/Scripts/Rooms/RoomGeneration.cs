@@ -5,7 +5,7 @@ public class RoomGeneration : MonoBehaviour
 {
     [SerializeField] private List<RoomRegion> _floor = new List<RoomRegion>();
     [SerializeField] private bool _reseting;
-    [SerializeField] private Room _hall;
+    [SerializeField] private Hub _hall;
     private List<Room> _roomsInPlay = new List<Room>();
     SCRoomsLists _roomsLists;
     List<GameObject> _currentFloor = new List<GameObject>();
@@ -93,7 +93,7 @@ public class RoomGeneration : MonoBehaviour
                         {
                             room.PreviousRoom = _hall;
                             room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorA.transform.position);
-                            _hall.NextRoom = room;
+                            _hall.RoomLeft = room;
                             room.RoomSide = Room.Side.LEFT;
 
                         }
@@ -101,7 +101,7 @@ public class RoomGeneration : MonoBehaviour
                         {
                             room.PreviousRoom = _hall;
                             room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorB.transform.position);
-                            _hall.PreviousRoom = room;
+                            _hall.RoomRight = room;
                             room.RoomSide = Room.Side.RIGHT;
                         }
                     }
@@ -110,14 +110,14 @@ public class RoomGeneration : MonoBehaviour
                         if(room.transform.position == _floor[i].FloorA.transform.position)
                         {
                             room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorA.transform.position);
-                            room.NextRoom = null;
+                            room.NextRoom = _hall;
                             room.RoomSide = Room.Side.LEFT;
 
                         }
                         if (room.transform.position == _floor[i].FloorB.transform.position)
                         {
                             room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorB.transform.position); ;
-                            room.NextRoom = null;
+                            room.NextRoom = _hall;
                             room.RoomSide = Room.Side.RIGHT;
                         }
                     }
