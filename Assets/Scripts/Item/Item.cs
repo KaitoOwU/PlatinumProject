@@ -1,18 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class Item : MonoBehaviour
+
+public class Item : Interactable
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
+    [Header("--- DATA ---")]
+    [SerializeField] private ItemData _itemData;
 
-    // Update is called once per frame
-    void Update()
+    protected override void OnInteract(Player player)
     {
+        if (player.HeldItem != null)
+            return;
         
+        player.HeldItem = _itemData;
+        Destroy(gameObject);
     }
+    
 }
