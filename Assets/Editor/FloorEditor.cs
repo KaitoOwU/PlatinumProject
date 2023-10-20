@@ -110,15 +110,15 @@ public class PathCreator : EditorWindow
         }
         if (GUILayout.Button("Save", SetOptionSize(340, 340, 20, 20)))
         {
-            SaveInputs();
+            SaveFloors();
         }
 
         EditorGUILayout.EndVertical();
     }
     #endregion
-    private void SaveInputs()//doesn't really work but the whole things works without it
+    private void SaveFloors()//doesn't really work but the whole things works without it
     {
-        string path = $"{FolderPath}Paths{_extention}";
+        string path = $"{FolderPath}Rooms{_extention}";
 
         if (!File.Exists(path))
         {
