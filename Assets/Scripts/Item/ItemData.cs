@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Item Data", menuName = "Platinum Project/Create new Item")]
 public class ItemData : ScriptableObject
 {
     
@@ -10,7 +9,7 @@ public class ItemData : ScriptableObject
     [SerializeField] private string _name;
     [SerializeField] private int _id;
     [SerializeField] private Sprite _icon;
-    [SerializeField] private Item _prefab;
+    [SerializeField] private GameObject _prefab;
     
     [Header("--- BEHAVIOUR ---")]
     [SerializeField] private bool _isThrowable;
@@ -19,7 +18,7 @@ public class ItemData : ScriptableObject
     public string Name => _name;
     public int ID => _id;
     public Sprite Icon => _icon;
-    public Item Prefab => _prefab;
+    public GameObject Prefab => _prefab;
     public bool IsThrowable => _isThrowable;
 
     public List<GenerationZone> GenerationZones
@@ -35,6 +34,14 @@ public class ItemData : ScriptableObject
 
             return generationZone;
         }
+    }
+
+    public ItemData(int id, string name, Sprite icon, GameObject prefab)
+    {
+        _id = id;
+        _name = name;
+        _icon = icon;
+        _prefab = prefab;
     }
 }
 
