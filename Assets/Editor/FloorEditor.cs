@@ -18,7 +18,7 @@ public class PathCreator : EditorWindow
     Vector2 _scrollPos;
 
     #region SetUp
-    [MenuItem("Platinium/FloorCreator")]
+    [MenuItem("Platinum/FloorCreator")]
     public static void ShowWindow()
     {
         EditorWindow.GetWindow(typeof(PathCreator), false, "Floor Creator");
@@ -78,6 +78,7 @@ public class PathCreator : EditorWindow
     }
     private void DisplayRooms()
     {
+
         EditorGUILayout.BeginVertical(SetOptionSize(200, 200, _windowSize.y, _windowSize.y));
         GUILayout.Label("Path:", EditorStyles.boldLabel);
         if (_editedRooms.Rooms.Count > 30)
@@ -110,13 +111,13 @@ public class PathCreator : EditorWindow
         }
         if (GUILayout.Button("Save", SetOptionSize(340, 340, 20, 20)))
         {
-            SaveFloors();
+            SaveInputs();
         }
 
         EditorGUILayout.EndVertical();
     }
     #endregion
-    private void SaveFloors()//doesn't really work but the whole things works without it
+    private void SaveInputs()//doesn't really work but the whole things works without it
     {
         string path = $"{FolderPath}Rooms{_extention}";
 
@@ -127,6 +128,7 @@ public class PathCreator : EditorWindow
         }
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+
     }
     #region GUIoptions
     public static GUILayoutOption[] SetOptionSize(int minWidth, int maxWidth, int minHeight, int maxHeight, int width = 0, int height = 0)
@@ -165,6 +167,23 @@ public class PathCreator : EditorWindow
             GUILayout.Width(width),
             GUILayout.Height(height)
         };
+
+    }
+    private Texture2D MakeBackgroundTexture(int width, int height, Color color)
+    {
+        Color[] pixels = new Color[width * height];
+
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            pixels[i] = color;
+        }
+
+        Texture2D backgroundTexture = new Texture2D(width, height);
+
+        backgroundTexture.SetPixels(pixels);
+        backgroundTexture.Apply();
+
+        return backgroundTexture;
     }
     #endregion //GUIoptions
 }

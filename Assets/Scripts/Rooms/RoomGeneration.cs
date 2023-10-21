@@ -37,7 +37,6 @@ public class RoomGeneration : MonoBehaviour
             int rand = Random.Range(0, _currentFloor.Count);
             GameObject room1 = Instantiate(_currentFloor[rand], floor.FloorA.transform.position, floor.FloorA.transform.rotation);
             _currentFloor.RemoveAt(rand);
-            Debug.Log(_currentFloor.Count);
             int rand2 = Random.Range(0, _currentFloor.Count);
             GameObject room2 = Instantiate(_currentFloor[rand2], floor.FloorB.transform.position, floor.FloorB.transform.rotation);
             _currentFloor.RemoveAt(rand2);
