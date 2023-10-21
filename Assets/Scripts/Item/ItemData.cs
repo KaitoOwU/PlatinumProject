@@ -5,15 +5,13 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
     
-    [Header("--- DATAS ---")]
-    [SerializeField] private string _name;
+    private string _name;
     [SerializeField] private int _id;
-    [SerializeField] private Sprite _icon;
-    [SerializeField] private GameObject _prefab;
+    private Sprite _icon;
+    private GameObject _prefab;
     
-    [Header("--- BEHAVIOUR ---")]
-    [SerializeField] private bool _isThrowable;
-    [SerializeField] private GenerationZone _generationZones;
+    private bool _isThrowable;
+    private GenerationZone _generationZones;
     
     public string Name => _name;
     public int ID => _id;
@@ -36,12 +34,16 @@ public class ItemData : ScriptableObject
         }
     }
 
-    public ItemData(int id, string name, Sprite icon, GameObject prefab)
+    public GenerationZone GenerationZoneAsEnum => _generationZones;
+
+    public void SaveData(int id, string name, Sprite icon, GameObject prefab, bool isThrowable, GenerationZone generationZones)
     {
         _id = id;
         _name = name;
         _icon = icon;
         _prefab = prefab;
+        _isThrowable = isThrowable;
+        _generationZones = generationZones;
     }
 }
 

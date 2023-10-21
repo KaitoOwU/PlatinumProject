@@ -10,6 +10,8 @@ public class Item : Interactable
     
     [Header("--- DATA ---")]
     [SerializeField] private ItemData _itemData;
+    
+    public ItemData ItemData { get; set; }
 
     protected override void OnInteract(Player player)
     {
@@ -19,5 +21,4 @@ public class Item : Interactable
         player.HeldItem = _itemData;
         Destroy(gameObject);
     }
-    
 }
