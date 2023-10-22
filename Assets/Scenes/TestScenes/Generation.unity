@@ -464,6 +464,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb6d93e4453e354cb6b4b2c57d480bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hub: {fileID: 1832810540}
+  _sizeAisle: 5
+  _betweenRoomDistance: 30
+  _oneDoorRoomL: []
+  _twoDoorRoomL: []
+  _threeDoorRoomL: []
+  _fourDoorRoomL: []
+  _oneDoorRoomR: []
+  _twoDoorRoomR: []
+  _threeDoorRoomR: []
+  _fourDoorRoomR: []
+--- !u!114 &1832810540 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -4933583240055195963, guid: 96d1a6be2b9b65e429303aecba0062e7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1029686887}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1719871307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719871305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ffd0fa145cb7ea409228891dcb1f2bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _hub: {fileID: 0}
   _sizeAisle: 0
   _betweenRoomDistance: 0
@@ -537,7 +566,12 @@ PrefabInstance:
         type: 3}
       propertyPath: _hall
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1832810540}
+    - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
+        type: 3}
+      propertyPath: _layout
+      value: 
+      objectReference: {fileID: 1719871307}
     - target: {fileID: 8816325919117355407, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: m_Name

@@ -3,37 +3,85 @@ using System.Collections.Generic;
 using UnityEngine;
 public class RoomGeneration : MonoBehaviour
 {
-    [SerializeField] private List<RoomRegion> _floor = new List<RoomRegion>();
+    //[SerializeField] private List<RoomRegion> _floor = new List<RoomRegion>();
     [SerializeField] private bool _reseting;
     [SerializeField] private Hub _hall;
+    private List<Room> _roomsInPlayR = new List<Room>();
+    private List<Room> _roomsInPlayL = new List<Room>();
     private List<Room> _roomsInPlay = new List<Room>();
     SCRoomsLists _roomsLists;
     List<GameObject> _currentFloor = new List<GameObject>();
+    [SerializeField] LayoutGenerator _layout;
     #region Generation
     private void Start()
     {
         _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
         _reseting = false;
-        GenerateRooms();
     }
-    private void GenerateRooms()
+    /*  private void GenerateRooms()
+      {
+          int i = 0;
+          if (_roomsInPlay.Count > 0)
+          {
+              foreach (Room room in _roomsInPlay)
+              {
+                  room.GetComponent<SelfDestruct>().Destruct();
+              }
+          }
+          _roomsInPlay = new List<Room>();
+          foreach (RoomRegion floor in _floor)
+          {
+
+              foreach (GameObject room in _roomsLists.Floors[i].Rooms)
+              {
+                  _currentFloor.Add(room);
+              }
+              int rand = Random.Range(0, _currentFloor.Count);
+              GameObject room1 = Instantiate(_currentFloor[rand], floor.FloorA.transform.position, floor.FloorA.transform.rotation);
+              _currentFloor.RemoveAt(rand);
+              int rand2 = Random.Range(0, _currentFloor.Count);
+              GameObject room2 = Instantiate(_currentFloor[rand2], floor.FloorB.transform.position, floor.FloorB.transform.rotation);
+              _currentFloor.RemoveAt(rand2);
+
+              _roomsInPlay.Add(room1.GetComponent<Room>());
+              _roomsInPlay.Add(room2.GetComponent<Room>());
+              i++;
+              _currentFloor.Clear();
+          }
+          SetRooms();
+      }*/
+    public void GenerateRooms()
     {
+        _roomsInPlayR = new List<Room>();
+        _roomsInPlayL = new List<Room>();
         int i = 0;
-        if (_roomsInPlay.Count > 0)
+        Debug.Log(_layout.AisleLeft[0].Count);
+        foreach(List<RoomPosition> positionsList in _layout.AisleLeft)
         {
-            foreach (Room room in _roomsInPlay)
+            Debug.Log("i " + i);
+            int rand = Random.Range(0, _currentFloor.Count);
+            for (int j = 0; j < positionsList.Count; j++)
             {
-                room.GetComponent<SelfDestruct>().Destruct();
+                Debug.Log("j " + j);
+                GameObject room= Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position,transform.rotation);
+                _roomsInPlayL.Add(room.GetComponent<Room>());
+                _roomsInPlay.Add(room.GetComponent<Room>());
             }
+            i++;
         }
-        _roomsInPlay = new List<Room>();
-        foreach (RoomRegion floor in _floor)
+        i = 0;
+        foreach (List<RoomPosition> positionsList in _layout.AisleRight)
         {
-           
-            foreach (GameObject room in _roomsLists.Floors[i].Rooms)
+            Debug.Log("i " + i);
+            int rand = Random.Range(0, _roomsLists.Floors[i].Rooms.Count);
+            for (int j = 0; j < positionsList.Count; j++)
             {
-                _currentFloor.Add(room);
+                Debug.Log("j " + j);
+                GameObject room = Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position, transform.rotation);
+                _roomsInPlayR.Add(room.GetComponent<Room>());
+                _roomsInPlay.Add(room.GetComponent<Room>());
             }
+<<<<<<< Updated upstream
             int rand = Random.Range(0, _currentFloor.Count);
             GameObject room1 = Instantiate(_currentFloor[rand], floor.FloorA.transform.position, floor.FloorA.transform.rotation);
             _currentFloor.RemoveAt(rand);
@@ -43,10 +91,10 @@ public class RoomGeneration : MonoBehaviour
 
             _roomsInPlay.Add(room1.GetComponent<Room>());
             _roomsInPlay.Add(room2.GetComponent<Room>());
+=======
+>>>>>>> Stashed changes
             i++;
-            _currentFloor.Clear();
         }
-        SetRooms();
     }
     #endregion
     #region Shuffle
@@ -54,19 +102,19 @@ public class RoomGeneration : MonoBehaviour
     {
         if (_reseting)
         {
-            Shuffle();
+            //Shuffle();
             _reseting = false;
         }
     }
-    private void Shuffle()
+   /* private void Shuffle()
     {
         List<Vector3> roomsPos = new List<Vector3>();
-        for(int i = 0; i < _floor.Count-1; i++)
+        for (int i = 0; i < _floor.Count - 1; i++)
         {
             roomsPos.Add(_floor[i].FloorA.transform.position);
             roomsPos.Add(_floor[i].FloorB.transform.position);
         }
-        foreach(Room room in _roomsInPlay)
+        foreach (Room room in _roomsInPlay)
         {
             if (room != _roomsInPlay[_roomsInPlay.Count - 1] && room != _roomsInPlay[_roomsInPlay.Count - 2])
             {
@@ -76,69 +124,12 @@ public class RoomGeneration : MonoBehaviour
             }
         }
         SetRooms();
-    }
+    }*/
     #endregion
+   
     public void SetRooms()
     {
-        if (_floor.Count > 1)
-        {
-            foreach (Room room in _roomsInPlay)
-            {
-                for (int i = 0; i < _floor.Count; i++)
-                {
-                    if (i == 0)
-                    {
-                        if (room.transform.position == _floor[i].FloorA.transform.position)
-                        {
-                            room.PreviousRoom = _hall;
-                            room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorA.transform.position);
-                            _hall.RoomLeft = room;
-                            room.RoomSide = Room.Side.LEFT;
 
-                        }
-                        if (room.transform.position == _floor[i].FloorB.transform.position)
-                        {
-                            room.PreviousRoom = _hall;
-                            room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorB.transform.position);
-                            _hall.RoomRight = room;
-                            room.RoomSide = Room.Side.RIGHT;
-                        }
-                    }
-                    else if (i == _floor.Count - 1)
-                    {
-                        if(room.transform.position == _floor[i].FloorA.transform.position)
-                        {
-                            room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorA.transform.position);
-                            room.NextRoom = _hall;
-                            room.RoomSide = Room.Side.LEFT;
-
-                        }
-                        if (room.transform.position == _floor[i].FloorB.transform.position)
-                        {
-                            room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorB.transform.position); ;
-                            room.NextRoom = _hall;
-                            room.RoomSide = Room.Side.RIGHT;
-                        }
-                    }
-                    else
-                    {
-                        if (room.transform.position == _floor[i].FloorA.transform.position)
-                        {
-                            room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorA.transform.position);
-                            room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorA.transform.position);
-                            room.RoomSide = Room.Side.LEFT;
-
-                        }
-                        if (room.transform.position == _floor[i].FloorB.transform.position)
-                        {
-                            room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorB.transform.position); ;
-                            room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorB.transform.position);
-                            room.RoomSide = Room.Side.RIGHT;
-                        }
-                    }
-                }
-            }
-        } 
     }
     public Room FindRoomAtPosition(Vector3 pos)
     {
@@ -153,7 +144,7 @@ public class RoomGeneration : MonoBehaviour
         return _wantedRoom;
     }
 }
-[System.Serializable]
+/*[System.Serializable]
 public class RoomRegion
 {
     [SerializeField] private GameObject _floorA;
@@ -161,4 +152,4 @@ public class RoomRegion
 
     public GameObject FloorA { get => _floorA; }
     public GameObject FloorB { get => _floorB; }
-}
+}*/

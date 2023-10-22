@@ -8500,10 +8500,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ffd0fa145cb7ea409228891dcb1f2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextRoom: {fileID: 0}
-  _previousRoom: {fileID: 0}
-  _nextRoomDoor: {fileID: 905576380753228828}
-  _previousRoomDoor: {fileID: 7609940457576197441}
+  _doors:
+  - {fileID: 905576380753228828}
+  - {fileID: 7609940457576197441}
   _roomSide: 0
   _cameraPoint: {fileID: 6654049696826231685}
   _roomLeft: {fileID: 0}

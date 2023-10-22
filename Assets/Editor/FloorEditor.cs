@@ -80,7 +80,7 @@ public class PathCreator : EditorWindow
     {
 
         EditorGUILayout.BeginVertical(SetOptionSize(200, 200, _windowSize.y, _windowSize.y));
-        GUILayout.Label("Path:", EditorStyles.boldLabel);
+        GUILayout.Label("Rooms:", EditorStyles.boldLabel);
         if (_editedRooms.Rooms.Count > 30)
         {
             _scrollPos =EditorGUILayout.BeginScrollView(_scrollPos, GUILayout.Width(500), GUILayout.Height(800));

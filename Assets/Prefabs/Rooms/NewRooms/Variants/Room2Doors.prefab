@@ -70,13 +70,33 @@ PrefabInstance:
       objectReference: {fileID: 785648309148475633}
     - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
+      propertyPath: _doors.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
       propertyPath: _previousRoomDoor
       value: 
       objectReference: {fileID: 7609940457576197441}
+    - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: _doors.Array.data[0]
+      value: 
+      objectReference: {fileID: 7609940457576197441}
+    - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: _doors.Array.data[1]
+      value: 
+      objectReference: {fileID: 785648309148475633}
+    - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5575927400965426629, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_Name
-      value: Room2
+      value: Room2Doors
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
