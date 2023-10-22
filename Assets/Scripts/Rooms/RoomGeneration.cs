@@ -81,18 +81,6 @@ public class RoomGeneration : MonoBehaviour
                 _roomsInPlayR.Add(room.GetComponent<Room>());
                 _roomsInPlay.Add(room.GetComponent<Room>());
             }
-<<<<<<< Updated upstream
-            int rand = Random.Range(0, _currentFloor.Count);
-            GameObject room1 = Instantiate(_currentFloor[rand], floor.FloorA.transform.position, floor.FloorA.transform.rotation);
-            _currentFloor.RemoveAt(rand);
-            int rand2 = Random.Range(0, _currentFloor.Count);
-            GameObject room2 = Instantiate(_currentFloor[rand2], floor.FloorB.transform.position, floor.FloorB.transform.rotation);
-            _currentFloor.RemoveAt(rand2);
-
-            _roomsInPlay.Add(room1.GetComponent<Room>());
-            _roomsInPlay.Add(room2.GetComponent<Room>());
-=======
->>>>>>> Stashed changes
             i++;
         }
     }
