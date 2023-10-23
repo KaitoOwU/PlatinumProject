@@ -44,12 +44,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c99cfa34e434346a75323a14f9c953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameData: {fileID: 11400000, guid: c19ad94c365c2d54aa78974a45361d24, type: 2}
   _playerList:
   - playerController: {fileID: 0}
     id: 1
+    _playerRef: {fileID: 0}
+    _relativePos: 0
   - playerController: {fileID: 0}
     id: 2
+    _playerRef: {fileID: 0}
+    _relativePos: 0
   - playerController: {fileID: 0}
     id: 3
+    _playerRef: {fileID: 0}
+    _relativePos: 0
   - playerController: {fileID: 0}
     id: 4
+    _playerRef: {fileID: 0}
+    _relativePos: 0
+  _fullCamera: {fileID: 0}
+  _splitCameraLeft: {fileID: 0}
+  _splitCameraRight: {fileID: 0}
+  OnShuffleRooms:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFirstPhaseEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSecondPhaseEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTimerEnd:
+    m_PersistentCalls:
+      m_Calls: []

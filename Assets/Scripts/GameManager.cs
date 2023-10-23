@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,26 +11,31 @@ public class GameManager : MonoBehaviour
         get => _currentGamePhase; 
         set => _currentGamePhase = value;
     }
-    private GamePhase _currentGamePhase;
 
     public CameraState CurrentCameraState
     {
         get; private set;
     }
-    private CameraState _currentCameraState;
 
     public List<PlayerInfo> PlayerList
     {
         get => _playerList;
         set => _playerList = value;
     }
-
+    public float Timer => _timer;
+    public TimerPhase CurrentTimerPhase => _currentTimerPhase;
+    
     public IReadOnlyList<PlayerInfo> RightPlayers =>
         PlayerList.FindAll(player => player.RelativePos == HubRelativePosition.RIGHT_WING);
     
     public IReadOnlyList<PlayerInfo> LeftPlayers =>
         PlayerList.FindAll(player => player.RelativePos == HubRelativePosition.LEFT_WING);
 
+    [Header("---Constants---")]
+    [SerializeField]
+    private GameData _gameData;
+
+    [Header("---References---")]
     [SerializeField]
     private List<PlayerInfo> _playerList = new(4);
     [SerializeField]
@@ -39,6 +45,19 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject _splitCameraRight;
 
+    [Header("---Events---")]
+    public UnityEvent OnShuffleRooms;
+    public UnityEvent OnFirstPhaseEnd;
+    public UnityEvent OnSecondPhaseEnd;
+    public UnityEvent OnTimerEnd;
+    public UnityEvent OnEachMinute;
+
+    private GamePhase _currentGamePhase;
+    private TimerPhase _currentTimerPhase;
+    private CameraState _currentCameraState;
+    private float _timer;
+    private bool _isTimerGoing;
+
     public enum GamePhase
     {
         MENU,
@@ -46,7 +65,14 @@ public class GameManager : MonoBehaviour
         GAME,
         GUESS,
         END,
-    }    
+    }
+    public enum TimerPhase
+    {
+        FIRST_PHASE,
+        SECOND_PHASE,
+        THIRD_PHASE,
+        END,
+    }
     public enum CameraState
     {
         FULL,
@@ -73,16 +99,73 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    // Start is called before the first frame update
+
     void Start()
     {
         CurrentGamePhase = GamePhase.HUB;
+        StartTimer();
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator IncrementTimer()
     {
-        
+        while (_isTimerGoing)
+        {
+            yield return new WaitForSeconds(1f);
+            _timer -= 1;
+            _AnalyseTimer();
+        }
+    }
+    private void _AnalyseTimer()
+    {
+        if (_timer % 60 == 0)
+        {
+            OnEachMinute?.Invoke();
+            Debug.Log("<color=cyan>Shuffle room </color>" + _timer);
+        }
+        switch (_currentTimerPhase)
+        {
+            case TimerPhase.FIRST_PHASE:
+                if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
+                {
+                    OnFirstPhaseEnd?.Invoke();
+                    OnShuffleRooms?.Invoke();
+                    Debug.Log("<color=cyan>First Phase End </color>" + _timer);
+                    _currentTimerPhase = TimerPhase.SECOND_PHASE;
+                }
+                break;
+            case TimerPhase.SECOND_PHASE:
+                if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
+                {
+                    OnSecondPhaseEnd?.Invoke();
+                    OnShuffleRooms?.Invoke();
+                    Debug.Log("<color=cyan>Second Phase End </color>" + _timer);
+                    _currentTimerPhase = TimerPhase.THIRD_PHASE;
+                }
+                break;
+            case TimerPhase.THIRD_PHASE:
+                if (_timer <= 0)
+                {
+                    OnTimerEnd?.Invoke();
+                    OnShuffleRooms?.Invoke();
+                    Debug.Log("<color=cyan>Third Phase End </color>" + _timer);
+                    _isTimerGoing = false;
+                    _timer = 0;
+                    _currentTimerPhase = TimerPhase.END;
+                }
+                break;
+            case TimerPhase.END:
+                break;
+        }
+    }
+
+    public void StartTimer() 
+    {
+        _currentTimerPhase = TimerPhase.FIRST_PHASE;
+        _timer = _gameData.TimerValues.FirstPhaseTime
+                + _gameData.TimerValues.SecondPhaseTime
+                + _gameData.TimerValues.ThirdPhaseTime;
+        _isTimerGoing = true;
+        StartCoroutine(IncrementTimer());
     }
 
     public void SwitchCameraState(CameraState targetState)

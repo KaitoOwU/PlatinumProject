@@ -56,7 +56,7 @@ public class LayoutGenerator : MonoBehaviour
         }
         int i = 1;
         int count = allAisleRoom.Count;
-        Debug.Log(allAisleRoom.Count);
+        //Debug.Log(allAisleRoom.Count);
         for (int  k= 0; k < 100;++k ) 
         {
             for (int j = 0; j < 4; j++)
@@ -72,7 +72,7 @@ public class LayoutGenerator : MonoBehaviour
                             if (!IsRoomPositionTaken(new Vector3(allAisleRoom[i].Position.x - _betweenRoomDistance, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z), allAisleRoom)&& allAisleRoom[i].Position.x - _betweenRoomDistance!=0)
                             {
                                 allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[i].Position.x - _betweenRoomDistance, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z)));
-                               Debug.Log(allAisleRoom[allAisleRoom.Count-1].Position + "1");
+                               //Debug.Log(allAisleRoom[allAisleRoom.Count-1].Position + "1");
                                 k++;
                             }
                             break;
@@ -80,7 +80,7 @@ public class LayoutGenerator : MonoBehaviour
                             if (!IsRoomPositionTaken(new Vector3(allAisleRoom[i].Position.x + _betweenRoomDistance, allAisleRoom[i ].Position.y, allAisleRoom[i].Position.z), allAisleRoom)&& allAisleRoom[i].Position.x + _betweenRoomDistance!=0)
                             {
                                 allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[i].Position.x + _betweenRoomDistance, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z)));
-                                Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "2");
+                                //Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "2");
                                 k++;
                             }
                             break;
@@ -88,7 +88,7 @@ public class LayoutGenerator : MonoBehaviour
                             if (!IsRoomPositionTaken(new Vector3(allAisleRoom[i].Position.x, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z + _betweenRoomDistance), allAisleRoom))
                             {
                                 allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[i].Position.x , allAisleRoom[i].Position.y, allAisleRoom[i].Position.z + _betweenRoomDistance)));
-                                Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "3");
+                                //Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "3");
                                 k++;
                             }
                             break;
@@ -96,7 +96,7 @@ public class LayoutGenerator : MonoBehaviour
                             if (!IsRoomPositionTaken(new Vector3(allAisleRoom[i].Position.x, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z - _betweenRoomDistance), allAisleRoom))
                             {
                                 allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[i].Position.x , allAisleRoom[i].Position.y, allAisleRoom[i].Position.z - _betweenRoomDistance)));
-                                Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "4");
+                                //Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "4");
                                 k++;
                             }
                             break;

@@ -57,15 +57,15 @@ public class RoomGeneration : MonoBehaviour
         _roomsInPlay.Add(_hall);
         _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
         int i = 0;
-        Debug.Log(_layout.AisleLeft[0].Count);
+        //Debug.Log(_layout.AisleLeft[0].Count);
         foreach(List<RoomPosition> positionsList in _layout.AisleLeft)
         {
-            Debug.Log("i " + i);
+            //Debug.Log("i " + i);
             
             for (int j = 0; j < positionsList.Count; j++)
             {
                 int rand = Random.Range(0, _roomsLists.Floors[i].Rooms.Count);
-                Debug.Log("j " + j);
+                //Debug.Log("j " + j);
                 GameObject room= Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position,transform.rotation);
                 switch (i)
                 {
@@ -91,11 +91,11 @@ public class RoomGeneration : MonoBehaviour
         i = 0;
         foreach (List<RoomPosition> positionsList in _layout.AisleRight)
         {
-            Debug.Log("i " + i);
+            //Debug.Log("i " + i);
             int rand = Random.Range(0, _roomsLists.Floors[i].Rooms.Count);
             for (int j = 0; j < positionsList.Count; j++)
             {
-                Debug.Log("j " + j);
+                //Debug.Log("j " + j);
                 GameObject room = Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position, transform.rotation);
                 switch (i)
                 {
