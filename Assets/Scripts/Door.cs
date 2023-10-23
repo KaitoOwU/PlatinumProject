@@ -21,27 +21,23 @@ public class Door : Interactable
         EXIT,
     }
 
-    /*protected override void OnInteract(Player player)
+    protected override void OnInteract(Player player)
     {
         if(player.CurrentRoom is Hub)
         {
-            int count = 0;
-            foreach (PlayerInfo p in GameManager.Instance.PlayerList)
-            {
-                if(p.PlayerController.IsInteractHeld) 
-                    count++;
-            }
+            int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsInteractHeld).Count;
             
             Hub hub = (Hub)player.CurrentRoom;
-            if (hub.RoomDoorLeft.PlayersInRange.Count > 1 && hub.RoomDoorRight.PlayersInRange.Count > 1 && count == 2) // 2 POUR TEST ==> 4 !!!
+            if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorRight.PlayersInRange.Count >= 1 && count >= 2) // >2 POUR TEST ==> ==4 !!!
             {
+                Debug.Log("TP !!");
                 
                 GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                 GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
 
                 //TP All players to next room depending on the door they're interacting with (after they all hold button)
-                hub.RoomDoorLeft.TP_Players(hub.RoomLeft.PreviousRoomDoor.TpPoint);
-                hub.RoomDoorRight.TP_Players(hub.RoomRight.PreviousRoomDoor.TpPoint);
+                hub.RoomDoorLeft.TP_Players(hub.RoomDoorLeft.LinkedDoor.TpPoint);
+                hub.RoomDoorRight.TP_Players(hub.RoomDoorRight.LinkedDoor.TpPoint);
 
                 hub.RoomDoorLeft.UpdateRoom(hub.RoomLeft);
                 hub.RoomDoorRight.UpdateRoom(hub.RoomRight);
@@ -55,35 +51,15 @@ public class Door : Interactable
         {
             Room room = player.CurrentRoom;
             Debug.Log("PLAYER  "+ player.Index );
-            switch (DoorTypeValue)
-            {
-                case DoorType.ENTRY:
-                    //SI TU RETOURNES AU HUB
-                    if(room.PreviousRoom is Hub)
-                    {
-                        Hub hub = (Hub)room.PreviousRoom;
-                        if(room.RoomSide == Hub.Side.LEFT)
-                            TP_Players(hub.RoomDoorLeft.TpPoint);
-                        else
-                            TP_Players(hub.RoomDoorRight.TpPoint);
-                        TP_Camera(room.PreviousRoom);
-                        UpdateRoom(room.PreviousRoom);
-                    }
-                    else
-                    {
-                        TP_Players(room.PreviousRoom.NextRoomDoor.TpPoint);
-                        TP_Camera(room.PreviousRoom);
-                        UpdateRoom(room.PreviousRoom);
-                    }
-                    break;
-                case DoorType.EXIT:
-                    TP_Players(room.NextRoom.PreviousRoomDoor.TpPoint);
-                    TP_Camera(room.NextRoom);
-                    UpdateRoom(room.NextRoom);
-                    break;
-            }                     
+
+            if (_linkedDoor.room is Hub)
+                return;
+            
+            TP_Players(_linkedDoor.TpPoint);
+            TP_Camera(_linkedDoor.room);
+            UpdateRoom(_linkedDoor.room);                     
         }
-    }*/
+    }
 
     public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
     { 
