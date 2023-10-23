@@ -29,7 +29,7 @@ public class Door : Interactable
             }
             
             Hub hub = (Hub)player.CurrentRoom;
-            if (hub.RoomDoorLeft.) // 2 POUR TEST ==> 4 !!!
+            if (hub.RoomDoorLeft.PlayersInRange.Count > 1 && hub.RoomDoorRight.PlayersInRange.Count > 1 && count == 2) // 2 POUR TEST ==> 4 !!!
             {
                 
                 GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
