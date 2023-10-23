@@ -1,23 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static GameManager;
 using static UnityEngine.EventSystems.EventTrigger;
-
+[System.Serializable]
 public class Door : Interactable
 {
     [SerializeField] private Transform _tpPoint;
     [SerializeField] private DoorType _doorTypeValue;
+    [SerializeField] private Door _linkedDoor;
+    [SerializeField] private Room room;
 
     public Transform TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
+
+    public Door LinkedDoor { get => _linkedDoor; set => _linkedDoor = value; }
+
     public enum DoorType
     {
         ENTRY,
         EXIT,
     }
 
-    protected override void OnInteract(Player player)
+    /*protected override void OnInteract(Player player)
     {
         if(player.CurrentRoom is Hub)
         {
@@ -27,10 +31,12 @@ public class Door : Interactable
                 if(p.PlayerController.IsInteractHeld) 
                     count++;
             }
-            if (count == 2) // 2 POUR TEST ==> 4 !!!
+            
+            Hub hub = (Hub)player.CurrentRoom;
+            if (hub.RoomDoorLeft.PlayersInRange.Count > 1 && hub.RoomDoorRight.PlayersInRange.Count > 1 && count == 2) // 2 POUR TEST ==> 4 !!!
             {
-                Hub hub = (Hub)player.CurrentRoom;
-                GameManager.Instance.SwitchCameraState(CameraState.SPLIT);
+                
+                GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                 GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
 
                 //TP All players to next room depending on the door they're interacting with (after they all hold button)
@@ -77,9 +83,9 @@ public class Door : Interactable
                     break;
             }                     
         }
-    }
+    }*/
 
-    public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui int�ragissent avec this porte
+    public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
     { 
         //GARDER EN MEMOIRE LE NOMBRE DE JOUEUR POUR SAVOIR COMBIEN IL EN FAUT POUR PASSER A LA SALLE SUIVANTE DANS CHAQUE BRANCHE
         foreach(Player p in _playersInRange)
