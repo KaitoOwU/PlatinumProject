@@ -204,6 +204,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Floor3Room2
       objectReference: {fileID: 0}
+    - target: {fileID: 6187120764720082186, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
+        type: 3}
+      propertyPath: _hub
+      value: 
+      objectReference: {fileID: 1000385519}
     - target: {fileID: 6340195886568384615, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -263,12 +268,12 @@ PrefabInstance:
         type: 3}
       propertyPath: _floor.Array.data[2]._floorA
       value: 
-      objectReference: {fileID: 587307437}
+      objectReference: {fileID: 0}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _floor.Array.data[2]._floorB
       value: 
-      objectReference: {fileID: 1387546550}
+      objectReference: {fileID: 0}
     - target: {fileID: 8816325919117355407, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: m_Name
@@ -490,12 +495,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96d1a6be2b9b65e429303aecba0062e7, type: 3}
---- !u!1 &587307437 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3195971930810303244, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
-    type: 3}
-  m_PrefabInstance: {fileID: 100793527}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &937407084
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,12 +649,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a620a50c6904c458ad3b0167f426b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1387546550 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2036859785265502345, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
-    type: 3}
-  m_PrefabInstance: {fileID: 100793527}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1908348851
 PrefabInstance:
   m_ObjectHideFlags: 0
