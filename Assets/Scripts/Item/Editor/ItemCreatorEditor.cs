@@ -46,17 +46,23 @@ public class ItemCreatorEditor : EditorWindow
     private void OnGUI()
     {
         GUILayout.Space(10);
-        GUILayout.Label("Data", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}, GUILayout.ExpandWidth(true));
-        GUILayout.Space(10);
+        GUILayout.Label("DATA", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}, GUILayout.ExpandWidth(true));
+        GUILayout.Space(20);
         
         EditorGUILayout.BeginHorizontal();
         {
+            if (_itemModified != null)
+                GUI.enabled = false;
+            
             GUILayout.Label("ID de l'Item");
+            
+            
             _id = EditorGUILayout.IntField(Mathf.Abs(_id));
             if (GUILayout.Button("Auto"))
             {
                 _id = FindFirstFreeID();
             }
+            GUI.enabled = true;
         }
         EditorGUILayout.EndHorizontal();
         
@@ -69,9 +75,11 @@ public class ItemCreatorEditor : EditorWindow
         
         _icon = (Sprite)EditorGUILayout.ObjectField("Icône de l'Item (UI)", _icon, typeof(Sprite), false);
         
+        EditorGUILayout.Separator();
+        
         GUILayout.Space(10);
-        GUILayout.Label("Behaviour", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}, GUILayout.ExpandWidth(true));
-        GUILayout.Space(10);
+        GUILayout.Label("BEHAVIOUR", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}, GUILayout.ExpandWidth(true));
+        GUILayout.Space(20);
         
         _isThrowable = EditorGUILayout.Toggle("Is Throwable ?", _isThrowable);
         _generationZone = (GenerationZone)EditorGUILayout.EnumFlagsField("Generation Zones", _generationZone);
@@ -117,11 +125,7 @@ public class ItemCreatorEditor : EditorWindow
         {
             if (GUILayout.Button("Sauvegarder l'item"))
             {
-                if (!IsIDFree(_id))
-                {
-                    EditorUtility.DisplayDialog("Erreur : ID déjà utilisé", "Cet ID est déjà utilisé\nUtilise le bouton \"Auto\" pour trouver le premier ID libre", "Ok");
-                }
-                else if (_name == string.Empty)
+                if (_name == string.Empty)
                 {
                     EditorUtility.DisplayDialog("Erreur : nom invalide", "Le nom que tu as donné à l'Item est invalide.", "Ok");
                 } else if (_icon == null)
@@ -130,8 +134,8 @@ public class ItemCreatorEditor : EditorWindow
                 }
                 else
                 {
-                    AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_itemModified.Prefab), _itemModified.ID + "_" + _itemModified.Name + "Prefab.prefab");
-                    AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_itemModified), _itemModified.ID + "_" + _itemModified.Name + "Data.asset");
+                    AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_itemModified.Prefab), _id + "_" + _name + "Prefab.prefab");
+                    AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_itemModified), _id + "_" + _name + "Data.asset");
                     
                     _itemModified.SaveData(_id, _name, _icon, _itemModified.Prefab, _isThrowable, _generationZone);
                     Close();

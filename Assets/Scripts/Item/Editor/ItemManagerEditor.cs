@@ -17,7 +17,7 @@ public class ItemManagerEditor : EditorWindow
     [MenuItem("Platinum/Manage Items")]
     private static void Init()
     {
-        ItemManagerEditor window = GetWindowWithRect<ItemManagerEditor>(new Rect(0, 0, 300, 400), false);
+        ItemManagerEditor window = GetWindowWithRect<ItemManagerEditor>(new Rect(0, 0, 500, 700), false);
         window.Show();
     }
 
@@ -77,7 +77,7 @@ public class ItemManagerEditor : EditorWindow
     {
         if (items.Count > 0)
         {
-            _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, GUILayout.Height(200));
+            _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, GUILayout.Height(500));
             {
                 foreach (ItemData data in items)
                 {

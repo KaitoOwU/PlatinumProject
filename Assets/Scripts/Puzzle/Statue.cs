@@ -6,36 +6,16 @@ using UnityEngine;
 public class Statue : Interactable
 {
 
-    private ReparationState _reparationState;
+    private bool _isRepaired;
     [SerializeField] private GameObject _statueArm;
     
     protected override void OnInteract(Player player)
     {
-        switch (_reparationState)
+        if (!_isRepaired && player.HeldItem.ID == 1) // BRAS DE STATUE
         {
-            case ReparationState.NONE:
-
-                if (player.HeldItem.ID == 1) //BRAS DE STATUE
-                {
-                    player.HeldItem = null;
-                    _statueArm.SetActive(true);
-                    _reparationState = ReparationState.ARM_PLACED;
-                }
-                
-                break;
-            
-            case ReparationState.ARM_PLACED:
-
-                if (player.HeldItem.ID == 0) //TOURNEVIS
-                {
-                    _statueArm.transform.DOLocalMoveZ(.6f, .5f);
-                    _reparationState = ReparationState.REPAIRED;
-                    Debug.Log("Quête complétée !!!!!");
-                }
-                
-                break;
+            player.HeldItem = null;
+            _statueArm.SetActive(true);
+            _isRepaired = true;
         }
     }
-    
-    private enum ReparationState {NONE, ARM_PLACED, REPAIRED}
 }
