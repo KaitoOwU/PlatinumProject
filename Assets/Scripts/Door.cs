@@ -9,11 +9,12 @@ public class Door : Interactable
     [SerializeField] private Transform _tpPoint;
     [SerializeField] private DoorType _doorTypeValue;
     [SerializeField] private Door _linkedDoor;
+    [SerializeField] private Room room;
 
     public Transform TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
 
-    public Door LinkedDoor { get => _linkedDoor;}
+    public Door LinkedDoor { get => _linkedDoor; set => _linkedDoor = value; }
 
     public enum DoorType
     {

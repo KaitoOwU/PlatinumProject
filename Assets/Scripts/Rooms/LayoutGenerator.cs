@@ -20,6 +20,7 @@ public class LayoutGenerator : MonoBehaviour
 
     public List<List<RoomPosition>> AisleLeft { get => _aisleLeft; }
     public List<List<RoomPosition>> AisleRight { get => _aisleRight;}
+    public int BetweenRoomDistance { get => _betweenRoomDistance; }
 
     // Start is called before the first frame update
     void Start()
@@ -152,12 +153,11 @@ public class LayoutGenerator : MonoBehaviour
     }
 }
 
-[System.Serializable]
 public class RoomPosition
 { 
-   [SerializeField] private Vector3 _position;
-    [SerializeField] private int _doorNumber;
-    [SerializeField] private List<Vector3> _nearbyPos = new List<Vector3>();
+    private Vector3 _position;
+    private int _doorNumber;
+    private List<Vector3> _nearbyPos = new List<Vector3>();
 
     public Vector3 Position { get => _position; }
     public int DoorNumber { get => _doorNumber; }
