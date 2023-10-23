@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static GameManager;
 using static UnityEngine.EventSystems.EventTrigger;
 
 public class Door : Interactable
@@ -28,10 +27,12 @@ public class Door : Interactable
                 if(p.PlayerController.IsInteractHeld) 
                     count++;
             }
-            if (count == 2) // 2 POUR TEST ==> 4 !!!
+            
+            Hub hub = (Hub)player.CurrentRoom;
+            if (hub.RoomDoorLeft.) // 2 POUR TEST ==> 4 !!!
             {
-                Hub hub = (Hub)player.CurrentRoom;
-                GameManager.Instance.SwitchCameraState(CameraState.SPLIT);
+                
+                GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                 GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
 
                 //TP All players to next room depending on the door they're interacting with (after they all hold button)
@@ -79,7 +80,7 @@ public class Door : Interactable
         }
     }
 
-    public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
+    public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intÃ©ragissent avec this porte
     { 
         //GARDER EN MEMOIRE LE NOMBRE DE JOUEUR POUR SAVOIR COMBIEN IL EN FAUT POUR PASSER A LA SALLE SUIVANTE DANS CHAQUE BRANCHE
         foreach(Player p in _playersInRange)

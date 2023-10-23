@@ -24,6 +24,12 @@ public class GameManager : MonoBehaviour
         set => _playerList = value;
     }
 
+    public IReadOnlyList<PlayerInfo> RightPlayers =>
+        PlayerList.FindAll(player => player.RelativePos == HubRelativePosition.RIGHT_WING);
+    
+    public IReadOnlyList<PlayerInfo> LeftPlayers =>
+        PlayerList.FindAll(player => player.RelativePos == HubRelativePosition.LEFT_WING);
+
     [SerializeField]
     private List<PlayerInfo> _playerList = new(4);
     [SerializeField]
@@ -108,19 +114,29 @@ public class GameManager : MonoBehaviour
         camera.transform.position = newValues.position;
         camera.transform.rotation = newValues.rotation;
     }
+}
 
-    [Serializable]
-    public struct PlayerInfo
-    { 
-        public PlayerController PlayerController => playerController;
-        [SerializeField]
-        private PlayerController playerController;
+[Serializable]
+public struct PlayerInfo
+{ 
+    public PlayerController PlayerController => playerController;
+    [SerializeField]
+    private PlayerController playerController;
 
-        public int Id => id;
-        [SerializeField]
-        private int id;
+    public int Id => id;
+    [SerializeField]
+    private int id;
 
-        public Player PlayerRef => _playerRef;
-        [SerializeField] private Player _playerRef;
-    }
+    public Player PlayerRef => _playerRef;
+    [SerializeField] private Player _playerRef;
+
+    [SerializeField] private HubRelativePosition _relativePos;
+    public HubRelativePosition RelativePos => _relativePos;
+}
+
+public enum HubRelativePosition
+{
+    HUB,
+    LEFT_WING,
+    RIGHT_WING
 }
