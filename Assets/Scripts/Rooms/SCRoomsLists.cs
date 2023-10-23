@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Rooms", menuName = "Platinium/Rooms", order = 0)]
+[CreateAssetMenu(fileName = "Rooms", menuName = "Platinum/Rooms", order = 0)]
 public class SCRoomsLists : ScriptableObject
 {
 

@@ -2,23 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
-
+[System.Serializable]
 public class Door : Interactable
 {
     [SerializeField] private Transform _tpPoint;
     [SerializeField] private DoorType _doorTypeValue;
+    [SerializeField] private Door _linkedDoor;
+    [SerializeField] private Room room;
 
     public Transform TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
+
+    public Door LinkedDoor { get => _linkedDoor; set => _linkedDoor = value; }
+
     public enum DoorType
     {
         ENTRY,
         EXIT,
     }
 
-    protected override void OnInteract(Player player)
+    /*protected override void OnInteract(Player player)
     {
-        Debug.Log(player.CurrentRoom is Hub);
         if(player.CurrentRoom is Hub)
         {
             int count = 0;
@@ -50,6 +54,7 @@ public class Door : Interactable
         else
         {
             Room room = player.CurrentRoom;
+            Debug.Log("PLAYER  "+ player.Index );
             switch (DoorTypeValue)
             {
                 case DoorType.ENTRY:
@@ -78,7 +83,7 @@ public class Door : Interactable
                     break;
             }                     
         }
-    }
+    }*/
 
     public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
     { 

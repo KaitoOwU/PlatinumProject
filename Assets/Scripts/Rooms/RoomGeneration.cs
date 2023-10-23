@@ -3,49 +3,123 @@ using System.Collections.Generic;
 using UnityEngine;
 public class RoomGeneration : MonoBehaviour
 {
-    [SerializeField] private List<RoomRegion> _floor = new List<RoomRegion>();
+    //[SerializeField] private List<RoomRegion> _floor = new List<RoomRegion>();
     [SerializeField] private bool _reseting;
     [SerializeField] private Hub _hall;
+    private List<Room> _roomsInPlay1 = new List<Room>();
+    private List<Room> _roomsInPlay2 = new List<Room>();
+    private List<Room> _roomsInPlay3 = new List<Room>();
+    private List<Room> _roomsInPlay4 = new List<Room>();
     private List<Room> _roomsInPlay = new List<Room>();
     SCRoomsLists _roomsLists;
     List<GameObject> _currentFloor = new List<GameObject>();
+    [SerializeField] LayoutGenerator _layout;
     #region Generation
     private void Start()
     {
-        _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
+       
         _reseting = false;
-        GenerateRooms();
     }
-    private void GenerateRooms()
-    {
-        int i = 0;
-        if (_roomsInPlay.Count > 0)
-        {
-            foreach (Room room in _roomsInPlay)
-            {
-                room.GetComponent<SelfDestruct>().Destruct();
-            }
-        }
-        _roomsInPlay = new List<Room>();
-        foreach (RoomRegion floor in _floor)
-        {
-           
-            foreach (GameObject room in _roomsLists.Floors[i].Rooms)
-            {
-                _currentFloor.Add(room);
-            }
-            int rand = Random.Range(0, _currentFloor.Count);
-            GameObject room1 = Instantiate(_currentFloor[rand], floor.FloorA.transform.position, floor.FloorA.transform.rotation);
-            _currentFloor.RemoveAt(rand);
-            Debug.Log(_currentFloor.Count);
-            int rand2 = Random.Range(0, _currentFloor.Count);
-            GameObject room2 = Instantiate(_currentFloor[rand2], floor.FloorB.transform.position, floor.FloorB.transform.rotation);
-            _currentFloor.RemoveAt(rand2);
+    /*  private void GenerateRooms()
+      {
+          int i = 0;
+          if (_roomsInPlay.Count > 0)
+          {
+              foreach (Room room in _roomsInPlay)
+              {
+                  room.GetComponent<SelfDestruct>().Destruct();
+              }
+          }
+          _roomsInPlay = new List<Room>();
+          foreach (RoomRegion floor in _floor)
+          {
 
-            _roomsInPlay.Add(room1.GetComponent<Room>());
-            _roomsInPlay.Add(room2.GetComponent<Room>());
+              foreach (GameObject room in _roomsLists.Floors[i].Rooms)
+              {
+                  _currentFloor.Add(room);
+              }
+              int rand = Random.Range(0, _currentFloor.Count);
+              GameObject room1 = Instantiate(_currentFloor[rand], floor.FloorA.transform.position, floor.FloorA.transform.rotation);
+              _currentFloor.RemoveAt(rand);
+              int rand2 = Random.Range(0, _currentFloor.Count);
+              GameObject room2 = Instantiate(_currentFloor[rand2], floor.FloorB.transform.position, floor.FloorB.transform.rotation);
+              _currentFloor.RemoveAt(rand2);
+
+              _roomsInPlay.Add(room1.GetComponent<Room>());
+              _roomsInPlay.Add(room2.GetComponent<Room>());
+              i++;
+              _currentFloor.Clear();
+          }
+          SetRooms();
+      }*/
+    public void GenerateRooms()
+    {
+        _roomsInPlay.Add(_hall);
+        _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
+        int i = 0;
+        Debug.Log(_layout.AisleLeft[0].Count);
+        foreach(List<RoomPosition> positionsList in _layout.AisleLeft)
+        {
+            Debug.Log("i " + i);
+            
+            for (int j = 0; j < positionsList.Count; j++)
+            {
+                int rand = Random.Range(0, _roomsLists.Floors[i].Rooms.Count);
+                Debug.Log("j " + j);
+                GameObject room= Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position,transform.rotation);
+                switch (i)
+                {
+                    case 0:
+                        _roomsInPlay1.Add(room.GetComponent<Room>());
+                        break;
+                    case 1:
+                        _roomsInPlay2.Add(room.GetComponent<Room>());
+                        break;
+                    case 2:
+                        _roomsInPlay3.Add(room.GetComponent<Room>());
+                        break;
+                    case 3:
+                        _roomsInPlay4.Add(room.GetComponent<Room>());
+                        break;
+                }               
+                _roomsInPlay.Add(room.GetComponent<Room>());
+            }
             i++;
-            _currentFloor.Clear();
+            if (i > 4)
+                break;
+        }
+        i = 0;
+        foreach (List<RoomPosition> positionsList in _layout.AisleRight)
+        {
+            Debug.Log("i " + i);
+            int rand = Random.Range(0, _roomsLists.Floors[i].Rooms.Count);
+            for (int j = 0; j < positionsList.Count; j++)
+            {
+                Debug.Log("j " + j);
+                GameObject room = Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position, transform.rotation);
+                switch (i)
+                {
+                    case 0:
+                        _roomsInPlay1.Add(room.GetComponent<Room>());
+                        break;
+                    case 1:
+                        _roomsInPlay2.Add(room.GetComponent<Room>());
+                        break;
+                    case 2:
+                        _roomsInPlay3.Add(room.GetComponent<Room>());
+                        break;
+                    case 3:
+                        _roomsInPlay4.Add(room.GetComponent<Room>());
+                        break;
+                }
+                _roomsInPlay.Add(room.GetComponent<Room>());
+            }
+            i++;
+            if(i > 4)
+            {
+                break;
+            }
+ 
         }
         SetRooms();
     }
@@ -59,87 +133,217 @@ public class RoomGeneration : MonoBehaviour
             _reseting = false;
         }
     }
+    /* private void Shuffle()
+     {
+         List<Vector3> roomsPos = new List<Vector3>();
+         for (int i = 0; i < _floor.Count - 1; i++)
+         {
+             roomsPos.Add(_floor[i].FloorA.transform.position);
+             roomsPos.Add(_floor[i].FloorB.transform.position);
+         }
+         foreach (Room room in _roomsInPlay)
+         {
+             if (room != _roomsInPlay[_roomsInPlay.Count - 1] && room != _roomsInPlay[_roomsInPlay.Count - 2])
+             {
+                 int rand = Random.Range(0, roomsPos.Count);
+                 room.transform.position = roomsPos[rand];
+                 roomsPos.RemoveAt(rand);
+             }
+         }
+         SetRooms();
+     }*/
     private void Shuffle()
     {
-        List<Vector3> roomsPos = new List<Vector3>();
-        for(int i = 0; i < _floor.Count-1; i++)
+        List<Room> roomToShuffle1 = new List<Room>();
+        List<Room> roomToShuffle2 = new List<Room>();
+        List<Room> roomToShuffle3 = new List<Room>();
+        List<Room> roomToShuffle4 = new List<Room>();
+        foreach(Room room in _roomsInPlay1)
         {
-            roomsPos.Add(_floor[i].FloorA.transform.position);
-            roomsPos.Add(_floor[i].FloorB.transform.position);
+            roomToShuffle1.Add(room);
         }
-        foreach(Room room in _roomsInPlay)
+        foreach (Room room in _roomsInPlay2)
         {
-            if (room != _roomsInPlay[_roomsInPlay.Count - 1] && room != _roomsInPlay[_roomsInPlay.Count - 2])
+            roomToShuffle2.Add(room);
+        }
+        foreach (Room room in _roomsInPlay3)
+        {
+            roomToShuffle3.Add(room);
+        }
+        foreach (Room room in _roomsInPlay4)
+        {
+            roomToShuffle4.Add(room);
+        }
+        _roomsInPlay1.Clear();
+        _roomsInPlay2.Clear();
+        _roomsInPlay3.Clear();
+        _roomsInPlay4.Clear();
+        int i = 0;
+        foreach (List<RoomPosition> roomPositions in _layout.AisleLeft)
+        {
+            foreach(RoomPosition roomPosition in roomPositions)
             {
-                int rand = Random.Range(0, roomsPos.Count);
-                room.transform.position = roomsPos[rand];
-                roomsPos.RemoveAt(rand);
+                int rand = 0;
+                switch (i)
+                {
+                    case 0:
+                         rand = Random.Range(0, roomToShuffle1.Count);
+                        roomToShuffle1[rand].transform.position = roomPosition.Position;
+                        _roomsInPlay1.Add(roomToShuffle1[rand]);
+                        roomToShuffle1.Remove(roomToShuffle1[rand]);
+                        break;
+                    case 1:
+                         rand = Random.Range(0, roomToShuffle2.Count);
+                        roomToShuffle2[rand].transform.position = roomPosition.Position;
+                        _roomsInPlay2.Add(roomToShuffle2[rand]);
+                        roomToShuffle2.Remove(roomToShuffle2[rand]);
+                        break;
+                    case 2:
+                        rand = Random.Range(0, roomToShuffle3.Count);
+                        roomToShuffle3[rand].transform.position = roomPosition.Position;
+                        _roomsInPlay3.Add(roomToShuffle3[rand]);
+                        roomToShuffle3.Remove(roomToShuffle3[rand]);
+                        break;
+                    case 3:
+                        rand = Random.Range(0, roomToShuffle4.Count);
+                        roomToShuffle4[rand].transform.position = roomPosition.Position;
+                        _roomsInPlay4.Add(roomToShuffle4[rand]);
+                        roomToShuffle4.Remove(roomToShuffle4[rand]);
+                        break;
+                }
             }
+            i++;
+            if (i > 4)
+                break;
+        }
+        i = 0;
+        foreach (List<RoomPosition> roomPositions in _layout.AisleRight)
+        {
+            foreach (RoomPosition roomPosition in roomPositions)
+            {
+                int rand = 0;
+                switch (i)
+                {
+                    case 0:
+                        rand = Random.Range(0, roomToShuffle1.Count);
+                        roomToShuffle1[rand].transform.position = roomPosition.Position;
+                        _roomsInPlay1.Add(roomToShuffle1[rand]);
+                        roomToShuffle1.Remove(roomToShuffle1[rand]);
+                        break;
+                    case 1:
+                        rand = Random.Range(0, roomToShuffle2.Count);
+                        roomToShuffle2[rand].transform.position = roomPosition.Position;
+                        _roomsInPlay2.Add(roomToShuffle2[rand]);
+                        roomToShuffle2.Remove(roomToShuffle2[rand]);
+                        break;
+                    case 2:
+                        rand = Random.Range(0, roomToShuffle3.Count);
+                        roomToShuffle3[rand].transform.position = roomPosition.Position;
+                        _roomsInPlay3.Add(roomToShuffle3[rand]);
+                        roomToShuffle3.Remove(roomToShuffle3[rand]);
+                        break;
+                    case 3:
+                        rand = Random.Range(0, roomToShuffle4.Count);
+                        roomToShuffle4[rand].transform.position = roomPosition.Position;
+                        _roomsInPlay4.Add(roomToShuffle4[rand]);
+                        roomToShuffle4.Remove(roomToShuffle4[rand]);
+                        break;
+                }
+            }
+            i++;
+            if (i > 4)
+                break;
         }
         SetRooms();
     }
+    
     #endregion
+
     public void SetRooms()
     {
-        if (_floor.Count > 1)
+        Door[] allDoors = FindObjectsOfType<Door>();
+        for (int i = 0; i < allDoors.Length; i++)
         {
-            foreach (Room room in _roomsInPlay)
+            if (allDoors[i].LinkedDoor != null)
+                allDoors[i].LinkedDoor = null;
+        }
+        foreach (Room room in _roomsInPlay)
+        {
+            room.LinkedRooms.Clear();
+        }
+        LinkRoom(_hall, FindRoomAtPosition(_hall.transform.position - new Vector3(_layout.BetweenRoomDistance, 0, 0)),_hall.Doors[0]);
+        LinkRoom(_hall, FindRoomAtPosition(_hall.transform.position + new Vector3(_layout.BetweenRoomDistance, 0, 0)),_hall.Doors[1]);
+        foreach (Room room in _roomsInPlay)
+        {
+            foreach(Door door in room.Doors)
             {
-                for (int i = 0; i < _floor.Count; i++)
+                if (door.LinkedDoor == null)
                 {
-                    if (i == 0)
+                    for (int i = 0; i < 4; i++)
                     {
-                        if (room.transform.position == _floor[i].FloorA.transform.position)
+                        switch (i)
                         {
-                            room.PreviousRoom = _hall;
-                            room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorA.transform.position);
-                            _hall.RoomLeft = room;
-                            room.RoomSide = Room.Side.LEFT;
-
+                            case 0:
+                                if (FindRoomAtPosition(room.transform.position + new Vector3(_layout.BetweenRoomDistance, 0, 0)))
+                                {
+                                    if(!FindRoomAtPosition(room.transform.position + new Vector3(_layout.BetweenRoomDistance, 0, 0)).LinkedRooms.Contains(room))
+                                    {
+                                        LinkRoom(room, FindRoomAtPosition(room.transform.position + new Vector3(_layout.BetweenRoomDistance, 0, 0)), door);
+                                        i = 4;
+                                    }
+                                }
+                                break;
+                            case 1:
+                                if (FindRoomAtPosition(room.transform.position + new Vector3(0, 0, _layout.BetweenRoomDistance)))
+                                {
+                                    if (!FindRoomAtPosition(room.transform.position + new Vector3(0, 0, _layout.BetweenRoomDistance)).LinkedRooms.Contains(room))
+                                    {
+                                        LinkRoom(room, FindRoomAtPosition(room.transform.position + new Vector3(0, 0, _layout.BetweenRoomDistance)), door);
+                                        i = 4;
+                                    }
+                                }
+                                break;
+                            case 2:
+                                if (FindRoomAtPosition(room.transform.position - new Vector3(_layout.BetweenRoomDistance, 0, 0)))
+                                {
+                                    if (!FindRoomAtPosition(room.transform.position - new Vector3(_layout.BetweenRoomDistance, 0, 0)).LinkedRooms.Contains(room))
+                                    {
+                                        LinkRoom(room, FindRoomAtPosition(room.transform.position - new Vector3(_layout.BetweenRoomDistance, 0, 0)), door);
+                                        i = 4;
+                                    }
+                                }
+                                break;
+                            case 3:
+                                if (FindRoomAtPosition(room.transform.position - new Vector3(0, 0, _layout.BetweenRoomDistance)))
+                                {
+                                    if (!FindRoomAtPosition(room.transform.position - new Vector3(0, 0, _layout.BetweenRoomDistance)).LinkedRooms.Contains(room))
+                                    {
+                                        LinkRoom(room, FindRoomAtPosition(room.transform.position - new Vector3(0, 0, _layout.BetweenRoomDistance)), door);
+                                        i = 4;
+                                    }
+                                }
+                                break;
                         }
-                        if (room.transform.position == _floor[i].FloorB.transform.position)
-                        {
-                            room.PreviousRoom = _hall;
-                            room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorB.transform.position);
-                            _hall.RoomRight = room;
-                            room.RoomSide = Room.Side.RIGHT;
-                        }
-                    }
-                    else if (i == _floor.Count - 1)
-                    {
-                        if(room.transform.position == _floor[i].FloorA.transform.position)
-                        {
-                            room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorA.transform.position);
-                            room.NextRoom = _hall;
-                            room.RoomSide = Room.Side.LEFT;
-
-                        }
-                        if (room.transform.position == _floor[i].FloorB.transform.position)
-                        {
-                            room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorB.transform.position); ;
-                            room.NextRoom = _hall;
-                            room.RoomSide = Room.Side.RIGHT;
-                        }
-                    }
-                    else
-                    {
-                        if (room.transform.position == _floor[i].FloorA.transform.position)
-                        {
-                            room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorA.transform.position);
-                            room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorA.transform.position);
-                            room.RoomSide = Room.Side.LEFT;
-
-                        }
-                        if (room.transform.position == _floor[i].FloorB.transform.position)
-                        {
-                            room.PreviousRoom = FindRoomAtPosition(_floor[i - 1].FloorB.transform.position); ;
-                            room.NextRoom = FindRoomAtPosition(_floor[i + 1].FloorB.transform.position);
-                            room.RoomSide = Room.Side.RIGHT;
-                        }
+                        
                     }
                 }
             }
-        } 
+        }
+    }
+    private void LinkRoom(Room room, Room roomToLink,Door door)
+    {
+        foreach (Door doorToLink in roomToLink.Doors)
+        {
+            if (doorToLink.LinkedDoor == null)
+            {
+                room.LinkedRooms.Add(roomToLink);
+               roomToLink.LinkedRooms.Add(room);
+                door.LinkedDoor = doorToLink;
+                doorToLink.LinkedDoor = door;
+                
+                break;
+            }
+        }
     }
     public Room FindRoomAtPosition(Vector3 pos)
     {
@@ -154,7 +358,7 @@ public class RoomGeneration : MonoBehaviour
         return _wantedRoom;
     }
 }
-[System.Serializable]
+/*[System.Serializable]
 public class RoomRegion
 {
     [SerializeField] private GameObject _floorA;
@@ -162,4 +366,4 @@ public class RoomRegion
 
     public GameObject FloorA { get => _floorA; }
     public GameObject FloorB { get => _floorB; }
-}
+}*/
