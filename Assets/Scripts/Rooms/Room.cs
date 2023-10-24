@@ -14,6 +14,7 @@ public class Room : MonoBehaviour
     [SerializeField] private  List<Door> _doors =new List<Door>();
     [SerializeField] private List<Room> _linkedRooms = new List<Room>();
     [SerializeField] private Side _roomSide;
+    [SerializeField] private Room _tandem;
 
     [SerializeField] protected Transform _cameraPoint;
 
@@ -32,4 +33,5 @@ public class Room : MonoBehaviour
     public Transform CameraPoint { get => _cameraPoint; set => _cameraPoint = value; }
     public List<Door> Doors { get => _doors; set => _doors = value; }
     public List<Room> LinkedRooms { get => _linkedRooms; set => _linkedRooms = value; }
+    public Room Tandem { get => _tandem; set => _tandem = value; }
 }
