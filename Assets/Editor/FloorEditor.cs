@@ -70,6 +70,7 @@ public class FloorEditor : EditorWindow
     }
     private void DisplayRooms()
     {
+
         if (_editedRooms == null)
         {
             _editedRooms = _floors.Floors[0];
@@ -78,9 +79,9 @@ public class FloorEditor : EditorWindow
         EditorGUILayout.BeginVertical();
         
         GUILayout.Label(_editedRoomsName, new GUIStyle(GUI.skin.label) { fontSize = 15, fontStyle = FontStyle.Bold, alignment= TextAnchor.MiddleCenter });
-        if (_editedRooms.Rooms.Count > 8)
+        if (_editedRooms.Rooms.Count > 6)
         {
-            _scrollPos =EditorGUILayout.BeginScrollView(_scrollPos);
+            _scrollPos =EditorGUILayout.BeginScrollView(_scrollPos,GUILayout.Height(200));
         }
         if (_editedRooms.Rooms.Count > 0)
         {
@@ -107,18 +108,19 @@ public class FloorEditor : EditorWindow
         {
             _editedRooms.Rooms.Add(new GameObject());
         }
-        if (GUILayout.Button("Save", new GUIStyle(GUI.skin.button) { fixedHeight = 16, fontSize = 11, fontStyle = FontStyle.Bold ,}))
+        GUI.backgroundColor = new Color(0, .53f, .22f);
+        if (GUILayout.Button("Save", new GUIStyle(GUI.skin.button) { fixedHeight = 16, fontSize = 11, fontStyle = FontStyle.Bold, }))
         {
-            SaveInputs();
+            SaveRooms();
         }
-
+        GUI.backgroundColor = Color.white;
         EditorGUILayout.EndVertical();
     }
     #endregion
-    private void SaveInputs()//doesn't really work but the whole things works without it
+    private void SaveRooms()//doesn't really work but the whole things works without it
     {
         string path = $"{FolderPath}Rooms{_extention}";
-
+        EditorUtility.SetDirty(_floors);
         if (!File.Exists(path))
         {
             Debug.Log("ça marche?");
@@ -126,7 +128,6 @@ public class FloorEditor : EditorWindow
         }
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-
     }
 }
 
