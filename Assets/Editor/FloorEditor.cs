@@ -79,10 +79,7 @@ public class FloorEditor : EditorWindow
         EditorGUILayout.BeginVertical();
         
         GUILayout.Label(_editedRoomsName, new GUIStyle(GUI.skin.label) { fontSize = 15, fontStyle = FontStyle.Bold, alignment= TextAnchor.MiddleCenter });
-        if (_editedRooms.Rooms.Count > 6)
-        {
-            _scrollPos =EditorGUILayout.BeginScrollView(_scrollPos,GUILayout.Height(200));
-        }
+        _scrollPos =EditorGUILayout.BeginScrollView(_scrollPos,GUILayout.Height(180));   
         if (_editedRooms.Rooms.Count > 0)
         {
             for (int i = 0; i < _editedRooms.Rooms.Count; i++)
@@ -100,10 +97,7 @@ public class FloorEditor : EditorWindow
                 EditorGUILayout.EndHorizontal();
             }
         }
-        if (_editedRooms.Rooms.Count > 30)
-        {
-            EditorGUILayout.EndScrollView();
-        }
+        EditorGUILayout.EndScrollView();
         if (GUILayout.Button("Add Room", new GUIStyle(GUI.skin.button) { fixedHeight = 16, fontSize = 11, fontStyle = FontStyle.Bold }))
         {
             _editedRooms.Rooms.Add(new GameObject());
