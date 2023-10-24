@@ -22,7 +22,10 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public GameData GameData => _gameData;
     public float Timer => _timer;
+    public SuspectData Murderer => _murderer;
+    public SuspectData Victim => _victim;
     public TimerPhase CurrentTimerPhase => _currentTimerPhase;
     
     public IReadOnlyList<PlayerInfo> RightPlayers =>
@@ -52,6 +55,8 @@ public class GameManager : MonoBehaviour
     public UnityEvent OnTimerEnd;
     public UnityEvent OnEachMinute;
 
+    private SuspectData _murderer;
+    private SuspectData _victim;
     private GamePhase _currentGamePhase;
     private TimerPhase _currentTimerPhase;
     private CameraState _currentCameraState;
@@ -60,6 +65,11 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
+
+    [SerializeField] private UnityEvent _onWin;
+    public UnityEvent OnWin => _onWin;
+    [SerializeField] private UnityEvent _onLose;
+    public UnityEvent OnLose => _onLose;
 
     public enum GamePhase
     {
@@ -86,9 +96,8 @@ public class GameManager : MonoBehaviour
     private static GameManager instance = null;
     public static GameManager Instance => instance;
 
-    private void Awake()
+    private void InitSingleton()
     {
-
         if (instance != null && instance != this)
         {
             Destroy(this.gameObject);
@@ -102,6 +111,11 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    private void Awake()
+    {
+        InitSingleton();
+        InitGame();
+    }
 
     void Start()
     {
@@ -109,6 +123,14 @@ public class GameManager : MonoBehaviour
         StartTimer();
     }
 
+    private void InitGame()
+    {
+        _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
+        _victim = GameData.SuspectsDatas[0]; //temporary
+        //init game accordingly;
+    }
+
+    #region Timer
     private IEnumerator IncrementTimer()
     {
         while (_isTimerGoing)
@@ -170,7 +192,9 @@ public class GameManager : MonoBehaviour
         _isTimerGoing = true;
         StartCoroutine(IncrementTimer());
     }
+    #endregion
 
+    #region Camera
     public void SwitchCameraState(CameraState targetState)
     {
         if(_currentCameraState == targetState)
@@ -200,6 +224,7 @@ public class GameManager : MonoBehaviour
         camera.transform.position = newValues.position;
         camera.transform.rotation = newValues.rotation;
     }
+    #endregion
 }
 
 [Serializable]

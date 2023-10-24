@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-[CreateAssetMenu(fileName = "Game Data", menuName = "Datas/Create Game Constants", order = 1)]
+[CreateAssetMenu(fileName = "GameData", menuName = "Datas/Create Game Constants", order = 1)]
 public class GameData : ScriptableObject
 {
     [Serializable]
@@ -22,12 +22,18 @@ public class GameData : ScriptableObject
     }
 
     [SerializeField] private TimerData _timerValues;
+    [SerializeField] private SuspectData[] suspectsDatas;
 
 
     public TimerData TimerValues
     {
         get { return _timerValues; }
         set { _timerValues = value; }
+    }    
+    public SuspectData[] SuspectsDatas
+    {
+        get { return suspectsDatas; }
+        set { suspectsDatas = value; }
     }
     
 }

@@ -51,7 +51,7 @@ public class Interactable : MonoBehaviour
     {
         foreach (Player p in _playersInRange)
         {
-            GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnInteractStarted.AddListener(OnInteract);
+            GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnInteractStarted?.RemoveListener(OnInteract);
         }
             
     }
