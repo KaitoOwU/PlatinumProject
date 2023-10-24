@@ -57,15 +57,9 @@ public class GuessManager : MonoBehaviour
         //Final Guess if all players have voted
         foreach(var v in _votes.Select(kv => kv.Value).ToList())
         {
-            Debug.Log(v);
             if (v == null)
-            {
-              Debug.Log("return");
-
                 return;
-            }
         };
-        Debug.Log("still in it");
 
         CheckFinalGuess(GetFinalGuess());
     }
