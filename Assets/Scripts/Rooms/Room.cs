@@ -5,12 +5,14 @@ using UnityEngine;
 public class Room : MonoBehaviour
 {
     
-    [SerializeField] private Room _nextRoom;
+    /*[SerializeField] private Room _nextRoom;
     [SerializeField] private Room _previousRoom;
 
     [SerializeField] private Door _nextRoomDoor;
-    [SerializeField] private Door _previousRoomDoor;
+    [SerializeField] private Door _previousRoomDoor;*/
 
+    [SerializeField] private  List<Door> _doors =new List<Door>();
+    [SerializeField] private List<Room> _linkedRooms = new List<Room>();
     [SerializeField] private Side _roomSide;
 
     [SerializeField] protected Transform _cameraPoint;
@@ -21,11 +23,13 @@ public class Room : MonoBehaviour
         RIGHT,
     }
 
-    public Room NextRoom { get => _nextRoom; set => _nextRoom = value; }
+    /*public Room NextRoom { get => _nextRoom; set => _nextRoom = value; }
     public Room PreviousRoom { get => _previousRoom; set => _previousRoom = value; }    
     
     public Door NextRoomDoor { get => _nextRoomDoor; set => _nextRoomDoor = value; }
-    public Door PreviousRoomDoor { get => _previousRoomDoor; set => _previousRoomDoor = value; }
+    public Door PreviousRoomDoor { get => _previousRoomDoor; set => _previousRoomDoor = value; }*/
     public Side RoomSide { get => _roomSide; set => _roomSide = value; }
     public Transform CameraPoint { get => _cameraPoint; set => _cameraPoint = value; }
+    public List<Door> Doors { get => _doors; set => _doors = value; }
+    public List<Room> LinkedRooms { get => _linkedRooms; set => _linkedRooms = value; }
 }

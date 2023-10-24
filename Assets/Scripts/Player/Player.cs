@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerController _playerController;
     public PlayerController PlayerController => _playerController;
     
+    [SerializeField] private HubRelativePosition _relativePos;
+    public HubRelativePosition RelativePos { get; set; }
+    
 
     [SerializeField]
     private Room _currentRoom;
@@ -28,4 +31,11 @@ public class Player : MonoBehaviour
         get;
         set;
     }
+}
+
+public enum HubRelativePosition
+{
+    HUB,
+    LEFT_WING,
+    RIGHT_WING
 }

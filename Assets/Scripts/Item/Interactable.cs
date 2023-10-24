@@ -10,6 +10,7 @@ public class Interactable : MonoBehaviour
 {
     protected List<Player> _playersInRange = new();
     protected Collider _collider;
+    public IReadOnlyList<Player> PlayersInRange => _playersInRange;
     
     [Header("--- EVENTS ---")]
     [SerializeField] protected UnityEvent _onPlayerEnterRange;

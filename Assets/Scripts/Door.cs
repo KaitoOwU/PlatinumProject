@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using static GameManager;
 using static UnityEngine.EventSystems.EventTrigger;
-
+[System.Serializable]
 public class Door : Interactable
 {
     [SerializeField] private Transform _tpPoint;
     [SerializeField] private DoorType _doorTypeValue;
+    [SerializeField] private Door _linkedDoor;
+    [SerializeField] private Room room;
 
     public Transform TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
+
+    public Door LinkedDoor { get => _linkedDoor; set => _linkedDoor = value; }
+
     public enum DoorType
     {
         ENTRY,
@@ -21,27 +26,23 @@ public class Door : Interactable
     {
         if(player.CurrentRoom is Hub)
         {
-            int count = 0;
-            foreach (PlayerInfo p in GameManager.Instance.PlayerList)
+            int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsInteractHeld).Count;
+            
+            Hub hub = (Hub)player.CurrentRoom;
+            if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count >= 1) // POUR BUILD FINALE ==> ==4 !!!
             {
-                if(p.PlayerController.IsInteractHeld) 
-                    count++;
-            }
-            if (count == 2) // 2 POUR TEST ==> 4 !!!
-            {
-                Hub hub = (Hub)player.CurrentRoom;
-                GameManager.Instance.SwitchCameraState(CameraState.SPLIT);
+                GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                 GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
 
                 //TP All players to next room depending on the door they're interacting with (after they all hold button)
-                hub.RoomDoorLeft.TP_Players(hub.RoomLeft.PreviousRoomDoor.TpPoint);
-                hub.RoomDoorRight.TP_Players(hub.RoomRight.PreviousRoomDoor.TpPoint);
+                hub.RoomDoorLeft.TP_Players(hub.RoomDoorLeft.LinkedDoor.TpPoint);
+                hub.RoomDoorRight.TP_Players(hub.RoomDoorRight.LinkedDoor.TpPoint);
 
-                hub.RoomDoorLeft.UpdateRoom(hub.RoomLeft);
-                hub.RoomDoorRight.UpdateRoom(hub.RoomRight);
+                hub.RoomDoorLeft.UpdateRoom(hub.RoomDoorLeft.LinkedDoor.room);
+                hub.RoomDoorRight.UpdateRoom(hub.RoomDoorRight.LinkedDoor.room);
 
-                hub.RoomDoorLeft.TP_Camera(hub.RoomLeft);
-                hub.RoomDoorRight.TP_Camera(hub.RoomRight);
+                hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
+                hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
                 
             }
         }
@@ -49,42 +50,54 @@ public class Door : Interactable
         {
             Room room = player.CurrentRoom;
             Debug.Log("PLAYER  "+ player.Index );
-            switch (DoorTypeValue)
+
+            if (_linkedDoor.room is Hub)
             {
-                case DoorType.ENTRY:
-                    //SI TU RETOURNES AU HUB
-                    if(room.PreviousRoom is Hub)
-                    {
-                        Hub hub = (Hub)room.PreviousRoom;
-                        if(room.RoomSide == Hub.Side.LEFT)
-                            TP_Players(hub.RoomDoorLeft.TpPoint);
-                        else
-                            TP_Players(hub.RoomDoorRight.TpPoint);
-                        TP_Camera(room.PreviousRoom);
-                        UpdateRoom(room.PreviousRoom);
-                    }
-                    else
-                    {
-                        TP_Players(room.PreviousRoom.NextRoomDoor.TpPoint);
-                        TP_Camera(room.PreviousRoom);
-                        UpdateRoom(room.PreviousRoom);
-                    }
-                    break;
-                case DoorType.EXIT:
-                    TP_Players(room.NextRoom.PreviousRoomDoor.TpPoint);
-                    TP_Camera(room.NextRoom);
-                    UpdateRoom(room.NextRoom);
-                    break;
-            }                     
+                GameManager.Instance.OnBackToHubRefused?.Invoke(this);
+                return;
+            }
+
+            if (room.RoomSide == Room.Side.RIGHT)
+            {
+                if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
+                    _playersInRange.All(player => player.PlayerController.IsInteractHeld))
+                {
+                    TP_Players(_linkedDoor.TpPoint);
+                    TP_Camera(_linkedDoor.room);
+                    UpdateRoom(_linkedDoor.room);    
+                }
+            } else if (room.RoomSide == Room.Side.LEFT)
+            {
+                if (GameManager.Instance.LeftPlayers.Count == _playersInRange.Count &&
+                    _playersInRange.All(player => player.PlayerController.IsInteractHeld))
+                {
+                    TP_Players(_linkedDoor.TpPoint);
+                    TP_Camera(_linkedDoor.room);
+                    UpdateRoom(_linkedDoor.room);
+                }
+            }
         }
     }
 
-    public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui int�ragissent avec this porte
+    public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
     { 
         //GARDER EN MEMOIRE LE NOMBRE DE JOUEUR POUR SAVOIR COMBIEN IL EN FAUT POUR PASSER A LA SALLE SUIVANTE DANS CHAQUE BRANCHE
-        foreach(Player p in _playersInRange)
+        foreach(Player p in _playersInRange) if (p.PlayerController.IsInteractHeld)
         {
             p.gameObject.transform.position = tpPoint.position;
+            if (room is Hub)
+            {
+                if (room == ((Hub)room).RoomDoorRight)
+                {
+                    p.RelativePos =
+                        HubRelativePosition.RIGHT_WING;
+                }
+                else if(this == ((Hub)room).RoomDoorLeft)
+                {
+                    p.RelativePos =
+                        HubRelativePosition.LEFT_WING;
+                }
+            }
         }
     }
 

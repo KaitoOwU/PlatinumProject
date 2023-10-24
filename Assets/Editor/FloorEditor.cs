@@ -18,7 +18,7 @@ public class PathCreator : EditorWindow
     Vector2 _scrollPos;
 
     #region SetUp
-    [MenuItem("Platinium/FloorCreator")]
+    [MenuItem("Platinum/FloorCreator")]
     public static void ShowWindow()
     {
         EditorWindow.GetWindow(typeof(PathCreator), false, "Floor Creator");
@@ -78,8 +78,9 @@ public class PathCreator : EditorWindow
     }
     private void DisplayRooms()
     {
+
         EditorGUILayout.BeginVertical(SetOptionSize(200, 200, _windowSize.y, _windowSize.y));
-        GUILayout.Label("Path:", EditorStyles.boldLabel);
+        GUILayout.Label("Rooms:", EditorStyles.boldLabel);
         if (_editedRooms.Rooms.Count > 30)
         {
             _scrollPos =EditorGUILayout.BeginScrollView(_scrollPos, GUILayout.Width(500), GUILayout.Height(800));
@@ -118,15 +119,16 @@ public class PathCreator : EditorWindow
     #endregion
     private void SaveInputs()//doesn't really work but the whole things works without it
     {
-        string path = $"{FolderPath}Paths{_extention}";
+        string path = $"{FolderPath}Rooms{_extention}";
 
         if (!File.Exists(path))
         {
-            Debug.Log("ça marche?");
+            Debug.Log("Ã§a marche?");
             AssetDatabase.CreateAsset(_floors, path);
         }
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+
     }
     #region GUIoptions
     public static GUILayoutOption[] SetOptionSize(int minWidth, int maxWidth, int minHeight, int maxHeight, int width = 0, int height = 0)
@@ -165,6 +167,23 @@ public class PathCreator : EditorWindow
             GUILayout.Width(width),
             GUILayout.Height(height)
         };
+
+    }
+    private Texture2D MakeBackgroundTexture(int width, int height, Color color)
+    {
+        Color[] pixels = new Color[width * height];
+
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            pixels[i] = color;
+        }
+
+        Texture2D backgroundTexture = new Texture2D(width, height);
+
+        backgroundTexture.SetPixels(pixels);
+        backgroundTexture.Apply();
+
+        return backgroundTexture;
     }
     #endregion //GUIoptions
 }

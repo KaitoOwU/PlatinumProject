@@ -6867,6 +6867,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1723672576091293550, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: room
+      value: 
+      objectReference: {fileID: -4933583240055195963}
     - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: _cameraPoint
@@ -6912,6 +6917,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 8277905828560068147, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: room
+      value: 
+      objectReference: {fileID: -4933583240055195963}
     m_RemovedComponents:
     - {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960, type: 3}
     m_RemovedGameObjects:
@@ -8500,10 +8510,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ffd0fa145cb7ea409228891dcb1f2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextRoom: {fileID: 0}
-  _previousRoom: {fileID: 0}
-  _nextRoomDoor: {fileID: 905576380753228828}
-  _previousRoomDoor: {fileID: 7609940457576197441}
+  _doors:
+  - {fileID: 905576380753228828}
+  - {fileID: 7609940457576197441}
+  _linkedRooms: []
   _roomSide: 0
   _cameraPoint: {fileID: 6654049696826231685}
   _roomLeft: {fileID: 0}
