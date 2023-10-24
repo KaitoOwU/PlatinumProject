@@ -26,10 +26,10 @@ public class GameManager : MonoBehaviour
     public TimerPhase CurrentTimerPhase => _currentTimerPhase;
     
     public IReadOnlyList<PlayerInfo> RightPlayers =>
-        PlayerList.FindAll(player => player.RelativePos == HubRelativePosition.RIGHT_WING);
+        PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.RIGHT_WING);
     
     public IReadOnlyList<PlayerInfo> LeftPlayers =>
-        PlayerList.FindAll(player => player.RelativePos == HubRelativePosition.LEFT_WING);
+        PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.LEFT_WING);
 
     [Header("---Constants---")]
     [SerializeField]
@@ -215,14 +215,4 @@ public struct PlayerInfo
 
     public Player PlayerRef => _playerRef;
     [SerializeField] private Player _playerRef;
-
-    [SerializeField] private HubRelativePosition _relativePos;
-    public HubRelativePosition RelativePos => _relativePos;
-}
-
-public enum HubRelativePosition
-{
-    HUB,
-    LEFT_WING,
-    RIGHT_WING
 }

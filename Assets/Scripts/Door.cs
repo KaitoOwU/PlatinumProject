@@ -29,10 +29,8 @@ public class Door : Interactable
             int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsInteractHeld).Count;
             
             Hub hub = (Hub)player.CurrentRoom;
-            if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count >= 3) // POUR BUILD FINALE ==> ==4 !!!
+            if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count >= 1) // POUR BUILD FINALE ==> ==4 !!!
             {
-                Debug.Log("TP !!");
-                
                 GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                 GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
 
@@ -84,9 +82,22 @@ public class Door : Interactable
     public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
     { 
         //GARDER EN MEMOIRE LE NOMBRE DE JOUEUR POUR SAVOIR COMBIEN IL EN FAUT POUR PASSER A LA SALLE SUIVANTE DANS CHAQUE BRANCHE
-        foreach(Player p in _playersInRange)
+        foreach(Player p in _playersInRange) if (p.PlayerController.IsInteractHeld)
         {
             p.gameObject.transform.position = tpPoint.position;
+            if (room is Hub)
+            {
+                if (room == ((Hub)room).RoomDoorRight)
+                {
+                    p.RelativePos =
+                        HubRelativePosition.RIGHT_WING;
+                }
+                else if(this == ((Hub)room).RoomDoorLeft)
+                {
+                    p.RelativePos =
+                        HubRelativePosition.LEFT_WING;
+                }
+            }
         }
     }
 

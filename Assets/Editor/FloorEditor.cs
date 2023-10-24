@@ -123,7 +123,7 @@ public class PathCreator : EditorWindow
 
         if (!File.Exists(path))
         {
-            Debug.Log("ça marche?");
+            Debug.Log("Ã§a marche?");
             AssetDatabase.CreateAsset(_floors, path);
         }
         AssetDatabase.SaveAssets();
