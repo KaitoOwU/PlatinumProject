@@ -8,24 +8,25 @@ using System;
 using static SCRoomsLists;
 
 
-public class PathCreator : EditorWindow
+public class FloorEditor : EditorWindow
 {
     private string FolderPath = "Assets/Resources/ScriptableObject/";
     private string _extention = ".asset";
     private Vector2 _windowSize;
     private SCRoomsLists _floors;
     private Floor _editedRooms;
+    private string _editedRoomsName;
     Vector2 _scrollPos;
 
     #region SetUp
     [MenuItem("Platinum/FloorCreator")]
-    public static void ShowWindow()
+    private static void Init()
     {
-        EditorWindow.GetWindow(typeof(PathCreator), false, "Floor Creator");
+        FloorEditor window = GetWindowWithRect<FloorEditor>(new Rect(0, 0, 500, 300), false);
+        window.Show();
     }
     private void OnGUI()
     {
-        InitGUI();
         LoadPaths();
         OnGUIUpdate();
     }
@@ -35,69 +36,66 @@ public class PathCreator : EditorWindow
         SCRoomsLists paths = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
         _floors = paths;
     }
-
-    private void InitGUI()
-    {
-        _windowSize = new Vector2(position.width, position.height);
-
-    }
-
     private void OnGUIUpdate()
     {
-        EditorGUILayout.BeginHorizontal(SetOptionSize(_windowSize.x, _windowSize.x, _windowSize.y, _windowSize.y));
+        EditorGUILayout.BeginVertical();
         DisplayFloorList();
         DisplayRooms();
-        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.EndVertical();
     }
     #endregion
     #region Display
     private void DisplayFloorList()
     {
-        EditorGUILayout.BeginVertical(SetOptionSize(200, 200, _windowSize.y, _windowSize.y));
-        GUILayout.Label("Floor List:", EditorStyles.boldLabel);
-        if (GUILayout.Button("New Entry", SetOptionSize(200, 200, 20, 20)))
-        {
-            _editedRooms = new Floor();
-            _floors.Floors.Add(_editedRooms);
-            _editedRooms.Rooms = new List<GameObject>();
-        }
+        EditorGUILayout.BeginVertical();
+        GUILayout.Label("Room type List:",  new GUIStyle(GUI.skin.label) { fontSize = 14, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter });
+        EditorGUILayout.BeginHorizontal();
         for (int i = 0; i < _floors.Floors.Count; i++)
         {
+            EditorGUILayout.BeginVertical();
+            GUILayout.Label((i + 1) + " Doors Rooms :",new GUIStyle(GUI.skin.label) { fontSize = 12, alignment = TextAnchor.MiddleCenter });
             DisplayListElement(_floors.Floors[i], i);
+            EditorGUILayout.EndHorizontal();
         }
+        EditorGUILayout.EndVertical();
         EditorGUILayout.EndVertical();
     }
     private void DisplayListElement(Floor floor, int index)
     {
-        EditorGUILayout.BeginHorizontal(SetOptionSize(200, 200, 20, 20));
-        if (GUILayout.Button("Edit", SetOptionSize(50, 50, 20, 20)))
+        if (GUILayout.Button("Edit", new GUIStyle(GUI.skin.button) { fontSize = 10, fontStyle = FontStyle.Bold }))
+        {
+            _editedRoomsName = (index+ 1) + " Doors Rooms :";
             _editedRooms = floor;
-        if (GUILayout.Button("-", SetOptionSize(50, 50, 20, 20)))
-            _floors.Floors.Remove(floor);
-        EditorGUILayout.EndHorizontal();
+        }
     }
     private void DisplayRooms()
     {
-
-        EditorGUILayout.BeginVertical(SetOptionSize(200, 200, _windowSize.y, _windowSize.y));
-        GUILayout.Label("Rooms:", EditorStyles.boldLabel);
-        if (_editedRooms.Rooms.Count > 30)
+        if (_editedRooms == null)
         {
-            _scrollPos =EditorGUILayout.BeginScrollView(_scrollPos, GUILayout.Width(500), GUILayout.Height(800));
+            _editedRooms = _floors.Floors[0];
+            _editedRoomsName ="1 Doors Rooms :";
+        }
+        EditorGUILayout.BeginVertical();
+        
+        GUILayout.Label(_editedRoomsName, new GUIStyle(GUI.skin.label) { fontSize = 15, fontStyle = FontStyle.Bold, alignment= TextAnchor.MiddleCenter });
+        if (_editedRooms.Rooms.Count > 8)
+        {
+            _scrollPos =EditorGUILayout.BeginScrollView(_scrollPos);
         }
         if (_editedRooms.Rooms.Count > 0)
         {
             for (int i = 0; i < _editedRooms.Rooms.Count; i++)
             {
-                EditorGUILayout.BeginHorizontal(SetOptionSize(100, 100, 20, 20));
-                EditorGUILayout.LabelField("Room: ");
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Room " + i );
                 
-                _editedRooms.Rooms[i]= EditorGUILayout.ObjectField( _editedRooms.Rooms[i], typeof(GameObject),false, SetOptionSize(100, 100, 20, 20)) as GameObject;
-
-                if (GUILayout.Button("X", SetOptionSize(20, 20, 20, 20)))
+                _editedRooms.Rooms[i]= EditorGUILayout.ObjectField( _editedRooms.Rooms[i], typeof(GameObject),false) as GameObject;
+                GUI.backgroundColor = Color.red;
+                if (GUILayout.Button("X", new GUIStyle(GUI.skin.button) { fixedHeight = 18, fontSize = 10, fontStyle = FontStyle.Bold,alignment=TextAnchor.MiddleCenter }))
                 {
                     _editedRooms.Rooms.RemoveAt(i);
                 }
+                GUI.backgroundColor = Color.white;
                 EditorGUILayout.EndHorizontal();
             }
         }
@@ -105,11 +103,11 @@ public class PathCreator : EditorWindow
         {
             EditorGUILayout.EndScrollView();
         }
-        if (GUILayout.Button("Add Room", SetOptionSize(340, 340, 20, 20)))
+        if (GUILayout.Button("Add Room", new GUIStyle(GUI.skin.button) { fixedHeight = 16, fontSize = 11, fontStyle = FontStyle.Bold }))
         {
             _editedRooms.Rooms.Add(new GameObject());
         }
-        if (GUILayout.Button("Save", SetOptionSize(340, 340, 20, 20)))
+        if (GUILayout.Button("Save", new GUIStyle(GUI.skin.button) { fixedHeight = 16, fontSize = 11, fontStyle = FontStyle.Bold ,}))
         {
             SaveInputs();
         }
@@ -130,62 +128,6 @@ public class PathCreator : EditorWindow
         AssetDatabase.Refresh();
 
     }
-    #region GUIoptions
-    public static GUILayoutOption[] SetOptionSize(int minWidth, int maxWidth, int minHeight, int maxHeight, int width = 0, int height = 0)
-    {
-        if (width == 0 || height == 0)
-            return new GUILayoutOption[] {
-            GUILayout.MinWidth(minWidth),
-            GUILayout.MaxWidth(maxWidth),
-            GUILayout.MinHeight(minHeight),
-            GUILayout.MaxHeight(maxHeight)
-        };
-        return new GUILayoutOption[] {
-            GUILayout.MinWidth(minWidth),
-            GUILayout.MaxWidth(maxWidth),
-            GUILayout.MinHeight(minHeight),
-            GUILayout.MaxHeight(maxHeight),
-            GUILayout.Width(width),
-            GUILayout.Height(height)
-        };
-    }
-
-    public static GUILayoutOption[] SetOptionSize(float minWidth, float maxWidth, float minHeight, float maxHeight, float width = 0, float height = 0)
-    {
-        if (width == 0 || height == 0)
-            return new GUILayoutOption[] {
-            GUILayout.MinWidth(minWidth),
-            GUILayout.MaxWidth(maxWidth),
-            GUILayout.MinHeight(minHeight),
-            GUILayout.MaxHeight(maxHeight)
-        };
-        return new GUILayoutOption[] {
-            GUILayout.MinWidth(minWidth),
-            GUILayout.MaxWidth(maxWidth),
-            GUILayout.MinHeight(minHeight),
-            GUILayout.MaxHeight(maxHeight),
-            GUILayout.Width(width),
-            GUILayout.Height(height)
-        };
-
-    }
-    private Texture2D MakeBackgroundTexture(int width, int height, Color color)
-    {
-        Color[] pixels = new Color[width * height];
-
-        for (int i = 0; i < pixels.Length; i++)
-        {
-            pixels[i] = color;
-        }
-
-        Texture2D backgroundTexture = new Texture2D(width, height);
-
-        backgroundTexture.SetPixels(pixels);
-        backgroundTexture.Apply();
-
-        return backgroundTexture;
-    }
-    #endregion //GUIoptions
 }
 
 
