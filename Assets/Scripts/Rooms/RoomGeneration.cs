@@ -57,7 +57,6 @@ public class RoomGeneration : MonoBehaviour
         _roomsInPlay.Add(_hall);
         _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
         int i = 0;
-        //Debug.Log(_layout.AisleLeft[0].Count);
         foreach(List<RoomPosition> positionsList in _layout.AisleLeft)
         {
             //Debug.Log("i " + i);
@@ -67,6 +66,7 @@ public class RoomGeneration : MonoBehaviour
                 int rand = Random.Range(0, _roomsLists.Floors[i].Rooms.Count);
                 //Debug.Log("j " + j);
                 GameObject room= Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position,transform.rotation);
+                room.GetComponent<Room>().RoomSide = Room.Side.LEFT;
                 switch (i)
                 {
                     case 0:
@@ -97,6 +97,7 @@ public class RoomGeneration : MonoBehaviour
             {
                 //Debug.Log("j " + j);
                 GameObject room = Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position, transform.rotation);
+                room.GetComponent<Room>().RoomSide = Room.Side.RIGHT;
                 switch (i)
                 {
                     case 0:
@@ -189,24 +190,28 @@ public class RoomGeneration : MonoBehaviour
                     case 0:
                          rand = Random.Range(0, roomToShuffle1.Count);
                         roomToShuffle1[rand].transform.position = roomPosition.Position;
+                         roomToShuffle1[rand].RoomSide = Room.Side.LEFT;
                         _roomsInPlay1.Add(roomToShuffle1[rand]);
                         roomToShuffle1.Remove(roomToShuffle1[rand]);
                         break;
                     case 1:
                          rand = Random.Range(0, roomToShuffle2.Count);
                         roomToShuffle2[rand].transform.position = roomPosition.Position;
+                         roomToShuffle2[rand].RoomSide = Room.Side.LEFT;
                         _roomsInPlay2.Add(roomToShuffle2[rand]);
                         roomToShuffle2.Remove(roomToShuffle2[rand]);
                         break;
                     case 2:
                         rand = Random.Range(0, roomToShuffle3.Count);
                         roomToShuffle3[rand].transform.position = roomPosition.Position;
+                        roomToShuffle3[rand].RoomSide = Room.Side.LEFT;
                         _roomsInPlay3.Add(roomToShuffle3[rand]);
                         roomToShuffle3.Remove(roomToShuffle3[rand]);
                         break;
                     case 3:
                         rand = Random.Range(0, roomToShuffle4.Count);
                         roomToShuffle4[rand].transform.position = roomPosition.Position;
+                        roomToShuffle4[rand].RoomSide = Room.Side.LEFT;
                         _roomsInPlay4.Add(roomToShuffle4[rand]);
                         roomToShuffle4.Remove(roomToShuffle4[rand]);
                         break;
@@ -227,24 +232,28 @@ public class RoomGeneration : MonoBehaviour
                     case 0:
                         rand = Random.Range(0, roomToShuffle1.Count);
                         roomToShuffle1[rand].transform.position = roomPosition.Position;
+                        roomToShuffle1[rand].RoomSide = Room.Side.RIGHT;
                         _roomsInPlay1.Add(roomToShuffle1[rand]);
                         roomToShuffle1.Remove(roomToShuffle1[rand]);
                         break;
                     case 1:
                         rand = Random.Range(0, roomToShuffle2.Count);
                         roomToShuffle2[rand].transform.position = roomPosition.Position;
+                        roomToShuffle2[rand].RoomSide = Room.Side.RIGHT;
                         _roomsInPlay2.Add(roomToShuffle2[rand]);
                         roomToShuffle2.Remove(roomToShuffle2[rand]);
                         break;
                     case 2:
                         rand = Random.Range(0, roomToShuffle3.Count);
                         roomToShuffle3[rand].transform.position = roomPosition.Position;
+                        roomToShuffle3[rand].RoomSide = Room.Side.RIGHT;
                         _roomsInPlay3.Add(roomToShuffle3[rand]);
                         roomToShuffle3.Remove(roomToShuffle3[rand]);
                         break;
                     case 3:
                         rand = Random.Range(0, roomToShuffle4.Count);
                         roomToShuffle4[rand].transform.position = roomPosition.Position;
+                        roomToShuffle4[rand].RoomSide = Room.Side.RIGHT;
                         _roomsInPlay4.Add(roomToShuffle4[rand]);
                         roomToShuffle4.Remove(roomToShuffle4[rand]);
                         break;

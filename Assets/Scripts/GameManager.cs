@@ -58,6 +58,9 @@ public class GameManager : MonoBehaviour
     private float _timer;
     private bool _isTimerGoing;
 
+    [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
+    public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
+
     public enum GamePhase
     {
         MENU,

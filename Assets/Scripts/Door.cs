@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 [System.Serializable]
@@ -28,7 +29,7 @@ public class Door : Interactable
             int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsInteractHeld).Count;
             
             Hub hub = (Hub)player.CurrentRoom;
-            if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorRight.PlayersInRange.Count >= 1 && count >= 2) // >2 POUR TEST ==> ==4 !!!
+            if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count >= 3) // POUR BUILD FINALE ==> ==4 !!!
             {
                 Debug.Log("TP !!");
                 
@@ -39,11 +40,11 @@ public class Door : Interactable
                 hub.RoomDoorLeft.TP_Players(hub.RoomDoorLeft.LinkedDoor.TpPoint);
                 hub.RoomDoorRight.TP_Players(hub.RoomDoorRight.LinkedDoor.TpPoint);
 
-                hub.RoomDoorLeft.UpdateRoom(hub.RoomLeft);
-                hub.RoomDoorRight.UpdateRoom(hub.RoomRight);
+                hub.RoomDoorLeft.UpdateRoom(hub.RoomDoorLeft.LinkedDoor.room);
+                hub.RoomDoorRight.UpdateRoom(hub.RoomDoorRight.LinkedDoor.room);
 
-                hub.RoomDoorLeft.TP_Camera(hub.RoomLeft);
-                hub.RoomDoorRight.TP_Camera(hub.RoomRight);
+                hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
+                hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
                 
             }
         }
@@ -53,11 +54,30 @@ public class Door : Interactable
             Debug.Log("PLAYER  "+ player.Index );
 
             if (_linkedDoor.room is Hub)
+            {
+                GameManager.Instance.OnBackToHubRefused?.Invoke(this);
                 return;
-            
-            TP_Players(_linkedDoor.TpPoint);
-            TP_Camera(_linkedDoor.room);
-            UpdateRoom(_linkedDoor.room);                     
+            }
+
+            if (room.RoomSide == Room.Side.RIGHT)
+            {
+                if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
+                    _playersInRange.All(player => player.PlayerController.IsInteractHeld))
+                {
+                    TP_Players(_linkedDoor.TpPoint);
+                    TP_Camera(_linkedDoor.room);
+                    UpdateRoom(_linkedDoor.room);    
+                }
+            } else if (room.RoomSide == Room.Side.LEFT)
+            {
+                if (GameManager.Instance.LeftPlayers.Count == _playersInRange.Count &&
+                    _playersInRange.All(player => player.PlayerController.IsInteractHeld))
+                {
+                    TP_Players(_linkedDoor.TpPoint);
+                    TP_Camera(_linkedDoor.room);
+                    UpdateRoom(_linkedDoor.room);
+                }
+            }
         }
     }
 
