@@ -49,7 +49,6 @@ public class Door : Interactable
         else
         {
             Room room = player.CurrentRoom;
-            Debug.Log("PLAYER  "+ player.Index );
 
             if (_linkedDoor.room is Hub)
             {

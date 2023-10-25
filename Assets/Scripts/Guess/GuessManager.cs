@@ -5,7 +5,6 @@ using UnityEngine.Events;
 using System;
 using Unity.VisualScripting;
 using System.Linq;
-using static UnityEditor.Progress;
 
 public class GuessManager : MonoBehaviour
 {
@@ -66,7 +65,7 @@ public class GuessManager : MonoBehaviour
 
     private SuspectData GetFinalGuess()
     {
-        Debug.Log("Final Guess");
+        Debug.LogError("Final Guess");
         Dictionary<SuspectData, int> finalVotes = new(); //vote for each suspect
         foreach (var v in GameManager.Instance.GameData.SuspectsDatas) { //init dict
             finalVotes.Add(v, 0); }
@@ -82,8 +81,8 @@ public class GuessManager : MonoBehaviour
 
     private void CheckFinalGuess(SuspectData finalGuess)
     {
-        Debug.Log("finalGuess : "+finalGuess.Name);
-        Debug.Log("Murderer : " + GameManager.Instance.Murderer);
+        Debug.LogError("finalGuess : "+finalGuess.Name);
+        Debug.LogError("Murderer : " + GameManager.Instance.Murderer);
 
         if (finalGuess == GameManager.Instance.Murderer)
             GameManager.Instance.OnWin?.Invoke();

@@ -27,6 +27,10 @@ public class Interactable : MonoBehaviour
             return;
 
         PlayerController p = other.GetComponent<PlayerController>();
+
+        if (p.Inputs == null)
+            return;
+        
         _playersInRange.Add(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
 
         p.Inputs.OnInteractStarted.AddListener(OnInteract);
@@ -40,6 +44,10 @@ public class Interactable : MonoBehaviour
             return;
         
         PlayerController p = other.GetComponent<PlayerController>();
+        
+        if (p.Inputs == null)
+            return;
+        
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
         
         p.Inputs.OnInteractStarted.RemoveListener(OnInteract);

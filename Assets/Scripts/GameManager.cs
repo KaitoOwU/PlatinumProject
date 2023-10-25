@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI _timerTxt;
+    
     public GamePhase CurrentGamePhase
     {
         get => _currentGamePhase; 
@@ -160,8 +163,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Win() => Debug.Log("<color:cyan> YOU WIN ! </color>");
-    void Lose() => Debug.Log("<color:cyan> YOU LOSE ! </color>");
+    void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
+    void Lose() => Debug.LogError("<color:cyan> YOU LOSE ! </color>");
 
     #region Timer
     private IEnumerator IncrementTimer()
@@ -169,8 +172,15 @@ public class GameManager : MonoBehaviour
         while (_isTimerGoing)
         {
             yield return new WaitForSeconds(1f);
-            _timer -= 1;
-            _AnalyseTimer();
+            if (PlayerList[0].PlayerRef.CurrentRoom != Hub)
+            {
+                _timer -= 1;
+                _AnalyseTimer();
+                
+                //RETIRER APRES (faux timer UI)
+                _timerTxt.text = "" + _timer;
+            }
+
         }
     }
     private void _AnalyseTimer()
@@ -178,7 +188,7 @@ public class GameManager : MonoBehaviour
         if (_timer % 60 == 0)
         {
             OnEachMinute?.Invoke();
-            Debug.Log("<color=cyan>Shuffle room </color>" + _timer);
+            Debug.LogError("<color=cyan>Shuffle room </color>" + _timer);
         }
         switch (_currentTimerPhase)
         {
@@ -187,7 +197,7 @@ public class GameManager : MonoBehaviour
                 {
                     OnFirstPhaseEnd?.Invoke();
                     OnEndPhase?.Invoke();
-                    Debug.Log("<color=cyan>First Phase End </color>" + _timer);
+                    Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
                 }
                 break;
@@ -196,7 +206,7 @@ public class GameManager : MonoBehaviour
                 {
                     OnSecondPhaseEnd?.Invoke();
                     OnEndPhase?.Invoke();
-                    Debug.Log("<color=cyan>Second Phase End </color>" + _timer);
+                    Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }
                 break;
@@ -205,7 +215,7 @@ public class GameManager : MonoBehaviour
                 {
                     OnTimerEnd?.Invoke();
                     OnEndPhase?.Invoke();
-                    Debug.Log("<color=cyan>Third Phase End </color>" + _timer);
+                    Debug.LogError("<color=cyan>Third Phase End </color>" + _timer);
                     _isTimerGoing = false;
                     _timer = 0;
                     _currentTimerPhase = TimerPhase.END;
@@ -230,7 +240,6 @@ public class GameManager : MonoBehaviour
     #region Camera
     public void SwitchCameraState(CameraState targetState)
     {
-        Debug.Log("SWITCH");
         if(_currentCameraState == targetState)
             return;
         switch(targetState)
