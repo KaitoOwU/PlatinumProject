@@ -129,6 +129,19 @@ public class GameManager : MonoBehaviour
         _victim = GameData.SuspectsDatas[0]; //temporary
         //init game accordingly;
     }
+    private void OnEnable()
+    {
+        _onWin.AddListener(Win);
+        _onLose.AddListener(Lose);
+    }    
+    private void OnDisable()
+    {
+        _onWin.RemoveListener(Win);
+        _onLose.RemoveListener(Lose);
+    }
+
+    void Win() => Debug.Log("<color:cyan> YOU WIN ! </color>");
+    void Lose() => Debug.Log("<color:cyan> YOU LOSE ! </color>");
 
     #region Timer
     private IEnumerator IncrementTimer()

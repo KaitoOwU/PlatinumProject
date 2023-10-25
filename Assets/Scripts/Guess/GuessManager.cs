@@ -82,12 +82,15 @@ public class GuessManager : MonoBehaviour
 
     private void CheckFinalGuess(SuspectData finalGuess)
     {
+        Debug.Log("finalGuess : "+finalGuess.Name);
+        Debug.Log("Murderer : " + GameManager.Instance.Murderer);
+
         if (finalGuess == GameManager.Instance.Murderer)
             GameManager.Instance.OnWin?.Invoke();
         else
             GameManager.Instance.OnLose?.Invoke();
     }
 
-    private Portrait? GetPortraitFromData(SuspectData suspectData) => _portraitsInfos.FirstOrDefault(e => e.SuspectData == suspectData);
+    private Portrait GetPortraitFromData(SuspectData suspectData) => _portraitsInfos.FirstOrDefault(e => e.SuspectData == suspectData);
 
 }
