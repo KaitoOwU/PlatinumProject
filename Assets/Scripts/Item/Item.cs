@@ -11,7 +11,7 @@ public class Item : Interactable
     [Header("--- DATA ---")]
     [SerializeField] private ItemData _itemData;
     
-    public ItemData ItemData { get; set; }
+    public ItemData ItemData { get => _itemData; set => _itemData = value; }
 
     protected override void OnInteract(Player player)
     {

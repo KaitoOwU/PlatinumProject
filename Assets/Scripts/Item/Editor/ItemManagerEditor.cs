@@ -15,7 +15,7 @@ public class ItemManagerEditor : EditorWindow
     private string _research = string.Empty;
     
     [MenuItem("Platinum/Manage Items")]
-    private static void Init()
+    public static void Init()
     {
         ItemManagerEditor window = GetWindowWithRect<ItemManagerEditor>(new Rect(0, 0, 500, 700), false);
         window.Show();
