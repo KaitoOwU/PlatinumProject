@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,11 +11,11 @@ public class GameManager : MonoBehaviour
     {
         get => _currentGamePhase; 
         set => _currentGamePhase = value;
-    }
-
+    }    
     public CameraState CurrentCameraState
     {
-        get; private set;
+        get => _currentCameraState; 
+        set => _currentCameraState = value;
     }
 
     public List<PlayerInfo> PlayerList
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
     public float Timer => _timer;
     public SuspectData Murderer => _murderer;
     public SuspectData Victim => _victim;
+    public Hub Hub => _hub;
     public TimerPhase CurrentTimerPhase => _currentTimerPhase;
     
     public IReadOnlyList<PlayerInfo> RightPlayers =>
@@ -47,12 +49,14 @@ public class GameManager : MonoBehaviour
     private GameObject _splitCameraLeft;
     [SerializeField]
     private GameObject _splitCameraRight;
+    [SerializeField]
+    private Hub _hub;
 
     [Header("---Events---")]
-    public UnityEvent OnShuffleRooms;
     public UnityEvent OnFirstPhaseEnd;
     public UnityEvent OnSecondPhaseEnd;
     public UnityEvent OnTimerEnd;
+    public UnityEvent OnEndPhase;
     public UnityEvent OnEachMinute;
 
     private SuspectData _murderer;
@@ -121,6 +125,9 @@ public class GameManager : MonoBehaviour
     {
         CurrentGamePhase = GamePhase.HUB;
         StartTimer();
+        _onWin.AddListener(Win);
+        _onLose.AddListener(Lose);
+        OnEndPhase.AddListener(TPAllPlayersToHub);
     }
 
     private void InitGame()
@@ -131,13 +138,26 @@ public class GameManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        _onWin.AddListener(Win);
-        _onLose.AddListener(Lose);
+        //_onWin.AddListener(Win);
+        //_onLose.AddListener(Lose);
+        //OnEndPhase.AddListener(TPAllPlayersToHub);
     }    
     private void OnDisable()
     {
         _onWin.RemoveListener(Win);
         _onLose.RemoveListener(Lose);
+        OnEndPhase.RemoveListener(TPAllPlayersToHub);
+    }
+
+    private void TPAllPlayersToHub()
+    {
+        SwitchCameraState(CameraState.FULL);
+        foreach (Player p in PlayerList.Select(data => data.PlayerRef))
+        {
+            p.gameObject.transform.position = _hub.Spawnpoints[p.Index-1].position;
+            p.RelativePos = HubRelativePosition.HUB;
+            p.CurrentRoom = _hub;
+        }
     }
 
     void Win() => Debug.Log("<color:cyan> YOU WIN ! </color>");
@@ -166,7 +186,7 @@ public class GameManager : MonoBehaviour
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
                     OnFirstPhaseEnd?.Invoke();
-                    OnShuffleRooms?.Invoke();
+                    OnEndPhase?.Invoke();
                     Debug.Log("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
                 }
@@ -175,7 +195,7 @@ public class GameManager : MonoBehaviour
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
                     OnSecondPhaseEnd?.Invoke();
-                    OnShuffleRooms?.Invoke();
+                    OnEndPhase?.Invoke();
                     Debug.Log("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }
@@ -184,7 +204,7 @@ public class GameManager : MonoBehaviour
                 if (_timer <= 0)
                 {
                     OnTimerEnd?.Invoke();
-                    OnShuffleRooms?.Invoke();
+                    OnEndPhase?.Invoke();
                     Debug.Log("<color=cyan>Third Phase End </color>" + _timer);
                     _isTimerGoing = false;
                     _timer = 0;
@@ -210,6 +230,7 @@ public class GameManager : MonoBehaviour
     #region Camera
     public void SwitchCameraState(CameraState targetState)
     {
+        Debug.Log("SWITCH");
         if(_currentCameraState == targetState)
             return;
         switch(targetState)

@@ -15,11 +15,20 @@ public class RoomGeneration : MonoBehaviour
     private List<Room> _tandemRoom = new List<Room>();
     SCRoomsLists _roomsLists;
     [SerializeField] LayoutGenerator _layout;
+
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnEndPhase.RemoveListener(Shuffle);
+    }
+
     #region Generation
     private void Start()
     {
        
         _reseting = false;
+        GameManager.Instance.OnEndPhase.AddListener(Shuffle);
+
     }
     #region Old
     /*  private void GenerateRooms()
@@ -270,7 +279,7 @@ public class RoomGeneration : MonoBehaviour
                         }
                         else
                         {
-                            rand = Random.Range(0, roomToShuffle2.Count);
+                            rand = Random.Range(0, roomToShuffle2.Count);   
                             roomToShuffle2[rand].transform.position = roomPosition.Position;
                             roomToShuffle2[rand].RoomSide = Room.Side.LEFT;
                             _roomsInPlay2.Add(roomToShuffle2[rand]);
