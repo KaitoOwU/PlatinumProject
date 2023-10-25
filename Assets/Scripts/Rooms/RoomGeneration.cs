@@ -127,6 +127,8 @@ public class RoomGeneration : MonoBehaviour
                     room = Instantiate(_tandemToPlace[0].gameObject, positionsList[j].Position, transform.rotation);
                     _tandemRoom.Add(room.GetComponent<Room>());
                     _tandemToPlace.Remove(_tandemToPlace[0]);
+                    room.GetComponent<Room>().RoomSide = Room.Side.RIGHT;
+
                 }
                 else if (_roomsLists.Floors[i].Rooms[rand].GetComponent<Room>().Tandem!=null)
                 {
@@ -165,7 +167,7 @@ public class RoomGeneration : MonoBehaviour
         }
         for(int j = 0; j < _tandemRoom.Count / 2; j++)
         {
-            Debug.Log(j +"Sa mère");
+            Debug.Log(j +"Sa mï¿½re");
             _tandemRoom[j].Tandem = _tandemRoom[j + _tandemRoom.Count / 2];
             _tandemRoom[_tandemRoom.Count / 2 + j].Tandem = _tandemRoom[j];
         }

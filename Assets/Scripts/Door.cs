@@ -29,7 +29,7 @@ public class Door : Interactable
             int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsInteractHeld).Count;
             
             Hub hub = (Hub)player.CurrentRoom;
-            if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count >= 1) // POUR BUILD FINALE ==> ==4 !!!
+            if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count >= 2) // POUR BUILD FINALE ==> ==4 !!!
             {
                 GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                 GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
@@ -64,7 +64,7 @@ public class Door : Interactable
                 {
                     TP_Players(_linkedDoor.TpPoint);
                     TP_Camera(_linkedDoor.room);
-                    UpdateRoom(_linkedDoor.room);    
+                    UpdateRoom(_linkedDoor.room);
                 }
             } else if (room.RoomSide == Room.Side.LEFT)
             {
@@ -85,19 +85,6 @@ public class Door : Interactable
         foreach(Player p in _playersInRange) if (p.PlayerController.IsInteractHeld)
         {
             p.gameObject.transform.position = tpPoint.position;
-            if (room is Hub)
-            {
-                if (room == ((Hub)room).RoomDoorRight)
-                {
-                    p.RelativePos =
-                        HubRelativePosition.RIGHT_WING;
-                }
-                else if(this == ((Hub)room).RoomDoorLeft)
-                {
-                    p.RelativePos =
-                        HubRelativePosition.LEFT_WING;
-                }
-            }
         }
     }
 
@@ -117,6 +104,19 @@ public class Door : Interactable
     {
         foreach(Player p in _playersInRange)
         {
+            if (p.CurrentRoom is Hub)
+            {
+                if (room.RoomSide == Room.Side.RIGHT)
+                {
+                    p.RelativePos =
+                        HubRelativePosition.RIGHT_WING;
+                }
+                else if(room.RoomSide == Room.Side.LEFT)
+                {
+                    p.RelativePos =
+                        HubRelativePosition.LEFT_WING;
+                }
+            }
             p.CurrentRoom = room;
         }
     }
