@@ -35,7 +35,6 @@ public class InputManager : MonoBehaviour
     
     private void _AddController()
     {
-        Debug.Log("started");
         //Get right character depending on controller index and launch set up (= controller corresponding character)
         GameManager.Instance.PlayerList[_inputs.playerIndex].PlayerController.SetUp(this, _inputs, transform);
         _index = _inputs.playerIndex;

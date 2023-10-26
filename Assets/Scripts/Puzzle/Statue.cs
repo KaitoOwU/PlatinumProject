@@ -11,6 +11,9 @@ public class Statue : Interactable
     
     protected override void OnInteract(Player player)
     {
+        if (player.HeldItem == null)
+            return;
+        
         if (!_isRepaired && player.HeldItem.ID == 0) // BRAS DE STATUE
         {
             player.HeldItem = null;
