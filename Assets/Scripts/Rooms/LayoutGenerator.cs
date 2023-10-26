@@ -64,38 +64,39 @@ public class LayoutGenerator : MonoBehaviour
                 if (allAisleRoom.Count - 1 >= _sizeAisle)
                     break;
                 int rand = Random.Range(0, 2);
+                int rand2 = Random.Range(1, allAisleRoom.Count - 1);
                 if (rand == 1)
                 {
                     switch (j)
                     {
                         case 0:
-                            if (!IsRoomPositionTaken(new Vector3(allAisleRoom[i].Position.x - _betweenRoomDistance, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z), allAisleRoom)&& allAisleRoom[i].Position.x - _betweenRoomDistance!=0)
+                            if (!IsRoomPositionTaken(new Vector3(allAisleRoom[rand2].Position.x - _betweenRoomDistance, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z), allAisleRoom)&& allAisleRoom[rand2].Position.x - _betweenRoomDistance!=0)
                             {
-                                allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[i].Position.x - _betweenRoomDistance, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z)));
+                                allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[rand2].Position.x - _betweenRoomDistance, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z)));
                                //Debug.Log(allAisleRoom[allAisleRoom.Count-1].Position + "1");
                                 k++;
                             }
                             break;
                         case 1:
-                            if (!IsRoomPositionTaken(new Vector3(allAisleRoom[i].Position.x + _betweenRoomDistance, allAisleRoom[i ].Position.y, allAisleRoom[i].Position.z), allAisleRoom)&& allAisleRoom[i].Position.x + _betweenRoomDistance!=0)
+                            if (!IsRoomPositionTaken(new Vector3(allAisleRoom[rand2].Position.x + _betweenRoomDistance, allAisleRoom[i ].Position.y, allAisleRoom[rand2].Position.z), allAisleRoom)&& allAisleRoom[rand2].Position.x + _betweenRoomDistance!=0)
                             {
-                                allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[i].Position.x + _betweenRoomDistance, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z)));
+                                allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[rand2].Position.x + _betweenRoomDistance, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z)));
                                 //Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "2");
                                 k++;
                             }
                             break;
                         case 2:
-                            if (!IsRoomPositionTaken(new Vector3(allAisleRoom[i].Position.x, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z + _betweenRoomDistance), allAisleRoom))
+                            if (!IsRoomPositionTaken(new Vector3(allAisleRoom[rand2].Position.x, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z + _betweenRoomDistance), allAisleRoom))
                             {
-                                allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[i].Position.x , allAisleRoom[i].Position.y, allAisleRoom[i].Position.z + _betweenRoomDistance)));
+                                allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[rand2].Position.x , allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z + _betweenRoomDistance)));
                                 //Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "3");
                                 k++;
                             }
                             break;
                         case 3:
-                            if (!IsRoomPositionTaken(new Vector3(allAisleRoom[i].Position.x, allAisleRoom[i].Position.y, allAisleRoom[i].Position.z - _betweenRoomDistance), allAisleRoom))
+                            if (!IsRoomPositionTaken(new Vector3(allAisleRoom[rand2].Position.x, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z - _betweenRoomDistance), allAisleRoom))
                             {
-                                allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[i].Position.x , allAisleRoom[i].Position.y, allAisleRoom[i].Position.z - _betweenRoomDistance)));
+                                allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[rand2].Position.x , allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z - _betweenRoomDistance)));
                                 //Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "4");
                                 k++;
                             }

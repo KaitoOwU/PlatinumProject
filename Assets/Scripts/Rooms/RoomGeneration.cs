@@ -126,7 +126,8 @@ public class RoomGeneration : MonoBehaviour
             {
                 GameObject room;
                 int rand = Random.Range(0, _roomsLists.Floors[i].Rooms.Count);
-                if (i == 1 && _tandemToPlace.Count > 0)
+                int rand2 = Random.Range(0, positionsList.Count - j);
+                if (i == 1 && _tandemToPlace.Count > 0&&(rand2==0||positionsList.Count-j == _tandemToPlace.Count))
                 {
                     room = Instantiate(_tandemToPlace[0].gameObject, positionsList[j].Position, transform.rotation);
                     _tandemRoom.Add(room.GetComponent<Room>());
