@@ -55,9 +55,9 @@ public class FloorEditor : EditorWindow
             EditorGUILayout.BeginVertical();
             GUILayout.Label((i + 1) + " Doors Rooms :",new GUIStyle(GUI.skin.label) { fontSize = 12, alignment = TextAnchor.MiddleCenter });
             DisplayListElement(_floors.Floors[i], i);
-            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
         }
-        EditorGUILayout.EndVertical();
+        EditorGUILayout.EndHorizontal();
         EditorGUILayout.EndVertical();
     }
     private void DisplayListElement(Floor floor, int index)
