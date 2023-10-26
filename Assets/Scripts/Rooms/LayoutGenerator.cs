@@ -9,14 +9,6 @@ public class LayoutGenerator : MonoBehaviour
     [SerializeField] private Hub _hub;
     [SerializeField] private int _sizeAisle;
     [SerializeField] private int _betweenRoomDistance;
-    [SerializeField] List<RoomPosition>_oneDoorRoomL = new List<RoomPosition>();
-    [SerializeField] List<RoomPosition>_twoDoorRoomL = new List<RoomPosition>();
-    [SerializeField] List<RoomPosition> _threeDoorRoomL = new List<RoomPosition>();
-    [SerializeField] List<RoomPosition> _fourDoorRoomL = new List<RoomPosition>();
-    [SerializeField] List<RoomPosition> _oneDoorRoomR = new List<RoomPosition>();
-    [SerializeField] List<RoomPosition> _twoDoorRoomR= new List<RoomPosition>();
-    [SerializeField] List<RoomPosition> _threeDoorRoomR = new List<RoomPosition>();
-    [SerializeField] List<RoomPosition> _fourDoorRoomR = new List<RoomPosition>();
     private List<Vector3> _lineListLayout = new List<Vector3>();
     private List<Vector3> _lineListAddedCorridor= new List<Vector3>();
     private Vector3[] _pointsLayout;
@@ -31,8 +23,8 @@ public class LayoutGenerator : MonoBehaviour
     {
         _aisleLeft = new List<List<RoomPosition>>();
         _aisleRight = new List<List<RoomPosition>>();
-        AisleLayout(_aisleLeft, true, _oneDoorRoomL, _twoDoorRoomL, _threeDoorRoomL, _fourDoorRoomL);
-        AisleLayout(_aisleRight, false, _oneDoorRoomR, _twoDoorRoomR, _threeDoorRoomR, _fourDoorRoomR);
+        AisleLayout(_aisleLeft, true);
+        AisleLayout(_aisleRight, false);
         _pointsLayout = new Vector3[_lineListLayout.Count];
         _pointsAddedCorridor = new Vector3[_lineListAddedCorridor.Count];
         for(int i = 0; i < _lineListLayout.Count; i++)
@@ -46,9 +38,13 @@ public class LayoutGenerator : MonoBehaviour
         FindObjectOfType<RoomGeneration>().GenerateRooms();
     }
     #region LayoutGeneration
-    private void AisleLayout(List<List<RoomPosition>> aisle,bool isLeft, List<RoomPosition> oneDoorRoom, List<RoomPosition> twoDoorRoom, List<RoomPosition> threeDoorRoom, List<RoomPosition> fourDoorRoom)
+    private void AisleLayout(List<List<RoomPosition>> aisle,bool isLeft)
     {
         List<RoomPosition> allAisleRoom = new List<RoomPosition>();
+        List<RoomPosition> oneDoorRoom = new List<RoomPosition>();
+        List<RoomPosition> twoDoorRoom = new List<RoomPosition>();
+        List<RoomPosition> threeDoorRoom = new List<RoomPosition>();
+        List<RoomPosition> fourDoorRoom = new List<RoomPosition>();
         RoomPosition hubPosition;
         hubPosition = new RoomPosition(_hub.transform.position, 1);
         allAisleRoom.Add(hubPosition);
@@ -80,7 +76,6 @@ public class LayoutGenerator : MonoBehaviour
                             if (!IsRoomPositionTaken(new Vector3(allAisleRoom[rand2].Position.x - _betweenRoomDistance, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z), allAisleRoom)&& allAisleRoom[rand2].Position.x - _betweenRoomDistance!=0)
                             {
                                 allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[rand2].Position.x - _betweenRoomDistance, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z)));
-                                //Debug.Log(allAisleRoom[allAisleRoom.Count-1].Position + "1");
                                 _lineListLayout.Add(new Vector3(allAisleRoom[rand2].Position.x - _betweenRoomDistance, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z));
                                 _lineListLayout.Add(allAisleRoom[rand2].Position);
                             }
@@ -89,7 +84,6 @@ public class LayoutGenerator : MonoBehaviour
                             if (!IsRoomPositionTaken(new Vector3(allAisleRoom[rand2].Position.x + _betweenRoomDistance, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z), allAisleRoom)&& allAisleRoom[rand2].Position.x + _betweenRoomDistance!=0)
                             {
                                 allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[rand2].Position.x + _betweenRoomDistance, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z)));
-                                //Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "2");
                                 _lineListLayout.Add(new Vector3(allAisleRoom[rand2].Position.x + _betweenRoomDistance, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z));
                                 _lineListLayout.Add(allAisleRoom[rand2].Position);
                             }
@@ -98,7 +92,6 @@ public class LayoutGenerator : MonoBehaviour
                             if (!IsRoomPositionTaken(new Vector3(allAisleRoom[rand2].Position.x, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z + _betweenRoomDistance), allAisleRoom))
                             {
                                 allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[rand2].Position.x , allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z + _betweenRoomDistance)));
-                                //Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "3");
                                 _lineListLayout.Add(new Vector3(allAisleRoom[rand2].Position.x , allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z + _betweenRoomDistance));
                                 _lineListLayout.Add(allAisleRoom[rand2].Position);
                             }
@@ -107,7 +100,6 @@ public class LayoutGenerator : MonoBehaviour
                             if (!IsRoomPositionTaken(new Vector3(allAisleRoom[rand2].Position.x, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z - _betweenRoomDistance), allAisleRoom))
                             {
                                 allAisleRoom.Add(new RoomPosition(new Vector3(allAisleRoom[rand2].Position.x , allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z - _betweenRoomDistance)));
-                                //Debug.Log(allAisleRoom[allAisleRoom.Count - 1].Position + "4");
                                 _lineListLayout.Add(new Vector3(allAisleRoom[rand2].Position.x, allAisleRoom[rand2].Position.y, allAisleRoom[rand2].Position.z - _betweenRoomDistance));
                                 _lineListLayout.Add(allAisleRoom[rand2].Position);
                             }
@@ -116,8 +108,7 @@ public class LayoutGenerator : MonoBehaviour
                 }
                 if (allAisleRoom.Count - 1 >= _sizeAisle )
                     break; 
-            }
-            
+            }      
         }
         for (int j = 1; j < allAisleRoom.Count; ++j)
         {
@@ -168,6 +159,7 @@ public class RoomPosition
 { 
     private Vector3 _position;
     private int _doorNumber;
+
     public Vector3 Position { get => _position; }
     public int DoorNumber { get => _doorNumber; }
 
@@ -181,6 +173,7 @@ public class RoomPosition
         _position = position;
         _doorNumber = 0;
     }
+
     public void DoorCheck(List<RoomPosition> roomPositions,int betweenRoomDistance,List<Vector3> lineListLayout, List<Vector3> lineListAddedCorridor)
     {
         foreach(RoomPosition roomPosition in roomPositions)

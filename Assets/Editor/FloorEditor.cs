@@ -111,7 +111,7 @@ public class FloorEditor : EditorWindow
         EditorGUILayout.EndVertical();
     }
     #endregion
-    private void SaveRooms()//doesn't really work but the whole things works without it
+    private void SaveRooms()
     {
         string path = $"{FolderPath}Rooms{_extention}";
         EditorUtility.SetDirty(_floors);
