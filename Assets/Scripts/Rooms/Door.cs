@@ -6,12 +6,12 @@ using static UnityEngine.EventSystems.EventTrigger;
 [System.Serializable]
 public class Door : Interactable
 {
-    [SerializeField] private Transform _tpPoint;
+    [SerializeField] private Transform[] _tpPoint;
     [SerializeField] private DoorType _doorTypeValue;
     [SerializeField] private Door _linkedDoor;
     [SerializeField] private Room room;
 
-    public Transform TpPoint => _tpPoint;
+    public Transform[] TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
 
     public Door LinkedDoor { get => _linkedDoor; set => _linkedDoor = value; }
@@ -78,12 +78,12 @@ public class Door : Interactable
         }
     }
 
-    public void TP_Players(Transform tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
+    public void TP_Players(Transform[] tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
     { 
         //GARDER EN MEMOIRE LE NOMBRE DE JOUEUR POUR SAVOIR COMBIEN IL EN FAUT POUR PASSER A LA SALLE SUIVANTE DANS CHAQUE BRANCHE
         foreach(Player p in _playersInRange) if (p.PlayerController.IsInteractHeld)
         {
-            p.gameObject.transform.position = tpPoint.position;
+            p.gameObject.transform.position = tpPoint[p.Index-1].position;
         }
     }
 
