@@ -5,8 +5,8 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
     
-    private string _name;
-    private int _id;
+    [SerializeField] private string _name;
+    [SerializeField] private int _id;
     [SerializeField] private Sprite _icon;
     [SerializeField] private GameObject _prefab;
 

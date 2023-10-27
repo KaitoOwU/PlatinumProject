@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class Statue : Interactable
+public class Statue : Interactable, IResettable
 {
 
     private bool _isRepaired;
@@ -20,5 +20,12 @@ public class Statue : Interactable
             _statueArm.SetActive(true);
             _isRepaired = true;
         }
+    }
+
+
+    public void ResetAsDefault()
+    {
+        _statueArm.SetActive(false);
+        _isRepaired = false;
     }
 }
