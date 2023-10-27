@@ -11,63 +11,55 @@ public class RoomGeneration : MonoBehaviour
     private List<Room> _roomsInPlay3 = new List<Room>();
     private List<Room> _roomsInPlay4 = new List<Room>();
     private List<Room> _roomsInPlay = new List<Room>();
+    private List<Room> _tandemToPlace = new List<Room>();
+    private List<Room> _tandemRoom = new List<Room>();
     SCRoomsLists _roomsLists;
-    List<GameObject> _currentFloor = new List<GameObject>();
     [SerializeField] LayoutGenerator _layout;
+
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnEndPhase.RemoveListener(Shuffle);
+    }
+
     #region Generation
     private void Start()
     {
-       
-        _reseting = false;
+        GameManager.Instance.OnEndPhase.AddListener(Shuffle);
     }
-    /*  private void GenerateRooms()
-      {
-          int i = 0;
-          if (_roomsInPlay.Count > 0)
-          {
-              foreach (Room room in _roomsInPlay)
-              {
-                  room.GetComponent<SelfDestruct>().Destruct();
-              }
-          }
-          _roomsInPlay = new List<Room>();
-          foreach (RoomRegion floor in _floor)
-          {
-
-              foreach (GameObject room in _roomsLists.Floors[i].Rooms)
-              {
-                  _currentFloor.Add(room);
-              }
-              int rand = Random.Range(0, _currentFloor.Count);
-              GameObject room1 = Instantiate(_currentFloor[rand], floor.FloorA.transform.position, floor.FloorA.transform.rotation);
-              _currentFloor.RemoveAt(rand);
-              int rand2 = Random.Range(0, _currentFloor.Count);
-              GameObject room2 = Instantiate(_currentFloor[rand2], floor.FloorB.transform.position, floor.FloorB.transform.rotation);
-              _currentFloor.RemoveAt(rand2);
-
-              _roomsInPlay.Add(room1.GetComponent<Room>());
-              _roomsInPlay.Add(room2.GetComponent<Room>());
-              i++;
-              _currentFloor.Clear();
-          }
-          SetRooms();
-      }*/
     public void GenerateRooms()
     {
         _roomsInPlay.Add(_hall);
         _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
-        int i = 0;
+        List<GameObject> roomsToPlace= new List<GameObject>();
         foreach(List<RoomPosition> positionsList in _layout.AisleLeft)
         {
-            //Debug.Log("i " + i);
-            
-            for (int j = 0; j < positionsList.Count; j++)
+            foreach(GameObject room1 in _roomsLists.Floors[_layout.AisleLeft.IndexOf(positionsList)].Rooms)
             {
-                int rand = Random.Range(0, _roomsLists.Floors[i].Rooms.Count);
-                //Debug.Log("j " + j);
-                GameObject room= Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position,transform.rotation);
-                room.GetComponent<Room>().RoomSide = Room.Side.LEFT;
-                switch (i)
+                roomsToPlace.Add(room1);
+            }
+            for (int j = 0; j < positionsList.Count; j++)
+            {              
+                 int rand = Random.Range(0, _roomsLists.Floors[_layout.AisleLeft.IndexOf(positionsList)].Rooms.Count);
+                GameObject roomToBe = _roomsLists.Floors[_layout.AisleLeft.IndexOf(positionsList)].Rooms[rand];
+                if (roomToBe.GetComponent<Room>().Tandem != null && _layout.AisleLeft.IndexOf(positionsList) == 1&&j<_layout.AisleRight[1].Count)
+                {
+                    _tandemToPlace.Add(roomToBe.GetComponent<Room>().Tandem);
+                    
+                }
+                else if (roomToBe.GetComponent<Room>().Tandem != null)
+                {
+                    --j;
+                    continue;
+                }
+                GameObject room= Instantiate(roomToBe, positionsList[j].Position,transform.rotation);
+                 room.GetComponent<Room>().RoomSide = Room.Side.LEFT;
+                if (roomToBe.GetComponent<Room>().Tandem != null && _layout.AisleLeft.IndexOf(positionsList)  == 1)
+                {
+                    _tandemRoom.Add(room.GetComponent<Room>());
+                }
+
+                switch (_layout.AisleLeft.IndexOf(positionsList))
                 {
                     case 0:
                         _roomsInPlay1.Add(room.GetComponent<Room>());
@@ -81,24 +73,38 @@ public class RoomGeneration : MonoBehaviour
                     case 3:
                         _roomsInPlay4.Add(room.GetComponent<Room>());
                         break;
-                }               
+                 }               
                 _roomsInPlay.Add(room.GetComponent<Room>());
             }
-            i++;
-            if (i > 4)
-                break;
+            roomsToPlace.Clear();
         }
-        i = 0;
         foreach (List<RoomPosition> positionsList in _layout.AisleRight)
         {
-            //Debug.Log("i " + i);
-            int rand = Random.Range(0, _roomsLists.Floors[i].Rooms.Count);
             for (int j = 0; j < positionsList.Count; j++)
             {
-                //Debug.Log("j " + j);
-                GameObject room = Instantiate(_roomsLists.Floors[i].Rooms[rand], positionsList[j].Position, transform.rotation);
-                room.GetComponent<Room>().RoomSide = Room.Side.RIGHT;
-                switch (i)
+                GameObject room;
+                int rand = Random.Range(0, _roomsLists.Floors[_layout.AisleRight.IndexOf(positionsList)].Rooms.Count);
+                int rand2 = Random.Range(0, positionsList.Count - j);
+                if (_layout.AisleRight.IndexOf(positionsList) == 1 && _tandemToPlace.Count > 0&&(rand2==0||positionsList.Count-j == _tandemToPlace.Count))
+                {
+                    room = Instantiate(_tandemToPlace[0].gameObject, positionsList[j].Position, transform.rotation);
+                    _tandemRoom.Add(room.GetComponent<Room>());
+                    _tandemToPlace.Remove(_tandemToPlace[0]);
+                    room.GetComponent<Room>().RoomSide = Room.Side.RIGHT;
+
+                }
+                else if (_roomsLists.Floors[_layout.AisleRight.IndexOf(positionsList)].Rooms[rand].GetComponent<Room>().Tandem!=null)
+                {
+                    --j;
+                    continue;
+                }
+                else
+                {
+                    room = Instantiate(_roomsLists.Floors[_layout.AisleRight.IndexOf(positionsList)].Rooms[rand], positionsList[j].Position, transform.rotation);
+                    room.GetComponent<Room>().RoomSide = Room.Side.RIGHT;
+
+                }
+                switch (_layout.AisleRight.IndexOf(positionsList))
                 {
                     case 0:
                         _roomsInPlay1.Add(room.GetComponent<Room>());
@@ -114,58 +120,38 @@ public class RoomGeneration : MonoBehaviour
                         break;
                 }
                 _roomsInPlay.Add(room.GetComponent<Room>());
-            }
-            i++;
-            if(i > 4)
-            {
-                break;
-            }
- 
+            } 
+        }
+        for(int j = 0; j < _tandemRoom.Count / 2; j++)
+        {
+            _tandemRoom[j].Tandem = _tandemRoom[j + _tandemRoom.Count / 2];
+            _tandemRoom[_tandemRoom.Count / 2 + j].Tandem = _tandemRoom[j];
         }
         SetRooms();
     }
     #endregion
     #region Shuffle
-    private void Update()
-    {
-        if (_reseting)
-        {
-            Shuffle();
-            _reseting = false;
-        }
-    }
-    /* private void Shuffle()
-     {
-         List<Vector3> roomsPos = new List<Vector3>();
-         for (int i = 0; i < _floor.Count - 1; i++)
-         {
-             roomsPos.Add(_floor[i].FloorA.transform.position);
-             roomsPos.Add(_floor[i].FloorB.transform.position);
-         }
-         foreach (Room room in _roomsInPlay)
-         {
-             if (room != _roomsInPlay[_roomsInPlay.Count - 1] && room != _roomsInPlay[_roomsInPlay.Count - 2])
-             {
-                 int rand = Random.Range(0, roomsPos.Count);
-                 room.transform.position = roomsPos[rand];
-                 roomsPos.RemoveAt(rand);
-             }
-         }
-         SetRooms();
-     }*/
     private void Shuffle()
     {
         List<Room> roomToShuffle1 = new List<Room>();
         List<Room> roomToShuffle2 = new List<Room>();
         List<Room> roomToShuffle3 = new List<Room>();
         List<Room> roomToShuffle4 = new List<Room>();
+        List<Room> TandemToShuffle = new List<Room>();
         foreach(Room room in _roomsInPlay1)
         {
             roomToShuffle1.Add(room);
         }
         foreach (Room room in _roomsInPlay2)
         {
-            roomToShuffle2.Add(room);
+            if (room.Tandem != null)
+            {
+                TandemToShuffle.Add(room);
+            }
+            else
+            {
+                roomToShuffle2.Add(room);
+            }
         }
         foreach (Room room in _roomsInPlay3)
         {
@@ -179,13 +165,12 @@ public class RoomGeneration : MonoBehaviour
         _roomsInPlay2.Clear();
         _roomsInPlay3.Clear();
         _roomsInPlay4.Clear();
-        int i = 0;
         foreach (List<RoomPosition> roomPositions in _layout.AisleLeft)
         {
             foreach(RoomPosition roomPosition in roomPositions)
             {
                 int rand = 0;
-                switch (i)
+                switch (_layout.AisleLeft.IndexOf(roomPositions))
                 {
                     case 0:
                          rand = Random.Range(0, roomToShuffle1.Count);
@@ -195,11 +180,22 @@ public class RoomGeneration : MonoBehaviour
                         roomToShuffle1.Remove(roomToShuffle1[rand]);
                         break;
                     case 1:
-                         rand = Random.Range(0, roomToShuffle2.Count);
-                        roomToShuffle2[rand].transform.position = roomPosition.Position;
-                         roomToShuffle2[rand].RoomSide = Room.Side.LEFT;
-                        _roomsInPlay2.Add(roomToShuffle2[rand]);
-                        roomToShuffle2.Remove(roomToShuffle2[rand]);
+                        int rand2 = Random.Range(0, roomToShuffle2.Count - _layout.AisleRight[1].Count+(TandemToShuffle.Count - _tandemRoom.Count / 2)) ;
+                        if (TandemToShuffle.Count > _tandemRoom.Count / 2 && (rand2 == 1 || roomToShuffle2.Count-_layout.AisleRight[1].Count == 0))
+                        {
+                            TandemToShuffle[TandemToShuffle.Count - 1].transform.position = roomPosition.Position;
+                            TandemToShuffle[TandemToShuffle.Count - 1].RoomSide = Room.Side.LEFT;
+                            _roomsInPlay2.Add(TandemToShuffle[TandemToShuffle.Count - 1]);
+                            TandemToShuffle.Remove(TandemToShuffle[TandemToShuffle.Count - 1]);
+                        }
+                        else
+                        {
+                            rand = Random.Range(0, roomToShuffle2.Count);   
+                            roomToShuffle2[rand].transform.position = roomPosition.Position;
+                            roomToShuffle2[rand].RoomSide = Room.Side.LEFT;
+                            _roomsInPlay2.Add(roomToShuffle2[rand]);
+                            roomToShuffle2.Remove(roomToShuffle2[rand]);
+                        }
                         break;
                     case 2:
                         rand = Random.Range(0, roomToShuffle3.Count);
@@ -217,17 +213,13 @@ public class RoomGeneration : MonoBehaviour
                         break;
                 }
             }
-            i++;
-            if (i > 4)
-                break;
         }
-        i = 0;
         foreach (List<RoomPosition> roomPositions in _layout.AisleRight)
         {
             foreach (RoomPosition roomPosition in roomPositions)
             {
                 int rand = 0;
-                switch (i)
+                switch (_layout.AisleRight.IndexOf(roomPositions))
                 {
                     case 0:
                         rand = Random.Range(0, roomToShuffle1.Count);
@@ -237,11 +229,22 @@ public class RoomGeneration : MonoBehaviour
                         roomToShuffle1.Remove(roomToShuffle1[rand]);
                         break;
                     case 1:
-                        rand = Random.Range(0, roomToShuffle2.Count);
-                        roomToShuffle2[rand].transform.position = roomPosition.Position;
-                        roomToShuffle2[rand].RoomSide = Room.Side.RIGHT;
-                        _roomsInPlay2.Add(roomToShuffle2[rand]);
-                        roomToShuffle2.Remove(roomToShuffle2[rand]);
+                        int rand2 = Random.Range(0, TandemToShuffle.Count + roomToShuffle2.Count - 1);
+                        if (TandemToShuffle.Count > 0 && (rand2 == 0 || roomToShuffle2.Count == 0))
+                        {
+                            TandemToShuffle[TandemToShuffle.Count-1].transform.position = roomPosition.Position;
+                            TandemToShuffle[TandemToShuffle.Count - 1].RoomSide = Room.Side.RIGHT;
+                            _roomsInPlay2.Add(TandemToShuffle[TandemToShuffle.Count - 1]);
+                            TandemToShuffle.Remove(TandemToShuffle[TandemToShuffle.Count - 1]);                      
+                        }
+                        else
+                        {
+                            rand = Random.Range(0, roomToShuffle2.Count);
+                            roomToShuffle2[rand].transform.position = roomPosition.Position;
+                            roomToShuffle2[rand].RoomSide = Room.Side.RIGHT;
+                            _roomsInPlay2.Add(roomToShuffle2[rand]);
+                            roomToShuffle2.Remove(roomToShuffle2[rand]);
+                        }
                         break;
                     case 2:
                         rand = Random.Range(0, roomToShuffle3.Count);
@@ -259,15 +262,10 @@ public class RoomGeneration : MonoBehaviour
                         break;
                 }
             }
-            i++;
-            if (i > 4)
-                break;
         }
         SetRooms();
     }
-    
     #endregion
-
     public void SetRooms()
     {
         Door[] allDoors = FindObjectsOfType<Door>();
@@ -332,8 +330,7 @@ public class RoomGeneration : MonoBehaviour
                                     }
                                 }
                                 break;
-                        }
-                        
+                        }                    
                     }
                 }
             }
@@ -348,8 +345,7 @@ public class RoomGeneration : MonoBehaviour
                 room.LinkedRooms.Add(roomToLink);
                roomToLink.LinkedRooms.Add(room);
                 door.LinkedDoor = doorToLink;
-                doorToLink.LinkedDoor = door;
-                
+                doorToLink.LinkedDoor = door;                
                 break;
             }
         }
@@ -367,12 +363,3 @@ public class RoomGeneration : MonoBehaviour
         return _wantedRoom;
     }
 }
-/*[System.Serializable]
-public class RoomRegion
-{
-    [SerializeField] private GameObject _floorA;
-    [SerializeField] private GameObject _floorB;
-
-    public GameObject FloorA { get => _floorA; }
-    public GameObject FloorB { get => _floorB; }
-}*/

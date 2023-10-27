@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     public PlayerController PlayerController => _playerController;
     
     [SerializeField] private HubRelativePosition _relativePos;
-    public HubRelativePosition RelativePos { get; set; }
+    public HubRelativePosition RelativePos { get => _relativePos; set => _relativePos = value; }
     
 
     [SerializeField]

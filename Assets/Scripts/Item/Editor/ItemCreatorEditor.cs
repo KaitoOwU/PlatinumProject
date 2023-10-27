@@ -14,8 +14,7 @@ public class ItemCreatorEditor : EditorWindow
     private string _name;
     private Sprite _icon;
 
-    private bool _isThrowable;
-    private GenerationZone _generationZone;
+    private bool _isClue;
 
     public static void InitForCreation()
     {
@@ -38,8 +37,7 @@ public class ItemCreatorEditor : EditorWindow
             _id = _itemModified.ID;
             _name = _itemModified.Name;
             _icon = _itemModified.Icon;
-            _isThrowable = _itemModified.IsThrowable;
-            _generationZone = _itemModified.GenerationZoneAsEnum;
+            _isClue = _itemModified.IsClue;
         }
     }
 
@@ -81,8 +79,7 @@ public class ItemCreatorEditor : EditorWindow
         GUILayout.Label("BEHAVIOUR", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}, GUILayout.ExpandWidth(true));
         GUILayout.Space(20);
         
-        _isThrowable = EditorGUILayout.Toggle("Is Throwable ?", _isThrowable);
-        _generationZone = (GenerationZone)EditorGUILayout.EnumFlagsField("Generation Zones", _generationZone);
+        _isClue = EditorGUILayout.Toggle("Is Clue ?", _isClue);
         
         GUILayout.Space(10);
 
@@ -103,14 +100,15 @@ public class ItemCreatorEditor : EditorWindow
                 }
                 else
                 {
-                    AssetDatabase.CopyAsset("Assets/Scripts/Item/Editor/ItemPrefab -- DO NOT TOUCH --.prefab", "Assets/Scripts/Item/ItemsPrefabs/" + _id + "_" + _name + "Prefab.prefab");
+                    AssetDatabase.CopyAsset("Assets/Scripts/Item/Editor/ItemPrefab -- DO NOT TOUCH --.prefab", "Assets/Resources/Item/ItemsPrefabs/" + _id + "_" + _name + "Prefab.prefab");
                     GameObject prefab =
-                        AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/Item/ItemsPrefabs/" + _id + "_" + _name +
+                        AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Item/ItemsPrefabs/" + _id + "_" + _name +
                                                                   "Prefab.prefab");
                 
                     ItemData data = CreateInstance<ItemData>();
-                    data.SaveData(_id, _name, _icon, prefab, _isThrowable, _generationZone);
-                    AssetDatabase.CreateAsset(data, "Assets/Scripts/Item/ItemsData/" + _id + "_" + _name +
+                    data.SaveData(_id, _name, _icon, prefab, _isClue);
+                    
+                    AssetDatabase.CreateAsset(data, "Assets/Resources/Item/ItemsData/" + _id + "_" + _name +
                                                     "Data.asset");
 
                     prefab.GetComponent<Item>().ItemData = data;
@@ -137,7 +135,7 @@ public class ItemCreatorEditor : EditorWindow
                     AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_itemModified.Prefab), _id + "_" + _name + "Prefab.prefab");
                     AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_itemModified), _id + "_" + _name + "Data.asset");
                     
-                    _itemModified.SaveData(_id, _name, _icon, _itemModified.Prefab, _isThrowable, _generationZone);
+                    _itemModified.SaveData(_id, _name, _icon, _itemModified.Prefab, _isClue);
                     Close();
                 }
             }
@@ -147,7 +145,7 @@ public class ItemCreatorEditor : EditorWindow
     private static int FindFirstFreeID()
     {
         var type = ItemManagerEditor.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
-            "Assets/Scripts/Item/ItemsData");
+            "Assets/Resources/Item/ItemsData");
 
         if (type.Count == 0)
             return 0;
@@ -165,7 +163,7 @@ public class ItemCreatorEditor : EditorWindow
     private static bool IsIDFree(int idToFind)
     {
         var type = ItemManagerEditor.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
-            "Assets/Scripts/Item/ItemsData");
+            "Assets/Resources/Item/ItemsData");
 
         return type.Find(value => value.ID == idToFind) == null;
     }

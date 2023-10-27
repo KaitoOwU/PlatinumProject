@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class Statue : Interactable
+public class Statue : Interactable, IResettable
 {
 
     private bool _isRepaired;
@@ -11,11 +11,21 @@ public class Statue : Interactable
     
     protected override void OnInteract(Player player)
     {
-        if (!_isRepaired && player.HeldItem.ID == 1) // BRAS DE STATUE
+        if (player.HeldItem == null)
+            return;
+        
+        if (!_isRepaired && player.HeldItem.ID == 0) // BRAS DE STATUE
         {
             player.HeldItem = null;
             _statueArm.SetActive(true);
             _isRepaired = true;
         }
+    }
+
+
+    public void ResetAsDefault()
+    {
+        _statueArm.SetActive(false);
+        _isRepaired = false;
     }
 }

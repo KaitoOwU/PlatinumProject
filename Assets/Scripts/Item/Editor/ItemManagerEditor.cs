@@ -15,7 +15,7 @@ public class ItemManagerEditor : EditorWindow
     private string _research = string.Empty;
     
     [MenuItem("Platinum/Manage Items")]
-    private static void Init()
+    public static void Init()
     {
         ItemManagerEditor window = GetWindowWithRect<ItemManagerEditor>(new Rect(0, 0, 500, 700), false);
         window.Show();
@@ -54,23 +54,15 @@ public class ItemManagerEditor : EditorWindow
         {
             if (_research != string.Empty)
             {
-                GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Item/ItemsData").FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
+                GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Resources/Item/ItemsData").FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
             }
             else
             {
-                GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Item/ItemsData").OrderBy(value => value.ID).ToList());
+                GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Resources/Item/ItemsData").OrderBy(value => value.ID).ToList());
             }
         }
         EditorGUILayout.EndVertical();
 
-    }
-    
-    public static List<T> FindAllScriptableObjectsOfType<T>(string filter, string folder = "Assets")
-        where T : ScriptableObject
-    {
-        return AssetDatabase.FindAssets(filter, new[] { folder })
-            .Select(guid => AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid)))
-            .ToList();
     }
 
     private void GUIPrintItems(List<ItemData> items)
@@ -102,9 +94,9 @@ public class ItemManagerEditor : EditorWindow
                         {
                             if(EditorUtility.DisplayDialog("Supprimer Item ?", $"Tu es sûr de vouloir supprimer l'Item : \"{data.Name}\" \nCela supprimera également le Prefab lié à l'Item !", "Oui", "Non"))
                             {
-                                AssetDatabase.DeleteAsset("Assets/Scripts/Item/ItemsPrefabs/" + data.ID + "_" + data.Name +
+                                AssetDatabase.DeleteAsset("Assets/Resources/Item/ItemsPrefabs/" + data.ID + "_" + data.Name +
                                                           "Prefab.prefab");
-                                AssetDatabase.DeleteAsset("Assets/Scripts/Item/ItemsData/" + data.ID + "_" + data.Name +
+                                AssetDatabase.DeleteAsset("Assets/Resources/Item/ItemsData/" + data.ID + "_" + data.Name +
                                                           "Data.asset");
                             }
                         }
@@ -125,5 +117,13 @@ public class ItemManagerEditor : EditorWindow
             GUILayout.Label("Clique sur \"Créer un Item\" pour en créer un", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 12});
             GUI.color = Color.white;
         }
+    }
+
+    public static List<T> FindAllScriptableObjectsOfType<T>(string filter, string folder = "Assets")
+        where T : ScriptableObject
+    {
+        return AssetDatabase.FindAssets(filter, new[] { folder })
+            .Select(guid => AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid)))
+            .ToList();
     }
 }
