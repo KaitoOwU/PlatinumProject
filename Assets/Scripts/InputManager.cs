@@ -12,11 +12,15 @@ using UnityEngine.Windows;
 public class InputManager : MonoBehaviour
 {
     [Header("Events for each input")]
+    [HideInInspector]
     public UnityEvent OnMoveStarted;
+    [HideInInspector]
     public UnityEvent OnMoveCanceled;
     public UnityEvent<Player> OnInteractStarted;
     public UnityEvent<Player> OnInteractCanceled;
+    [HideInInspector]
     public UnityEvent OnUseTool;
+    [HideInInspector]
     public UnityEvent OnPause;
 
     private PlayerInput _inputs;

@@ -46,10 +46,15 @@ public class GameManager : MonoBehaviour
     private GameObject _splitCameraRight;
 
     [Header("---Events---")]
+    [HideInInspector]
     public UnityEvent OnShuffleRooms;
+    [HideInInspector]
     public UnityEvent OnFirstPhaseEnd;
+    [HideInInspector]
     public UnityEvent OnSecondPhaseEnd;
+    [HideInInspector]
     public UnityEvent OnTimerEnd;
+    [HideInInspector]
     public UnityEvent OnEachMinute;
 
     private GamePhase _currentGamePhase;

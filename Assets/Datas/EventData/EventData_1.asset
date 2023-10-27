@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc6dbed766a510e43bd900840650aa48, type: 3}
+  m_Name: EventData_1
+  m_EditorClassIdentifier: 
+  _database:
+  - scriptName: GameManager
+    events:
+    - eventName: OnShuffleRooms
+      unityEvent:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2800000, guid: 7083a24a1019be642bc61d59b0a420a8, type: 3}
+            m_TargetAssemblyTypeName: UnityEngine.Texture2D, UnityEngine
+            m_MethodName: set_alphaIsTransparency
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+    - eventName: OnFirstPhaseEnd
+      unityEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - eventName: OnSecondPhaseEnd
+      unityEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - eventName: OnTimerEnd
+      unityEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - eventName: OnEachMinute
+      unityEvent:
+        m_PersistentCalls:
+          m_Calls: []
+  - scriptName: InputManager
+    events:
+    - eventName: OnMoveStarted
+      unityEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - eventName: OnMoveCanceled
+      unityEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - eventName: OnUseTool
+      unityEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - eventName: OnPause
+      unityEvent:
+        m_PersistentCalls:
+          m_Calls: []
