@@ -100,15 +100,15 @@ public class ItemCreatorEditor : EditorWindow
                 }
                 else
                 {
-                    AssetDatabase.CopyAsset("Assets/Scripts/Item/Editor/ItemPrefab -- DO NOT TOUCH --.prefab", "Assets/Scripts/Item/ItemsPrefabs/" + _id + "_" + _name + "Prefab.prefab");
+                    AssetDatabase.CopyAsset("Assets/Scripts/Item/Editor/ItemPrefab -- DO NOT TOUCH --.prefab", "Assets/Resources/Item/ItemsPrefabs/" + _id + "_" + _name + "Prefab.prefab");
                     GameObject prefab =
-                        AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/Item/ItemsPrefabs/" + _id + "_" + _name +
+                        AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/Item/ItemsPrefabs/" + _id + "_" + _name +
                                                                   "Prefab.prefab");
                 
                     ItemData data = CreateInstance<ItemData>();
                     data.SaveData(_id, _name, _icon, prefab, _isClue);
                     
-                    AssetDatabase.CreateAsset(data, "Assets/Scripts/Item/ItemsData/" + _id + "_" + _name +
+                    AssetDatabase.CreateAsset(data, "Assets/Resources/Item/ItemsData/" + _id + "_" + _name +
                                                     "Data.asset");
 
                     prefab.GetComponent<Item>().ItemData = data;
@@ -144,8 +144,8 @@ public class ItemCreatorEditor : EditorWindow
 
     private static int FindFirstFreeID()
     {
-        var type = Helper.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
-            "Assets/Scripts/Item/ItemsData");
+        var type = ItemManagerEditor.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
+            "Assets/Resources/Item/ItemsData");
 
         if (type.Count == 0)
             return 0;
@@ -162,8 +162,8 @@ public class ItemCreatorEditor : EditorWindow
 
     private static bool IsIDFree(int idToFind)
     {
-        var type = Helper.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
-            "Assets/Scripts/Item/ItemsData");
+        var type = ItemManagerEditor.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
+            "Assets/Resources/Item/ItemsData");
 
         return type.Find(value => value.ID == idToFind) == null;
     }

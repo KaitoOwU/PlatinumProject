@@ -127,8 +127,7 @@ public class GameManager : MonoBehaviour
         InitSingleton();
         InitGame();
 
-        _items = Helper.FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Item/ItemsData")
-            .OrderBy(value => value.ID).ToList();
+        _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
     }
 
     void Start()
@@ -294,11 +293,8 @@ public struct PlayerInfo
 
 public static class Helper
 {
-    public static List<T> FindAllScriptableObjectsOfType<T>(string filter, string folder = "Assets")
-        where T : ScriptableObject
+    public static List<ItemData> GetAllItemDatas()
     {
-        return AssetDatabase.FindAssets(filter, new[] { folder })
-            .Select(guid => AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid)))
-            .ToList();
+        return Resources.LoadAll<ItemData>("Item/ItemsData").ToList();
     }
 }
