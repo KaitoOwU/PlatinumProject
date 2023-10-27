@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DebugMenu : MonoBehaviour
@@ -25,29 +27,42 @@ public class DebugMenu : MonoBehaviour
         data = new Data(){playerSelected = GameManager.Instance.PlayerList[0], multiplayerRestrictions = true};
         
         _openMenu.Debug.Activate.performed += DebugMenuEnabled;
-        _openMenu.Debug.Navigate.started += DebugMenuNavigate;
         _openMenu.Enable();
     }
 
     private void OnDisable()
     {
         _openMenu.Debug.Activate.performed -= DebugMenuEnabled;
-        _openMenu.Debug.Navigate.started -= DebugMenuNavigate;
         _openMenu.Disable();
     }
 
-    private void DebugMenuEnabled(InputAction.CallbackContext callbackContext)
+    public void DebugMenuEnabled(InputAction.CallbackContext callbackContext)
     {
+        _openMenu.Debug.Navigate.started += DebugMenuNavigate;
+        
         _disableEvents.gameObject.SetActive(false);
         _debugMenu.SetActive(true);
 
         UpdateValues();
     }
 
-    private void DebugMenuDisabled()
+    public void DebugMenuDisabled()
     {
+        _openMenu.Debug.Navigate.started -= DebugMenuNavigate;
+        
         _debugMenu.SetActive(false);
         _disableEvents.gameObject.SetActive(true);
+    }
+
+    public void RestartScene()
+    {
+        Destroy(GameManager.Instance.gameObject);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ResetAllPuzzles()
+    {
+        FindObjectsOfType<MonoBehaviour>().OfType<IResettable>().ToList().ForEach(value => value.ResetAsDefault());
     }
 
     private void UpdateValues()
@@ -88,6 +103,23 @@ public class DebugMenu : MonoBehaviour
                 break;
             
             case "ItemButton":
+                if (data.currentItem == null)
+                {
+                    data.currentItem = GameManager.Instance.Items[0];
+                }
+                else
+                {
+                    if (data.currentItem.ID + 1 < GameManager.Instance.Items.Count)
+                    {
+                        data.currentItem = GameManager.Instance.Items[data.currentItem.ID + 1];
+                    }
+                    else
+                    {
+                        data.currentItem = null;
+                    }
+                }
+
+                data.playerSelected.PlayerRef.HeldItem = data.currentItem;
                 break;
         }
 

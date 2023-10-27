@@ -54,23 +54,15 @@ public class ItemManagerEditor : EditorWindow
         {
             if (_research != string.Empty)
             {
-                GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Item/ItemsData").FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
+                GUIPrintItems(Helper.FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Item/ItemsData").FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
             }
             else
             {
-                GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Item/ItemsData").OrderBy(value => value.ID).ToList());
+                GUIPrintItems(Helper.FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Item/ItemsData").OrderBy(value => value.ID).ToList());
             }
         }
         EditorGUILayout.EndVertical();
 
-    }
-    
-    public static List<T> FindAllScriptableObjectsOfType<T>(string filter, string folder = "Assets")
-        where T : ScriptableObject
-    {
-        return AssetDatabase.FindAssets(filter, new[] { folder })
-            .Select(guid => AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid)))
-            .ToList();
     }
 
     private void GUIPrintItems(List<ItemData> items)
