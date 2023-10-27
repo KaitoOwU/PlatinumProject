@@ -69,3 +69,9 @@ public class Interactable : MonoBehaviour
     protected virtual void PlayAnimation(){}
 
 }
+
+public interface IResettable
+{
+    public abstract void ResetAsDefault();
+}
+    

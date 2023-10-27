@@ -144,7 +144,7 @@ public class ItemCreatorEditor : EditorWindow
 
     private static int FindFirstFreeID()
     {
-        var type = ItemManagerEditor.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
+        var type = Helper.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
             "Assets/Scripts/Item/ItemsData");
 
         if (type.Count == 0)
@@ -162,7 +162,7 @@ public class ItemCreatorEditor : EditorWindow
 
     private static bool IsIDFree(int idToFind)
     {
-        var type = ItemManagerEditor.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
+        var type = Helper.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
             "Assets/Scripts/Item/ItemsData");
 
         return type.Find(value => value.ID == idToFind) == null;

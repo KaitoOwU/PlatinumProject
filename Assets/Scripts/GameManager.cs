@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -39,6 +40,8 @@ public class GameManager : MonoBehaviour
     public IReadOnlyList<PlayerInfo> LeftPlayers =>
         PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.LEFT_WING);
 
+    public IReadOnlyList<ItemData> Items => _items;
+
     [Header("---Constants---")]
     [SerializeField]
     private GameData _gameData;
@@ -69,6 +72,7 @@ public class GameManager : MonoBehaviour
     private CameraState _currentCameraState;
     private float _timer;
     private bool _isTimerGoing;
+    private List<ItemData> _items = new();
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -122,6 +126,9 @@ public class GameManager : MonoBehaviour
     {
         InitSingleton();
         InitGame();
+
+        _items = Helper.FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Scripts/Item/ItemsData")
+            .OrderBy(value => value.ID).ToList();
     }
 
     void Start()
@@ -283,4 +290,15 @@ public struct PlayerInfo
 
     public Player PlayerRef => _playerRef;
     [SerializeField] private Player _playerRef;
+}
+
+public static class Helper
+{
+    public static List<T> FindAllScriptableObjectsOfType<T>(string filter, string folder = "Assets")
+        where T : ScriptableObject
+    {
+        return AssetDatabase.FindAssets(filter, new[] { folder })
+            .Select(guid => AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid)))
+            .ToList();
+    }
 }
