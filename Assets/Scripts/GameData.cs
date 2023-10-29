@@ -7,6 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameData", menuName = "Datas/Create Game Constants", order = 1)]
 public class GameData : ScriptableObject
 {
+
     [Serializable]
     public struct TimerData
     {

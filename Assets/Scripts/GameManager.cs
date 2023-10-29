@@ -10,7 +10,11 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _timerTxt;
-    
+    public string text1 = typeof(GameManager).AssemblyQualifiedName;
+    public string text2 = typeof(SuspectData).AssemblyQualifiedName;
+    public string text3 = typeof(GameData).AssemblyQualifiedName;
+    public string text4 = typeof(InputManager).AssemblyQualifiedName;
+
     public GamePhase CurrentGamePhase
     {
         get => _currentGamePhase; 

@@ -1,33 +1,65 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Linq;
+using UnityEditor.PackageManager;
+
 
 public class UnityEventManager : MonoBehaviour
 {
     private static UnityEventManager instance;
     public static UnityEventManager Instance => instance;
 
-    [SerializeField] private UnityEventData eventsData;
+    [SerializeField] private UnityEventData _eventsData;
+    [SerializeField] private AudioSource _audioSource;
 
     private void Awake()
     {
         instance = this;
+        InitEvents(_eventsData);
     }
-    // Start is called before the first frame update
-    void Start()
+    void InitEvents(UnityEventData data)
     {
         //get all scripts in scene and add listener from scriptable object
+
+        //foreach (var script in data.DataBase)
+        //{
+        //    var instances = FindObjectsOfType(Type.GetType($"{script.ScriptName}, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"));
+        //    foreach(var instance in instances)
+        //    {
+        //        foreach (var eventValue in script.Events)
+        //        {
+        //            switch (eventValue.EventAction.EventType)
+        //            {
+        //                case EventAction.EventTypeEnum.DEBUG:
+        //                    ((UnityEvent)instance.GetType().GetField(eventValue.EventName)).AddListener(this.DebugMessage);
+
+        //            }
+        //            (UnityEvent)instance.GetType().GetField(eventValue.EventName).AddListener(this.)
+        //        }
+        //    }
+        //}
     }
 
-    // Update is called once per frame
-    void Update()
+ 
+    public void DebugMessage(string msg)
     {
-        
+        Debug.Log(msg);
+    }
+    public void PlaySFX(AudioClip audioClip)
+    {
+        _audioSource.PlayOneShot(audioClip);
+    }
+    public void ScreenShake(float intensity)
+    {
+        Debug.Log($"ScreenShake at intensity : {intensity}");
     }
 }
+
 [Serializable]
 public class ScriptEventInfo
 {
@@ -51,27 +83,88 @@ public class ScriptEventInfo
     private string scriptName;
     [SerializeField]
     private UnityEventInfo[] events;
+
+    //public void DebugMessage(string msg)
+    //{
+    //    UnityEventManager.Instance.DebugMessage(msg);
+    //}
+    //public void PlaySFX(AudioClip audioClip)
+    //{
+    //    UnityEventManager.Instance.PlaySFX(audioClip);
+    //}
+    //public void ScreenShake(float intensity)
+    //{
+    //    UnityEventManager.Instance.ScreenShake(intensity);
+    //}
 }
 [Serializable]
 public class UnityEventInfo
 {
-    public UnityEventInfo(string _eventName, UnityEvent _unityEvent)
+    public UnityEventInfo(string _eventName, EventAction _eventAction)
     {
         eventName = _eventName;
-        unityEvent = _unityEvent;
+        eventAction = _eventAction;
     }
     public string EventName
     {
         get { return eventName; }
         set { eventName = value; }
     }
-    public UnityEvent UnityEvent
+    public EventAction EventAction
     {
-        get { return unityEvent; }
-        set { unityEvent = value; }
+        get { return eventAction; }
+        set { eventAction = value; }
     }
     [SerializeField]
     private string eventName;
     [SerializeField]
-    private UnityEvent unityEvent;
+    private EventAction eventAction;
+}
+[Serializable]
+public enum EventTypeEnum
+{
+    NONE,
+    DEBUG,
+    PLAY_SOUND,
+    SCREENSHAKE,
+}
+[Serializable]
+public class EventAction
+{
+    public EventAction() 
+    {
+        eventType = EventTypeEnum.NONE;
+    }
+
+
+
+    public EventTypeEnum EventType
+    {
+        get { return eventType; } set { eventType = value; }
+    }
+
+    public string DebugMessage
+    {
+        get { return debugMessage; }
+        set { debugMessage = value; }
+    }
+    public AudioClip Clip
+    {
+        get { return clip; }
+        set { clip = value; }
+    }
+    public float Intensity
+    {
+        get { return intensity; }
+        set { intensity = value; }
+    }
+
+    [SerializeField]
+    private EventTypeEnum eventType;
+    [SerializeField]
+    private string debugMessage;
+    [SerializeField]
+    private AudioClip clip;
+    [SerializeField]
+    private float intensity;
 }
