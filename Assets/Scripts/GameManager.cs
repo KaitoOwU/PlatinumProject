@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
         set => _playerList = value;
     }
     public GameData GameData => _gameData;
+    public PlayerConstants PlayerConstants => _playerConstants;
     public float Timer => _timer;
     public SuspectData Murderer => _murderer;
     public SuspectData Victim => _victim;
@@ -45,6 +46,8 @@ public class GameManager : MonoBehaviour
     [Header("---Constants---")]
     [SerializeField]
     private GameData _gameData;
+    [SerializeField]
+    private PlayerConstants _playerConstants;
 
     [Header("---References---")]
     [SerializeField]
