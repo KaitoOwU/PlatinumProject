@@ -26,25 +26,33 @@ public class UnityEventManager : MonoBehaviour
     {
         //get all scripts in scene and add listener from scriptable object
 
-        //foreach (var script in data.DataBase)
-        //{
-        //    var instances = FindObjectsOfType(Type.GetType($"{script.ScriptName}, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"));
-        //    foreach(var instance in instances)
-        //    {
-        //        foreach (var eventValue in script.Events)
-        //        {
-        //            switch (eventValue.EventAction.EventType)
-        //            {
-        //                case EventAction.EventTypeEnum.DEBUG:
-        //                    ((UnityEvent)instance.GetType().GetField(eventValue.EventName)).AddListener(this.DebugMessage);
+        foreach (var script in data.DataBase)
+        {
+            var instances = FindObjectsOfType(Type.GetType($"{script.ScriptName}, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"));
+            foreach (var instance in instances)
+            {
+                foreach (var eventValue in script.Events)
+                {
+                    switch (eventValue.EventAction.EventType)
+                    {
+                        case EventTypeEnum.DEBUG:
+                            UnityAction d = () => DebugMessage(eventValue.EventAction.DebugMessage);
+                            ((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance))).AddListener(d);
+                            break;
+                    }
 
-        //            }
-        //            (UnityEvent)instance.GetType().GetField(eventValue.EventName).AddListener(this.)
-        //        }
-        //    }
-        //}
+                }
+            }
+        }
     }
-
+    private void OnDisable()
+    {
+        //((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance))).RemoveListener(d);
+    }
+    void CallAllEvents()
+    {
+        
+    }
  
     public void DebugMessage(string msg)
     {

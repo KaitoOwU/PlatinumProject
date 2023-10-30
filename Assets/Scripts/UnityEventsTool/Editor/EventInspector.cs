@@ -24,10 +24,10 @@ public class EventInspector : Editor
             foreach (var eventInfo in script.Events)
             {
                 GUILayout.Space(10);    
-                EditorGUILayout.BeginHorizontal();
                 GUILayout.Label(eventInfo.EventName, new GUIStyle(GUI.skin.label){ fontSize = 13, fontStyle = FontStyle.Bold});
+
+                
                 eventInfo.EventAction.EventType = (EventTypeEnum)EditorGUILayout.EnumPopup(eventInfo.EventAction.EventType);
-                EditorGUILayout.EndHorizontal();
                 switch (eventInfo.EventAction.EventType)
                 {
                     case EventTypeEnum.NONE: break;

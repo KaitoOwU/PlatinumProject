@@ -20,6 +20,7 @@ public class InputManager : MonoBehaviour
     public UnityEvent<Player> OnInteractCanceled;
     [HideInInspector]
     public UnityEvent OnUseTool;
+    //public UnityEvent OnUseTool;
     [HideInInspector]
     public UnityEvent OnPause;
 
