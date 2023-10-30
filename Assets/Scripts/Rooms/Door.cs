@@ -17,6 +17,7 @@ public class Door : Interactable
 
     public Door LinkedDoor { get => _linkedDoor; set => _linkedDoor = value; }
     public bool IsLocked { get => _isLocked; set => _isLocked = value; }
+    public Room Room { get => room;}
 
     public enum DoorType
     {

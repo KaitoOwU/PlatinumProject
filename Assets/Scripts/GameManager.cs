@@ -201,30 +201,30 @@ public class GameManager : MonoBehaviour
             case TimerPhase.FIRST_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
+                    _currentTimerPhase = TimerPhase.SECOND_PHASE;
                     OnFirstPhaseEnd?.Invoke();
                     OnEndPhase?.Invoke();
-                    Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
-                    _currentTimerPhase = TimerPhase.SECOND_PHASE;
+                    Debug.LogError("<color=cyan>First Phase End </color>" + _timer);               
                 }
                 break;
             case TimerPhase.SECOND_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
+                    _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
                     OnEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
-                    _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
                 if (_timer <= 0)
                 {
+                    _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
                     OnEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Third Phase End </color>" + _timer);
                     _isTimerGoing = false;
                     _timer = 0;
-                    _currentTimerPhase = TimerPhase.END;
                 }
                 break;
             case TimerPhase.END:

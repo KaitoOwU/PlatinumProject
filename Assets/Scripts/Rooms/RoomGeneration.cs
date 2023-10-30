@@ -366,7 +366,7 @@ public class RoomGeneration : MonoBehaviour
             }
         }
         int max=0;
-        switch (FindObjectOfType<GameManager>().CurrentTimerPhase)
+        switch (GameManager.Instance.CurrentTimerPhase)
         {
             case GameManager.TimerPhase.FIRST_PHASE:
                 max = 2;
@@ -375,9 +375,13 @@ public class RoomGeneration : MonoBehaviour
                 max =4;
                 break;
             case GameManager.TimerPhase.THIRD_PHASE:
-                max = _roomsInPlay.Count / 2-1;
+                max = _roomsInPlay.Count / 2;
+                break;
+            case GameManager.TimerPhase.END:
+                max = 0;
                 break;
         }
+        Debug.Log(max);
         for (int i = 0; i < max; i++)
         {
             foreach (Door door in FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).Doors)
@@ -388,6 +392,7 @@ public class RoomGeneration : MonoBehaviour
             {
                 door.IsLocked = false;
             }
+            
         }
     }
     public Room FindRoomAtPosition(Vector3 pos)
