@@ -6,18 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ad82a591-267b-454e-8808-fec20011c7ba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PlatinumProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PlatinumProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/TestScenes/KevinScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/TestScenes/KevinScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugMenu.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Item/Editor/ItemCreatorEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Item/Editor/ItemCreatorEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Item/Editor/ItemManagerEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Item/Editor/ItemManagerEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Item/Interactable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Item/Interactable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Item/ItemData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Item/ItemData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Item/ItemsData/0_Statue's ArmData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Item/ItemsData/0_Statue's ArmData.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Item/ItemsPrefabs/0_Statue's ArmPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Item/ItemsPrefabs/0_Statue's ArmPrefab.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Item/ItemsPrefabs/0_Statue's ArmPrefab.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Item/ItemsPrefabs/0_Statue's ArmPrefab.prefab.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Puzzle/Statue.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Puzzle/Statue.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-2022.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-2022.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +20,9 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3b24cc7fa9794ed8ab04312c53e6dedd172c00/8a/246d5c89/Debug.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/787acc3c9a4c471ba7d971300105af2446ac00/b3/2c4303c7/ThrowHelper.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ff547e179675494c96be16730e63c2497a00/80/60dcf4fe/FontStyle.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Clues/Clue.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Clues/Editor/MurderScenarioCustomEditor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Clues/Editor/ScenarioEditorWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Item/Editor/ItemCreatorEditor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Item/Editor/ItemDataEditor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Item/Interactable.cs" root0="FORCE_HIGHLIGHTING" />
@@ -59,7 +51,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.22193211&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;GP-DebugMenu&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;GP-ToolMeutrier&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -109,10 +101,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="25720">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="25720" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -163,6 +155,8 @@
       <workItem from="1698234989295" duration="3128000" />
       <workItem from="1698327116049" duration="5311000" />
       <workItem from="1698390758998" duration="3618000" />
+      <workItem from="1698656385799" duration="61000" />
+      <workItem from="1698656457786" duration="10166000" />
     </task>
     <servers />
   </component>
@@ -190,6 +184,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Clues/MurderScenario.cs</url>
+          <line>35</line>
+          <properties documentPath="C:\Users\adves\Documents\Unity\Unity Projects\PlatinumProject\Assets\Scripts\Clues\MurderScenario.cs" initialLine="35" containingFunctionPresentation="Method 'SaveData'">
+            <startOffsets>
+              <option value="915" />
+            </startOffsets>
+            <endOffsets>
+              <option value="933" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

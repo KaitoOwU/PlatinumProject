@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.LEFT_WING);
 
     public IReadOnlyList<ItemData> Items => _items;
+    public IReadOnlyList<MurderScenario> MurderScenarios => Resources.LoadAll<MurderScenario>("Clues");
 
     [Header("---Constants---")]
     [SerializeField]
@@ -274,6 +275,10 @@ public class GameManager : MonoBehaviour
         camera.transform.rotation = newValues.rotation;
     }
     #endregion
+
+    public MurderScenario GetMurderScenario(SuspectData victim, SuspectData murderer) => MurderScenarios.ToList()
+        .FindAll(scenario => scenario.DuoSuspect.Victim == victim)
+        .Find(scenario => scenario.DuoSuspect.Murderer == murderer);
 }
 
 [Serializable]
