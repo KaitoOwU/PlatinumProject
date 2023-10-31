@@ -52,9 +52,9 @@ public class Interactable : MonoBehaviour
         
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
         
-        p.Inputs.OnInteract.RemoveListener(OnInteract);
-        p.Inputs.OnPush.RemoveListener(OnPush);
-        p.Inputs.OnPushCanceled.RemoveListener(OnPushCanceled);
+        p.Inputs.OnInteract?.RemoveListener(OnInteract);
+        p.Inputs.OnPush?.RemoveListener(OnPush);
+        p.Inputs.OnPushCanceled?.RemoveListener(OnPushCanceled);
 
 
         _onPlayerExitRange?.Invoke();
@@ -66,6 +66,7 @@ public class Interactable : MonoBehaviour
         {
             GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnInteract?.RemoveListener(OnInteract);
             GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnPush?.RemoveListener(OnPush);
+            GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnPushCanceled?.RemoveListener(OnPushCanceled);
         }
             
     }

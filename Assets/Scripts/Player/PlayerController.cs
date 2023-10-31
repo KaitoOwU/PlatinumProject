@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     { EButtonType.PAUSE, "Pause" }};
 
     private void OnDisable() => _CleanUp();
-
+    RigidbodyConstraints _normalConstraints;
 
     public bool IsButtonHeld(EButtonType buttonType)
     {
@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
 
         _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed;
         _moveState = EMoveState.NORMAL;
+        _normalConstraints = _rigidbody.constraints;
     }
     private void _CleanUp()
     {
@@ -84,26 +85,28 @@ public class PlayerController : MonoBehaviour
 
     public void SwitchMoveState(EMoveState newMoveState, Vector3 constraint = new()) 
     {
-        Debug.Log("newMoveState : "+newMoveState.ToString());
         _moveState = newMoveState;
         switch (newMoveState)
         {
             case EMoveState.NORMAL:
+                _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ; 
                 _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed; break;
             case EMoveState.PUSH:
+                if (constraint.x != 0)
+                    _rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                else if (constraint.z != 0)
+                    _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                 _moveSpeed = GameManager.Instance.PlayerConstants.PushMoveSpeed; break;
         }
-        _constraint = constraint;
     }
 
     private void FixedUpdate()
     {
-        Debug.Log(_moveState.ToString());
         if (_inputs != null)
         {
             if (_inputs.actions["Move"].ReadValue<Vector2>() != Vector2.zero)
             {
-                if(_moveState == EMoveState.NORMAL) 
+                if (_moveState == EMoveState.NORMAL)
                     UpdatePlayerRotation(_inputs.actions["Move"].ReadValue<Vector2>());
                 _Move(_inputs.actions["Move"].ReadValue<Vector2>());
             }
@@ -113,18 +116,7 @@ public class PlayerController : MonoBehaviour
     #region Player Actions Methods
     private void _Move(Vector3 dir)
     {
-        if(_constraint == Vector3.zero)
-            _rigidbody.velocity = new Vector3(dir.x * _moveSpeed, _rigidbody.velocity.y, dir.y * _moveSpeed);
-        else if(_constraint.x !=0)
-        {
-            _rigidbody.velocity = Vector3.zero;
-            _rigidbody.velocity = new Vector3(dir.x * _moveSpeed, _rigidbody.velocity.y, 0);
-        }
-        else if (_constraint.z != 0)
-        {
-            _rigidbody.velocity = Vector3.zero;
-            _rigidbody.velocity = new Vector3(0, _rigidbody.velocity.y, dir.y * _moveSpeed);
-        }
+        _rigidbody.velocity = new Vector3(dir.x * _moveSpeed, _rigidbody.velocity.y, dir.y * _moveSpeed);
     }
     private void UpdatePlayerRotation(Vector3 dir)
     {
