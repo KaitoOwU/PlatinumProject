@@ -66,11 +66,11 @@ public class ItemManagerEditor : EditorWindow
                 {
                     if (_research != string.Empty)
                     {
-                        GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Resources/Item/ItemsData").FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
+                        GUIPrintItems(FindAllScriptableObjectsOfType<PickableData>("t:PickableData").FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
                     }
                     else
                     {
-                        GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Resources/Item/ItemsData").OrderBy(value => value.ID).ToList());
+                        GUIPrintItems(FindAllScriptableObjectsOfType<PickableData>("t:PickableData").OrderBy(value => value.ID).ToList());
                     }
                 }
                 EditorGUILayout.EndVertical();
@@ -83,11 +83,11 @@ public class ItemManagerEditor : EditorWindow
                 {
                     if (_research != string.Empty)
                     {
-                        GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Resources/Item/ItemsData").FindAll(value => !value.IsClue).FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
+                        GUIPrintItems(FindAllScriptableObjectsOfType<PickableData>("t:ItemData").FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
                     }
                     else
                     {
-                        GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Resources/Item/ItemsData").FindAll(value => !value.IsClue).OrderBy(value => value.ID).ToList());
+                        GUIPrintItems(FindAllScriptableObjectsOfType<PickableData>("t:ItemData").OrderBy(value => value.ID).ToList());
                     }
                 }
                 EditorGUILayout.EndVertical();
@@ -100,11 +100,11 @@ public class ItemManagerEditor : EditorWindow
                 {
                     if (_research != string.Empty)
                     {
-                        GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Resources/Item/ItemsData").FindAll(value => value.IsClue).FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
+                        GUIPrintItems(FindAllScriptableObjectsOfType<PickableData>("t:ClueData").FindAll(value => value.Name.ContainsInsensitive(_research)).OrderBy(value => value.ID).ToList());
                     }
                     else
                     {
-                        GUIPrintItems(FindAllScriptableObjectsOfType<ItemData>("t:ItemData", "Assets/Resources/Item/ItemsData").FindAll(value => value.IsClue).OrderBy(value => value.ID).ToList());
+                        GUIPrintItems(FindAllScriptableObjectsOfType<PickableData>("t:ClueData").OrderBy(value => value.ID).ToList());
                     }
                 }
                 EditorGUILayout.EndVertical();
@@ -114,16 +114,16 @@ public class ItemManagerEditor : EditorWindow
 
     }
 
-    private void GUIPrintItems(List<ItemData> items)
+    private void GUIPrintItems(List<PickableData> items)
     {
         if (items.Count > 0)
         {
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos, GUILayout.Height(500));
             {
-                foreach (ItemData data in items)
+                foreach (PickableData data in items)
                 {
                     
-                    GUILayout.Label($"({data.ID}) {data.Name}", new GUIStyle(GUI.skin.label) {fontSize = 17, fontStyle = FontStyle.Bold});
+                    GUILayout.Label($"{(data is ItemData ? "<color=#f170ff>Item</color>" : "<color=#70bfff>Clue</color>")} • ({data.ID}) {data.Name}", new GUIStyle(GUI.skin.label) {fontSize = 17, fontStyle = FontStyle.Bold, richText = true});
 
                     EditorGUILayout.BeginHorizontal();
                     {
@@ -143,10 +143,8 @@ public class ItemManagerEditor : EditorWindow
                         {
                             if(EditorUtility.DisplayDialog("Supprimer Item ?", $"Tu es sûr de vouloir supprimer l'Item : \"{data.Name}\" \nCela supprimera également le Prefab lié à l'Item !", "Oui", "Non"))
                             {
-                                AssetDatabase.DeleteAsset("Assets/Resources/Item/ItemsPrefabs/" + data.ID + "_" + data.Name +
-                                                          "Prefab.prefab");
-                                AssetDatabase.DeleteAsset("Assets/Resources/Item/ItemsData/" + data.ID + "_" + data.Name +
-                                                          "Data.asset");
+                                AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(data.Prefab.GetInstanceID()));
+                                AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(data));
                             }
                         }
                         GUI.backgroundColor = Color.white;

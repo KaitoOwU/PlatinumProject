@@ -11,12 +11,12 @@ public class Statue : Interactable, IResettable
     
     protected override void OnInteract(Player player)
     {
-        if (player.HeldItem == null)
+        if (player.HeldPickable == null)
             return;
         
-        if (!_isRepaired && player.HeldItem.ID == 0) // BRAS DE STATUE
+        if (!_isRepaired && player.HeldPickable.ID == 0) // BRAS DE STATUE
         {
-            player.HeldItem = null;
+            player.HeldPickable = null;
             _statueArm.SetActive(true);
             _isRepaired = true;
         }
