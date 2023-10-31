@@ -13,6 +13,7 @@ public class ItemCreatorEditor : EditorWindow
     private int _id;
     private string _name;
     private Sprite _icon;
+    private int _toolbar;
 
     private bool _isClue;
 
@@ -46,6 +47,8 @@ public class ItemCreatorEditor : EditorWindow
         GUILayout.Space(10);
         GUILayout.Label("DATA", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}, GUILayout.ExpandWidth(true));
         GUILayout.Space(20);
+
+        _toolbar = GUILayout.Toolbar(_toolbar, new string[] { "Item", "Indice" });
         
         EditorGUILayout.BeginHorizontal();
         {
@@ -71,15 +74,11 @@ public class ItemCreatorEditor : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
         
-        _icon = (Sprite)EditorGUILayout.ObjectField("Icône de l'Item (UI)", _icon, typeof(Sprite), false);
+        if(_toolbar == 0) _icon = (Sprite)EditorGUILayout.ObjectField("Icône de l'Item (UI)", _icon, typeof(Sprite), false);
         
         EditorGUILayout.Separator();
         
-        GUILayout.Space(10);
-        GUILayout.Label("BEHAVIOUR", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}, GUILayout.ExpandWidth(true));
-        GUILayout.Space(20);
-        
-        _isClue = EditorGUILayout.Toggle("Is Clue ?", _isClue);
+        _isClue = _toolbar == 1;
         
         GUILayout.Space(10);
 
