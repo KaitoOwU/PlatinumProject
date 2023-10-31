@@ -11,6 +11,7 @@ public class Door : Interactable
     [SerializeField] private Door _linkedDoor;
     [SerializeField] private Room room;
     [SerializeField] private bool _isLocked;
+    List<GameObject> _corridors;
 
     public Transform[] TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
@@ -19,6 +20,10 @@ public class Door : Interactable
     public bool IsLocked { get => _isLocked; set => _isLocked = value; }
     public Room Room { get => room;}
 
+    private void Start()
+    {
+        _corridors= Resources.Load<SCRoomsLists>("ScriptableObject/Rooms").Floors[4].Rooms;
+    }
     public enum DoorType
     {
         ENTRY,
@@ -29,6 +34,7 @@ public class Door : Interactable
     {
         if (!_isLocked&&!_linkedDoor.IsLocked)
         {
+            int rand = Random.Range(0, 10);
             if (player.CurrentRoom is Hub)
             {
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsInteractHeld).Count;
@@ -48,11 +54,11 @@ public class Door : Interactable
 
                     hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
                     hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
-
                 }
             }
             else
             {
+
                 Room room = player.CurrentRoom;
 
                 if (_linkedDoor.room is Hub)
@@ -66,9 +72,23 @@ public class Door : Interactable
                     if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
                         _playersInRange.All(player => player.PlayerController.IsInteractHeld))
                     {
-                        TP_Players(_linkedDoor.TpPoint);
-                        TP_Camera(_linkedDoor.room);
-                        UpdateRoom(_linkedDoor.room);
+                        if (rand < GameManager.Instance.CorridorChance)
+                        {
+                            int rand2 = Random.Range(0, _corridors.Count);
+                            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
+                            corridor.SetCorridor(player, LinkedDoor);
+                            TP_Players(corridor.Doors[0].TpPoint);
+                            TP_Camera(corridor);
+                            UpdateRoom(corridor);
+                            GameManager.Instance.CorridorChance = 10;
+                        }
+                        else
+                        {
+                            GameManager.Instance.CorridorChance --;
+                            TP_Players(_linkedDoor.TpPoint);
+                            TP_Camera(_linkedDoor.room);
+                            UpdateRoom(_linkedDoor.room);
+                        }
                     }
                 }
                 else if (room.RoomSide == Room.Side.LEFT)
@@ -76,9 +96,23 @@ public class Door : Interactable
                     if (GameManager.Instance.LeftPlayers.Count == _playersInRange.Count &&
                         _playersInRange.All(player => player.PlayerController.IsInteractHeld))
                     {
-                        TP_Players(_linkedDoor.TpPoint);
-                        TP_Camera(_linkedDoor.room);
-                        UpdateRoom(_linkedDoor.room);
+                        if (rand < GameManager.Instance.CorridorChance)
+                        {
+                            int rand2 = Random.Range(0, _corridors.Count);
+                            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
+                            corridor.SetCorridor(player, LinkedDoor);
+                            TP_Players(corridor.Doors[0].TpPoint);
+                            TP_Camera(corridor);
+                            UpdateRoom(corridor);
+                            GameManager.Instance.CorridorChance = 10;
+                        }
+                        else
+                        {
+                            GameManager.Instance.CorridorChance--;
+                            TP_Players(_linkedDoor.TpPoint);
+                            TP_Camera(_linkedDoor.room);
+                            UpdateRoom(_linkedDoor.room);
+                        }
                     }
                 }
             }

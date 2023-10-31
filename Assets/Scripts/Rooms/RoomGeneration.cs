@@ -29,8 +29,14 @@ public class RoomGeneration : MonoBehaviour
     }
     public void GenerateRooms()
     {
+        Vector3 pos = new Vector3(0, 0, 55);
         _roomsInPlay.Add(_hall);
         _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
+        for (int i = 1; i <= _roomsLists.Floors[4].Rooms.Count; i++)
+        {
+            GameObject Corridor = Instantiate(_roomsLists.Floors[4].Rooms[i - 1], pos * i, transform.rotation);
+            Corridor.name = "Corridor " + i;
+        }
         List<GameObject> roomsToPlace= new List<GameObject>();
         foreach(RoomPosition positionsList in _layout.AisleLeftInOrder)
         {

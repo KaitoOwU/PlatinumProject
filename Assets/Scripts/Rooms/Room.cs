@@ -22,7 +22,8 @@ public class Room : MonoBehaviour
     {
         LEFT,
         RIGHT,
-        HUB
+        HUB,
+        CORRIDOR,
     }
 
     /*public Room NextRoom { get => _nextRoom; set => _nextRoom = value; }

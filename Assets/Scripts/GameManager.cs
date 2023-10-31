@@ -27,6 +27,11 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public int CorridorChance
+    { 
+        get => _corridorChance; 
+        set => _corridorChance = value;
+    }
     public GameData GameData => _gameData;
     public float Timer => _timer;
     public SuspectData Murderer => _murderer;
@@ -73,6 +78,7 @@ public class GameManager : MonoBehaviour
     private float _timer;
     private bool _isTimerGoing;
     private List<ItemData> _items = new();
+    private int _corridorChance;
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -107,6 +113,7 @@ public class GameManager : MonoBehaviour
     private static GameManager instance = null;
     public static GameManager Instance => instance;
 
+
     private void InitSingleton()
     {
         if (instance != null && instance != this)
@@ -132,6 +139,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        _corridorChance = 10;
         CurrentGamePhase = GamePhase.HUB;
         StartTimer();
         _onWin.AddListener(Win);
