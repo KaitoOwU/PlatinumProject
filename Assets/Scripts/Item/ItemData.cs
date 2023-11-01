@@ -1,29 +1,17 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemData : ScriptableObject
+public class ItemData : PickableData
 {
-    
-    [SerializeField] private string _name;
-    [SerializeField] private int _id;
-    [SerializeField] private Sprite _icon;
-    [SerializeField] private GameObject _prefab;
+    [SerializeField] protected Sprite _uiIcon;
+    public Sprite UIIcon => _uiIcon;
 
-    [SerializeField] private bool _isClue;
-    
-    public string Name => _name;
-    public int ID => _id;
-    public Sprite Icon => _icon;
-    public GameObject Prefab => _prefab;
-    public bool IsClue => _isClue;
-
-    public void SaveData(int id, string name, Sprite icon, GameObject prefab, bool isClue = false)
+    public void SaveData(int id, string name, GameObject prefab, Sprite icon)
     {
-        _id = id;
         _name = name;
-        _icon = icon;
+        _id = id;
         _prefab = prefab;
-        _isClue = isClue;
+        _uiIcon = icon;
     }
 }

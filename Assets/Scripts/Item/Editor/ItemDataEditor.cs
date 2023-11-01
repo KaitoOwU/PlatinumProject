@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(ItemData))]
+[CustomEditor(typeof(PickableData))]
 public class ItemDataEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        ItemData data = (ItemData)target;
+        PickableData data = (PickableData)target;
         
         GUILayout.Label($"({data.ID}) {data.Name}", new GUIStyle(GUI.skin.label) {fontSize = 17, fontStyle = FontStyle.Bold});
         GUI.enabled = false;
