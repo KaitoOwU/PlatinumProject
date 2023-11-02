@@ -16,6 +16,9 @@ public class RoomGeneration : MonoBehaviour
     SCRoomsLists _roomsLists;
     [SerializeField] LayoutGenerator _layout;
     int _maxRooms;
+    private List<Interactable> _rewards= new List<Interactable>();
+    [SerializeField] private Item arm;
+    private List<Clue> _rewardClueOnly = new List<Clue>();
 
 
     private void OnDisable()
@@ -28,6 +31,7 @@ public class RoomGeneration : MonoBehaviour
     {
         _maxRooms = 0;
         GameManager.Instance.OnEndPhase.AddListener(Shuffle);
+  
     }
     public void GenerateRooms()
     {
@@ -133,6 +137,7 @@ public class RoomGeneration : MonoBehaviour
             _tandemRoom[j].Tandem = _tandemRoom[j + _tandemRoom.Count / 2];
             _tandemRoom[_tandemRoom.Count / 2 + j].Tandem = _tandemRoom[j];
         }
+       
         SetRooms();
         LockedDoor();
     }
@@ -416,6 +421,45 @@ public class RoomGeneration : MonoBehaviour
                 door.IsLocked = false;
             }
             
+        }
+    }
+    public void SetRoomsRewards(List<Clue> clues)
+    {
+        foreach (Clue clue in clues)
+        {
+            _rewards.Add(clue);
+            _rewardClueOnly.Add(clue);
+        }
+        if (FindObjectsOfType<Statue>().Length > FindObjectsOfType<Item>().Length)
+        {
+            for (int i = 0; i < FindObjectsOfType<Statue>().Length - FindObjectsOfType<Item>().Length; i++)
+            {
+                _rewards.Add(arm);
+            }
+        }
+        int k = 0;
+        foreach (Room room2 in _roomsInPlay)
+        {
+            if (room2.RoomSide != Room.Side.HUB&&room2.HasReward)
+            {
+                int rand = Random.Range(0, _roomsInPlay.Count-1 - k);
+                if (rand < _rewards.Count && !room2.IsRewardClue)
+                {
+                    room2.Reward = _rewards[rand];
+                    _rewards.Remove(_rewards[rand]);
+                    if(rand < _rewardClueOnly.Count)
+                    {
+                        _rewardClueOnly.Remove(_rewardClueOnly[rand]);
+                    }
+                }
+                else if (rand < _rewardClueOnly.Count)
+                {
+                    room2.Reward = _rewardClueOnly[rand];
+                    _rewardClueOnly.Remove(_rewardClueOnly[rand]);
+                    _rewards.Remove(_rewards[rand]);
+                }
+                k--;
+            }
         }
     }
     public Room FindRoomAtPosition(Vector3 pos)
