@@ -53,7 +53,15 @@ public class FloorEditor : EditorWindow
         for (int i = 0; i < _floors.Floors.Count; i++)
         {
             EditorGUILayout.BeginVertical();
-            GUILayout.Label((i + 1) + " Doors Rooms :",new GUIStyle(GUI.skin.label) { fontSize = 12, alignment = TextAnchor.MiddleCenter });
+            if (i == 4)
+            {
+                GUILayout.Label("Rdm Corridors  :", new GUIStyle(GUI.skin.label) { fontSize = 12, alignment = TextAnchor.MiddleCenter });
+            }
+            else
+            {
+                GUILayout.Label((i + 1) + " Doors Rooms :", new GUIStyle(GUI.skin.label) { fontSize = 12, alignment = TextAnchor.MiddleCenter });
+            }
+            
             DisplayListElement(_floors.Floors[i], i);
             EditorGUILayout.EndVertical();
         }
@@ -64,7 +72,14 @@ public class FloorEditor : EditorWindow
     {
         if (GUILayout.Button("Edit", new GUIStyle(GUI.skin.button) { fontSize = 10, fontStyle = FontStyle.Bold }))
         {
-            _editedRoomsName = (index+ 1) + " Doors Rooms :";
+            if(index == 4)
+            {
+                _editedRoomsName = "Corridors :";
+            }
+            else
+            {
+                _editedRoomsName = (index + 1) + " Doors Rooms :";
+            }
             _editedRooms = floor;
         }
     }

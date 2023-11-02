@@ -27,6 +27,17 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public int CorridorChance
+    { 
+        get => _corridorChance; 
+        set => _corridorChance = value;
+    }
+    public int ValidatedRooom 
+    {
+        get => _validatedRooom;
+        set => _validatedRooom = value;
+    }
+
     public GameData GameData => _gameData;
     public float Timer => _timer;
     public SuspectData Murderer => _murderer;
@@ -73,6 +84,8 @@ public class GameManager : MonoBehaviour
     private CameraState _currentCameraState;
     private float _timer;
     private bool _isTimerGoing;
+    private int _corridorChance;
+    private int _validatedRooom;
     private List<PickableData> _items = new();
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
@@ -133,6 +146,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        _validatedRooom = 0;
+        _corridorChance = 10;
         CurrentGamePhase = GamePhase.HUB;
         StartTimer();
         _onWin.AddListener(Win);
@@ -202,30 +217,30 @@ public class GameManager : MonoBehaviour
             case TimerPhase.FIRST_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
+                    _currentTimerPhase = TimerPhase.SECOND_PHASE;
                     OnFirstPhaseEnd?.Invoke();
                     OnEndPhase?.Invoke();
-                    Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
-                    _currentTimerPhase = TimerPhase.SECOND_PHASE;
+                    Debug.LogError("<color=cyan>First Phase End </color>" + _timer);               
                 }
                 break;
             case TimerPhase.SECOND_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
+                    _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
                     OnEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
-                    _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
                 if (_timer <= 0)
                 {
+                    _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
                     OnEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Third Phase End </color>" + _timer);
                     _isTimerGoing = false;
                     _timer = 0;
-                    _currentTimerPhase = TimerPhase.END;
                 }
                 break;
             case TimerPhase.END:

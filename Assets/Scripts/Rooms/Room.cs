@@ -22,7 +22,8 @@ public class Room : MonoBehaviour
     {
         LEFT,
         RIGHT,
-        HUB
+        HUB,
+        CORRIDOR,
     }
 
     /*public Room NextRoom { get => _nextRoom; set => _nextRoom = value; }
@@ -35,4 +36,10 @@ public class Room : MonoBehaviour
     public List<Door> Doors { get => _doors; set => _doors = value; }
     public List<Room> LinkedRooms { get => _linkedRooms; set => _linkedRooms = value; }
     public Room Tandem { get => _tandem; set => _tandem = value; }
+
+    public void OnCompletedRoom()
+    {
+        GameManager.Instance.ValidatedRooom++;
+        FindObjectOfType<RoomGeneration>().LockedDoor();
+    }
 }
