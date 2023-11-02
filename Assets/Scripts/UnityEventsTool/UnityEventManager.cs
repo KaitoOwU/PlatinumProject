@@ -7,15 +7,23 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
 using UnityEditor.PackageManager;
-
+using Unity.VisualScripting;
+using DG.Tweening;
 
 public class UnityEventManager : MonoBehaviour
 {
     private static UnityEventManager instance;
     public static UnityEventManager Instance => instance;
 
+    [Header("---References---")]
     [SerializeField] private UnityEventData _eventsData;
     [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private GameObject _camera;
+
+    //private List<UnityAction> _actions = new();
+
+    // from script name : get 
+    Dictionary<UnityEvent, UnityAction> _actions = new();
 
     private void Awake()
     {
@@ -29,16 +37,31 @@ public class UnityEventManager : MonoBehaviour
         foreach (var script in data.DataBase)
         {
             var instances = FindObjectsOfType(Type.GetType($"{script.ScriptName}, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"));
-            foreach (var instance in instances)
+            foreach (var instance in instances) // foreach class of type in scene
             {
-                foreach (var eventValue in script.Events)
+                foreach (var eventValue in script.Events) // foreach event in class
                 {
-                    switch (eventValue.EventAction.EventType)
+                    foreach(var eventAction in eventValue.EventActions)
                     {
-                        case EventTypeEnum.DEBUG:
-                            UnityAction d = () => DebugMessage(eventValue.EventAction.DebugMessage);
+                        UnityAction d = null;
+                        switch (eventAction.EventType)
+                        {
+                            case EventTypeEnum.NONE:
+                                break;
+                            case EventTypeEnum.DEBUG:
+                                d = () => DebugMessage(eventAction.DebugMessage);
+                                break;
+                            case EventTypeEnum.SCREENSHAKE:
+                                d = () => ScreenShake(eventAction.Intensity);
+                                break;
+                            case EventTypeEnum.PLAY_SOUND:
+                                d = () => PlaySFX(eventAction.Clip);
+                                break;
+                        }
+                        if(d !=null)
                             ((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance))).AddListener(d);
-                            break;
+                        var t = (UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance));
+                        _actions.Add(t,d);
                     }
 
                 }
@@ -47,6 +70,10 @@ public class UnityEventManager : MonoBehaviour
     }
     private void OnDisable()
     {
+        foreach(var a in _actions)
+        {
+            a.Key.RemoveListener(a.Value);
+        }
         //((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance))).RemoveListener(d);
     }
     void CallAllEvents()
@@ -56,7 +83,7 @@ public class UnityEventManager : MonoBehaviour
  
     public void DebugMessage(string msg)
     {
-        Debug.Log(msg);
+        Debug.Log($"<color=cyan>{msg}</color>");
     }
     public void PlaySFX(AudioClip audioClip)
     {
@@ -64,6 +91,7 @@ public class UnityEventManager : MonoBehaviour
     }
     public void ScreenShake(float intensity)
     {
+        _camera.transform.DOShakePosition(intensity);
         Debug.Log($"ScreenShake at intensity : {intensity}");
     }
 }
@@ -71,7 +99,7 @@ public class UnityEventManager : MonoBehaviour
 [Serializable]
 public class ScriptEventInfo
 {
-    public ScriptEventInfo(string _scriptName, UnityEventInfo[] _events)
+    public ScriptEventInfo(string _scriptName, List<UnityEventInfo> _events)
     {
         scriptName = _scriptName;
         events = _events;
@@ -81,7 +109,7 @@ public class ScriptEventInfo
         get { return scriptName; }
         set { scriptName = value; }
     }
-    public UnityEventInfo[] Events
+    public List<UnityEventInfo> Events
     {
         get { return events; }
         set { events = value; }
@@ -90,7 +118,7 @@ public class ScriptEventInfo
     [SerializeField]
     private string scriptName;
     [SerializeField]
-    private UnityEventInfo[] events;
+    private List<UnityEventInfo> events;
 
     //public void DebugMessage(string msg)
     //{
@@ -108,25 +136,25 @@ public class ScriptEventInfo
 [Serializable]
 public class UnityEventInfo
 {
-    public UnityEventInfo(string _eventName, EventAction _eventAction)
+    public UnityEventInfo(string _eventName, List<EventAction> _eventActions)
     {
         eventName = _eventName;
-        eventAction = _eventAction;
+        eventActions = _eventActions;
     }
     public string EventName
     {
         get { return eventName; }
         set { eventName = value; }
     }
-    public EventAction EventAction
+    public List<EventAction> EventActions
     {
-        get { return eventAction; }
-        set { eventAction = value; }
+        get { return eventActions; }
+        set { eventActions = value; }
     }
     [SerializeField]
     private string eventName;
     [SerializeField]
-    private EventAction eventAction;
+    private List<EventAction> eventActions;
 }
 [Serializable]
 public enum EventTypeEnum

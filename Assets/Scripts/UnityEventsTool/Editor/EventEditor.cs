@@ -124,12 +124,12 @@ public class EventEditor : EditorWindow
             if (unityEventsFields.Length == 0)
                 continue; // Pass if there is no events in script
 
-            UnityEventInfo[] newUnityEventsInfo = new UnityEventInfo[unityEventsFields.Length];
+            List<UnityEventInfo> newUnityEventsInfo = new List<UnityEventInfo>();
 
 
             for (int i = 0; i < unityEventsFields.Length; i++)
             {
-                newUnityEventsInfo[i] = new(unityEventsFields[i].Name, new EventAction());
+                newUnityEventsInfo.Add(new(unityEventsFields[i].Name, new()));
             }
 
             ScriptEventInfo newScriptInfo = new ScriptEventInfo(script, newUnityEventsInfo);
@@ -141,7 +141,7 @@ public class EventEditor : EditorWindow
                 if (oldScriptInfo != null)
                 {
                     //verify if old events still exist => dont replace // only recreate if didnt exist because it creates an empty event
-                    for (int i = 0; i < newScriptInfo.Events.Length; i++)
+                    for (int i = 0; i < newScriptInfo.Events.Count; i++)
                     {
                         UnityEventInfo oldEvent = oldScriptInfo.Events.FirstOrDefault(f => f.EventName == newScriptInfo.Events[i].EventName);
                         if (oldEvent != null)
@@ -149,7 +149,7 @@ public class EventEditor : EditorWindow
                     }
                 }
             }
-            if (newScriptInfo.Events.Length>0) 
+            if (newScriptInfo.Events.Count > 0) 
                 newDatabase.Add(newScriptInfo);
         }
         return (newDatabase);
