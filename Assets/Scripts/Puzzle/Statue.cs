@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class Statue : Interactable, IResettable
+public class Statue : Puzzle, IResettable
 {
 
     private bool _isRepaired;

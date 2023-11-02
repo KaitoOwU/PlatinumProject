@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
 
     public IReadOnlyList<PickableData> Items => _items;
     public IReadOnlyList<MurderScenario> MurderScenarios => Resources.LoadAll<MurderScenario>("Clues");
+    public IReadOnlyList<Clue> CurrentClues { get; private set; }
 
     [Header("---Constants---")]
     [SerializeField]
@@ -160,6 +161,9 @@ public class GameManager : MonoBehaviour
         _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
         _victim = GameData.SuspectsDatas[0]; //temporary
         //init game accordingly;
+
+        CurrentClues = MurderScenarios.ToList()
+            .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
     }
     private void OnEnable()
     {
