@@ -3,22 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 
 public class Item : Interactable
 {
     
+    [FormerlySerializedAs("_itemData")]
     [Header("--- DATA ---")]
-    [SerializeField] private ItemData _itemData;
+    [SerializeField] private PickableData _pickableData;
     
-    public ItemData ItemData { get => _itemData; set => _itemData = value; }
+    public PickableData PickableData { get => _pickableData; set => _pickableData = value; }
 
     protected override void OnInteract(Player player)
     {
-        if (player.HeldItem != null)
+        if (player.HeldPickable != null)
             return;
         
-        player.HeldItem = _itemData;
+        player.HeldPickable = _pickableData;
         Destroy(gameObject);
     }
 }

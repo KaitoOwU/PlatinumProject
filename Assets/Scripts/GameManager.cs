@@ -41,7 +41,9 @@ public class GameManager : MonoBehaviour
     public IReadOnlyList<PlayerInfo> LeftPlayers =>
         PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.LEFT_WING);
 
-    public IReadOnlyList<ItemData> Items => _items;
+    public IReadOnlyList<PickableData> Items => _items;
+    public IReadOnlyList<MurderScenario> MurderScenarios => Resources.LoadAll<MurderScenario>("Clues");
+    public IReadOnlyList<Clue> CurrentClues { get; private set; }
 
     [Header("---Constants---")]
     [SerializeField]
@@ -75,7 +77,7 @@ public class GameManager : MonoBehaviour
     private CameraState _currentCameraState;
     private float _timer;
     private bool _isTimerGoing;
-    private List<ItemData> _items = new();
+    private List<PickableData> _items = new();
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -147,6 +149,9 @@ public class GameManager : MonoBehaviour
         _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
         _victim = GameData.SuspectsDatas[0]; //temporary
         //init game accordingly;
+
+        CurrentClues = MurderScenarios.ToList()
+            .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
     }
     private void OnEnable()
     {
@@ -277,6 +282,10 @@ public class GameManager : MonoBehaviour
         camera.transform.rotation = newValues.rotation;
     }
     #endregion
+
+    public MurderScenario GetMurderScenario(SuspectData victim, SuspectData murderer) => MurderScenarios.ToList()
+        .FindAll(scenario => scenario.DuoSuspect.Victim == victim)
+        .Find(scenario => scenario.DuoSuspect.Murderer == murderer);
 }
 
 [Serializable]
@@ -296,8 +305,8 @@ public struct PlayerInfo
 
 public static class Helper
 {
-    public static List<ItemData> GetAllItemDatas()
+    public static List<PickableData> GetAllItemDatas()
     {
-        return Resources.LoadAll<ItemData>("Item/ItemsData").ToList();
+        return Resources.LoadAll<PickableData>("Item/ItemsData").ToList();
     }
 }

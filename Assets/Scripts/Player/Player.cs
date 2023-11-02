@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 public class Player : MonoBehaviour
 {
 
-    [SerializeField] private ItemData _heldItem;
+    [FormerlySerializedAs("_heldItem")] [SerializeField] private PickableData _heldPickable;
     [SerializeField] private PlayerController _playerController;
     public PlayerController PlayerController => _playerController;
     
@@ -19,10 +19,10 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Room _currentRoom;
 
-    public ItemData HeldItem
+    public PickableData HeldPickable
     {
-        get => _heldItem;
-        set => _heldItem = value;
+        get => _heldPickable;
+        set => _heldPickable = value;
     }
     public Room CurrentRoom { get => _currentRoom; set => _currentRoom = value; }
 
