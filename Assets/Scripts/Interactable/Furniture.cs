@@ -8,11 +8,41 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Furniture : Interactable
 {
-    public EFurnitureType FurnitureType => _furnitureType;
+    #region Fields
+    public EFurnitureType FurnitureType
+    {
+        get => _furnitureType;
+        set => _furnitureType = value;
+    }
+    public int NeededPlayersCount
+    {
+        get => _neededPlayersCount;
+        set => _neededPlayersCount = value;
+    }
+    public GameObject Model
+    {
+        get => _3Dmodel;
+        set => _3Dmodel = value;
+    }
+    public Clue Clue
+    {
+        get => _clue;
+        set => _clue = value;
+    }
+    public List<Player> PlayersPushing => _playersPushing;
+    
     [Header("--Type--")]
     [SerializeField] private EFurnitureType _furnitureType;
+    [Header("--Number of Players needed to push--")]
+    //[ShowIf("showInt")]
+    [SerializeField] private int _neededPlayersCount;
     [Header("--Ref--")]
     [SerializeField] private GameObject _3Dmodel;
+
+    private List<Player> _playersPushing;
+    private Clue _clue;
+
+#endregion
 
     public enum EFurnitureType
     {
@@ -22,6 +52,7 @@ public class Furniture : Interactable
 
     private void Start()
     {
+        _playersPushing = new();
         _3Dmodel.layer = LayerMask.NameToLayer("Furniture");
     }
 
@@ -29,9 +60,20 @@ public class Furniture : Interactable
     {
         if(_furnitureType == EFurnitureType.SEARCHABLE)
         {
-            _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f)) ;
+            _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
+            if(_clue != null)
+            {
+                GameManager.Instance.FoundClues.Add(_clue);
+                Debug.Log("Found Clue !");
+            }
+            else
+            {
+                Debug.Log("No Clue Found!");
+            }
         }
     }
+
+    #region Push
     protected override void OnPush(Player player)
     {
         if (_furnitureType == EFurnitureType.MOVABLE)
@@ -45,21 +87,32 @@ public class Furniture : Interactable
             // Check if our raycast has hit furniture
             if (Physics.Raycast(player.transform.position, fwd, 50, LayerMask.GetMask("Furniture")))
             {
-                Physics.IgnoreCollision(_collider, player.GetComponent<Collider>(), true);
-                float angle = -Mathf.Atan2(fwd.z, fwd.x) * Mathf.Rad2Deg + 90.0f;
-                angle = Mathf.Round(angle / 90.0f) * 90.0f;
-                player.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
-                player.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1,0,0): new Vector3(0, 0, 1));
-                transform.parent.parent = player.transform;
+                _playersPushing.Add(player);
+                if(_playersPushing.Count >= _neededPlayersCount)
+                {
+                    float angle = -Mathf.Atan2(fwd.z, fwd.x) * Mathf.Rad2Deg + 90.0f;
+                    angle = Mathf.Round(angle / 90.0f) * 90.0f;
+                    foreach (var p in _playersPushing)
+                    {
+                        Physics.IgnoreCollision(_collider, p.GetComponent<Collider>(), true);
+                        p.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
+                        p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1,0,0): new Vector3(0, 0, 1));
+                    }
+                    transform.parent.parent = player.transform;
+                }
             }
         }
     }
     protected override void OnPushCanceled(Player player)
     {
+        _playersPushing.Remove(player);
         transform.parent.parent = null;
-        Physics.IgnoreCollision(_collider, player.GetComponent<Collider>(), false);
-
-        player.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
+        foreach (var p in _playersPushing)
+        {
+            Physics.IgnoreCollision(_collider, p.GetComponent<Collider>(), false);
+            p.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
+        }
     }
+#endregion
 
 }

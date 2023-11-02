@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "GameData", menuName = "Datas/Create Game Constants", order = 1)]
@@ -22,18 +23,11 @@ public class GameData : ScriptableObject
     }
 
     [SerializeField] private TimerData _timerValues;
-    [SerializeField] private SuspectData[] suspectsDatas;
+    [SerializeField] private SuspectData[] _suspectsDatas;
+    [SerializeField] private int _furnitureCluesCount;
 
+    public TimerData TimerValues => _timerValues;
+    public SuspectData[] SuspectsDatas => _suspectsDatas;
+    public int FurnitureCluesCount => _furnitureCluesCount;
 
-    public TimerData TimerValues
-    {
-        get { return _timerValues; }
-        set { _timerValues = value; }
-    }    
-    public SuspectData[] SuspectsDatas
-    {
-        get { return suspectsDatas; }
-        set { suspectsDatas = value; }
-    }
-    
 }

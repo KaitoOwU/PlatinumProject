@@ -27,6 +27,11 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public List<Clue> FoundClues
+    {
+        get => _foundClues;
+        set => _foundClues = value;
+    }
     public GameData GameData => _gameData;
     public PlayerConstants PlayerConstants => _playerConstants;
     public float Timer => _timer;
@@ -78,6 +83,7 @@ public class GameManager : MonoBehaviour
     private float _timer;
     private bool _isTimerGoing;
     private List<PickableData> _items = new();
+    private List<Clue> _foundClues;
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -86,6 +92,8 @@ public class GameManager : MonoBehaviour
     public UnityEvent OnWin => _onWin;
     [SerializeField] private UnityEvent _onLose;
     public UnityEvent OnLose => _onLose;
+
+
 
     public enum GamePhase
     {
@@ -131,8 +139,6 @@ public class GameManager : MonoBehaviour
     {
         InitSingleton();
         InitGame();
-
-        _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
     }
 
     void Start()
@@ -152,7 +158,32 @@ public class GameManager : MonoBehaviour
 
         CurrentClues = MurderScenarios.ToList()
             .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
+
+        _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+
+        DistributeClues();
     }
+
+    private void DistributeClues()
+    {
+        List<Clue> puzzleClues = CurrentClues.ToList(); ///
+        List<Clue> furnitureClues = new();
+        for(int i = 0; i < _gameData.FurnitureCluesCount; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, CurrentClues.Count);
+            furnitureClues.Add(puzzleClues[randomIndex]);
+            puzzleClues.RemoveAt(randomIndex);
+        } 
+        List<Furniture> allSearchableFurnitures = GameObject.FindObjectsOfType<Furniture>().Where(f => f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE).ToList();
+        foreach(Clue clue in furnitureClues)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
+            allSearchableFurnitures[randomIndex].Clue = clue;
+            allSearchableFurnitures.RemoveAt(randomIndex);
+        }
+        //ADD PUZZLE CLUES
+    }
+
     private void OnEnable()
     {
         //_onWin.AddListener(Win);
