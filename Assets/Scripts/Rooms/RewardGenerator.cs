@@ -31,4 +31,9 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
     {
         throw new System.NotImplementedException();
     }
+
+    public void PuzzleCompleted()
+    {
+        throw new System.NotImplementedException();
+    }
 }
