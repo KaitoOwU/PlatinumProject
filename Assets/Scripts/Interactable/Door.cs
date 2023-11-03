@@ -37,7 +37,7 @@ public class Door : Interactable
             int rand = Random.Range(0, 10);
             if (player.CurrentRoom is Hub)
             {
-                int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsInteractHeld).Count;
+                int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
 
                 Hub hub = (Hub)player.CurrentRoom;
                 if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4) // POUR BUILD FINALE ==> ==4 !!!
@@ -70,7 +70,7 @@ public class Door : Interactable
                 if (room.RoomSide == Room.Side.RIGHT)
                 {
                     if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
-                        _playersInRange.All(player => player.PlayerController.IsInteractHeld))
+                        _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
                     {
                         if (rand < GameManager.Instance.CorridorChance)
                         {
@@ -94,7 +94,7 @@ public class Door : Interactable
                 else if (room.RoomSide == Room.Side.LEFT)
                 {
                     if (GameManager.Instance.LeftPlayers.Count == _playersInRange.Count &&
-                        _playersInRange.All(player => player.PlayerController.IsInteractHeld))
+                        _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
                     {
                         if (rand < GameManager.Instance.CorridorChance)
                         {
@@ -122,7 +122,7 @@ public class Door : Interactable
     public void TP_Players(Transform[] tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
     { 
         //GARDER EN MEMOIRE LE NOMBRE DE JOUEUR POUR SAVOIR COMBIEN IL EN FAUT POUR PASSER A LA SALLE SUIVANTE DANS CHAQUE BRANCHE
-        foreach(Player p in _playersInRange) if (p.PlayerController.IsInteractHeld)
+        foreach(Player p in _playersInRange) if (p.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT))
         {
             p.gameObject.transform.position = tpPoint[p.Index-1].position;
         }

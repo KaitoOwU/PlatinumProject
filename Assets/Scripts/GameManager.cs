@@ -105,6 +105,17 @@ public class GameManager : MonoBehaviour
     public GameObject CurrentCamera => _currentCamera;
     private GameObject _currentCamera; // A ASSIGNER
 
+    public int CorridorChance { 
+        get=> _corridorChance;
+        set => _corridorChance = value;
+    }
+    int _corridorChance = 0;
+    public int ValidatedRooom
+    {
+        get => _validatedRooom;
+        set => _validatedRooom = value;
+    }
+    int _validatedRooom = 0;
 
 
     public enum GamePhase

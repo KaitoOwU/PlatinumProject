@@ -16,7 +16,7 @@ public class Interactable : MonoBehaviour
     [SerializeField] protected UnityEvent _onPlayerEnterRange;
     [SerializeField] protected UnityEvent _onPlayerExitRange;
     
-    protected void Awake()
+    protected virtual void Awake()
     {
         _collider = GetComponent<Collider>();
     }
