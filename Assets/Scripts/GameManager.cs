@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
     private int _corridorChance;
     private int _validatedRooom;
     private List<PickableData> _items = new();
+    private RoomGeneration _roomGenerator;
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -141,7 +142,7 @@ public class GameManager : MonoBehaviour
     {
         InitSingleton();
         InitGame();
-
+        _roomGenerator = FindObjectOfType<RoomGeneration>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
     }
 
