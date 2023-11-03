@@ -196,31 +196,34 @@ public class GameManager : MonoBehaviour
     {
 
         List<Clue> puzzleClues = CurrentClues.ToList(); ///
-        List<Clue> furnitureClues = new();
-        for (int i = 0; i < _gameData.FurnitureCluesCount; i++)
+        Debug.Log(puzzleClues.Count);
+        if (FindObjectsOfType<Furniture>().Length > 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
-            furnitureClues.Add(puzzleClues[randomIndex]);
-            puzzleClues.RemoveAt(randomIndex);
-            if (puzzleClues.Count == 0)
+            List<Clue> furnitureClues = new();
+            for (int i = 0; i < _gameData.FurnitureCluesCount; i++)
             {
-                break;
+                int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
+                furnitureClues.Add(puzzleClues[randomIndex]);
+                puzzleClues.RemoveAt(randomIndex);
+                if (puzzleClues.Count == 0)
+                {
+                    break;
+                }
             }
-        }
-        List<Furniture> allSearchableFurnitures = new List<Furniture>();
-        Debug.Log(FindObjectsOfType<Furniture>().Length);
-         foreach (Furniture f in FindObjectsOfType<Furniture>())
-        {
-            if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
+            List<Furniture> allSearchableFurnitures = new List<Furniture>();
+            foreach (Furniture f in FindObjectsOfType<Furniture>())
             {
-                allSearchableFurnitures.Add(f);
+                if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
+                {
+                    allSearchableFurnitures.Add(f);
+                }
             }
-        }
-        foreach(Clue clue in furnitureClues)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
-            allSearchableFurnitures[randomIndex].Clue = clue;
-            allSearchableFurnitures.RemoveAt(randomIndex);
+            foreach (Clue clue in furnitureClues)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
+                allSearchableFurnitures[randomIndex].Clue = clue;
+                allSearchableFurnitures.RemoveAt(randomIndex);
+            }
         }
         _roomGenerator.SetRoomsRewards(puzzleClues);
     }

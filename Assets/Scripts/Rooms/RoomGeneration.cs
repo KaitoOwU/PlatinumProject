@@ -460,7 +460,7 @@ public class RoomGeneration : MonoBehaviour
                     _rewardClueOnly.Remove(_rewardClueOnly[rand]);
                     _rewards.Remove(_rewards[rand]);
                 }
-                k--;
+                k++;
             }
         }
     }

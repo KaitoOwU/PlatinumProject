@@ -20,8 +20,4 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
         room.OnCompletedRoom();
     }
 
-    public void PuzzleCompleted()
-    {
-        throw new System.NotImplementedException();
-    }
 }
