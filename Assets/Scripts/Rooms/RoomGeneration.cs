@@ -17,9 +17,9 @@ public class RoomGeneration : MonoBehaviour
     SCRoomsLists _roomsLists;
     [SerializeField] LayoutGenerator _layout;
     int _maxRooms;
-    private List<Interactable> _rewards= new List<Interactable>();
-    [SerializeField] private Item arm;
-    private List<Clue> _rewardClueOnly = new List<Clue>();
+    private List<GameObject> _rewards= new List<GameObject>();
+    [SerializeField] private GameObject arm;
+    private List<GameObject> _rewardClueOnly = new List<GameObject>();
 
 
     private void OnDisable()
@@ -428,8 +428,8 @@ public class RoomGeneration : MonoBehaviour
     {
         foreach (Clue clue in clues)
         {
-            _rewards.Add(clue);
-            _rewardClueOnly.Add(clue);
+            _rewards.Add(clue.gameObject);
+            _rewardClueOnly.Add(clue.gameObject);
         }
         if (FindObjectsOfType<Statue>().Length > FindObjectsOfType<Item>().Length)
         {
@@ -441,7 +441,7 @@ public class RoomGeneration : MonoBehaviour
         int k = 0;
         foreach (Room room2 in _roomsInPlay)
         {
-            if (room2.RoomSide != Room.Side.HUB&&room2.HasReward)
+            if (room2.RoomSide != Room.Side.HUB&&room2.CanHaveReward)
             {
                 int rand = Random.Range(0, _roomsInPlay.Count-1 - k);
                 if (rand < _rewards.Count && !room2.IsRewardClue)

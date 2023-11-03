@@ -14,8 +14,7 @@ public class Puzzle : Interactable
     }
 
 }
-
 public interface IPuzzleReactive
 {
-    public abstract void GenerateItem(GameObject objToSpawn);
+    public abstract void GenerateItem();
 }
