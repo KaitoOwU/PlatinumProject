@@ -6,11 +6,12 @@ public class RewardGenerator : MonoBehaviour,IPuzzleReactive
 {
     private GameObject _reward;
     [SerializeField] Room room;
-    private void Start()
+    public void SetUp()
     {
+        if(room)
         _reward = room.Reward;
     }
-    public  void GenerateItem()
+    public  void PuzzleCompleted()
     {
         if (_reward)
         {

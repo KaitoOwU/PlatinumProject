@@ -141,6 +141,7 @@ public class RoomGeneration : MonoBehaviour
        
         SetRooms();
         LockedDoor();
+        GameManager.Instance.DistributeClues();
     }
     #endregion
     #region Shuffle
@@ -410,7 +411,6 @@ public class RoomGeneration : MonoBehaviour
             _maxRooms = _roomsInPlay.Count / 2;
         else if (GameManager.Instance.CurrentTimerPhase == GameManager.TimerPhase.END)
             _maxRooms = 0;
-        Debug.Log(_maxRooms);
         for (int i = 0; i < _maxRooms; i++)
         {
             foreach (Door door in FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).Doors)
@@ -438,6 +438,7 @@ public class RoomGeneration : MonoBehaviour
                 _rewards.Add(arm);
             }
         }
+        Debug.Log(_rewards.Count);
         int k = 0;
         foreach (Room room2 in _roomsInPlay)
         {

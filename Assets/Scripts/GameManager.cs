@@ -186,27 +186,43 @@ public class GameManager : MonoBehaviour
 
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
 
-        DistributeClues();
+        foreach(RewardGenerator rewardGenerator in FindObjectsOfType<RewardGenerator>())
+        {
+            rewardGenerator.SetUp();
+        }
     }
 
-    private void DistributeClues()
+    public void DistributeClues()
     {
+
         List<Clue> puzzleClues = CurrentClues.ToList(); ///
         List<Clue> furnitureClues = new();
-        for(int i = 0; i < _gameData.FurnitureCluesCount; i++)
+        for (int i = 0; i < _gameData.FurnitureCluesCount; i++)
         {
             int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
             furnitureClues.Add(puzzleClues[randomIndex]);
             puzzleClues.RemoveAt(randomIndex);
-        } 
-        List<Furniture> allSearchableFurnitures = GameObject.FindObjectsOfType<Furniture>().Where(f => f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE).ToList();
+            if (puzzleClues.Count == 0)
+            {
+                break;
+            }
+        }
+        List<Furniture> allSearchableFurnitures = new List<Furniture>();
+        Debug.Log(FindObjectsOfType<Furniture>().Length);
+         foreach (Furniture f in FindObjectsOfType<Furniture>())
+        {
+            if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
+            {
+                allSearchableFurnitures.Add(f);
+            }
+        }
         foreach(Clue clue in furnitureClues)
         {
             int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
             allSearchableFurnitures[randomIndex].Clue = clue;
             allSearchableFurnitures.RemoveAt(randomIndex);
         }
-        //ADD PUZZLE CLUES
+        _roomGenerator.SetRoomsRewards(puzzleClues);
     }
 
     private void OnEnable()
