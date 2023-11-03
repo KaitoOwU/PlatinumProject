@@ -22,8 +22,11 @@ public class ItemCreatorEditor : EditorWindow
     //CLUE DATA
     private SuspectData _victim, _murderer;
     private MurderScenario _scenario;
+    private string _description = "";
+    private Sprite _clueSprite;
     
     private int _toolbar;
+    private int _clueToolbar;
     private bool _allConditionsOpe;
 
     public static void InitForCreation()
@@ -121,6 +124,24 @@ public class ItemCreatorEditor : EditorWindow
                     EditorGUILayout.HelpBox($"{_scenario.name} a été trouvé", MessageType.Info);
                     _allConditionsOpe = _name != null && IsIDFree(_id);
                 }
+
+                GUILayout.Space(10);
+
+                _clueToolbar = GUILayout.Toolbar(_clueToolbar, new string[] { "Journal", "Note", "Objet" });
+                
+                GUILayout.Space(5);
+                
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if(_clueToolbar == 2) GUILayout.Label("Description");
+                    else GUILayout.Label("Contenu");
+                    
+                    _description = GUILayout.TextArea(_description, new GUIStyle(GUI.skin.textArea){fixedWidth = 250});
+                }
+                EditorGUILayout.EndHorizontal();
+
+                if(_clueToolbar == 2) _clueSprite = (Sprite)EditorGUILayout.ObjectField("Visuel de l'Indice", _clueSprite, typeof(Sprite), false);
+                
                 break;
             }
         }
@@ -157,7 +178,7 @@ public class ItemCreatorEditor : EditorWindow
                     //CREATION DU SCRIPTABLE
                     ClueData clue = CreateInstance<ClueData>();
                     AssetDatabase.CreateAsset(clue, $"Assets/Resources/Clues/ClueData/{name}.asset");
-                    clue.SaveData(_id, _name, prefab, new MurderScenario.SuspectDuo(_victim, _murderer));
+                    clue.SaveData(_id, _name, prefab, new MurderScenario.SuspectDuo(_victim, _murderer), _description, _clueSprite);
                     
                     //APPLICATION AU SCENARIO DEFINI
                     _scenario.Clues.Add(prefab.GetComponent<Clue>());
@@ -195,18 +216,14 @@ public class ItemCreatorEditor : EditorWindow
                     //MODIFICATION DU SCRIPTABLE
                     AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_pickableModified),
                         newName + ".asset");
-                    ((ClueData)_pickableModified).SaveData(_id, _name, _pickableModified.Prefab,
-                        new MurderScenario.SuspectDuo(_victim, _murderer));
+                    ((ClueData)_pickableModified).SaveData(_id, _name, _pickableModified.Prefab, new MurderScenario.SuspectDuo(_victim, _murderer), _description, _clueSprite);
                 }
 
                 Close();
             }
         }
 
-        if (!_allConditionsOpe)
-        {
-            _PrintHelpboxProblems();
-        }
+        _PrintHelpboxProblems();
     }
 
     private static int FindFirstFreeID()
@@ -240,7 +257,7 @@ public class ItemCreatorEditor : EditorWindow
     {
         StringBuilder str = new();
         
-        if (!IsIDFree(_id)) str.Append($"Cet ID ({_id}) est déjà pris");
+        if (!IsIDFree(_id)) str.Append($"\nCet ID ({_id}) est déjà pris");
         if (_name == string.Empty || _name == null) str.Append("\nLe nom ne peut pas être nul");
         
         if (_toolbar == 0)
@@ -249,9 +266,17 @@ public class ItemCreatorEditor : EditorWindow
         } else if (_toolbar == 1)
         {
             if (_scenario == null) str.Append("\nUn scénario est nécéssaire pour créer l'Indice");
+            
+            if (_clueToolbar == 2 && _clueSprite == null)
+                str.Append("\nLe sprite d'un Indice ne peut pas être nul");
         }
-        
-        if(str.ToString() != "")
-            EditorGUILayout.HelpBox(str.ToString(), MessageType.Error);
+
+        if (str.ToString() != "")
+        {
+            if (str.ToString().StartsWith("\n")) str.Replace("\n", "", 0, 1);
+            EditorGUILayout.HelpBox(str.ToString(), MessageType.Error, true);
+            _allConditionsOpe = false;
+        }
+            
     }
 }
