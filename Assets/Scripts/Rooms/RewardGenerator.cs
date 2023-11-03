@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RewardGenerator : MonoBehaviour,IPuzzleReactive
+public class RewardGenerator : MonoBehaviour, IPuzzleReactive
 {
     private GameObject _reward;
     [SerializeField] Room room;
@@ -18,5 +18,10 @@ public class RewardGenerator : MonoBehaviour,IPuzzleReactive
             Instantiate(_reward, transform.position, transform.rotation);
         }
         room.OnCompletedRoom();
+    }
+
+    public void PuzzleCompleted()
+    {
+        throw new System.NotImplementedException();
     }
 }
