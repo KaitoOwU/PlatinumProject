@@ -8,7 +8,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 
-[EditorWindowTitle(title = "Item Manager", icon = "Assets/Scripts/Item/Editor/mini_3d.png")]
+[EditorWindowTitle(title = "Item Manager", icon = "Assets/Scripts/Interactable/Item/Editor/mini_3d.png")]
 public class ItemManagerEditor : EditorWindow
 {
 
@@ -29,7 +29,7 @@ public class ItemManagerEditor : EditorWindow
         
         EditorGUILayout.BeginHorizontal();
         {
-            GUILayout.Label(AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Scripts/Item/Editor/3d.png"), new GUIStyle(GUI.skin.label) {fixedWidth = 64, fixedHeight = 64});
+            GUILayout.Label(AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Scripts/Interactable/Item/Editor/3d.png"), new GUIStyle(GUI.skin.label) {fixedWidth = 64, fixedHeight = 64});
             GUILayout.Label("Item Manager", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 30, fontStyle = FontStyle.Bold, fixedHeight = 64});
         }
         EditorGUILayout.EndHorizontal();
