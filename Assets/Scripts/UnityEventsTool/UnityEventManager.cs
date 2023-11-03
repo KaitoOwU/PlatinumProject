@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEditor.PackageManager;
 using Unity.VisualScripting;
 using DG.Tweening;
+using static System.Collections.Specialized.BitVector32;
 
 public class UnityEventManager : MonoBehaviour
 {
@@ -23,7 +24,19 @@ public class UnityEventManager : MonoBehaviour
     //private List<UnityAction> _actions = new();
 
     // from script name : get 
-    Dictionary<UnityEvent, UnityAction> _actions = new();
+    List<SAction> _actions = new();
+    struct SAction
+    {
+        public SAction(UnityEvent _eventRef, UnityAction _action)
+        {
+            eventRef = _eventRef;
+            action = _action;
+        }
+        public UnityEvent EventRef => eventRef;
+        public UnityAction Action => action;
+        UnityEvent eventRef;
+        UnityAction action;
+    }
 
     private void Awake()
     {
@@ -60,8 +73,10 @@ public class UnityEventManager : MonoBehaviour
                         }
                         if(d !=null)
                             ((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance))).AddListener(d);
+                        Debug.Log(eventValue.EventName);
+                        Debug.Log((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance)));
                         var t = (UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance));
-                        _actions.Add(t,d);
+                        _actions.Add(new SAction(t,d));
                     }
 
                 }
@@ -72,7 +87,7 @@ public class UnityEventManager : MonoBehaviour
     {
         foreach(var a in _actions)
         {
-            a.Key.RemoveListener(a.Value);
+            a.EventRef.RemoveListener(a.Action);
         }
         //((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance))).RemoveListener(d);
     }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static Furniture;
 using static UnityEditor.PlayerSettings;
 
@@ -19,6 +20,7 @@ public class FurnitureInspector : Editor
         {
             EditorGUILayout.Space(10);
 
+            //position.x = EditorGUIUtility.currentViewWidth - position.width - 20f;
             _chosenIndex = EditorGUILayout.Popup("Number of Players to push :", _chosenIndex, _options);
             data.NeededPlayersCount = int.Parse(_options[_chosenIndex]);
         }

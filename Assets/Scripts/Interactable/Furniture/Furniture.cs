@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SocialPlatforms;
 using static Furniture;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -9,6 +10,15 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class Furniture : Interactable
 {
     #region Fields
+
+    public UnityEvent OnClueFoundInFurniture;
+    public UnityEvent OnClueNotFoundInFurniture;
+
+    public UnityEvent OnBeginPushingFurniture;
+    public UnityEvent OnStopPushingFurniture;
+
+    public UnityEvent OnBeginStrugglePushingFurniture;
+
     public EFurnitureType FurnitureType
     {
         get => _furnitureType;
@@ -56,6 +66,45 @@ public class Furniture : Interactable
         _3Dmodel.layer = LayerMask.NameToLayer("Furniture");
     }
 
+    #region Overridden methods
+    protected override void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<PlayerController>() == null)
+            return;
+
+        PlayerController p = other.GetComponent<PlayerController>();
+
+        if (p.Inputs == null)
+            return;
+
+        _playersInRange.Add(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+
+        _onPlayerEnterRange?.Invoke();
+
+        p.Inputs.OnInteract.AddListener(OnInteract);
+        p.Inputs.OnPush.AddListener(OnPush);
+        p.Inputs.OnPushCanceled.AddListener(OnPushCanceled);
+    }
+    protected override void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<PlayerController>() == null)
+            return;
+
+        PlayerController p = other.GetComponent<PlayerController>();
+
+        if (p.Inputs == null)
+            return;
+
+        _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+
+        p.Inputs.OnInteract?.RemoveListener(OnInteract);
+        p.Inputs.OnPush?.RemoveListener(OnPush);
+        p.Inputs.OnPushCanceled?.RemoveListener(OnPushCanceled);
+
+        _onPlayerExitRange?.Invoke();
+    }
+    #endregion
+
     protected override void OnInteract(Player player)
     {
         if(_furnitureType == EFurnitureType.SEARCHABLE)
@@ -64,17 +113,19 @@ public class Furniture : Interactable
             if(_clue != null)
             {
                 GameManager.Instance.FoundClues.Add(_clue);
+                OnClueFoundInFurniture?.Invoke();
                 Debug.Log("Found Clue !");
             }
             else
             {
+                OnClueNotFoundInFurniture?.Invoke();
                 Debug.Log("No Clue Found!");
             }
         }
     }
 
     #region Push
-    protected override void OnPush(Player player)
+    protected void OnPush(Player player)
     {
         if (_furnitureType == EFurnitureType.MOVABLE)
         {
@@ -90,6 +141,7 @@ public class Furniture : Interactable
                 _playersPushing.Add(player);
                 if(_playersPushing.Count >= _neededPlayersCount)
                 {
+                    OnBeginPushingFurniture?.Invoke();
                     float angle = -Mathf.Atan2(fwd.z, fwd.x) * Mathf.Rad2Deg + 90.0f;
                     angle = Mathf.Round(angle / 90.0f) * 90.0f;
                     foreach (var p in _playersPushing)
@@ -100,19 +152,36 @@ public class Furniture : Interactable
                     }
                     transform.parent.parent = player.transform;
                 }
+                else
+                {
+                    OnBeginStrugglePushingFurniture?.Invoke();
+                }
             }
         }
     }
-    protected override void OnPushCanceled(Player player)
+    protected void OnPushCanceled(Player player)
     {
         _playersPushing.Remove(player);
-        transform.parent.parent = null;
-        foreach (var p in _playersPushing)
+        if (_playersPushing.Count < _neededPlayersCount)
         {
-            Physics.IgnoreCollision(_collider, p.GetComponent<Collider>(), false);
-            p.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
+            OnStopPushingFurniture?.Invoke();
+            transform.parent.parent = null;
+            foreach (var p in _playersPushing)
+            {
+                Physics.IgnoreCollision(_collider, p.GetComponent<Collider>(), false);
+                p.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
+            }
         }
     }
-#endregion
+    #endregion
 
+    protected override void OnDestroy()
+    {
+        foreach (Player p in _playersInRange)
+        {
+            GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnInteract?.RemoveListener(OnInteract);
+            GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnPush?.RemoveListener(OnPush);
+            GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnPushCanceled?.RemoveListener(OnPushCanceled);
+        }
+    }
 }

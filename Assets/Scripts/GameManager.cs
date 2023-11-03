@@ -99,6 +99,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UnityEvent _onLose;
     public UnityEvent OnLose => _onLose;
 
+    public GameObject CurrentCamera => _currentCamera;
+    private GameObject _currentCamera; // A ASSIGNER
+
 
 
     public enum GamePhase
@@ -176,7 +179,7 @@ public class GameManager : MonoBehaviour
         List<Clue> furnitureClues = new();
         for(int i = 0; i < _gameData.FurnitureCluesCount; i++)
         {
-            int randomIndex = UnityEngine.Random.Range(0, CurrentClues.Count);
+            int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
             furnitureClues.Add(puzzleClues[randomIndex]);
             puzzleClues.RemoveAt(randomIndex);
         } 
