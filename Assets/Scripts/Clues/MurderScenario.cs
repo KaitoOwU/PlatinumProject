@@ -29,6 +29,12 @@ public class MurderScenario : ScriptableObject
             _victim = victim;
             _murderer = murderer;
         }
+
+        public static bool operator ==(SuspectDuo a, SuspectDuo b) =>
+            a.Victim == b.Victim && a.Murderer == b.Murderer;
+
+        public static bool operator !=(SuspectDuo a, SuspectDuo b) =>
+            a.Victim != b.Victim || a.Murderer != b.Murderer;
     }
 
     public void SaveData(SuspectDuo duo)
