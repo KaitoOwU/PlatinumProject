@@ -5,7 +5,8 @@ using UnityEngine;
 public class Puzzle : Interactable
 {
 
-    [SerializeField] private Transform _cluePosition;
+    [SerializeField] protected Transform _cluePosition;
+    [SerializeField] private IPuzzleReactive _reactive;
 
     public void SpawnClue(Clue clue)
     {
