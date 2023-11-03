@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     {
         NORMAL,
         PUSH,
+        PUSH_BLOCKED,
     }
     private Vector3 _constraint;
     Dictionary<EButtonType, string> _inputNames = new()
@@ -63,7 +64,6 @@ public class PlayerController : MonoBehaviour
         GetComponent<Player>().Index = _playerIndex;
 
         _inputManager.OnInteract.AddListener(_Interact);
-        _inputManager.OnPush.AddListener(_Push);
         _inputManager.OnUseTool.AddListener(_UseTool);
         _inputManager.OnPause.AddListener(_Pause);
 
@@ -76,7 +76,6 @@ public class PlayerController : MonoBehaviour
         if (_inputManager != null)
         {
             _inputManager.OnInteract.RemoveListener(_Interact);
-            _inputManager.OnPush.RemoveListener(_Push);
             _inputManager.OnUseTool.RemoveListener(_UseTool);
             _inputManager.OnPause.RemoveListener(_Pause);
         }
@@ -97,6 +96,9 @@ public class PlayerController : MonoBehaviour
                 else if (constraint.z != 0)
                     _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                 _moveSpeed = GameManager.Instance.PlayerConstants.PushMoveSpeed; break;
+            case EMoveState.PUSH_BLOCKED:
+                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                _moveSpeed = 0; break;
         }
     }
 

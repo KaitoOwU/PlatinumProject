@@ -79,7 +79,7 @@ public class InputManager : MonoBehaviour
     private void _Move_started(InputAction.CallbackContext obj) => OnMoveStarted?.Invoke();
     private void _Move_canceled(InputAction.CallbackContext obj) => OnMoveCanceled?.Invoke();
     private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
-    private void _Push_performed(InputAction.CallbackContext obj) => OnPush?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
+    private void _Push_performed(InputAction.CallbackContext obj) => OnPush?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);  
     private void _Push_canceled(InputAction.CallbackContext obj) => OnPushCanceled?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
     private void _Tool_performed(InputAction.CallbackContext obj) => OnUseTool?.Invoke();
     private void _Pause_performed(InputAction.CallbackContext obj) => OnPause?.Invoke();

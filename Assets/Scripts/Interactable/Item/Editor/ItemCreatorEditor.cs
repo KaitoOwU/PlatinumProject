@@ -158,7 +158,7 @@ public class ItemCreatorEditor : EditorWindow
                 {
                     //COPIE DU PREFAB ORIGINEL
                     string name = "Item" + _id + "_" + Regex.Replace(_name, "[^0-9A-Za-z_-]", "");
-                    AssetDatabase.CopyAsset("Assets/Scripts/Item/Editor/ItemPrefab -- DO NOT TOUCH --.prefab",
+                    AssetDatabase.CopyAsset("Assets/Scripts/Interactable/Item/Editor/ItemPrefab -- DO NOT TOUCH --.prefab",
                         $"Assets/Resources/Item/ItemsPrefabs/{name}.prefab");
                     GameObject prefab =
                         AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Resources/Item/ItemsPrefabs/{name}.prefab");
@@ -171,7 +171,7 @@ public class ItemCreatorEditor : EditorWindow
                 {
                     //COPIE DU PREFAB ORIGINEL
                     string name = "Clue" + _id + "_" + Regex.Replace(_name, "[^0-9A-Za-z_-]", "");
-                    AssetDatabase.CopyAsset("Assets/Scripts/Item/Editor/CluePrefab -- DO NOT TOUCH --.prefab",
+                    AssetDatabase.CopyAsset("Assets/Scripts/Interactable/Item/Editor/CluePrefab -- DO NOT TOUCH --.prefab",
                         $"Assets/Resources/Clues/CluePrefab/{name}.prefab");
                     GameObject prefab =
                         AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Resources/Clues/CluePrefab/{name}.prefab");

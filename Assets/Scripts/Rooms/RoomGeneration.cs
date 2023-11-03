@@ -410,7 +410,7 @@ public class RoomGeneration : MonoBehaviour
             _maxRooms = _roomsInPlay.Count / 2;
         else if (GameManager.Instance.CurrentTimerPhase == GameManager.TimerPhase.END)
             _maxRooms = 0;
-        Debug.Log(_maxRooms);
+        //Debug.Log(_maxRooms);
         for (int i = 0; i < _maxRooms; i++)
         {
             foreach (Door door in FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).Doors)

@@ -102,7 +102,7 @@ public class UnityEventManager : MonoBehaviour
     }
     public void PlaySFX(AudioClip audioClip)
     {
-        _audioSource.PlayOneShot(audioClip);
+        _audioSource.PlayOneShot(audioClip, 1);
     }
     public void ScreenShake(float intensity)
     {

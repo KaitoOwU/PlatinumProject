@@ -195,9 +195,12 @@ public class GameManager : MonoBehaviour
         List<Clue> furnitureClues = new();
         for(int i = 0; i < _gameData.FurnitureCluesCount; i++)
         {
-            int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
-            furnitureClues.Add(puzzleClues[randomIndex]);
-            puzzleClues.RemoveAt(randomIndex);
+            if(puzzleClues.Count > 0)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
+                furnitureClues.Add(puzzleClues[randomIndex]);
+                puzzleClues.RemoveAt(randomIndex);
+            }
         } 
         List<Furniture> allSearchableFurnitures = GameObject.FindObjectsOfType<Furniture>().Where(f => f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE).ToList();
         foreach(Clue clue in furnitureClues)

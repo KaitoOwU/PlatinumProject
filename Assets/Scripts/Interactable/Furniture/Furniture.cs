@@ -11,13 +11,14 @@ public class Furniture : Interactable
 {
     #region Fields
 
-    public UnityEvent OnClueFoundInFurniture;
-    public UnityEvent OnClueNotFoundInFurniture;
 
-    public UnityEvent OnBeginPushingFurniture;
-    public UnityEvent OnStopPushingFurniture;
+    [HideInInspector] public UnityEvent OnClueFoundInFurniture;
+    [HideInInspector] public UnityEvent OnClueNotFoundInFurniture;
 
-    public UnityEvent OnBeginStrugglePushingFurniture;
+    [HideInInspector] public UnityEvent OnBeginPushingFurniture;
+    [HideInInspector] public UnityEvent OnStopPushingFurniture;
+
+    [HideInInspector] public UnityEvent OnBeginStrugglePushingFurniture;
 
     public EFurnitureType FurnitureType
     {
@@ -87,6 +88,7 @@ public class Furniture : Interactable
     }
     protected override void OnTriggerExit(Collider other)
     {
+        Debug.Log("Trigger exit " + other.gameObject.name);
         if (other.GetComponent<PlayerController>() == null)
             return;
 
@@ -96,6 +98,8 @@ public class Furniture : Interactable
             return;
 
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+        OnPushCanceled(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+
 
         p.Inputs.OnInteract?.RemoveListener(OnInteract);
         p.Inputs.OnPush?.RemoveListener(OnPush);
@@ -127,6 +131,8 @@ public class Furniture : Interactable
     #region Push
     protected void OnPush(Player player)
     {
+        if(_playersPushing.Contains(player))
+            return;
         if (_furnitureType == EFurnitureType.MOVABLE)
         {
             Vector3 fwd = Vector3Int.RoundToInt(player.transform.TransformDirection(Vector3.forward));
@@ -146,14 +152,14 @@ public class Furniture : Interactable
                     angle = Mathf.Round(angle / 90.0f) * 90.0f;
                     foreach (var p in _playersPushing)
                     {
-                        Physics.IgnoreCollision(_collider, p.GetComponent<Collider>(), true);
                         p.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
                         p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1,0,0): new Vector3(0, 0, 1));
                     }
-                    transform.parent.parent = player.transform;
+                    transform.parent = player.transform;
                 }
                 else
                 {
+                    player.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH_BLOCKED);
                     OnBeginStrugglePushingFurniture?.Invoke();
                 }
             }
@@ -162,16 +168,23 @@ public class Furniture : Interactable
     protected void OnPushCanceled(Player player)
     {
         _playersPushing.Remove(player);
-        if (_playersPushing.Count < _neededPlayersCount)
+        if (transform.parent == player.transform && _playersPushing.Count != 0)
+        {
+            transform.parent = _playersPushing[0].transform;
+        }
+        if (_playersPushing.Count == 0)
         {
             OnStopPushingFurniture?.Invoke();
-            transform.parent.parent = null;
-            foreach (var p in _playersPushing)
+            transform.parent = null;
+        }
+        else if(_playersPushing.Count < _neededPlayersCount)
+        {
+            foreach(var p in _playersPushing)
             {
-                Physics.IgnoreCollision(_collider, p.GetComponent<Collider>(), false);
-                p.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
+                p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH_BLOCKED);
             }
         }
+        player.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
     }
     #endregion
 
