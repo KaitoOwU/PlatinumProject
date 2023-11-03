@@ -30,7 +30,7 @@ public class PressurePlateManager : Puzzle
     {
         if (_pressurePlates.FindAll((plate) => plate.IsValid).Count == _pressurePlates.Count)
         {
-            //_reactive.GenerateItem(_objToSpawn);
+            _reactive.PuzzleCompleted();
         }
     }
 }

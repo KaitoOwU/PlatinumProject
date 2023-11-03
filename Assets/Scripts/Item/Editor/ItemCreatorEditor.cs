@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class ItemCreatorEditor : EditorWindow
@@ -100,13 +101,13 @@ public class ItemCreatorEditor : EditorWindow
             {
                 EditorGUILayout.BeginHorizontal();
                 {
-                    _victim = (SuspectData)EditorGUILayout.ObjectField(_victim, typeof(SuspectData), false);
-                    GUILayout.Label("a tué");
                     _murderer = (SuspectData)EditorGUILayout.ObjectField(_murderer, typeof(SuspectData), false);
+                    GUILayout.Label("a tué");
+                    _victim = (SuspectData)EditorGUILayout.ObjectField(_victim, typeof(SuspectData), false);
                 }
                 EditorGUILayout.EndHorizontal();
 
-                _scenario = Resources.LoadAll<MurderScenario>("Clues").ToList()
+                _scenario = Resources.LoadAll<MurderScenario>("Clues/Interactions").ToList()
                         .FindAll(scenario => scenario.DuoSuspect.Victim == _victim)
                         .Find(scenario => scenario.DuoSuspect.Murderer == _murderer);
 
@@ -164,8 +165,8 @@ public class ItemCreatorEditor : EditorWindow
                     
                     //CREATION DU SCRIPTABLE
                     ItemData item = CreateInstance<ItemData>();
-                    AssetDatabase.CreateAsset(item, $"Assets/Resources/Item/ItemsData/{name}.asset");
                     item.SaveData(_id, _name, prefab, _icon);
+                    AssetDatabase.CreateAsset(item, $"Assets/Resources/Item/ItemsData/{name}.asset");
                 } else if (_toolbar == 1)
                 {
                     //COPIE DU PREFAB ORIGINEL
@@ -180,8 +181,11 @@ public class ItemCreatorEditor : EditorWindow
                     clue.SaveData(_id, _name, prefab, new MurderScenario.SuspectDuo(_victim, _murderer), _description, _clueSprite);
                     AssetDatabase.CreateAsset(clue, $"Assets/Resources/Clues/ClueData/{name}.asset");
                     
+                    AssetDatabase.SaveAssets();
+                    
                     //APPLICATION AU SCENARIO DEFINI
                     _scenario.Clues.Add(prefab.GetComponent<Clue>());
+                    AssetDatabase.SaveAssetIfDirty(_scenario);
                 }
 
                 AssetDatabase.SaveAssets();

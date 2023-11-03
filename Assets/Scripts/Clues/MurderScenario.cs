@@ -11,11 +11,7 @@ public class MurderScenario : ScriptableObject
     [SerializeField] private List<Clue> _clues;
 
     public SuspectDuo DuoSuspect => _suspectDuo;
-    public List<Clue> Clues
-    {
-        get => _clues;
-        set => _clues = value;
-    }
+    public List<Clue> Clues => _clues;
     
     [Serializable]
     public struct SuspectDuo
@@ -50,6 +46,5 @@ public class MurderScenario : ScriptableObject
     public void SaveData(SuspectDuo duo)
     {
         _suspectDuo = duo;
-        _clues = new();
     }
 }
