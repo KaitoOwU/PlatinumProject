@@ -177,13 +177,14 @@ public class ItemCreatorEditor : EditorWindow
                     
                     //CREATION DU SCRIPTABLE
                     ClueData clue = CreateInstance<ClueData>();
-                    AssetDatabase.CreateAsset(clue, $"Assets/Resources/Clues/ClueData/{name}.asset");
                     clue.SaveData(_id, _name, prefab, new MurderScenario.SuspectDuo(_victim, _murderer), _description, _clueSprite);
+                    AssetDatabase.CreateAsset(clue, $"Assets/Resources/Clues/ClueData/{name}.asset");
                     
                     //APPLICATION AU SCENARIO DEFINI
                     _scenario.Clues.Add(prefab.GetComponent<Clue>());
                 }
 
+                AssetDatabase.SaveAssets();
                 Close();
             }
             GUI.enabled = true;
@@ -216,9 +217,11 @@ public class ItemCreatorEditor : EditorWindow
                     //MODIFICATION DU SCRIPTABLE
                     AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_pickableModified),
                         newName + ".asset");
+                    
                     ((ClueData)_pickableModified).SaveData(_id, _name, _pickableModified.Prefab, new MurderScenario.SuspectDuo(_victim, _murderer), _description, _clueSprite);
                 }
 
+                AssetDatabase.SaveAssets();
                 Close();
             }
         }
