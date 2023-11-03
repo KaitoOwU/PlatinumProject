@@ -15,14 +15,17 @@ public class Room : MonoBehaviour
     [SerializeField] private List<Room> _linkedRooms = new List<Room>();
     [SerializeField] private Side _roomSide;
     [SerializeField] private Room _tandem;
-
+    [SerializeField] private Interactable _reward;
     [SerializeField] protected Transform _cameraPoint;
+    [SerializeField] private bool _isRewardClue;
+    [SerializeField] private bool _hasReward;
 
     public enum Side
     {
         LEFT,
         RIGHT,
-        HUB
+        HUB,
+        CORRIDOR,
     }
 
     /*public Room NextRoom { get => _nextRoom; set => _nextRoom = value; }
@@ -35,4 +38,17 @@ public class Room : MonoBehaviour
     public List<Door> Doors { get => _doors; set => _doors = value; }
     public List<Room> LinkedRooms { get => _linkedRooms; set => _linkedRooms = value; }
     public Room Tandem { get => _tandem; set => _tandem = value; }
+    public Interactable Reward { get => _reward; set => _reward = value; }
+    public bool IsRewardClue { get => _isRewardClue; }
+    public bool HasReward { get => _hasReward;}
+
+    public void OnCompletedRoom()
+    {
+        GameManager.Instance.ValidatedRooom++;
+        if (_reward)
+        {
+            Instantiate(_reward, transform.position, transform.rotation);
+        }
+        FindObjectOfType<RoomGeneration>().LockedDoor();
+    }
 }

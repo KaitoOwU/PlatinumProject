@@ -10,12 +10,20 @@ public class Door : Interactable
     [SerializeField] private DoorType _doorTypeValue;
     [SerializeField] private Door _linkedDoor;
     [SerializeField] private Room room;
+    [SerializeField] private bool _isLocked;
+    List<GameObject> _corridors;
 
     public Transform[] TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
 
     public Door LinkedDoor { get => _linkedDoor; set => _linkedDoor = value; }
+    public bool IsLocked { get => _isLocked; set => _isLocked = value; }
+    public Room Room { get => room;}
 
+    private void Start()
+    {
+        _corridors= Resources.Load<SCRoomsLists>("ScriptableObject/Rooms").Floors[4].Rooms;
+    }
     public enum DoorType
     {
         ENTRY,
@@ -24,55 +32,88 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
-        if(player.CurrentRoom is Hub)
+        if (!_isLocked&&!_linkedDoor.IsLocked)
         {
-            int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
-            
-            Hub hub = (Hub)player.CurrentRoom;
-            if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4) // POUR BUILD FINALE ==> ==4 !!!
+            int rand = Random.Range(0, 10);
+            if (player.CurrentRoom is Hub)
             {
-                GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
-                GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
+                int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsInteractHeld).Count;
 
-                //TP All players to next room depending on the door they're interacting with (after they all hold button)
-                hub.RoomDoorLeft.TP_Players(hub.RoomDoorLeft.LinkedDoor.TpPoint);
-                hub.RoomDoorRight.TP_Players(hub.RoomDoorRight.LinkedDoor.TpPoint);
-
-                hub.RoomDoorLeft.UpdateRoom(hub.RoomDoorLeft.LinkedDoor.room);
-                hub.RoomDoorRight.UpdateRoom(hub.RoomDoorRight.LinkedDoor.room);
-
-                hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
-                hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
-                
-            }
-        }
-        else
-        {
-            Room room = player.CurrentRoom;
-
-            if (_linkedDoor.room is Hub)
-            {
-                GameManager.Instance.OnBackToHubRefused?.Invoke(this);
-                return;
-            }
-
-            if (room.RoomSide == Room.Side.RIGHT)
-            {
-                if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
-                    _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
+                Hub hub = (Hub)player.CurrentRoom;
+                if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4) // POUR BUILD FINALE ==> ==4 !!!
                 {
-                    TP_Players(_linkedDoor.TpPoint);
-                    TP_Camera(_linkedDoor.room);
-                    UpdateRoom(_linkedDoor.room);
+                    GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
+                    GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
+
+                    //TP All players to next room depending on the door they're interacting with (after they all hold button)
+                    hub.RoomDoorLeft.TP_Players(hub.RoomDoorLeft.LinkedDoor.TpPoint);
+                    hub.RoomDoorRight.TP_Players(hub.RoomDoorRight.LinkedDoor.TpPoint);
+
+                    hub.RoomDoorLeft.UpdateRoom(hub.RoomDoorLeft.LinkedDoor.room);
+                    hub.RoomDoorRight.UpdateRoom(hub.RoomDoorRight.LinkedDoor.room);
+
+                    hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
+                    hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
                 }
-            } else if (room.RoomSide == Room.Side.LEFT)
+            }
+            else
             {
-                if (GameManager.Instance.LeftPlayers.Count == _playersInRange.Count &&
-                    _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
+
+                Room room = player.CurrentRoom;
+
+                if (_linkedDoor.room is Hub)
                 {
-                    TP_Players(_linkedDoor.TpPoint);
-                    TP_Camera(_linkedDoor.room);
-                    UpdateRoom(_linkedDoor.room);
+                    GameManager.Instance.OnBackToHubRefused?.Invoke(this);
+                    return;
+                }
+
+                if (room.RoomSide == Room.Side.RIGHT)
+                {
+                    if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
+                        _playersInRange.All(player => player.PlayerController.IsInteractHeld))
+                    {
+                        if (rand < GameManager.Instance.CorridorChance)
+                        {
+                            int rand2 = Random.Range(0, _corridors.Count);
+                            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
+                            corridor.SetCorridor(player, LinkedDoor);
+                            TP_Players(corridor.Doors[0].TpPoint);
+                            TP_Camera(corridor);
+                            UpdateRoom(corridor);
+                            GameManager.Instance.CorridorChance = 10;
+                        }
+                        else
+                        {
+                            GameManager.Instance.CorridorChance --;
+                            TP_Players(_linkedDoor.TpPoint);
+                            TP_Camera(_linkedDoor.room);
+                            UpdateRoom(_linkedDoor.room);
+                        }
+                    }
+                }
+                else if (room.RoomSide == Room.Side.LEFT)
+                {
+                    if (GameManager.Instance.LeftPlayers.Count == _playersInRange.Count &&
+                        _playersInRange.All(player => player.PlayerController.IsInteractHeld))
+                    {
+                        if (rand < GameManager.Instance.CorridorChance)
+                        {
+                            int rand2 = Random.Range(0, _corridors.Count);
+                            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
+                            corridor.SetCorridor(player, LinkedDoor);
+                            TP_Players(corridor.Doors[0].TpPoint);
+                            TP_Camera(corridor);
+                            UpdateRoom(corridor);
+                            GameManager.Instance.CorridorChance = 10;
+                        }
+                        else
+                        {
+                            GameManager.Instance.CorridorChance--;
+                            TP_Players(_linkedDoor.TpPoint);
+                            TP_Camera(_linkedDoor.room);
+                            UpdateRoom(_linkedDoor.room);
+                        }
+                    }
                 }
             }
         }
@@ -81,7 +122,7 @@ public class Door : Interactable
     public void TP_Players(Transform[] tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
     { 
         //GARDER EN MEMOIRE LE NOMBRE DE JOUEUR POUR SAVOIR COMBIEN IL EN FAUT POUR PASSER A LA SALLE SUIVANTE DANS CHAQUE BRANCHE
-        foreach(Player p in _playersInRange) if (p.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT))
+        foreach(Player p in _playersInRange) if (p.PlayerController.IsInteractHeld)
         {
             p.gameObject.transform.position = tpPoint[p.Index-1].position;
         }
