@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class ClueData : PickableData
@@ -16,6 +17,6 @@ public class ClueData : PickableData
         _prefab = prefab;
         _suspects = suspects;
         _description = description;
-        if (!sprite.Equals(null)) _sprite = sprite;
+        if (sprite is not null) _sprite = sprite;
     }
 }
