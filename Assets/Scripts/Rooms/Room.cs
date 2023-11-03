@@ -15,10 +15,10 @@ public class Room : MonoBehaviour
     [SerializeField] private List<Room> _linkedRooms = new List<Room>();
     [SerializeField] private Side _roomSide;
     [SerializeField] private Room _tandem;
-    [SerializeField] private Interactable _reward;
+    [SerializeField] private GameObject _reward;
     [SerializeField] protected Transform _cameraPoint;
     [SerializeField] private bool _isRewardClue;
-    [SerializeField] private bool _hasReward;
+    [SerializeField] private bool _canHaveReward;
 
     public enum Side
     {
@@ -38,17 +38,21 @@ public class Room : MonoBehaviour
     public List<Door> Doors { get => _doors; set => _doors = value; }
     public List<Room> LinkedRooms { get => _linkedRooms; set => _linkedRooms = value; }
     public Room Tandem { get => _tandem; set => _tandem = value; }
-    public Interactable Reward { get => _reward; set => _reward = value; }
+    public GameObject Reward { get => _reward; set => _reward = value; }
     public bool IsRewardClue { get => _isRewardClue; }
-    public bool HasReward { get => _hasReward;}
+    public bool CanHaveReward { get => _canHaveReward; }
 
+    public void OnSetUp()
+    {
+        if (!_doors[0].IsLocked && !_canHaveReward && RoomSide!=Side.HUB&&RoomSide!=Side.CORRIDOR)
+        {
+            OnCompletedRoom();
+        }
+
+    }
     public void OnCompletedRoom()
     {
         GameManager.Instance.ValidatedRooom++;
-        if (_reward)
-        {
-            Instantiate(_reward, transform.position, transform.rotation);
-        }
         FindObjectOfType<RoomGeneration>().LockedDoor();
     }
 }

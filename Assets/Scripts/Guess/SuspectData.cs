@@ -7,7 +7,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SuspectData", menuName = "Datas/Create Suspect Data", order = 2)]
 public class SuspectData : ScriptableObject
 {
-
     [SerializeField] private string _name;
     [SerializeField] private Sprite _image;
 
