@@ -58,9 +58,9 @@ public class ScenarioEditorWindow : EditorWindow
             
             EditorGUILayout.BeginHorizontal();
             {
-                _victim = (SuspectData) EditorGUILayout.ObjectField(_victim, typeof(SuspectData), false);
-                GUILayout.Label(" a tué ", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 15});
                 _murderer = (SuspectData) EditorGUILayout.ObjectField(_murderer, typeof(SuspectData), false);
+                GUILayout.Label(" a tué ", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 15});
+                _victim = (SuspectData) EditorGUILayout.ObjectField(_victim, typeof(SuspectData), false);
             }
             EditorGUILayout.EndHorizontal();
 
@@ -134,7 +134,7 @@ public class ScenarioEditorWindow : EditorWindow
                     
                     MurderScenario scenario = CreateInstance<MurderScenario>();
                     scenario.SaveData(new MurderScenario.SuspectDuo(victim, murderer));
-                    AssetDatabase.CreateAsset(scenario, "Assets/Resources/Clues/Interaction" + i + ".asset");
+                    AssetDatabase.CreateAsset(scenario, "Assets/Resources/Clues/Interactions/Interaction" + i + ".asset");
                     AssetDatabase.SaveAssets();
                     i++;
                 }

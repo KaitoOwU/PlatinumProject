@@ -6,7 +6,7 @@ public class Puzzle : Interactable
 {
 
     [SerializeField] protected Transform _cluePosition;
-    [SerializeField] private IPuzzleReactive _reactive;
+    [SerializeField] protected IPuzzleReactive _reactive;
 
     public void SpawnClue(Clue clue)
     {
@@ -14,7 +14,9 @@ public class Puzzle : Interactable
     }
 
 }
+
 public interface IPuzzleReactive
 {
-    public abstract void GenerateItem();
+    protected GameObject ObjToSpawn { get; set; }
+    public abstract void PuzzleCompleted();
 }

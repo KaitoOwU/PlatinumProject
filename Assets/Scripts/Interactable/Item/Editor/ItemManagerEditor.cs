@@ -143,6 +143,16 @@ public class ItemManagerEditor : EditorWindow
                         {
                             if(EditorUtility.DisplayDialog("Supprimer Item ?", $"Tu es sûr de vouloir supprimer l'Item : \"{data.Name}\" \nCela supprimera également le Prefab lié à l'Item !", "Oui", "Non"))
                             {
+                                if (data is ClueData)
+                                {
+                                    ClueData cData = ((ClueData)data);
+                                    MurderScenario _scenario = Resources.LoadAll<MurderScenario>("Clues/Interactions").ToList()
+                                        .FindAll(scenario => scenario.DuoSuspect.Victim == cData.Suspects.Victim)
+                                        .Find(scenario => scenario.DuoSuspect.Murderer == cData.Suspects.Murderer);
+
+                                    _scenario.Clues.Remove(data.Prefab.GetComponent<Clue>());
+                                }
+                                
                                 AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(data.Prefab.GetInstanceID()));
                                 AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(data));
                             }
