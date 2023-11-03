@@ -27,7 +27,13 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public List<Clue> FoundClues
+    {
+        get => _foundClues;
+        set => _foundClues = value;
+    }
     public GameData GameData => _gameData;
+    public PlayerConstants PlayerConstants => _playerConstants;
     public float Timer => _timer;
     public SuspectData Murderer => _murderer;
     public SuspectData Victim => _victim;
@@ -40,11 +46,15 @@ public class GameManager : MonoBehaviour
     public IReadOnlyList<PlayerInfo> LeftPlayers =>
         PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.LEFT_WING);
 
-    public IReadOnlyList<ItemData> Items => _items;
+    public IReadOnlyList<PickableData> Items => _items;
+    public IReadOnlyList<MurderScenario> MurderScenarios => Resources.LoadAll<MurderScenario>("Clues");
+    public IReadOnlyList<Clue> CurrentClues { get; private set; }
 
     [Header("---Constants---")]
     [SerializeField]
     private GameData _gameData;
+    [SerializeField]
+    private PlayerConstants _playerConstants;
 
     [Header("---References---")]
     [SerializeField]
@@ -78,7 +88,8 @@ public class GameManager : MonoBehaviour
     private CameraState _currentCameraState;
     private float _timer;
     private bool _isTimerGoing;
-    private List<ItemData> _items = new();
+    private List<PickableData> _items = new();
+    private List<Clue> _foundClues;
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -87,6 +98,8 @@ public class GameManager : MonoBehaviour
     public UnityEvent OnWin => _onWin;
     [SerializeField] private UnityEvent _onLose;
     public UnityEvent OnLose => _onLose;
+
+
 
     public enum GamePhase
     {
@@ -132,8 +145,6 @@ public class GameManager : MonoBehaviour
     {
         InitSingleton();
         InitGame();
-
-        _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
     }
 
     void Start()
@@ -150,7 +161,35 @@ public class GameManager : MonoBehaviour
         _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
         _victim = GameData.SuspectsDatas[0]; //temporary
         //init game accordingly;
+
+        CurrentClues = MurderScenarios.ToList()
+            .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
+
+        _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+
+        DistributeClues();
     }
+
+    private void DistributeClues()
+    {
+        List<Clue> puzzleClues = CurrentClues.ToList(); ///
+        List<Clue> furnitureClues = new();
+        for(int i = 0; i < _gameData.FurnitureCluesCount; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, CurrentClues.Count);
+            furnitureClues.Add(puzzleClues[randomIndex]);
+            puzzleClues.RemoveAt(randomIndex);
+        } 
+        List<Furniture> allSearchableFurnitures = GameObject.FindObjectsOfType<Furniture>().Where(f => f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE).ToList();
+        foreach(Clue clue in furnitureClues)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
+            allSearchableFurnitures[randomIndex].Clue = clue;
+            allSearchableFurnitures.RemoveAt(randomIndex);
+        }
+        //ADD PUZZLE CLUES
+    }
+
     private void OnEnable()
     {
         //_onWin.AddListener(Win);
@@ -280,6 +319,10 @@ public class GameManager : MonoBehaviour
         camera.transform.rotation = newValues.rotation;
     }
     #endregion
+
+    public MurderScenario GetMurderScenario(SuspectData victim, SuspectData murderer) => MurderScenarios.ToList()
+        .FindAll(scenario => scenario.DuoSuspect.Victim == victim)
+        .Find(scenario => scenario.DuoSuspect.Murderer == murderer);
 }
 
 [Serializable]
@@ -299,8 +342,8 @@ public struct PlayerInfo
 
 public static class Helper
 {
-    public static List<ItemData> GetAllItemDatas()
+    public static List<PickableData> GetAllItemDatas()
     {
-        return Resources.LoadAll<ItemData>("Item/ItemsData").ToList();
+        return Resources.LoadAll<PickableData>("Item/ItemsData").ToList();
     }
 }

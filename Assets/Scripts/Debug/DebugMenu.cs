@@ -68,7 +68,7 @@ public class DebugMenu : MonoBehaviour
     private void UpdateValues()
     {
         _characterName.text = data.playerSelected.PlayerRef.name;
-        _itemInHand.text = data.playerSelected.PlayerRef.HeldItem == null ? "null" : data.playerSelected.PlayerRef.HeldItem.Name;
+        _itemInHand.text = data.playerSelected.PlayerRef.HeldPickable == null ? "null" : data.playerSelected.PlayerRef.HeldPickable.Name;
         _multiplayerRestrictionsText.text = data.multiplayerRestrictions.ToString();
     }
 
@@ -103,23 +103,23 @@ public class DebugMenu : MonoBehaviour
                 break;
             
             case "ItemButton":
-                if (data.currentItem == null)
+                if (data.currentPickable == null)
                 {
-                    data.currentItem = GameManager.Instance.Items[0];
+                    data.currentPickable = GameManager.Instance.Items[0];
                 }
                 else
                 {
-                    if (data.currentItem.ID + 1 < GameManager.Instance.Items.Count)
+                    if (data.currentPickable.ID + 1 < GameManager.Instance.Items.Count)
                     {
-                        data.currentItem = GameManager.Instance.Items[data.currentItem.ID + 1];
+                        data.currentPickable = GameManager.Instance.Items[data.currentPickable.ID + 1];
                     }
                     else
                     {
-                        data.currentItem = null;
+                        data.currentPickable = null;
                     }
                 }
 
-                data.playerSelected.PlayerRef.HeldItem = data.currentItem;
+                data.playerSelected.PlayerRef.HeldPickable = data.currentPickable;
                 break;
         }
 
@@ -130,13 +130,13 @@ public class DebugMenu : MonoBehaviour
     {
         internal PlayerInfo playerSelected;
         internal bool multiplayerRestrictions;
-        internal ItemData currentItem;
+        internal PickableData currentPickable;
         
         public PlayerInfo PlayerSelected => playerSelected;
 
         public bool MultiplayerRestrictions => multiplayerRestrictions;
 
-        public ItemData CurrentItem => currentItem;
+        public PickableData CurrentPickable => currentPickable;
         
         //Restart Scene
         //Reset All Puzzles
