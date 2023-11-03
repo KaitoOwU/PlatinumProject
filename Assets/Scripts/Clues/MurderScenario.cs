@@ -35,6 +35,16 @@ public class MurderScenario : ScriptableObject
 
         public static bool operator !=(SuspectDuo a, SuspectDuo b) =>
             a.Victim != b.Victim || a.Murderer != b.Murderer;
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
     public void SaveData(SuspectDuo duo)
