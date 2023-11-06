@@ -40,10 +40,9 @@ public class Door : Interactable
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsInteractHeld).Count;
 
                 Hub hub = (Hub)player.CurrentRoom;
-                if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4) // POUR BUILD FINALE ==> ==4 !!!
+                if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 /*&& hub.RoomDoorRight.PlayersInRange.Count >= 1*/ && count == 1 && GameManager.Instance.CurrentGamePhase != GameManager.GamePhase.EARLY_GUESS) // POUR BUILD FINALE ==> ==4 !!!
                 {
                     GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
-                    GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
 
                     //TP All players to next room depending on the door they're interacting with (after they all hold button)
                     hub.RoomDoorLeft.TP_Players(hub.RoomDoorLeft.LinkedDoor.TpPoint);
@@ -54,6 +53,8 @@ public class Door : Interactable
 
                     hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
                     hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
+
+                    GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
                 }
             }
             else

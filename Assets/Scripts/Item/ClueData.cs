@@ -16,6 +16,6 @@ public class ClueData : PickableData
         _prefab = prefab;
         _suspects = suspects;
         _description = description;
-        if (!sprite.Equals(null)) _sprite = sprite;
+        if (sprite != null) _sprite = sprite;
     }
 }
