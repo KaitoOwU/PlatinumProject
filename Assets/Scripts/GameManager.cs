@@ -1,20 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI _timerTxt;
+    
     public GamePhase CurrentGamePhase
     {
         get => _currentGamePhase; 
         set => _currentGamePhase = value;
-    }
-
+    }    
     public CameraState CurrentCameraState
     {
-        get; private set;
+        get => _currentCameraState; 
+        set => _currentCameraState = value;
     }
 
     public List<PlayerInfo> PlayerList
@@ -22,14 +27,33 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public int CorridorChance
+    { 
+        get => _corridorChance; 
+        set => _corridorChance = value;
+    }
+    public int ValidatedRooom 
+    {
+        get => _validatedRooom;
+        set => _validatedRooom = value;
+    }
+
+    public GameData GameData => _gameData;
     public float Timer => _timer;
+    public SuspectData Murderer => _murderer;
+    public SuspectData Victim => _victim;
+    public Hub Hub => _hub;
     public TimerPhase CurrentTimerPhase => _currentTimerPhase;
     
     public IReadOnlyList<PlayerInfo> RightPlayers =>
-        PlayerList.FindAll(player => player.RelativePos == HubRelativePosition.RIGHT_WING);
+        PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.RIGHT_WING);
     
     public IReadOnlyList<PlayerInfo> LeftPlayers =>
-        PlayerList.FindAll(player => player.RelativePos == HubRelativePosition.LEFT_WING);
+        PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.LEFT_WING);
+
+    public IReadOnlyList<PickableData> Items => _items;
+    public IReadOnlyList<MurderScenario> MurderScenarios => Resources.LoadAll<MurderScenario>("Clues");
+    public IReadOnlyList<Clue> CurrentClues { get; private set; }
 
     [Header("---Constants---")]
     [SerializeField]
@@ -44,19 +68,34 @@ public class GameManager : MonoBehaviour
     private GameObject _splitCameraLeft;
     [SerializeField]
     private GameObject _splitCameraRight;
+    [SerializeField]
+    private Hub _hub;
 
     [Header("---Events---")]
-    public UnityEvent OnShuffleRooms;
     public UnityEvent OnFirstPhaseEnd;
     public UnityEvent OnSecondPhaseEnd;
     public UnityEvent OnTimerEnd;
+    public UnityEvent OnEndPhase;
     public UnityEvent OnEachMinute;
 
+    private SuspectData _murderer;
+    private SuspectData _victim;
     private GamePhase _currentGamePhase;
     private TimerPhase _currentTimerPhase;
     private CameraState _currentCameraState;
     private float _timer;
     private bool _isTimerGoing;
+    private int _corridorChance;
+    private int _validatedRooom;
+    private List<PickableData> _items = new();
+
+    [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
+    public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
+
+    [SerializeField] private UnityEvent _onWin;
+    public UnityEvent OnWin => _onWin;
+    [SerializeField] private UnityEvent _onLose;
+    public UnityEvent OnLose => _onLose;
 
     public enum GamePhase
     {
@@ -83,9 +122,8 @@ public class GameManager : MonoBehaviour
     private static GameManager instance = null;
     public static GameManager Instance => instance;
 
-    private void Awake()
+    private void InitSingleton()
     {
-
         if (instance != null && instance != this)
         {
             Destroy(this.gameObject);
@@ -99,20 +137,76 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    private void Awake()
+    {
+        InitSingleton();
+        InitGame();
+
+        _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+    }
 
     void Start()
     {
+        _validatedRooom = 0;
+        _corridorChance = 10;
         CurrentGamePhase = GamePhase.HUB;
         StartTimer();
+        _onWin.AddListener(Win);
+        _onLose.AddListener(Lose);
+        OnEndPhase.AddListener(TPAllPlayersToHub);
     }
 
+    private void InitGame()
+    {
+        _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
+        _victim = GameData.SuspectsDatas[0]; //temporary
+        //init game accordingly;
+
+        CurrentClues = MurderScenarios.ToList()
+            .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
+    }
+    private void OnEnable()
+    {
+        //_onWin.AddListener(Win);
+        //_onLose.AddListener(Lose);
+        //OnEndPhase.AddListener(TPAllPlayersToHub);
+    }    
+    private void OnDisable()
+    {
+        _onWin.RemoveListener(Win);
+        _onLose.RemoveListener(Lose);
+        OnEndPhase.RemoveListener(TPAllPlayersToHub);
+    }
+
+    private void TPAllPlayersToHub()
+    {
+        SwitchCameraState(CameraState.FULL);
+        foreach (Player p in PlayerList.Select(data => data.PlayerRef))
+        {
+            p.gameObject.transform.position = _hub.Spawnpoints[p.Index-1].position;
+            p.RelativePos = HubRelativePosition.HUB;
+            p.CurrentRoom = _hub;
+        }
+    }
+
+    void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
+    void Lose() => Debug.LogError("<color:cyan> YOU LOSE ! </color>");
+
+    #region Timer
     private IEnumerator IncrementTimer()
     {
         while (_isTimerGoing)
         {
             yield return new WaitForSeconds(1f);
-            _timer -= 1;
-            _AnalyseTimer();
+            if (PlayerList[0].PlayerRef.CurrentRoom != Hub)
+            {
+                _timer -= 1;
+                _AnalyseTimer();
+                
+                //RETIRER APRES (faux timer UI)
+                _timerTxt.text = "" + _timer;
+            }
+
         }
     }
     private void _AnalyseTimer()
@@ -120,37 +214,37 @@ public class GameManager : MonoBehaviour
         if (_timer % 60 == 0)
         {
             OnEachMinute?.Invoke();
-            Debug.Log("<color=cyan>Shuffle room </color>" + _timer);
+            Debug.LogError("<color=cyan>Shuffle room </color>" + _timer);
         }
         switch (_currentTimerPhase)
         {
             case TimerPhase.FIRST_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
-                    OnFirstPhaseEnd?.Invoke();
-                    OnShuffleRooms?.Invoke();
-                    Debug.Log("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
+                    OnFirstPhaseEnd?.Invoke();
+                    OnEndPhase?.Invoke();
+                    Debug.LogError("<color=cyan>First Phase End </color>" + _timer);               
                 }
                 break;
             case TimerPhase.SECOND_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
-                    OnSecondPhaseEnd?.Invoke();
-                    OnShuffleRooms?.Invoke();
-                    Debug.Log("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
+                    OnSecondPhaseEnd?.Invoke();
+                    OnEndPhase?.Invoke();
+                    Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
                 if (_timer <= 0)
                 {
+                    _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
-                    OnShuffleRooms?.Invoke();
-                    Debug.Log("<color=cyan>Third Phase End </color>" + _timer);
+                    OnEndPhase?.Invoke();
+                    Debug.LogError("<color=cyan>Third Phase End </color>" + _timer);
                     _isTimerGoing = false;
                     _timer = 0;
-                    _currentTimerPhase = TimerPhase.END;
                 }
                 break;
             case TimerPhase.END:
@@ -167,7 +261,9 @@ public class GameManager : MonoBehaviour
         _isTimerGoing = true;
         StartCoroutine(IncrementTimer());
     }
+    #endregion
 
+    #region Camera
     public void SwitchCameraState(CameraState targetState)
     {
         if(_currentCameraState == targetState)
@@ -197,6 +293,11 @@ public class GameManager : MonoBehaviour
         camera.transform.position = newValues.position;
         camera.transform.rotation = newValues.rotation;
     }
+    #endregion
+
+    public MurderScenario GetMurderScenario(SuspectData victim, SuspectData murderer) => MurderScenarios.ToList()
+        .FindAll(scenario => scenario.DuoSuspect.Victim == victim)
+        .Find(scenario => scenario.DuoSuspect.Murderer == murderer);
 }
 
 [Serializable]
@@ -212,14 +313,12 @@ public struct PlayerInfo
 
     public Player PlayerRef => _playerRef;
     [SerializeField] private Player _playerRef;
-
-    [SerializeField] private HubRelativePosition _relativePos;
-    public HubRelativePosition RelativePos => _relativePos;
 }
 
-public enum HubRelativePosition
+public static class Helper
 {
-    HUB,
-    LEFT_WING,
-    RIGHT_WING
+    public static List<PickableData> GetAllItemDatas()
+    {
+        return Resources.LoadAll<PickableData>("Item/ItemsData").ToList();
+    }
 }

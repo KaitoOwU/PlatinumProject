@@ -358,7 +358,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1303103703289309016}
   - component: {fileID: 4381156297965968201}
-  - component: {fileID: 8322297875342516226}
   - component: {fileID: 2712080483962722682}
   m_Layer: 0
   m_Name: RoomBase
@@ -397,18 +396,6 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 1
---- !u!114 &8322297875342516226
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5575927400965426629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b59690eec763de40bd858288b3a1e5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2712080483962722682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,11 +408,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23b19296b933a8a4d89ac64b2ed41974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextRoom: {fileID: 0}
-  _previousRoom: {fileID: 0}
-  _nextRoomDoor: {fileID: 0}
-  _previousRoomDoor: {fileID: 0}
+  _doors: []
+  _linkedRooms: []
   _roomSide: 0
+  _tandem: {fileID: 0}
   _cameraPoint: {fileID: 5128783077591038199}
 --- !u!1 &5712469277784657438
 GameObject:
@@ -609,7 +595,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4035481564989393076}
@@ -762,7 +748,7 @@ Transform:
   m_GameObject: {fileID: 7311916846653176122}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

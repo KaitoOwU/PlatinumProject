@@ -2,160 +2,241 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 public class ItemCreatorEditor : EditorWindow
 {
-    private static ItemData _itemModified;
+    private static PickableData _pickableModified;
 
+    //PICKABLE DATA
     private int _id;
-    private string _name;
+    private string _name = "";
+    
+    //ITEM DATA
     private Sprite _icon;
-
-    private bool _isThrowable;
-    private GenerationZone _generationZone;
+    
+    //CLUE DATA
+    private SuspectData _victim, _murderer;
+    private MurderScenario _scenario;
+    private string _description = "";
+    private Sprite _clueSprite;
+    
+    private int _toolbar;
+    private int _clueToolbar;
+    private bool _allConditionsOpe;
 
     public static void InitForCreation()
     {
-        _itemModified = null;
-        ItemCreatorEditor window = GetWindowWithRect<ItemCreatorEditor>(new Rect(0, 0, 250, 450), true, "Créer un nouvel Item");
+        _pickableModified = null;
+        ItemCreatorEditor window = GetWindowWithRect<ItemCreatorEditor>(new Rect(0, 0, 350, 500), true, "Créer un nouvel Item");
         window.Show();
     }
     
-    public static void InitForModification(ItemData data)
+    public static void InitForModification(PickableData data)
     {
-        _itemModified = data;
-        ItemCreatorEditor window = GetWindowWithRect<ItemCreatorEditor>(new Rect(0, 0, 250, 450), true, "Modifier un Item");
+        _pickableModified = data;
+        ItemCreatorEditor window = GetWindowWithRect<ItemCreatorEditor>(new Rect(0, 0, 350, 500), true, "Modifier un Item");
         window.Show();
     }
 
     private void CreateGUI()
     {
-        if (_itemModified != null)
+        if (_pickableModified != null)
         {
-            _id = _itemModified.ID;
-            _name = _itemModified.Name;
-            _icon = _itemModified.Icon;
-            _isThrowable = _itemModified.IsThrowable;
-            _generationZone = _itemModified.GenerationZoneAsEnum;
+            _id = _pickableModified.ID;
+            _name = _pickableModified.Name;
+            if (_pickableModified is ItemData)
+            {
+                _icon = (_pickableModified as ItemData).UIIcon;
+            } else if (_pickableModified is ClueData)
+            {
+                _victim = (_pickableModified as ClueData).Suspects.Victim;
+                _murderer = (_pickableModified as ClueData).Suspects.Murderer;
+            }
         }
     }
 
     private void OnGUI()
     {
         GUILayout.Space(10);
-        GUILayout.Label("DATA", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}, GUILayout.ExpandWidth(true));
-        GUILayout.Space(20);
         
+        if (_pickableModified == null)
+        {
+            GUILayout.Label("TYPE", new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold});
+            _toolbar = GUILayout.Toolbar(_toolbar, new string[] { "Item", "Clue" });
+        }
+        else
+        {
+            _toolbar = _pickableModified is ItemData ? 0 : 1;
+        }
+        
+        GUILayout.Space(10);
+            
+        GUILayout.Label("DATA", new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold});
+        _name = EditorGUILayout.TextField("Item name", _name);
         EditorGUILayout.BeginHorizontal();
         {
-            if (_itemModified != null)
-                GUI.enabled = false;
-            
-            GUILayout.Label("ID de l'Item");
-            
-            
-            _id = EditorGUILayout.IntField(Mathf.Abs(_id));
+            _id = EditorGUILayout.IntField("ID", _id);
             if (GUILayout.Button("Auto"))
             {
                 _id = FindFirstFreeID();
             }
-            GUI.enabled = true;
         }
         EditorGUILayout.EndHorizontal();
         
-        EditorGUILayout.BeginHorizontal();
+        switch (_toolbar)
         {
-            GUILayout.Label("Nom de l'Item");
-            _name = EditorGUILayout.TextField(_name);
-        }
-        EditorGUILayout.EndHorizontal();
-        
-        _icon = (Sprite)EditorGUILayout.ObjectField("Icône de l'Item (UI)", _icon, typeof(Sprite), false);
-        
-        EditorGUILayout.Separator();
-        
-        GUILayout.Space(10);
-        GUILayout.Label("BEHAVIOUR", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}, GUILayout.ExpandWidth(true));
-        GUILayout.Space(20);
-        
-        _isThrowable = EditorGUILayout.Toggle("Is Throwable ?", _isThrowable);
-        _generationZone = (GenerationZone)EditorGUILayout.EnumFlagsField("Generation Zones", _generationZone);
-        
-        GUILayout.Space(10);
-
-        if (_itemModified == null)
-        {
-            if (GUILayout.Button("Créer l'item"))
+            case 0:
             {
-                if (!IsIDFree(_id))
+                _icon = (Sprite)EditorGUILayout.ObjectField("UI Icon", _icon, typeof(Sprite), false);
+                _allConditionsOpe = _icon != null && _name != null && IsIDFree(_id);
+                break;
+            }
+            case 1:
+            {
+                EditorGUILayout.BeginHorizontal();
                 {
-                    EditorUtility.DisplayDialog("Erreur : ID déjà utilisé", "Cet ID est déjà utilisé\nUtilise le bouton \"Auto\" pour trouver le premier ID libre", "Ok");
+                    _victim = (SuspectData)EditorGUILayout.ObjectField(_victim, typeof(SuspectData), false);
+                    GUILayout.Label("a tué");
+                    _murderer = (SuspectData)EditorGUILayout.ObjectField(_murderer, typeof(SuspectData), false);
                 }
-                else if (_name == string.Empty)
+                EditorGUILayout.EndHorizontal();
+
+                _scenario = Resources.LoadAll<MurderScenario>("Clues").ToList()
+                        .FindAll(scenario => scenario.DuoSuspect.Victim == _victim)
+                        .Find(scenario => scenario.DuoSuspect.Murderer == _murderer);
+
+                if (Resources.LoadAll<MurderScenario>("Clues").Length == 0)
                 {
-                    EditorUtility.DisplayDialog("Erreur : nom invalide", "Le nom que tu as donné à l'Item est invalide.", "Ok");
-                } else if (_icon == null)
+                    EditorGUILayout.HelpBox("Les scénarios n'ont pas été générés, générez les dans le Scenario Manager", MessageType.Error);
+                    _allConditionsOpe = false;
+                } else if (_scenario == null)
                 {
-                    EditorUtility.DisplayDialog("Erreur : icône manquant", "Tu n'as pas donné d'icône à ton Item.", "Ok");
+                    EditorGUILayout.HelpBox("Aucun scénario ne correspond à ce duo", MessageType.Warning);
+                    _allConditionsOpe = false;
                 }
                 else
                 {
-                    AssetDatabase.CopyAsset("Assets/Scripts/Item/Editor/ItemPrefab -- DO NOT TOUCH --.prefab", "Assets/Scripts/Item/ItemsPrefabs/" + _id + "_" + _name + "Prefab.prefab");
-                    GameObject prefab =
-                        AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Scripts/Item/ItemsPrefabs/" + _id + "_" + _name +
-                                                                  "Prefab.prefab");
-                
-                    ItemData data = CreateInstance<ItemData>();
-                    data.SaveData(_id, _name, _icon, prefab, _isThrowable, _generationZone);
-                    AssetDatabase.CreateAsset(data, "Assets/Scripts/Item/ItemsData/" + _id + "_" + _name +
-                                                    "Data.asset");
-
-                    prefab.GetComponent<Item>().ItemData = data;
-                
-                    AssetDatabase.SaveAssets();
-                    
-                    Close();
+                    EditorGUILayout.HelpBox($"{_scenario.name} a été trouvé", MessageType.Info);
+                    _allConditionsOpe = _name != null && IsIDFree(_id);
                 }
+
+                GUILayout.Space(10);
+
+                _clueToolbar = GUILayout.Toolbar(_clueToolbar, new string[] { "Journal", "Note", "Objet" });
+                
+                GUILayout.Space(5);
+                
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if(_clueToolbar == 2) GUILayout.Label("Description");
+                    else GUILayout.Label("Contenu");
+                    
+                    _description = GUILayout.TextArea(_description, new GUIStyle(GUI.skin.textArea){fixedWidth = 250});
+                }
+                EditorGUILayout.EndHorizontal();
+
+                if(_clueToolbar == 2) _clueSprite = (Sprite)EditorGUILayout.ObjectField("Visuel de l'Indice", _clueSprite, typeof(Sprite), false);
+                
+                break;
             }
+        }
+        
+        if (_pickableModified == null)
+        {
+            GUILayout.Space(10);
+            
+            GUI.enabled = _allConditionsOpe;
+            if (GUILayout.Button("Créer l'Item"))
+            {
+                if (_toolbar == 0)
+                {
+                    //COPIE DU PREFAB ORIGINEL
+                    string name = "Item" + _id + "_" + Regex.Replace(_name, "[^0-9A-Za-z_-]", "");
+                    AssetDatabase.CopyAsset("Assets/Scripts/Item/Editor/ItemPrefab -- DO NOT TOUCH --.prefab",
+                        $"Assets/Resources/Item/ItemsPrefabs/{name}.prefab");
+                    GameObject prefab =
+                        AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Resources/Item/ItemsPrefabs/{name}.prefab");
+                    
+                    //CREATION DU SCRIPTABLE
+                    ItemData item = CreateInstance<ItemData>();
+                    AssetDatabase.CreateAsset(item, $"Assets/Resources/Item/ItemsData/{name}.asset");
+                    item.SaveData(_id, _name, prefab, _icon);
+                } else if (_toolbar == 1)
+                {
+                    //COPIE DU PREFAB ORIGINEL
+                    string name = "Clue" + _id + "_" + Regex.Replace(_name, "[^0-9A-Za-z_-]", "");
+                    AssetDatabase.CopyAsset("Assets/Scripts/Item/Editor/CluePrefab -- DO NOT TOUCH --.prefab",
+                        $"Assets/Resources/Clues/CluePrefab/{name}.prefab");
+                    GameObject prefab =
+                        AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Resources/Clues/CluePrefab/{name}.prefab");
+                    
+                    //CREATION DU SCRIPTABLE
+                    ClueData clue = CreateInstance<ClueData>();
+                    AssetDatabase.CreateAsset(clue, $"Assets/Resources/Clues/ClueData/{name}.asset");
+                    clue.SaveData(_id, _name, prefab, new MurderScenario.SuspectDuo(_victim, _murderer), _description, _clueSprite);
+                    
+                    //APPLICATION AU SCENARIO DEFINI
+                    _scenario.Clues.Add(prefab.GetComponent<Clue>());
+                }
+
+                Close();
+            }
+            GUI.enabled = true;
         }
         else
         {
-            if (GUILayout.Button("Sauvegarder l'item"))
+            if (GUILayout.Button("Modifier l'Item"))
             {
-                if (_name == string.Empty)
+                if (_pickableModified is ItemData)
                 {
-                    EditorUtility.DisplayDialog("Erreur : nom invalide", "Le nom que tu as donné à l'Item est invalide.", "Ok");
-                } else if (_icon == null)
-                {
-                    EditorUtility.DisplayDialog("Erreur : icône manquant", "Tu n'as pas donné d'icône à ton Item.", "Ok");
+                    //RENOMMAGE DU PREFAB
+                    string name = "Item" + _pickableModified.ID + "_" +
+                                  Regex.Replace(_pickableModified.Name, "[^0-9A-Za-z_-]", "");
+                    string newName = "Item" + _id + "_" + Regex.Replace(_name, "[^0-9A-Za-z_-]", "");
+                    AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_pickableModified),
+                        newName + ".prefab");
+
+                    //MODIFICATION DU SCRIPTABLE
+                    ((ItemData)_pickableModified).SaveData(_id, _name, _pickableModified.Prefab, _icon);
                 }
                 else
                 {
-                    AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_itemModified.Prefab), _id + "_" + _name + "Prefab.prefab");
-                    AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_itemModified), _id + "_" + _name + "Data.asset");
-                    
-                    _itemModified.SaveData(_id, _name, _icon, _itemModified.Prefab, _isThrowable, _generationZone);
-                    Close();
+                    //RENOMMAGE DU PREFAB
+                    string name = "Clue" + _pickableModified.ID + "_" +
+                                  Regex.Replace(_pickableModified.Name, "[^0-9A-Za-z_-]", "");
+                    string newName = "Clue" + _id + "_" + Regex.Replace(_name, "[^0-9A-Za-z_-]", "");
+                    AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_pickableModified.Prefab.GetInstanceID()),
+                        newName + ".prefab");
+
+                    //MODIFICATION DU SCRIPTABLE
+                    AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(_pickableModified),
+                        newName + ".asset");
+                    ((ClueData)_pickableModified).SaveData(_id, _name, _pickableModified.Prefab, new MurderScenario.SuspectDuo(_victim, _murderer), _description, _clueSprite);
                 }
+
+                Close();
             }
         }
+
+        _PrintHelpboxProblems();
     }
 
     private static int FindFirstFreeID()
     {
-        var type = ItemManagerEditor.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
-            "Assets/Scripts/Item/ItemsData");
+        var type = ItemManagerEditor.FindAllScriptableObjectsOfType<PickableData>("t:PickableData");
 
         if (type.Count == 0)
             return 0;
         
         for (var index = 0; index < type.Count; index++)
         {
-            ItemData itemData = type[index];
-            if (itemData.ID != index)
+            PickableData pickableData = type[index];
+            if (pickableData.ID != index)
                 return index;
         }
 
@@ -164,9 +245,38 @@ public class ItemCreatorEditor : EditorWindow
 
     private static bool IsIDFree(int idToFind)
     {
-        var type = ItemManagerEditor.FindAllScriptableObjectsOfType<ItemData>("t:ItemData",
-            "Assets/Scripts/Item/ItemsData");
+        var type = ItemManagerEditor.FindAllScriptableObjectsOfType<PickableData>("t:PickableData");
 
-        return type.Find(value => value.ID == idToFind) == null;
+        if(_pickableModified is null)
+            return type.Find(value => value.ID == idToFind) == null;
+        else
+            return type.Find(value => value.ID == idToFind && value.ID != _pickableModified.ID) == null;
+    }
+
+    private void _PrintHelpboxProblems()
+    {
+        StringBuilder str = new();
+        
+        if (!IsIDFree(_id)) str.Append($"\nCet ID ({_id}) est déjà pris");
+        if (_name == string.Empty || _name == null) str.Append("\nLe nom ne peut pas être nul");
+        
+        if (_toolbar == 0)
+        {
+            if (_icon == null) str.Append("\nL'icône ne peut pas être nul");
+        } else if (_toolbar == 1)
+        {
+            if (_scenario == null) str.Append("\nUn scénario est nécéssaire pour créer l'Indice");
+            
+            if (_clueToolbar == 2 && _clueSprite == null)
+                str.Append("\nLe sprite d'un Indice ne peut pas être nul");
+        }
+
+        if (str.ToString() != "")
+        {
+            if (str.ToString().StartsWith("\n")) str.Replace("\n", "", 0, 1);
+            EditorGUILayout.HelpBox(str.ToString(), MessageType.Error, true);
+            _allConditionsOpe = false;
+        }
+            
     }
 }
