@@ -218,7 +218,7 @@ PrefabInstance:
     - target: {fileID: 6187120764720082186, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _sizeAisle
-      value: 500
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6187120764720082186, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
@@ -378,6 +378,12 @@ PrefabInstance:
       propertyPath: _fullCamera
       value: 
       objectReference: {fileID: 2120400645}
+    - target: {fileID: 2744998676336695786, guid: 2d8d2288e0b97b94293ccc4ede262aac,
+        type: 3}
+      propertyPath: _playerConstants
+      value: 
+      objectReference: {fileID: 11400000, guid: c50b8bc2fb53b4d48b4a798a8560c80d,
+        type: 2}
     - target: {fileID: 2744998676336695786, guid: 2d8d2288e0b97b94293ccc4ede262aac,
         type: 3}
       propertyPath: _splitCameraLeft
@@ -1260,6 +1266,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1908348852}
+    - target: {fileID: 4364512374608154809, guid: 2806766ec833a2045ac56a2c5157895a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4504373755487242773, guid: 2806766ec833a2045ac56a2c5157895a,
         type: 3}
       propertyPath: _currentRoom

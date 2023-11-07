@@ -17,7 +17,7 @@ public class LoadingText : MonoBehaviour
     [SerializeField] private Slider _loadingBar;
     [SerializeField, TextArea] private List<string> _loadingTexts = new();
 
-    private bool _loadable = false, _allTextPrinted = false;
+    private bool _allTextPrinted = false;
     private bool _sceneMustLoad = false;
 
     private void Start()
@@ -28,41 +28,37 @@ public class LoadingText : MonoBehaviour
 
     private void OnEnable()
     {
-        _action.performed += SkipCutsceneEvent;
         _action.Enable();
-    }
-
-    private void OnDisable()
-    {
-        _action.performed -= SkipCutsceneEvent;
-        _action.Disable();
-    }
-
-    private void SkipCutsceneEvent(InputAction.CallbackContext obj)
-    {
-        SkipCutscene();
-    }
-
-    private void SkipCutscene()
-    {
-        if (_loadable)
-        {
-            _text.DOColor(new Color(0, 0, 0, 1), 1f);
-            _loadingBar.fillRect.GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 1f);
-            _pressA.DOKill();
-            _pressA.DOColor(new Color(0, 0, 0, 1), 1f).OnComplete(() => _sceneMustLoad = true);
-        }
     }
 
     IEnumerator LoadGameScene()
     {
-        yield return SceneManager.LoadSceneAsync("Proto1");
+        AsyncOperation operation = SceneManager.LoadSceneAsync("Proto1");
+        operation.allowSceneActivation = false;
+
+        while (operation.progress < 0.9f)
+        {
+            _loadingBar.DOValue(operation.progress / 0.9f, 0.5f);
+            yield return null;
+        }
+        
+        yield return _loadingBar.DOValue(1f, 0.5f).WaitForCompletion();
+        _pressA.DOColor(new Color(1, 1, 1, 1), 0.5f);
+
+        yield return new WaitUntil(() => _allTextPrinted || _action.ReadValue<float>() > 0);
+        
+        _text.DOColor(new Color(0, 0, 0, 1), 1f);
+        _loadingBar.fillRect.GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 1f);
+        _pressA.DOKill();
+        _pressA.DOColor(new Color(0, 0, 0, 1), 1f).OnComplete(() => _sceneMustLoad = true);
+
+        yield return new WaitUntil(() => _sceneMustLoad);
+        
+        operation.allowSceneActivation = true;
     }
 
     IEnumerator PrintTexts()
     {
-        yield return new WaitForSecondsRealtime(_timeBetweenTexts);
-
         for (var index = 0; index < _loadingTexts.Count; index++)
         {
             var text = _loadingTexts[index];
@@ -70,7 +66,7 @@ public class LoadingText : MonoBehaviour
             foreach (string splitedText in splitedTexts)
             {
                 string printableSplitedText = splitedText.Replace("<stop>", "");
-                yield return _text.DOText(_text.text + printableSplitedText, _timeCharacterPrinting * printableSplitedText.Length).WaitForCompletion();
+                _text.text += printableSplitedText;
                 yield return new WaitForSecondsRealtime(_timeBetweenTexts);
             }
 
@@ -81,8 +77,5 @@ public class LoadingText : MonoBehaviour
                 _text.color = new Color(1, 1, 1, 1);
             }
         }
-
-        yield return new WaitUntil(() => _loadable);
-        SkipCutscene();
     }
 }

@@ -26,6 +26,11 @@ public class RoomGeneration : MonoBehaviour
 
     public LayoutGenerator Layout { get => _layout; }
 
+    private void Awake()
+    {
+        _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms"); 
+    }
+
     private void OnDisable()
     {
         GameManager.Instance.OnEndPhase.RemoveListener(Shuffle);
