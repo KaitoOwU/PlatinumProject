@@ -31,7 +31,7 @@ public class GuessManager : MonoBehaviour
     {
         foreach(var v in GameManager.Instance.PlayerList) // init dict
         {
-            _votes.Add(v.PlayerRef, null);
+            //_votes.Add(v.PlayerRef, null);
         }
         InitPortraits();
     }

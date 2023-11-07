@@ -37,6 +37,7 @@ public class Door : Interactable
             int rand = Random.Range(0, 10);
             if (player.CurrentRoom is Hub)
             {
+                int countInHub = GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.HUB).Count;
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
 
                 Hub hub = (Hub)player.CurrentRoom;
@@ -54,6 +55,17 @@ public class Door : Interactable
 
                     hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
                     hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
+
+                    hub.RoomDoorLeft._isLocked = true;
+                    hub.RoomDoorRight._isLocked = true;
+                }
+                else if (_playersInRange.Count == countInHub && countInHub < 4)
+                {
+                    TP_Players(LinkedDoor.TpPoint);
+                    TP_Camera(_linkedDoor.room);
+                    UpdateRoom(_linkedDoor.room);
+
+                    _isLocked = true;
                 }
             }
             else

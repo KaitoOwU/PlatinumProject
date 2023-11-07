@@ -251,6 +251,23 @@ public class GameManager : MonoBehaviour
             p.CurrentRoom = _hub;
         }
     }
+    public void TPPlayerPostTrap(Player[] players)
+    {
+        if (players[1].RelativePos == HubRelativePosition.RIGHT_WING)
+        {
+            _hub.Doors[1].IsLocked = false;
+        }
+        else
+        {
+            _hub.Doors[0].IsLocked = false;
+        }
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].gameObject.transform.position = _hub.Spawnpoints[i].position;
+            players[i].RelativePos = HubRelativePosition.HUB;
+            players[i].CurrentRoom = _hub;
+        }
+    }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
     void Lose() => Debug.LogError("<color:cyan> YOU LOSE ! </color>");
