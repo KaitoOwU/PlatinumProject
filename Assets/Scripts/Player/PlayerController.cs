@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Windows;
 using UnityEngine.InputSystem;
 using static PlayerController;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _inputs;
     private float _currentVelocity;
     private EMoveState _moveState;
+
+    public UnityEvent OnMoveStarted;
+    public UnityEvent OnMoveCanceled;
 
     public enum EButtonType
     {
@@ -63,9 +67,13 @@ public class PlayerController : MonoBehaviour
 
         GetComponent<Player>().Index = _playerIndex;
 
+
         _inputManager.OnInteract.AddListener(_Interact);
         _inputManager.OnUseTool.AddListener(_UseTool);
         _inputManager.OnPause.AddListener(_Pause);
+
+        _inputManager.OnMoveStarted.AddListener(_StartMove);
+        _inputManager.OnMoveCanceled.AddListener(_StopMove);
 
         _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed;
         _moveState = EMoveState.NORMAL;
@@ -75,6 +83,9 @@ public class PlayerController : MonoBehaviour
     {
         if (_inputManager != null)
         {
+            _inputManager.OnMoveStarted.RemoveListener(_StartMove);
+            _inputManager.OnMoveCanceled.RemoveListener(_StopMove);
+
             _inputManager.OnInteract.RemoveListener(_Interact);
             _inputManager.OnUseTool.RemoveListener(_UseTool);
             _inputManager.OnPause.RemoveListener(_Pause);
@@ -120,6 +131,8 @@ public class PlayerController : MonoBehaviour
     {
         _rigidbody.velocity = new Vector3(dir.x * _moveSpeed, _rigidbody.velocity.y, dir.y * _moveSpeed);
     }
+    private void _StartMove() => OnMoveStarted?.Invoke();
+    private void _StopMove() => OnMoveCanceled?.Invoke();
     private void UpdatePlayerRotation(Vector3 dir)
     {
         var targetAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg, ref _currentVelocity, 0.05f);

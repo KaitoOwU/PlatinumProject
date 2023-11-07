@@ -986,7 +986,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _eventsData
       value: 
-      objectReference: {fileID: 11400000, guid: e9ed704ee9259844e8119a4332463ed5,
+      objectReference: {fileID: 11400000, guid: 49cb867b72f032849bea60e551ec9326,
         type: 2}
     - target: {fileID: 5809297908048904983, guid: 59f68adff5a10b4408d033c6e3e1fa4b,
         type: 3}
@@ -1675,8 +1675,13 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 563221743733572270, guid: 6118580cfd250e54db359088106706f5,
         type: 3}
+      propertyPath: _furnitureType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 563221743733572270, guid: 6118580cfd250e54db359088106706f5,
+        type: 3}
       propertyPath: _neededPlayersCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1384806673898677561, guid: 6118580cfd250e54db359088106706f5,
         type: 3}
@@ -1721,7 +1726,7 @@ PrefabInstance:
     - target: {fileID: 4033724306214375581, guid: 6118580cfd250e54db359088106706f5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.08
+      value: 0.11
       objectReference: {fileID: 0}
     - target: {fileID: 4033724306214375581, guid: 6118580cfd250e54db359088106706f5,
         type: 3}

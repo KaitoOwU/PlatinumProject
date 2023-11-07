@@ -5,6 +5,8 @@ using UnityEngine;
 using System;
 using System.Text.RegularExpressions;
 using System.Linq;
+using UnityEngine.UIElements;
+using UnityEditor.PackageManager.UI;
 
 [CustomEditor(typeof(UnityEventData))]
 public class EventInspector : Editor
@@ -21,6 +23,9 @@ public class EventInspector : Editor
         //GUIStyle scriptNameStyle = GUI.skin.label;
         //scriptNameStyle.normal.textColor = new Color(0.1f, 01f, 1);
         GUI.skin.font = font;
+        //Save asset
+
+        serializedObject.Update();
 
 
         foreach (var script in data.DataBase)
@@ -47,7 +52,9 @@ public class EventInspector : Editor
                 GUILayout.FlexibleSpace();
                 GUI.backgroundColor = new Color(0.8f, 1f, 0.7f);
                 if (GUILayout.Button("Add Action when event is called", buttonStyle, GUILayout.Width(250)))
+                {
                     eventInfo.EventActions.Add(new());
+                }
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
 
@@ -69,11 +76,65 @@ public class EventInspector : Editor
                             eventAction.DebugMessage = GUILayout.TextField(eventAction.DebugMessage);
                             EditorGUILayout.EndHorizontal();
                             break;
-                        case EventTypeEnum.PLAY_SOUND:
+                        case EventTypeEnum.PLAY_SOUND_ONCE:
+                        case EventTypeEnum.START_PLAY_SOUND:
                             EditorGUILayout.BeginHorizontal();
                             GUILayout.Label("SFX", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(1, 0.8f, 0.4f) } });
-                            eventAction.Clip = (AudioClip)EditorGUILayout.ObjectField(eventAction.Clip, typeof(AudioClip), true);
+
+                            EditorGUILayout.BeginHorizontal();
+                            GUI.backgroundColor = new Color(1f, 1f, 1f);
+                            eventAction.ClipAudio.Audioclip = EditorGUILayout.ObjectField(eventAction.ClipAudio.Audioclip, typeof(AudioClip), true) as AudioClip;
+                            eventAction.ClipAudio.Volume = EditorGUILayout.Slider(eventAction.ClipAudio.Volume, 0, 1, GUILayout.Width(150));
                             EditorGUILayout.EndHorizontal();
+
+                            EditorGUILayout.EndHorizontal();
+                            break;
+                        case EventTypeEnum.STOP_PLAY_SOUND:
+                            EditorGUILayout.BeginHorizontal();
+                            GUILayout.Label("SFX", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(1, 0.8f, 0.4f) } });
+
+                            EditorGUILayout.BeginHorizontal();
+                            GUI.backgroundColor = new Color(1f, 1f, 1f);
+                            eventAction.ClipAudio.Audioclip = EditorGUILayout.ObjectField(eventAction.ClipAudio.Audioclip, typeof(AudioClip), true) as AudioClip;
+                            EditorGUILayout.EndHorizontal();
+
+                            EditorGUILayout.EndHorizontal();
+                            break;
+                        case EventTypeEnum.PLAY_RANDOM_SOUND_ONCE:                                
+                            if (GUILayout.Button("Add SFX", buttonStyle, GUILayout.Width(150)))
+                            {
+                                EditorUtility.SetDirty(data);
+                                eventInfo.EventActions[i].ClipsAudio.Add(new());
+                                AssetDatabase.SaveAssetIfDirty(data);
+                            }
+                            for(int c = 0; c< eventAction.ClipsAudio.Count; c++)
+                            {
+                                var clip = eventAction.ClipsAudio[c];
+                                GUI.backgroundColor = new Color(0f, 0f, 0f);
+                                GUILayout.BeginVertical("HelpBox");
+
+
+                                EditorGUILayout.BeginHorizontal();
+                                GUILayout.Label("SFX", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(1, 0.8f, 0.4f) } });
+                                EditorGUILayout.BeginHorizontal();
+                                GUI.backgroundColor = new Color(1f, 1f, 1f);
+                                eventAction.ClipsAudio[c].Audioclip = (AudioClip)EditorGUILayout.ObjectField(eventAction.ClipsAudio[c].Audioclip, typeof(AudioClip), true);
+                                eventAction.ClipsAudio[c].Volume = EditorGUILayout.Slider(clip.Volume, 0, 1, GUILayout.Width(150));
+                                EditorGUILayout.EndHorizontal();
+
+
+                                GUI.backgroundColor = new Color(1f, 0.5f, 0.6f);
+                                if (GUILayout.Button("X", buttonStyle, GUILayout.Width(50)))
+                                {
+                                    EditorUtility.SetDirty(data);
+                                    eventAction.ClipsAudio.Remove(clip);
+                                    AssetDatabase.SaveAssetIfDirty(data);
+                                }
+                                EditorGUILayout.EndHorizontal();
+
+
+                                GUILayout.EndVertical();
+                            }
                             break;
                         case EventTypeEnum.SCREENSHAKE:
                             EditorGUILayout.BeginHorizontal();
@@ -89,21 +150,26 @@ public class EventInspector : Editor
                     if (GUILayout.Button("Remove Action", buttonStyle, GUILayout.Width(150)))
                     {
                         eventInfo.EventActions.Remove(eventAction);
-                        EditorUtility.SetDirty(target);
                     }
                     GUILayout.FlexibleSpace();
                     GUILayout.EndHorizontal();
 
                     GUILayout.EndVertical();
-
-                    //DrawUILine(new Color(0.6f,0.6f,0.6f), 1, 20);
-                        //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider); //Line
                 }
 
                 GUILayout.EndVertical();
-                //GUILayout.EndHorizontal();
+
             }
         }
+        if (GUI.changed)
+        {
+            AssetDatabase.SaveAssetIfDirty(target);
+            //AssetDatabase.SaveAssets();
+        }
+
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(target);
+
     }
     public static void DrawUILine(Color color, int thickness = 2, int padding = 10)
     {
@@ -125,5 +191,16 @@ public class EventInspector : Editor
         }
         return name;
     }
+    //public static void DisplaySFX(EventAction action)
+    //{
+    //    EditorGUILayout.BeginHorizontal();
+    //    GUILayout.Label("SFX", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(1, 0.8f, 0.4f) } });
+    //    EditorGUILayout.BeginHorizontal();
+    //    GUI.backgroundColor = new Color(1f, 1f, 1f);
+    //    action.ClipAudio.Audioclip = EditorGUILayout.ObjectField(action.ClipAudio.Audioclip, typeof(AudioClip), true);
+    //    action.ClipAudio.Volume = EditorGUILayout.Slider(action.ClipAudio.Volume, 0, 1, GUILayout.Width(150));
+    //    EditorGUILayout.EndHorizontal();
+
+    //}
 
 }

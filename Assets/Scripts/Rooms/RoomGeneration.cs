@@ -141,6 +141,7 @@ public class RoomGeneration : MonoBehaviour
        
         SetRooms();
         LockedDoor();
+        GameManager.Instance.DistributeClues();
     }
     #endregion
     #region Shuffle

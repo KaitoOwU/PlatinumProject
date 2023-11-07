@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     private bool _isTimerGoing;
     private List<PickableData> _items = new();
 
-    private List<Clue> _foundClues;
+    private List<Clue> _foundClues = new();
 
     private RoomGeneration _roomGenerator;
 
@@ -185,12 +185,15 @@ public class GameManager : MonoBehaviour
             .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
 
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
-
-        DistributeClues();
     }
 
-    private void DistributeClues()
+    public void DistributeClues()
     {
+        if(CurrentClues.Count == 0)
+        {
+            Debug.LogError("No Clues found");
+            return;
+        }
         List<Clue> puzzleClues = CurrentClues.ToList(); ///
         List<Clue> furnitureClues = new();
         for(int i = 0; i < _gameData.FurnitureCluesCount; i++)

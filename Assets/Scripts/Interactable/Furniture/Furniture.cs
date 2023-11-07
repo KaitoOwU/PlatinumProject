@@ -51,7 +51,10 @@ public class Furniture : Interactable
     [SerializeField] private GameObject _3Dmodel;
 
     private List<Player> _playersPushing;
+    [SerializeField]
     private Clue _clue;
+    private float _baseY;
+    private bool _searched=false;
 
 #endregion
 
@@ -65,6 +68,7 @@ public class Furniture : Interactable
     {
         _playersPushing = new();
         _3Dmodel.layer = LayerMask.NameToLayer("Furniture");
+        _baseY = transform.position.y;
     }
 
     #region Overridden methods
@@ -88,7 +92,7 @@ public class Furniture : Interactable
     }
     protected override void OnTriggerExit(Collider other)
     {
-        Debug.Log("Trigger exit " + other.gameObject.name);
+        //Debug.Log("Trigger exit " + other.gameObject.name);
         if (other.GetComponent<PlayerController>() == null)
             return;
 
@@ -111,7 +115,7 @@ public class Furniture : Interactable
 
     protected override void OnInteract(Player player)
     {
-        if(_furnitureType == EFurnitureType.SEARCHABLE)
+        if(_furnitureType == EFurnitureType.SEARCHABLE && !_searched)
         {
             _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
             if(_clue != null)
@@ -125,6 +129,7 @@ public class Furniture : Interactable
                 OnClueNotFoundInFurniture?.Invoke();
                 Debug.Log("No Clue Found!");
             }
+            _searched = true;
         }
     }
 
@@ -176,6 +181,7 @@ public class Furniture : Interactable
         {
             OnStopPushingFurniture?.Invoke();
             transform.parent = null;
+            transform.position = new Vector3(transform.position.x, _baseY, transform.position.z);
         }
         else if(_playersPushing.Count < _neededPlayersCount)
         {

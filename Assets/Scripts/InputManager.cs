@@ -11,14 +11,49 @@ using UnityEngine.Windows;
 
 public class InputManager : MonoBehaviour
 {
-    [Header("Events for each input")]
-    public UnityEvent OnMoveStarted;
-    public UnityEvent OnMoveCanceled;
-    public UnityEvent<Player> OnInteract;
-    public UnityEvent<Player> OnPush;
-    public UnityEvent<Player> OnPushCanceled;
-    public UnityEvent OnUseTool;
-    public UnityEvent OnPause;
+    //[Header("Events for each input")]
+    public UnityEvent OnMoveStarted
+    {
+        get { return onMoveStarted; }
+        set { onMoveStarted = value; }
+    }
+    public UnityEvent OnMoveCanceled
+    {
+        get { return onMoveCanceled; }
+        set { onMoveCanceled = value; }
+    }
+    public UnityEvent<Player> OnInteract
+    {
+        get { return onInteract; }
+        set { onInteract = value; }
+    }
+    public UnityEvent<Player> OnPush
+    {
+        get { return onPush; }
+        set { onPush = value; }
+    }
+    public UnityEvent<Player> OnPushCanceled
+    {
+        get { return onPushCanceled; }
+        set { onPushCanceled = value; }
+    }
+    public UnityEvent OnUseTool
+    {
+        get { return onUseTool; }
+        set { onUseTool = value; }
+    }
+    public UnityEvent OnPause
+    {
+        get { return onPause; }
+        set { onPause = value; }
+    }
+    private UnityEvent onMoveStarted = new();
+    private UnityEvent onMoveCanceled = new();
+    private UnityEvent<Player> onInteract = new();
+    private UnityEvent<Player> onPush = new();
+    private UnityEvent<Player> onPushCanceled = new();
+    private UnityEvent onUseTool = new();
+    private UnityEvent onPause = new();
 
     private PlayerInput _inputs;
     [SerializeField]

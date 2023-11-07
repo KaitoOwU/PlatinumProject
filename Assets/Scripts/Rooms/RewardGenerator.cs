@@ -7,7 +7,7 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
     private GameObject _reward;
     [SerializeField] Room room;
 
-    GameObject IPuzzleReactive.ObjToSpawn { get; set; }
+    //GameObject IPuzzleReactive.ObjToSpawn { get; set; }
 
     //private void Start()
     //{
@@ -32,8 +32,8 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
         throw new System.NotImplementedException();
     }
 
-    public void PuzzleCompleted()
-    {
-        throw new System.NotImplementedException();
-    }
+    //public void PuzzleCompleted()
+    //{
+    //    throw new System.NotImplementedException();
+    //}
 }
