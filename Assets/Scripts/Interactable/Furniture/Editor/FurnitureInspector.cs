@@ -4,55 +4,59 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Codice.Client.BaseCommands.Import.Commit;
 using static Furniture;
 using static UnityEditor.PlayerSettings;
 
-//[CustomEditor(typeof(Furniture))]
-public class FurnitureInspector : MonoBehaviour
+[CustomEditor(typeof(Furniture))]
+public class FurnitureInspector : Editor
 {
-    //string[] _options = new string[] { "1", "2", "3" };
-    //int _chosenIndex;
-    //[SerializeField]
-    //SerializedProperty FurnitureType;
-    //[SerializeField]
-    //SerializedProperty NeededPlayersCount;
-    //[SerializeField]
-    //SerializedProperty Model;
+    [SerializeField]
+    SerializedProperty FurnitureType;
+    [SerializeField]
+    SerializedProperty NeededPlayersCount;
+    [SerializeField]
+    SerializedProperty Model;
+    public Font font;
 
-    //public override void OnInspectorGUI()
-    //{
-    //    serializedObject.Update();
-    //    Furniture obj = (Furniture)target;
-    //    Furniture data = obj;
-    //    //SerializedObject _serializedObject = new UnityEditor.SerializedObject(obj);
+    public override void OnInspectorGUI()
+    {
+        GUI.skin.font = font;
+        serializedObject.Update();
+        Furniture data = (Furniture)target;
 
-    //    FurnitureType = serializedObject.FindProperty("FurnitureType");
-    //    NeededPlayersCount = serializedObject.FindProperty("NeededPlayersCount");
-    //    Model = serializedObject.FindProperty("Model");
+        FurnitureType = serializedObject.FindProperty("_furnitureType");
+        NeededPlayersCount = serializedObject.FindProperty("_playersNeededNumber");
+        Model = serializedObject.FindProperty("_3Dmodel");
 
-    //    if (FurnitureType == null)
-    //        FurnitureType.enumValueIndex = 0;
-    //    FurnitureType.enumValueIndex = (int)(Furniture.EFurnitureType)EditorGUILayout.EnumPopup("Furniture type :", data.FurnitureType);
-    //    if (FurnitureType.enumValueIndex == (int)Furniture.EFurnitureType.MOVABLE)
-    //    {
-    //        EditorGUILayout.Space(10);
+        if (FurnitureType == null)
+            FurnitureType.enumValueIndex = 0;
 
-    //        //position.x = EditorGUIUtility.currentViewWidth - position.width - 20f;
-    //        _chosenIndex = EditorGUILayout.Popup("Number of Players to push :", _chosenIndex, _options);
-    //        NeededPlayersCount.intValue = int.Parse(_options[_chosenIndex]);
-    //    }
-    //    EditorGUILayout.Space(10);
+        if (FurnitureType.enumValueIndex == (int)EFurnitureType.MOVABLE)
+            GUI.backgroundColor = new Color(0.8f, 1f, 0.7f);
+        else
+            GUI.backgroundColor = new Color(0.6f, 0.7f, 1f);
+        FurnitureType.enumValueIndex = (int)(EFurnitureType)EditorGUILayout.EnumPopup("Furniture type :", data.FurnitureType);
 
-    //    Model.objectReferenceValue = (GameObject)EditorGUILayout.ObjectField("Furniture 3D Model :",data.Model, typeof(GameObject), true);
 
-    //    EditorUtility.SetDirty(target);
-    //    //_serializedObject.FindProperty("FurnitureType").enumValueIndex = (int)data.FurnitureType;
-    //    //_serializedObject.FindProperty("NeededPlayersCount").intValue = data.NeededPlayersCount;
-    //    //_serializedObject.FindProperty("Model").objectReferenceValue = data.Model;
+        if (FurnitureType.enumValueIndex == (int)EFurnitureType.MOVABLE)
+        {
+            EditorGUILayout.Space(10);
+            GUI.backgroundColor = new Color(1f, 1f, 1f);
 
-    //    serializedObject    .ApplyModifiedProperties();
-    //}
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Number of Players to push :");
+            NeededPlayersCount.intValue = GUILayout.Toolbar(NeededPlayersCount.intValue - 1, new string[] {"1", "2", "3"}) + 1;
+            EditorGUILayout.EndHorizontal();
+        }
+        EditorGUILayout.Space(10);
 
+        GUI.backgroundColor = new Color(1f, 1f, 1f);
+        Model.objectReferenceValue = (GameObject)EditorGUILayout.ObjectField("Furniture 3D Model :", data.Model, typeof(GameObject), true);
+
+        EditorUtility.SetDirty(target);
+        serializedObject.ApplyModifiedProperties();
+    }
 }
 
 

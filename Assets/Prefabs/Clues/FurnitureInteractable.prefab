@@ -46,12 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2331c27cfe58a1d419546d8354e578dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _onPlayerEnterRange:
-    m_PersistentCalls:
-      m_Calls: []
-  _onPlayerExitRange:
-    m_PersistentCalls:
-      m_Calls: []
   OnClueFoundInFurniture:
     m_PersistentCalls:
       m_Calls: []
@@ -68,8 +62,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _furnitureType: 0
-  _neededPlayersCount: 1
   _3Dmodel: {fileID: 2620666943912915696}
+  _playersNeededNumber: 1
+  _clue: {fileID: 0}
 --- !u!135 &1384806673898677561
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -89,8 +84,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.5910629
-  m_Center: {x: 0, y: 1.0910629, z: 0}
+  m_Radius: 1.61
+  m_Center: {x: 0, y: 1.09, z: 0}
 --- !u!1001 &2927079597638193057
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -101,18 +96,33 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 121.4817
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 121.4817
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 121.48169
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.02
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.00000095367
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,
         type: 3}
@@ -190,7 +200,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

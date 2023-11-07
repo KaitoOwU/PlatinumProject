@@ -13,17 +13,16 @@ public class EventInspector : Editor
 {
     public Font font;
 
+    #region Draw Inspector
+
     public override void OnInspectorGUI()
     {
         UnityEventData data = (UnityEventData)target;
         GUIStyle buttonStyle = GUI.skin.button;
         buttonStyle.fontSize = 13;
         GUILayout.Label($"Events Data n°{data.name[^1]}", new GUIStyle(GUI.skin.label) { fontSize = 20, fontStyle = FontStyle.Bold });
-        //GUI.enabled = false;
-        //GUIStyle scriptNameStyle = GUI.skin.label;
-        //scriptNameStyle.normal.textColor = new Color(0.1f, 01f, 1);
+
         GUI.skin.font = font;
-        //Save asset
 
         serializedObject.Update();
 
@@ -31,11 +30,7 @@ public class EventInspector : Editor
         foreach (var script in data.DataBase)
         {
             DrawUILine(new Color(0.8f, 0.8f, 0.8f), 2, 0);
-
-            //EditorGUILayout.LabelField("", GUI.skin.horizontalSlider); //Line
             GUILayout.Space(5);
-
-
             GUILayout.Label(script.ScriptName, new GUIStyle(GUI.skin.label) { fontSize = 17, normal = new GUIStyleState() {textColor = new Color(0.5f, 0.7f, 0.9f) } });
 
             foreach (var eventInfo in script.Events)
@@ -139,7 +134,13 @@ public class EventInspector : Editor
                         case EventTypeEnum.SCREENSHAKE:
                             EditorGUILayout.BeginHorizontal();
                             GUILayout.Label("Screenshake Intensity", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(0.9f, 0.6f, 0.8f) } });
-                            eventAction.Intensity = EditorGUILayout.FloatField(eventAction.Intensity);
+                            eventAction.Intensity = EditorGUILayout.Slider(eventAction.Intensity, 0, 1, GUILayout.Width(200));
+                            EditorGUILayout.EndHorizontal();
+                            break;
+                        case EventTypeEnum.VIBRATE_ALL_CONTROLLERS:
+                            EditorGUILayout.BeginHorizontal();
+                            GUILayout.Label("Screenshake Intensity", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(0.9f, 0.6f, 0.8f) } });
+                            eventAction.Intensity = EditorGUILayout.Slider(eventAction.Intensity, 0, 1, GUILayout.Width(200));
                             EditorGUILayout.EndHorizontal();
                             break;
                     }
@@ -158,19 +159,17 @@ public class EventInspector : Editor
                 }
 
                 GUILayout.EndVertical();
-
             }
         }
         if (GUI.changed)
-        {
             AssetDatabase.SaveAssetIfDirty(target);
-            //AssetDatabase.SaveAssets();
-        }
 
         serializedObject.ApplyModifiedProperties();
         EditorUtility.SetDirty(target);
-
     }
+
+    #endregion
+
     public static void DrawUILine(Color color, int thickness = 2, int padding = 10)
     {
         Rect r = EditorGUILayout.GetControlRect(GUILayout.Height(padding + thickness));
@@ -180,6 +179,7 @@ public class EventInspector : Editor
         r.width += 6;
         EditorGUI.DrawRect(r, color);
     }
+
     public static string SplitName(string str)
     {
         string[] allWordsInName = Regex.Split(str, @"(?<!^)(?=[A-Z])");
@@ -191,16 +191,4 @@ public class EventInspector : Editor
         }
         return name;
     }
-    //public static void DisplaySFX(EventAction action)
-    //{
-    //    EditorGUILayout.BeginHorizontal();
-    //    GUILayout.Label("SFX", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(1, 0.8f, 0.4f) } });
-    //    EditorGUILayout.BeginHorizontal();
-    //    GUI.backgroundColor = new Color(1f, 1f, 1f);
-    //    action.ClipAudio.Audioclip = EditorGUILayout.ObjectField(action.ClipAudio.Audioclip, typeof(AudioClip), true);
-    //    action.ClipAudio.Volume = EditorGUILayout.Slider(action.ClipAudio.Volume, 0, 1, GUILayout.Width(150));
-    //    EditorGUILayout.EndHorizontal();
-
-    //}
-
 }

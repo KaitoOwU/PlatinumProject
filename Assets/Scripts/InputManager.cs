@@ -11,7 +11,6 @@ using UnityEngine.Windows;
 
 public class InputManager : MonoBehaviour
 {
-    //[Header("Events for each input")]
     public UnityEvent OnMoveStarted
     {
         get { return onMoveStarted; }

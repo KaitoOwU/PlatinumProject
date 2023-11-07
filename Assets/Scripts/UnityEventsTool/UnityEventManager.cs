@@ -18,18 +18,16 @@ public class UnityEventManager : MonoBehaviour
     public static UnityEventManager Instance => instance;
 
     [Header("---References---")]
-    [SerializeField] private UnityEventData _eventsData;
+    [SerializeField]
+    UnityEventData _eventsData;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private GameObject _camera;
     [SerializeField] private GameObject _audioSourcesStorage;
 
-    //private List<UnityAction> _actions = new();
-
     private List<SSoundRef> _soundsPlaying = new();
 
-
-    // from script name : get 
     List<SAction> _actions = new();
+
     struct SAction
     {
         public SAction(UnityEvent _eventRef, UnityAction _action)
@@ -46,19 +44,25 @@ public class UnityEventManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        InitEvents(_eventsData);
+        var events = Resources.LoadAll("CurrentEvents", typeof(UnityEventData));
+        if (events.Length == 0)
+            Debug.LogWarning("WARNING : Current events database wasn't found : --> Try to 'Update Database' in Event Tool Window.");
+        else
+        {
+            _eventsData = Resources.LoadAll("CurrentEvents", typeof(UnityEventData))[0] as UnityEventData;
+            InitEvents(_eventsData);
+        }
     }
+
     void InitEvents(UnityEventData data)
     {
         //get all scripts in scene and add listener from scriptable object
 
         foreach (var script in data.DataBase)
         {
-            Debug.Log("script " + script.ScriptName);
             var instances = FindObjectsOfType(Type.GetType($"{script.ScriptName}, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"));
             foreach (var instance in instances) // foreach class of type in scene
             {
-                Debug.Log("instance " + instance.name + " " + script.ScriptName);
                 foreach (var eventValue in script.Events) // foreach event in class
                 {
                     foreach(var eventAction in eventValue.EventActions)
@@ -85,7 +89,6 @@ public class UnityEventManager : MonoBehaviour
                                     d = () => PlayRandomSFX(nonNullClips);
                                 break;
                             case EventTypeEnum.START_PLAY_SOUND:
-                                Debug.Log("START PlaySFX "+ eventAction.ClipAudio + " "+eventValue.EventName);
                                 if (eventAction.ClipAudio != null)
                                     d = () => StartPlaySFX(instance as GameObject, eventAction.ClipAudio);
                                 break;
@@ -110,6 +113,7 @@ public class UnityEventManager : MonoBehaviour
             }
         }
     }
+
     private void OnDisable()
     {
         foreach(var a in _actions)
@@ -134,7 +138,6 @@ public class UnityEventManager : MonoBehaviour
     }
     public void StartPlaySFX(GameObject instance, Clip audioClip)
     { 
-        Debug.Log("START PlaySFX");
         AudioSource newAudioSource = _audioSourcesStorage.AddComponent<AudioSource>();
         newAudioSource.loop = true;
         newAudioSource.clip = audioClip.Audioclip;
@@ -144,7 +147,6 @@ public class UnityEventManager : MonoBehaviour
     }
     public void StopPlaySFX(GameObject instance, Clip audioClip)
     {
-        Debug.Log("STOP PlaySFX");
         List<SSoundRef> _soundRefs = _soundsPlaying.Where(t => t.InstanceRef == instance).ToList();
         SSoundRef _soundRef = _soundRefs.FirstOrDefault(t => t.Clip == audioClip.Audioclip);
         if(_soundRef != null)
@@ -165,6 +167,7 @@ public class UnityEventManager : MonoBehaviour
     }
     #endregion
 }
+
 class SSoundRef
 {
     public SSoundRef(AudioSource _audioSource, GameObject _instanceRef, AudioClip _action)
@@ -206,6 +209,7 @@ public class ScriptEventInfo
     private List<UnityEventInfo> events;
 
 }
+
 [Serializable]
 public class UnityEventInfo
 {
@@ -229,6 +233,7 @@ public class UnityEventInfo
     [SerializeField]
     private List<EventAction> eventActions;
 }
+
 [Serializable]
 public enum EventTypeEnum
 {
@@ -293,6 +298,7 @@ public class EventAction
     private float intensity;
 
 }
+
 [Serializable]
 public class Clip
 {

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SocialPlatforms;
@@ -10,8 +11,6 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class Furniture : Interactable
 {
     #region Fields
-
-
     [HideInInspector] public UnityEvent OnClueFoundInFurniture;
     [HideInInspector] public UnityEvent OnClueNotFoundInFurniture;
 
@@ -20,44 +19,21 @@ public class Furniture : Interactable
 
     [HideInInspector] public UnityEvent OnBeginStrugglePushingFurniture;
 
-    public EFurnitureType FurnitureType
-    {
-        get => _furnitureType;
-        set => _furnitureType = value;
-    }
-    public int NeededPlayersCount
-    {
-        get => _neededPlayersCount;
-        set => _neededPlayersCount = value;
-    }
-    public GameObject Model
-    {
-        get => _3Dmodel;
-        set => _3Dmodel = value;
-    }
-    public Clue Clue
-    {
-        get => _clue;
-        set => _clue = value;
-    }
-    public List<Player> PlayersPushing => _playersPushing;
-    
-    [Header("--Type--")]
+    public EFurnitureType FurnitureType => _furnitureType;
+    public GameObject Model => _3Dmodel;
+    public int PlayersNeededNumber => _playersNeededNumber;
+    public Clue Clue { get => _clue; set => _clue = value;}
+
     [SerializeField] private EFurnitureType _furnitureType;
-    [Header("--Number of Players needed to push--")]
-    //[ShowIf("showInt")]
-    [SerializeField] private int _neededPlayersCount;
-    [Header("--Ref--")]
     [SerializeField] private GameObject _3Dmodel;
+    [SerializeField] private int _playersNeededNumber;
+    [SerializeField] private Clue _clue;
 
     private List<Player> _playersPushing;
-    [SerializeField]
-    private Clue _clue;
     private float _baseY;
-    private bool _searched=false;
+    private bool _searched = false;
 
-#endregion
-
+    #endregion
     public enum EFurnitureType
     {
         MOVABLE,
@@ -150,7 +126,7 @@ public class Furniture : Interactable
             if (Physics.Raycast(player.transform.position, fwd, 50, LayerMask.GetMask("Furniture")))
             {
                 _playersPushing.Add(player);
-                if(_playersPushing.Count >= _neededPlayersCount)
+                if(_playersPushing.Count >= _playersNeededNumber)
                 {
                     OnBeginPushingFurniture?.Invoke();
                     float angle = -Mathf.Atan2(fwd.z, fwd.x) * Mathf.Rad2Deg + 90.0f;
@@ -183,7 +159,7 @@ public class Furniture : Interactable
             transform.parent = null;
             transform.position = new Vector3(transform.position.x, _baseY, transform.position.z);
         }
-        else if(_playersPushing.Count < _neededPlayersCount)
+        else if(_playersPushing.Count < _playersNeededNumber)
         {
             foreach(var p in _playersPushing)
             {
