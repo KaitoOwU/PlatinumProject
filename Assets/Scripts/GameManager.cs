@@ -6,6 +6,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -141,14 +142,14 @@ public class GameManager : MonoBehaviour
     {
         InitSingleton();
         InitGame();
-
+        _validatedRooom = 0;
+        _corridorChance = 10;
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
     }
 
     void Start()
     {
-        _validatedRooom = 0;
-        _corridorChance = 10;
+        
         CurrentGamePhase = GamePhase.HUB;
         StartTimer();
         _onWin.AddListener(Win);
