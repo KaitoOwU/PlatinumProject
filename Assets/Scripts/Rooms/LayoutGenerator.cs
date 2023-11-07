@@ -41,7 +41,7 @@ public class LayoutGenerator : MonoBehaviour
         {
             _pointsAddedCorridor[i] = _lineListAddedCorridor[i];
         }
-        FindObjectOfType<RoomGeneration>().GenerateRooms();
+        StartCoroutine(FindObjectOfType<RoomGeneration>().GenerateRooms());
     }
     #region LayoutGeneration
     private void AisleLayout(List<List<RoomPosition>> aisle,bool isLeft,List<RoomPosition> aisleInOrder)
