@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 244458756645189165}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.33, y: 0, z: 3.91}
+  m_LocalPosition: {x: 18.33, y: 0, z: 2.74}
   m_LocalScale: {x: 2.1361, y: 1, z: 0.4195051}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -271,7 +271,7 @@ Transform:
   m_GameObject: {fileID: 4828848977056320985}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.2, y: 0, z: 3.91}
+  m_LocalPosition: {x: 4.2, y: 0, z: 2.81}
   m_LocalScale: {x: 2.1361, y: 1, z: 0.4195051}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3378,6 +3378,11 @@ PrefabInstance:
       propertyPath: _nextRoomDoor
       value: 
       objectReference: {fileID: 7609940457576197441}
+    - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: _canHaveReward
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: _doors.Array.size
@@ -8984,11 +8989,16 @@ PrefabInstance:
         type: 3}
       propertyPath: room
       value: 
-      objectReference: {fileID: 4528872093061261832}
+      objectReference: {fileID: 0}
     - target: {fileID: 6670124447910129254, guid: 95f5991f6e0c588458746fdd9de672a8,
         type: 3}
       propertyPath: _doorTypeValue
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6670124447910129254, guid: 95f5991f6e0c588458746fdd9de672a8,
+        type: 3}
+      propertyPath: _tpPoint.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9201499466769513656, guid: 95f5991f6e0c588458746fdd9de672a8,
         type: 3}

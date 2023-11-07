@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class Puzzle : Interactable
 {
-
-    [SerializeField] private Transform _cluePosition;
-
-    public void SpawnClue(Clue clue)
-    {
-        Instantiate(clue, _cluePosition.position, Quaternion.identity);
-    }
+    
+    [SerializeField] protected GameObject _reactive;
+    
+    public IPuzzleReactive Reactive => _reactive.GetComponent<IPuzzleReactive>();
 
 }
 
 public interface IPuzzleReactive
 {
-    public abstract void GenerateItem(GameObject objToSpawn);
+    public abstract void PuzzleCompleted();
 }
