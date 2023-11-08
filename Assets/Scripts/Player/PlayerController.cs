@@ -61,8 +61,8 @@ public class PlayerController : MonoBehaviour
         _inputs = inputs;
         playerController.SetParent(transform);
         
-        _playerUi.SetActive(true);
-        _playerUi.transform.DOScale(new Vector3(1, 1, 1), 0.5f);
+        //_playerUi.SetActive(true);
+        //_playerUi.transform.DOScale(new Vector3(1, 1, 1), 0.5f);
 
         _rigidbody = GetComponent<Rigidbody>();
 

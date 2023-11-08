@@ -68,7 +68,6 @@ public class InputManager : MonoBehaviour
     public T GetInputValue<T>(string buttonName) where T : struct
     {
         return _inputs.actions[buttonName].ReadValue<T>();
-
     }
 
     #region Debug Methods

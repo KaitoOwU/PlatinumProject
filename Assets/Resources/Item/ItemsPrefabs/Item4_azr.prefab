@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2445989207902142631}
   - component: {fileID: 9113972113090718614}
   - component: {fileID: 8932976944785940371}
+  - component: {fileID: 7031211385217956618}
   - component: {fileID: 5167264918321583356}
-  - component: {fileID: 6487053575844110790}
   m_Layer: 0
   m_Name: Item4_azr
   m_TagString: Untagged
@@ -85,6 +85,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7031211385217956618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 651415574374227879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc50a7d2c009eec488de6e9e87160a60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _onPlayerEnterRange:
+    m_PersistentCalls:
+      m_Calls: []
+  _onPlayerExitRange:
+    m_PersistentCalls:
+      m_Calls: []
+  _pickableData: {fileID: 11400000, guid: 202099fb47a746e4387db9d4388582f2, type: 2}
 --- !u!135 &5167264918321583356
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -106,22 +125,3 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6487053575844110790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 651415574374227879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc50a7d2c009eec488de6e9e87160a60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _onPlayerEnterRange:
-    m_PersistentCalls:
-      m_Calls: []
-  _onPlayerExitRange:
-    m_PersistentCalls:
-      m_Calls: []
-  _itemData: {fileID: 0}

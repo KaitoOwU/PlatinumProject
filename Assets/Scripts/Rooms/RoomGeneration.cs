@@ -385,7 +385,7 @@ public class RoomGeneration : MonoBehaviour
             }
         }
     }
-    private void LinkRoom(Room room, Room roomToLink,Door door)
+    private void LinkRoom(Room room, Room roomToLink, Door door)
     {
         foreach (Door doorToLink in roomToLink.Doors)
         {
@@ -403,9 +403,12 @@ public class RoomGeneration : MonoBehaviour
     {
         foreach(Room room in _roomsInPlay)
         {
-            foreach(Door door in room.Doors)
+            if (room.RoomSide != Room.Side.HUB)
             {
-                door.IsLocked = true;
+                foreach(Door door in room.Doors)
+                {
+                    door.IsLocked = true;
+                }
             }
         }
         int validated = GameManager.Instance.ValidatedRooom;
