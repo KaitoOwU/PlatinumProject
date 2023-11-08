@@ -13,6 +13,7 @@ public class BookshelfTrap : MonoBehaviour
 
     private void Start()
     {
+        _room=GetComponentInParent<Room>();
         _isShooting = false;
     }
 
@@ -22,7 +23,6 @@ public class BookshelfTrap : MonoBehaviour
         if (_playerInRoom > 0&& !_isShooting)
         {
             _isShooting = true;
-            Debug.Log("aeaze");
             StartCoroutine(ShootBook());      
         }
         else if (_playerInRoom == 0)
@@ -40,7 +40,6 @@ public class BookshelfTrap : MonoBehaviour
                 pInRoom++;
             }
         }
-        Debug.Log(pInRoom);
         return pInRoom;
     }
     IEnumerator ShootBook()

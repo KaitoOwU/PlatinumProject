@@ -33,7 +33,7 @@ public class RoomGeneration : MonoBehaviour
     {
         _maxRooms = 0;
         GameManager.Instance.OnEndPhase.AddListener(Shuffle);
-  
+
     }
     public void GenerateRooms()
     {

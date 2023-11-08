@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public UnityEvent OnEndPhase;
     public UnityEvent OnEachMinute;
+    public UnityEvent OnTPToHubAfterTrap;
 
     private SuspectData _murderer;
     private SuspectData _victim;

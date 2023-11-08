@@ -11,7 +11,7 @@ public class Door : Interactable
     [SerializeField] private Door _linkedDoor;
     [SerializeField] private Room room;
     [SerializeField] private bool _isLocked;
-    List<GameObject> _corridors;
+    List<Corridor> _corridors;
 
     public Transform[] TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
@@ -22,7 +22,7 @@ public class Door : Interactable
 
     private void Start()
     {
-        _corridors= Resources.Load<SCRoomsLists>("ScriptableObject/Rooms").Floors[4].Rooms;
+        _corridors=FindObjectsOfType<Corridor>().ToList();
     }
     public enum DoorType
     {
@@ -54,7 +54,9 @@ public class Door : Interactable
                     hub.RoomDoorRight.UpdateRoom(hub.RoomDoorRight.LinkedDoor.room);
 
                     hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
-                    hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);   
+                    hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
+
+   
                 }
                 else if (_playersInRange.Count == countInHub && countInHub < 4)
                 {
@@ -76,7 +78,7 @@ public class Door : Interactable
                     GameManager.Instance.OnBackToHubRefused?.Invoke(this);
                     return;
                 }
-
+                Debug.Log(rand);
                 if (room.RoomSide == Room.Side.RIGHT)
                 {
                     if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
@@ -85,7 +87,7 @@ public class Door : Interactable
                         if (rand < GameManager.Instance.CorridorChance)
                         {
                             int rand2 = Random.Range(0, _corridors.Count);
-                            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
+                            Corridor corridor = _corridors[rand2];
                             corridor.SetCorridor(player, LinkedDoor);
                             TP_Players(corridor.Doors[0].TpPoint);
                             TP_Camera(corridor);
@@ -109,7 +111,7 @@ public class Door : Interactable
                         if (rand < GameManager.Instance.CorridorChance)
                         {
                             int rand2 = Random.Range(0, _corridors.Count);
-                            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
+                            Corridor corridor = _corridors[rand2];
                             corridor.SetCorridor(player, LinkedDoor);
                             TP_Players(corridor.Doors[0].TpPoint);
                             TP_Camera(corridor);

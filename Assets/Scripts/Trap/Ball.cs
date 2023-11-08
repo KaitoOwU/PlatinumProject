@@ -14,7 +14,13 @@ public class Ball : MonoBehaviour
     {
         _goal = transform.position;
     }
-   
+    private void Update()
+    {
+        if(transform.position!= _goal)
+        {
+            transform.position += ( _goal- transform.position ).normalized * _speed;
+        }
+    }
     private void OnCollisionEnter(Collision collision)
     {
         GameObject other = collision.gameObject;
