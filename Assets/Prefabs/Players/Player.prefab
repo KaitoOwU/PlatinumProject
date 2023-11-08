@@ -241,6 +241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerIndex: 0
   _inputManager: {fileID: 0}
+  _playerUi: {fileID: 0}
 --- !u!136 &2423820674682253852
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -303,7 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a620a50c6904c458ad3b0167f426b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _heldItem: {fileID: 0}
+  _heldPickable: {fileID: 0}
   _playerController: {fileID: 0}
   _relativePos: 0
   _currentRoom: {fileID: 0}

@@ -6,6 +6,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,6 +28,12 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public int CorridorChance
+    { 
+        get => _corridorChance; 
+        set => _corridorChance = value;
+    }
+    
     public List<Clue> FoundClues
     {
         get => _foundClues;
@@ -105,11 +112,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject CurrentCamera => _currentCamera;
     private GameObject _currentCamera; // A ASSIGNER
-
-    public int CorridorChance { 
-        get=> _corridorChance;
-        set => _corridorChance = value;
-    }
+    
     int _corridorChance = 0;
     public int ValidatedRooom
     {
@@ -163,6 +166,8 @@ public class GameManager : MonoBehaviour
     {
         InitSingleton();
         InitGame();
+        _validatedRooom = 0;
+        _corridorChance = 10;
         _roomGenerator = FindObjectOfType<RoomGeneration>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
     }
@@ -311,6 +316,7 @@ public class GameManager : MonoBehaviour
             case TimerPhase.SECOND_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
+                    _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
                     OnEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
@@ -320,6 +326,7 @@ public class GameManager : MonoBehaviour
             case TimerPhase.THIRD_PHASE:
                 if (_timer <= 0)
                 {
+                    _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
                     OnEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Third Phase End </color>" + _timer);

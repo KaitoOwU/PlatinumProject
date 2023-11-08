@@ -32,7 +32,7 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
-        if (!_isLocked&&!_linkedDoor.IsLocked)
+        if (!_isLocked && !_linkedDoor.IsLocked)
         {
             int rand = Random.Range(0, 10);
             if (player.CurrentRoom is Hub)
@@ -41,7 +41,7 @@ public class Door : Interactable
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
 
                 Hub hub = (Hub)player.CurrentRoom;
-                if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4) // POUR BUILD FINALE ==> ==4 !!!
+                if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 /*&& hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4*/) // POUR BUILD FINALE ==> ==4 !!!
                 {
                     GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;

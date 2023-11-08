@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Windows;
 using UnityEngine.InputSystem;
@@ -21,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _inputs;
     private float _currentVelocity;
     private EMoveState _moveState;
+
+    [SerializeField] private GameObject _playerUi;
 
     public enum EButtonType
     {
@@ -57,6 +60,9 @@ public class PlayerController : MonoBehaviour
         _inputManager = inputManager;
         _inputs = inputs;
         playerController.SetParent(transform);
+        
+        //_playerUi.SetActive(true);
+        //_playerUi.transform.DOScale(new Vector3(1, 1, 1), 0.5f);
 
         _rigidbody = GetComponent<Rigidbody>();
 

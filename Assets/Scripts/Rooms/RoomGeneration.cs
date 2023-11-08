@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 public class RoomGeneration : MonoBehaviour
 {
     //[SerializeField] private List<RoomRegion> _floor = new List<RoomRegion>();
@@ -23,6 +26,11 @@ public class RoomGeneration : MonoBehaviour
 
     public LayoutGenerator Layout { get => _layout; }
 
+    private void Awake()
+    {
+        _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms"); 
+    }
+
     private void OnDisable()
     {
         GameManager.Instance.OnEndPhase.RemoveListener(Shuffle);
@@ -33,13 +41,12 @@ public class RoomGeneration : MonoBehaviour
     {
         _maxRooms = 0;
         GameManager.Instance.OnEndPhase.AddListener(Shuffle);
-
     }
-    public void GenerateRooms()
+    public IEnumerator GenerateRooms()
     {
+        yield return null;
         Vector3 pos = new Vector3(0, 0, 55);
         _roomsInPlay.Add(_hall);
-        _roomsLists = Resources.Load<SCRoomsLists>("ScriptableObject/Rooms");
         for (int i = 1; i <= _roomsLists.Floors[4].Rooms.Count; i++)
         {
             GameObject Corridor = Instantiate(_roomsLists.Floors[4].Rooms[i - 1], pos * i, transform.rotation, _generationParent);
@@ -218,24 +225,22 @@ public class RoomGeneration : MonoBehaviour
                     rand = Random.Range(0, roomToShuffle1.Count);
                     roomToShuffle1[rand].transform.position = roomPosition.Position;
                     roomToShuffle1[rand].RoomSide = Room.Side.LEFT;
-                    _roomsInPlay[i] = roomToShuffle1[roomToShuffle1.Count - 1];
                     roomToShuffle1.Remove(roomToShuffle1[rand]);
                     break;
                 case 1:
                     int rand2 = Random.Range(0, roomToShuffle2.Count - _layout.AisleRight[1].Count + (TandemToShuffle.Count - _tandemRoom.Count / 2));
                     if (TandemToShuffle.Count > TandemTotal.Count / 2 && (rand2 == 1 || roomToShuffle2.Count - _layout.AisleRight[1].Count == 0))
                     {
-                        TandemToShuffle[TandemToShuffle.Count - 1].transform.position = roomPosition.Position;
-                        TandemToShuffle[TandemToShuffle.Count - 1].RoomSide = Room.Side.LEFT;
-                        _roomsInPlay[i] = TandemToShuffle[TandemToShuffle.Count - 1];
-                        TandemToShuffle.Remove(TandemToShuffle[TandemToShuffle.Count - 1]);
+                        rand = Random.Range(0, TandemToShuffle.Count);
+                        TandemToShuffle[rand].transform.position = roomPosition.Position;
+                        TandemToShuffle[rand].RoomSide = Room.Side.LEFT;
+                        TandemToShuffle.Remove(TandemToShuffle[rand]);
                     }
                     else
                     {
                         rand = Random.Range(0, roomToShuffle2.Count);
                         roomToShuffle2[rand].transform.position = roomPosition.Position;
                         roomToShuffle2[rand].RoomSide = Room.Side.LEFT;
-                        _roomsInPlay[i] = roomToShuffle2[roomToShuffle2.Count - 1];
                         roomToShuffle2.Remove(roomToShuffle2[rand]);
                     }
                     break;
@@ -243,14 +248,12 @@ public class RoomGeneration : MonoBehaviour
                     rand = Random.Range(0, roomToShuffle3.Count);
                     roomToShuffle3[rand].transform.position = roomPosition.Position;
                     roomToShuffle3[rand].RoomSide = Room.Side.LEFT;
-                    _roomsInPlay[i] = roomToShuffle3[roomToShuffle3.Count - 1];
                     roomToShuffle3.Remove(roomToShuffle3[rand]);
                     break;
                 case 3:
                     rand = Random.Range(0, roomToShuffle4.Count);
                     roomToShuffle4[rand].transform.position = roomPosition.Position;
                     roomToShuffle4[rand].RoomSide = Room.Side.LEFT;
-                    _roomsInPlay[i] = roomToShuffle4[roomToShuffle4.Count - 1];
                     roomToShuffle4.Remove(roomToShuffle4[rand]);
                     break;
             }
@@ -270,24 +273,22 @@ public class RoomGeneration : MonoBehaviour
                     rand = Random.Range(0, roomToShuffle1.Count);
                     roomToShuffle1[rand].transform.position = roomPosition.Position;
                     roomToShuffle1[rand].RoomSide = Room.Side.RIGHT;
-                    _roomsInPlay[i] = roomToShuffle1[roomToShuffle1.Count - 1];
                     roomToShuffle1.Remove(roomToShuffle1[rand]);
                     break;
                 case 1:
                     int rand2 = Random.Range(0, TandemToShuffle.Count + roomToShuffle2.Count - 1);
                     if (TandemToShuffle.Count > 0 && (rand2 == 0 || roomToShuffle2.Count == 0))
                     {
-                        TandemToShuffle[TandemToShuffle.Count - 1].transform.position = roomPosition.Position;
-                        TandemToShuffle[TandemToShuffle.Count - 1].RoomSide = Room.Side.RIGHT;
-                        _roomsInPlay[i] = TandemToShuffle[TandemToShuffle.Count - 1];
-                        TandemToShuffle.Remove(TandemToShuffle[TandemToShuffle.Count - 1]);           
+                        rand = Random.Range(0, TandemToShuffle.Count);
+                        TandemToShuffle[rand].transform.position = roomPosition.Position;
+                        TandemToShuffle[rand].RoomSide = Room.Side.RIGHT;
+                        TandemToShuffle.Remove(TandemToShuffle[rand]);           
                     }
                     else
                     {
                         rand = Random.Range(0, roomToShuffle2.Count);
                         roomToShuffle2[rand].transform.position = roomPosition.Position;
                         roomToShuffle2[rand].RoomSide = Room.Side.RIGHT;
-                        _roomsInPlay[i] = roomToShuffle2[roomToShuffle2.Count - 1];
                         roomToShuffle2.Remove(roomToShuffle2[rand]);
                     }
                     break;
@@ -295,14 +296,12 @@ public class RoomGeneration : MonoBehaviour
                     rand = Random.Range(0, roomToShuffle3.Count);
                     roomToShuffle3[rand].transform.position = roomPosition.Position;
                     roomToShuffle3[rand].RoomSide = Room.Side.RIGHT;
-                    _roomsInPlay[i] = roomToShuffle3[roomToShuffle3.Count - 1];
                     roomToShuffle3.Remove(roomToShuffle3[rand]);
                     break;
                 case 3:
                     rand = Random.Range(0, roomToShuffle4.Count);
                     roomToShuffle4[rand].transform.position = roomPosition.Position;
                     roomToShuffle4[rand].RoomSide = Room.Side.RIGHT;
-                    _roomsInPlay[i] = roomToShuffle4[roomToShuffle4.Count - 1];
                     roomToShuffle4.Remove(roomToShuffle4[rand]);
                     break;
              }
@@ -386,7 +385,7 @@ public class RoomGeneration : MonoBehaviour
             }
         }
     }
-    private void LinkRoom(Room room, Room roomToLink,Door door)
+    private void LinkRoom(Room room, Room roomToLink, Door door)
     {
         foreach (Door doorToLink in roomToLink.Doors)
         {
@@ -406,7 +405,7 @@ public class RoomGeneration : MonoBehaviour
         {
             if (room.RoomSide != Room.Side.HUB)
             {
-                foreach (Door door in room.Doors)
+                foreach(Door door in room.Doors)
                 {
                     door.IsLocked = true;
                 }
@@ -448,7 +447,6 @@ public class RoomGeneration : MonoBehaviour
                 _rewards.Add(arm);
             }
         }
-        Debug.Log(_rewards.Count);
         int k = 0;
         foreach (Room room2 in _roomsInPlay)
         {
