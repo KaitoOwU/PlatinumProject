@@ -253,13 +253,13 @@ public class GameManager : MonoBehaviour
     }
     public void TPPlayerPostTrap(Player[] players)
     {
-        if (players[1].RelativePos == HubRelativePosition.RIGHT_WING)
+        if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
         {
-            _hub.Doors[1].IsLocked = false;
+            _hub.Doors[0].IsLocked = true;
         }
         else
         {
-            _hub.Doors[0].IsLocked = false;
+            _hub.Doors[1].IsLocked = true;
         }
         for (int i = 0; i < players.Length; i++)
         {

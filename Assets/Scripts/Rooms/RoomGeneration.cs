@@ -404,9 +404,12 @@ public class RoomGeneration : MonoBehaviour
     {
         foreach(Room room in _roomsInPlay)
         {
-            foreach(Door door in room.Doors)
+            if (room.RoomSide != Room.Side.HUB)
             {
-                door.IsLocked = true;
+                foreach (Door door in room.Doors)
+                {
+                    door.IsLocked = true;
+                }
             }
         }
         int validated = GameManager.Instance.ValidatedRooom;

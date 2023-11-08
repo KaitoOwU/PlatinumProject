@@ -18,7 +18,7 @@ public class BookshelfTrap : MonoBehaviour
 
     private void Update()
     {
-        _playerInRoom = 1; //PlayerInRoom();
+        _playerInRoom = PlayerInRoom();
         if (_playerInRoom > 0&& !_isShooting)
         {
             _isShooting = true;
@@ -33,20 +33,20 @@ public class BookshelfTrap : MonoBehaviour
     private int PlayerInRoom()
     {
         int pInRoom = 0;
-        foreach (PlayerInfo p in GameManager.Instance.PlayerList.FindAll(player => player.PlayerController))
+        foreach (PlayerInfo p in GameManager.Instance.PlayerList.FindAll(player => player.PlayerController!=null))
         {
             if (p.PlayerRef.CurrentRoom == _room)
             {
                 pInRoom++;
             }
         }
+        Debug.Log(pInRoom);
         return pInRoom;
     }
     IEnumerator ShootBook()
     {
         while (_isShooting)
         {
-            Debug.Log("ah");
             yield return new WaitForSeconds(_cadence);
             GameObject projectile = Instantiate(_book, _spawnPoint);
         }

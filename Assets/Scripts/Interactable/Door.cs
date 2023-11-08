@@ -54,10 +54,7 @@ public class Door : Interactable
                     hub.RoomDoorRight.UpdateRoom(hub.RoomDoorRight.LinkedDoor.room);
 
                     hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
-                    hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
-
-                    hub.RoomDoorLeft._isLocked = true;
-                    hub.RoomDoorRight._isLocked = true;
+                    hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);   
                 }
                 else if (_playersInRange.Count == countInHub && countInHub < 4)
                 {
@@ -65,7 +62,8 @@ public class Door : Interactable
                     TP_Camera(_linkedDoor.room);
                     UpdateRoom(_linkedDoor.room);
 
-                    _isLocked = true;
+                    hub.RoomDoorLeft._isLocked = false;
+                    hub.RoomDoorRight._isLocked = false;
                 }
             }
             else
