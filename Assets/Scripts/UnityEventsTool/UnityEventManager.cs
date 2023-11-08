@@ -295,7 +295,7 @@ public class EventAction
     [SerializeField]
     private List<Clip> clipsAudio;
     [SerializeField]
-    private float intensity;
+    private float intensity = 1;
 
 }
 

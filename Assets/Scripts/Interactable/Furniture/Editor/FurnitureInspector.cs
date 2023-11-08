@@ -54,8 +54,11 @@ public class FurnitureInspector : Editor
         GUI.backgroundColor = new Color(1f, 1f, 1f);
         Model.objectReferenceValue = (GameObject)EditorGUILayout.ObjectField("Furniture 3D Model :", data.Model, typeof(GameObject), true);
 
-        EditorUtility.SetDirty(target);
-        serializedObject.ApplyModifiedProperties();
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(target);
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 }
 
