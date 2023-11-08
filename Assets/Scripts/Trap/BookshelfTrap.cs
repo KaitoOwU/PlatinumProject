@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BookshelfTrap : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class BookshelfTrap : MonoBehaviour
     private int _playerInRoom;
     private bool _isShooting;
 
+    public UnityEvent ThrowBook;
     private void Start()
     {
         _room=GetComponentInParent<Room>();

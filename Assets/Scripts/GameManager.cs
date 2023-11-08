@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
     public UnityEvent OnEndPhase;
     public UnityEvent OnEachMinute;
     public UnityEvent OnTPToHubAfterTrap;
+    public UnityEvent OnTPToHub;
 
     private SuspectData _murderer;
     private SuspectData _victim;
@@ -201,8 +202,7 @@ public class GameManager : MonoBehaviour
     public void DistributeClues()
     {
 
-        List<Clue> puzzleClues = CurrentClues.ToList(); ///
-        Debug.Log(puzzleClues.Count);
+        List<Clue> puzzleClues = CurrentClues.ToList(); 
         if (FindObjectsOfType<Furniture>().Length > 0)
         {
             List<Clue> furnitureClues = new();
