@@ -41,7 +41,7 @@ public class UnityEventManager : MonoBehaviour
         UnityAction action;
     }
 
-    private void Awake()
+    private void Start()
     {
         instance = this;
         var events = Resources.LoadAll("CurrentEvents", typeof(UnityEventData));

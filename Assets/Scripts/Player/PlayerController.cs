@@ -23,8 +23,9 @@ public class PlayerController : MonoBehaviour
     private float _currentVelocity;
     private EMoveState _moveState;
 
-    public UnityEvent OnMoveStarted;
-    public UnityEvent OnMoveCanceled;
+    [HideInInspector] public UnityEvent OnMoveStarted;
+    [HideInInspector] public UnityEvent OnMoveCanceled;
+    [HideInInspector] public UnityEvent OnPause;
 
     public enum EButtonType
     {
@@ -40,7 +41,7 @@ public class PlayerController : MonoBehaviour
         PUSH,
         PUSH_BLOCKED,
     }
-    private Vector3 _constraint;
+
     Dictionary<EButtonType, string> _inputNames = new()
     { { EButtonType.MOVE, "Move" },
     { EButtonType.INTERACT, "Interact" },
@@ -49,7 +50,6 @@ public class PlayerController : MonoBehaviour
     { EButtonType.PAUSE, "Pause" }};
 
     private void OnDisable() => _CleanUp();
-    RigidbodyConstraints _normalConstraints;
 
     public bool IsButtonHeld(EButtonType buttonType)
     {
@@ -77,7 +77,6 @@ public class PlayerController : MonoBehaviour
 
         _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed;
         _moveState = EMoveState.NORMAL;
-        _normalConstraints = _rigidbody.constraints;
     }
     private void _CleanUp()
     {
@@ -155,7 +154,7 @@ public class PlayerController : MonoBehaviour
 
     private void _Pause()
     {
-        
+        OnPause?.Invoke();
     }
     #endregion
 }

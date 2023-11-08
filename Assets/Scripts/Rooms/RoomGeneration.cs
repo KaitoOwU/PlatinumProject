@@ -24,14 +24,14 @@ public class RoomGeneration : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.Instance.OnEndPhase.RemoveListener(Shuffle);
+        GameManager.Instance.OnEachEndPhase.RemoveListener(Shuffle);
     }
 
     #region Generation
     private void Start()
     {
         _maxRooms = 0;
-        GameManager.Instance.OnEndPhase.AddListener(Shuffle);
+        GameManager.Instance.OnEachEndPhase.AddListener(Shuffle);
   
     }
     public void GenerateRooms()
