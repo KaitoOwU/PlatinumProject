@@ -31,9 +31,9 @@ public class BallTrap : MonoBehaviour
                 NextPoint();
             }
         }
-        else
+        else if(_ball.transform.position!=_route[0].position)
         {
-            _ball.transform.position = _route[0].transform.position;
+            _ball.transform.position = _route[0].position;
         }
     }
     private void NextPoint()
