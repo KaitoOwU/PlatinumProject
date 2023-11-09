@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour
     private Vector3 _dir;
     void Start()
     {
-        _dir = Vector3.forward * _speed;
+        _dir = transform.forward * _speed;
     }
 
     // Update is called once per frame

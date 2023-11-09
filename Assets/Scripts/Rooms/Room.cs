@@ -62,4 +62,13 @@ public class Room : MonoBehaviour
         GameManager.Instance.ValidatedRooom++;
         FindObjectOfType<RoomGeneration>().LockedDoor();
     }
+    public int PlayerInRoom()
+    {
+        int pInRoom = 0;
+        foreach (Player p in FindObjectsOfType<Player>().ToList().FindAll(player => player.CurrentRoom == this))
+        {
+            pInRoom++;
+        }
+        return pInRoom;
+    }
 }

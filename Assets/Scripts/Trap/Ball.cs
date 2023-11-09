@@ -6,9 +6,12 @@ public class Ball : MonoBehaviour
 {
     [SerializeField] float _speed;
     private Vector3 _goal;
+    private bool _isMoving;
+    private bool _isTurning;
 
     public float Speed { get => _speed; set => _speed = value; }
     public Vector3 Goal { get => _goal; set => _goal = value; }
+    public bool IsTurning { get => _isTurning; set => _isTurning = value; }
 
     private void Start()
     {
@@ -16,9 +19,36 @@ public class Ball : MonoBehaviour
     }
     private void Update()
     {
-        if(transform.position!= _goal)
+        if (((transform.position - _goal).magnitude >= 0.2) && _speed>0)
         {
-            transform.position += ( _goal- transform.position ).normalized * _speed;
+            BallMov();
+        }
+    }
+    public void RotateBall()
+    {
+        {
+            Vector3 targetDirection = _goal - transform.position;
+            float singleStep = _speed * Time.deltaTime;
+            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newDirection);
+            Debug.Log(Vector3.Dot(targetDirection, newDirection) - (targetDirection.magnitude * newDirection.magnitude));
+            if (Mathf.Abs(Vector3.Dot(targetDirection,newDirection)-(targetDirection.magnitude*newDirection.magnitude))<= 0.1)
+            {
+                _isTurning = false;
+            }
+        }
+    }
+
+    private void BallMov() 
+    {
+        if (_isTurning)
+        {
+                RotateBall();
+                
+        }
+        else
+        {
+            transform.position += (_goal - transform.position).normalized * _speed * Time.deltaTime;
         }
     }
     private void OnCollisionEnter(Collision collision)
