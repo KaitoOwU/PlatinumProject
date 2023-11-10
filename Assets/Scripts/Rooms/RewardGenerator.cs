@@ -6,34 +6,18 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
 {
     private GameObject _reward;
     [SerializeField] Room room;
-
-    //GameObject IPuzzleReactive.ObjToSpawn { get; set; }
-
-    //private void Start()
-    //{
-    //    _reward = room.Reward;
-    //}
-    //public void GenerateItem()
-    //{
-    //    if (_reward)
-    //    {
-    //        Instantiate(_reward, transform.position, transform.rotation);
-    //    }
-    //    room.OnCompletedRoom();
-    //}
-
-    public void PuzzleCompleted()
+    public void SetUp()
     {
-        throw new System.NotImplementedException();
+        if(room)
+        _reward = room.Reward;
+    }
+    public  void PuzzleCompleted()
+    {
+        if (_reward)
+        {
+            Instantiate(_reward, transform.position, transform.rotation);
+        }
+        room.OnCompletedRoom();
     }
 
-    void IPuzzleReactive.PuzzleCompleted()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    //public void PuzzleCompleted()
-    //{
-    //    throw new System.NotImplementedException();
-    //}
 }

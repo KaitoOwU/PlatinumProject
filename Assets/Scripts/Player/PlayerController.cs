@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Windows;
 using UnityEngine.InputSystem;
@@ -53,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsButtonHeld(EButtonType buttonType)
     {
-        return _inputManager.GetInputValue<bool>(_inputNames[buttonType]);
+        return _inputManager?.GetInputValue(_inputNames[buttonType]) > 0;
     }
 
     #region Set up & Clean up
@@ -62,6 +63,9 @@ public class PlayerController : MonoBehaviour
         _inputManager = inputManager;
         _inputs = inputs;
         playerController.SetParent(transform);
+        
+        //_playerUi.SetActive(true);
+        //_playerUi.transform.DOScale(new Vector3(1, 1, 1), 0.5f);
 
         _rigidbody = GetComponent<Rigidbody>();
 

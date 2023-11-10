@@ -23,7 +23,7 @@ public class LayoutGenerator : MonoBehaviour
     public List<RoomPosition> AisleRightInOrder { get => _aisleRightInOrder;}
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _aisleLeft = new List<List<RoomPosition>>();
         _aisleRight = new List<List<RoomPosition>>();
@@ -41,7 +41,7 @@ public class LayoutGenerator : MonoBehaviour
         {
             _pointsAddedCorridor[i] = _lineListAddedCorridor[i];
         }
-        FindObjectOfType<RoomGeneration>().GenerateRooms();
+        StartCoroutine(FindObjectOfType<RoomGeneration>().GenerateRooms());
     }
     #region LayoutGeneration
     private void AisleLayout(List<List<RoomPosition>> aisle,bool isLeft,List<RoomPosition> aisleInOrder)

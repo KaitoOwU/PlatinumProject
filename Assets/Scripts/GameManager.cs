@@ -6,6 +6,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,6 +28,12 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public int CorridorChance
+    { 
+        get => _corridorChance; 
+        set => _corridorChance = value;
+    }
+    
     public List<Clue> FoundClues
     {
         get => _foundClues;
@@ -109,11 +116,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject CurrentCamera => _currentCamera;
     private GameObject _currentCamera; // A ASSIGNER
-
-    public int CorridorChance { 
-        get=> _corridorChance;
-        set => _corridorChance = value;
-    }
+    
     int _corridorChance = 0;
     public int ValidatedRooom
     {
@@ -167,6 +170,8 @@ public class GameManager : MonoBehaviour
     {
         InitSingleton();
         InitGame();
+        _validatedRooom = 0;
+        _corridorChance = 10;
         _roomGenerator = FindObjectOfType<RoomGeneration>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
     }
@@ -190,6 +195,11 @@ public class GameManager : MonoBehaviour
             .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
 
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+
+        foreach(RewardGenerator rewardGenerator in FindObjectsOfType<RewardGenerator>())
+        {
+            rewardGenerator.SetUp();
+        }
     }
 
     public void DistributeClues()
@@ -200,24 +210,36 @@ public class GameManager : MonoBehaviour
             return;
         }
         List<Clue> puzzleClues = CurrentClues.ToList(); ///
-        List<Clue> furnitureClues = new();
-        for(int i = 0; i < _gameData.FurnitureCluesCount; i++)
+        Debug.Log(puzzleClues.Count);
+        if (FindObjectsOfType<Furniture>().Length > 0)
         {
-            if(puzzleClues.Count > 0)
+            List<Clue> furnitureClues = new();
+            for (int i = 0; i < _gameData.FurnitureCluesCount; i++)
             {
                 int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
                 furnitureClues.Add(puzzleClues[randomIndex]);
                 puzzleClues.RemoveAt(randomIndex);
+                if (puzzleClues.Count == 0)
+                {
+                    break;
+                }
             }
-        } 
-        List<Furniture> allSearchableFurnitures = GameObject.FindObjectsOfType<Furniture>().Where(f => f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE).ToList();
-        foreach(Clue clue in furnitureClues)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
-            allSearchableFurnitures[randomIndex].Clue = clue;
-            allSearchableFurnitures.RemoveAt(randomIndex);
+            List<Furniture> allSearchableFurnitures = new List<Furniture>();
+            foreach (Furniture f in FindObjectsOfType<Furniture>())
+            {
+                if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
+                {
+                    allSearchableFurnitures.Add(f);
+                }
+            }
+            foreach (Clue clue in furnitureClues)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
+                allSearchableFurnitures[randomIndex].Clue = clue;
+                allSearchableFurnitures.RemoveAt(randomIndex);
+            }
         }
-        //ADD PUZZLE CLUES
+        _roomGenerator.SetRoomsRewards(puzzleClues);
     }
 
     private void OnEnable()
@@ -243,6 +265,23 @@ public class GameManager : MonoBehaviour
             p.CurrentRoom = _hub;
         }
     }
+    public void TPPlayerPostTrap(Player[] players)
+    {
+        if (players[1].RelativePos == HubRelativePosition.RIGHT_WING)
+        {
+            _hub.Doors[1].IsLocked = false;
+        }
+        else
+        {
+            _hub.Doors[0].IsLocked = false;
+        }
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].gameObject.transform.position = _hub.Spawnpoints[i].position;
+            players[i].RelativePos = HubRelativePosition.HUB;
+            players[i].CurrentRoom = _hub;
+        }
+    }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
     void Lose() => Debug.LogError("<color:cyan> YOU LOSE ! </color>");
@@ -257,9 +296,6 @@ public class GameManager : MonoBehaviour
             {
                 _timer -= 1;
                 _AnalyseTimer();
-                
-                //RETIRER APRES (faux timer UI)
-                _timerTxt.text = "" + _timer;
             }
         }
     }
@@ -285,6 +321,7 @@ public class GameManager : MonoBehaviour
             case TimerPhase.SECOND_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
+                    _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
@@ -294,6 +331,7 @@ public class GameManager : MonoBehaviour
             case TimerPhase.THIRD_PHASE:
                 if (_timer <= 0)
                 {
+                    _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Third Phase End </color>" + _timer);

@@ -14,7 +14,7 @@ public class Door : Interactable
     [SerializeField] private Door _linkedDoor;
     [SerializeField] private Room room;
     [SerializeField] private bool _isLocked;
-    List<GameObject> _corridors;
+    List<Corridor> _corridors;
 
     public Transform[] TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
@@ -23,9 +23,10 @@ public class Door : Interactable
     public bool IsLocked { get => _isLocked; set => _isLocked = value; }
     public Room Room { get => room;}
 
-    private void Start()
+    private void Awake()
     {
-        _corridors= Resources.Load<SCRoomsLists>("ScriptableObject/Rooms").Floors[4].Rooms;
+        _corridors= FindObjectsOfType<Corridor>().ToList();
+        room = GetComponentInParent<Room>();
     }
     public enum DoorType
     {
@@ -35,17 +36,17 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
-        if (!_isLocked&&!_linkedDoor.IsLocked)
+        if (!_isLocked && !_linkedDoor.IsLocked)
         {
             OnChangeRoom?.Invoke();
 
             if (player.CurrentRoom is Hub)
             {
+                int countInHub = GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.HUB).Count;
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
 
                 Hub hub = (Hub)player.CurrentRoom;
-
-                if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 && hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4)
+                if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 /*&& hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4*/) // POUR BUILD FINALE ==> ==4 !!!
                 {
                     GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
@@ -58,6 +59,17 @@ public class Door : Interactable
 
                     hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
                     hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
+
+                    hub.RoomDoorLeft._isLocked = true;
+                    hub.RoomDoorRight._isLocked = true;
+                }
+                else if (_playersInRange.Count == countInHub && countInHub < 4)
+                {
+                    TP_Players(LinkedDoor.TpPoint);
+                    TP_Camera(_linkedDoor.room);
+                    UpdateRoom(_linkedDoor.room);
+
+                    _isLocked = true;
                 }
             }
             else
@@ -133,11 +145,12 @@ public class Door : Interactable
     private void TP_SidePlayers()
     {
         int rand = Random.Range(0, 10);
-
-        if (rand < GameManager.Instance.CorridorChance)
+        Debug.Log(GameManager.Instance.CorridorChance);
+        if (rand > GameManager.Instance.CorridorChance)
         {
             int rand2 = Random.Range(0, _corridors.Count);
-            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
+            Corridor corridor = _corridors[rand2];
+            Debug.Log(corridor.name);
             corridor.SetCorridor(_playersInRange[0], LinkedDoor);
             TP_Players(corridor.Doors[0].TpPoint);
             TP_Camera(corridor);
