@@ -23,7 +23,7 @@ public class Door : Interactable
     public bool IsLocked { get => _isLocked; set => _isLocked = value; }
     public Room Room { get => room;}
 
-    private void Awake()
+    private void Start()
     {
         _corridors= FindObjectsOfType<Corridor>().ToList();
         room = GetComponentInParent<Room>();

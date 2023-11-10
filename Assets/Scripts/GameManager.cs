@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         List<Clue> puzzleClues = CurrentClues.ToList(); ///
-        Debug.Log(puzzleClues.Count);
+        //Debug.Log(puzzleClues.Count);
         if (FindObjectsOfType<Furniture>().Length > 0)
         {
             List<Clue> furnitureClues = new();
