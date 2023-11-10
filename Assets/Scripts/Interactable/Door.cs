@@ -15,6 +15,8 @@ public class Door : Interactable
     [SerializeField] private Room room;
     [SerializeField] private bool _isLocked;
     List<Corridor> _corridors;
+    [SerializeField] private MeshRenderer _doormat;
+    private Material _doormatMat;
 
     public Transform[] TpPoint => _tpPoint;
     public DoorType DoorTypeValue => _doorTypeValue;
@@ -22,6 +24,7 @@ public class Door : Interactable
     public Door LinkedDoor { get => _linkedDoor; set => _linkedDoor = value; }
     public bool IsLocked { get => _isLocked; set => _isLocked = value; }
     public Room Room { get => room;}
+    public Material DoormatMat { get => _doormatMat; set => _doormatMat = value; }
 
     private void Awake()
     {
@@ -81,7 +84,6 @@ public class Door : Interactable
                     GameManager.Instance.OnBackToHubRefused?.Invoke(this);
                     return;
                 }
-                Debug.Log(rand);
                 if (room.RoomSide == Room.Side.RIGHT)
                 {
                     if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
@@ -164,5 +166,9 @@ public class Door : Interactable
             TP_Camera(_linkedDoor.room);
             UpdateRoom(_linkedDoor.room);
         }
+    }
+    public void UpdateDoormat()
+    {
+        _doormat.material = _doormatMat;
     }
 }

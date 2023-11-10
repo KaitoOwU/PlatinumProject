@@ -21,7 +21,7 @@ public class Room : MonoBehaviour
     [SerializeField] protected Transform _cameraPoint;
     [SerializeField] private bool _isRewardClue;
     [SerializeField] private bool _canHaveReward;
-
+    private List<Material> _usedDoormats = new List<Material>();
     public enum Side
     {
         LEFT,
@@ -43,6 +43,7 @@ public class Room : MonoBehaviour
     public GameObject Reward { get => _reward; set => _reward = value; }
     public bool IsRewardClue { get => _isRewardClue; }
     public bool CanHaveReward { get => _canHaveReward; }
+    public List<Material> UsedDoormats { get => _usedDoormats; set => _usedDoormats = value; }
 
     private void Awake()
     {
