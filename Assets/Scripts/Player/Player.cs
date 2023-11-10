@@ -26,11 +26,7 @@ public class Player : MonoBehaviour
     }
     public Room CurrentRoom { get => _currentRoom; set => _currentRoom = value; }
 
-    public int Index
-    {
-        get;
-        set;
-    }
+    public int Index => _playerController.PlayerIndex;
 }
 
 public enum HubRelativePosition

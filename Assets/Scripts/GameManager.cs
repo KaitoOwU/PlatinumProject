@@ -15,7 +15,12 @@ public class GameManager : MonoBehaviour
     public GamePhase CurrentGamePhase
     {
         get => _currentGamePhase; 
-        set => _currentGamePhase = value;
+        set
+        {
+            _currentGamePhase = value;
+            OnGamePhaseChange?.Invoke(value);
+            Debug.Log("CHANGE PHASE : <color=cyan>" + value + "</color>");
+        }
     }    
     public CameraState CurrentCameraState
     {
@@ -32,6 +37,11 @@ public class GameManager : MonoBehaviour
     { 
         get => _corridorChance; 
         set => _corridorChance = value;
+    }
+    public int ValidatedRooom 
+    {
+        get => _validatedRooom;
+        set => _validatedRooom = value;
     }
     
     public List<Clue> FoundClues
@@ -128,11 +138,12 @@ public class GameManager : MonoBehaviour
 
     public enum GamePhase
     {
-        MENU,
+        SELECT_CHARACTER,
         HUB,
         GAME,
+        EARLY_GUESS,
         GUESS,
-        END,
+        END
     }
     public enum TimerPhase
     {
@@ -178,7 +189,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        CurrentGamePhase = GamePhase.HUB;
+        CurrentGamePhase = GamePhase.HUB; //SELECT CHARACTER
+        
+        _validatedRooom = 0;
+        _corridorChance = 10;
         StartTimer();
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);
@@ -314,8 +328,9 @@ public class GameManager : MonoBehaviour
                 {
                     OnFirstPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
-                    Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
+                    Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
+                    CurrentGamePhase = GamePhase.HUB;
                 }
                 break;
             case TimerPhase.SECOND_PHASE:
@@ -326,6 +341,7 @@ public class GameManager : MonoBehaviour
                     OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
+                    CurrentGamePhase = GamePhase.HUB;
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
@@ -338,6 +354,7 @@ public class GameManager : MonoBehaviour
                     _isTimerGoing = false;
                     _timer = 0;
                     _currentTimerPhase = TimerPhase.END;
+                    CurrentGamePhase = GamePhase.EARLY_GUESS;
                 }
                 break;
             case TimerPhase.END:
