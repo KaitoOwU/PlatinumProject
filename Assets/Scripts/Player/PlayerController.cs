@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsButtonHeld(EButtonType buttonType)
     {
-        return _inputManager.GetInputValue<bool>(_inputNames[buttonType]);
+        return _inputManager?.GetInputValue(_inputNames[buttonType]) > 0;
     }
 
     #region Set up & Clean up

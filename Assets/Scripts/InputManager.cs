@@ -99,9 +99,9 @@ public class InputManager : MonoBehaviour
     }
     #endregion
 
-    public T GetInputValue<T>(string buttonName) where T : struct
+    public float GetInputValue(string buttonName)
     {
-        return _inputs.actions[buttonName].ReadValue<T>();
+        return _inputs.actions[buttonName].ReadValue<float>();
     }
 
     #region Debug Methods

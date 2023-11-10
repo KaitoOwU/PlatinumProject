@@ -296,9 +296,6 @@ public class GameManager : MonoBehaviour
             {
                 _timer -= 1;
                 _AnalyseTimer();
-                
-                //RETIRER APRES (faux timer UI)
-                _timerTxt.text = "" + _timer;
             }
         }
     }
