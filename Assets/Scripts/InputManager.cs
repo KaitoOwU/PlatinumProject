@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
 using UnityEngine.Serialization;
 using UnityEngine.Windows;
 
@@ -58,12 +59,18 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     private int _index;
 
+    private Gamepad _gamepad;
+
     private void Start()
     {
         _inputs = GetComponent<PlayerInput>();
 
         _SetupEvents();
         _AddController();
+
+        //Gamepad.all.ToList().ForEach(gamepad => gamepad.SetMotorSpeeds(1f, 1f));
+        Gamepad.all[_index].SetMotorSpeeds(1f, 1f);
+        Gamepad.all[_index + 1].SetMotorSpeeds(1f, 1f);
     }
 
     private void OnDisable() => _CleanEvents();
