@@ -272,16 +272,19 @@ public class GameManager : MonoBehaviour
         if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
         {
             _hub.Doors[0].IsLocked = true;
+            TP_RightCamera(_hub.CameraPoint);
         }
         else
         {
             _hub.Doors[1].IsLocked = true;
+            TP_LeftCamera(_hub.CameraPoint);
         }
         for (int i = 0; i < players.Length; i++)
         {
             players[i].gameObject.transform.position = _hub.Spawnpoints[i].position;
             players[i].RelativePos = HubRelativePosition.HUB;
             players[i].CurrentRoom = _hub;
+            
         }
     }
 

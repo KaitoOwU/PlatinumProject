@@ -82,6 +82,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1259153238061541977, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: room
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1269409269613646723, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: _doorTypeValue
@@ -233,6 +238,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 2.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8216174638811408361, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: room
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 9105892949080795235, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: room
@@ -317,6 +327,12 @@ MonoBehaviour:
   _roomSide: 3
   _tandem: {fileID: 0}
   _reward: {fileID: 0}
-  _cameraPoint: {fileID: 0}
+  _cameraPoint: {fileID: 6654049696826231685}
   _isRewardClue: 0
   _canHaveReward: 0
+--- !u!4 &6654049696826231685 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5128783077591038199, guid: c870671ee6471bb49827e26d1cbc2960,
+    type: 3}
+  m_PrefabInstance: {fileID: 1980167634142278514}
+  m_PrefabAsset: {fileID: 0}
