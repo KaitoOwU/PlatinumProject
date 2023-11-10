@@ -13,8 +13,8 @@ public class Interactable : MonoBehaviour
     public IReadOnlyList<Player> PlayersInRange => _playersInRange;
     
     [Header("--- EVENTS ---")]
-    [SerializeField] protected UnityEvent _onPlayerEnterRange;
-    [SerializeField] protected UnityEvent _onPlayerExitRange;
+    protected UnityEvent _onPlayerEnterRange;
+    protected UnityEvent _onPlayerExitRange;
     
     protected virtual void Awake()
     {

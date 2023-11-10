@@ -4,33 +4,62 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static Codice.Client.BaseCommands.Import.Commit;
 using static Furniture;
 using static UnityEditor.PlayerSettings;
 
 [CustomEditor(typeof(Furniture))]
 public class FurnitureInspector : Editor
 {
-    string[] _options = new string[] { "1", "2", "3" };
-    int _chosenIndex;
+    [SerializeField]
+    SerializedProperty FurnitureType;
+    [SerializeField]
+    SerializedProperty NeededPlayersCount;
+    [SerializeField]
+    SerializedProperty Model;
+    public Font font;
+
     public override void OnInspectorGUI()
     {
+        GUI.skin.font = font;
+        serializedObject.Update();
         Furniture data = (Furniture)target;
-        data.FurnitureType = (Furniture.EFurnitureType)EditorGUILayout.EnumPopup("Furniture type :", data.FurnitureType);
-        if (data.FurnitureType == Furniture.EFurnitureType.MOVABLE)
+
+        FurnitureType = serializedObject.FindProperty("_furnitureType");
+        NeededPlayersCount = serializedObject.FindProperty("_playersNeededNumber");
+        Model = serializedObject.FindProperty("_3Dmodel");
+
+        if (FurnitureType == null)
+            FurnitureType.enumValueIndex = 0;
+
+        if (FurnitureType.enumValueIndex == (int)EFurnitureType.MOVABLE)
+            GUI.backgroundColor = new Color(0.8f, 1f, 0.7f);
+        else
+            GUI.backgroundColor = new Color(0.6f, 0.7f, 1f);
+        FurnitureType.enumValueIndex = (int)(EFurnitureType)EditorGUILayout.EnumPopup("Furniture type :", data.FurnitureType);
+
+
+        if (FurnitureType.enumValueIndex == (int)EFurnitureType.MOVABLE)
         {
             EditorGUILayout.Space(10);
+            GUI.backgroundColor = new Color(1f, 1f, 1f);
 
-            //position.x = EditorGUIUtility.currentViewWidth - position.width - 20f;
-            _chosenIndex = EditorGUILayout.Popup("Number of Players to push :", _chosenIndex, _options);
-            data.NeededPlayersCount = int.Parse(_options[_chosenIndex]);
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Number of Players to push :");
+            NeededPlayersCount.intValue = GUILayout.Toolbar(NeededPlayersCount.intValue - 1, new string[] {"1", "2", "3"}) + 1;
+            EditorGUILayout.EndHorizontal();
         }
         EditorGUILayout.Space(10);
 
-        data.Model = (GameObject)EditorGUILayout.ObjectField("Furniture 3D Model :",data.Model, typeof(GameObject), true);
+        GUI.backgroundColor = new Color(1f, 1f, 1f);
+        Model.objectReferenceValue = (GameObject)EditorGUILayout.ObjectField("Furniture 3D Model :", data.Model, typeof(GameObject), true);
 
-        //DrawDefaultInspector();
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(target);
+            serializedObject.ApplyModifiedProperties();
+        }
     }
-
 }
 
 

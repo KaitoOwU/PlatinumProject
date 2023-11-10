@@ -6,6 +6,7 @@ using UnityEngine;
 public class UnityEventData : ScriptableObject
 {
     public SerializedProperty serializedProperty => new UnityEditor.SerializedObject(this).FindProperty("_database");
+
     [SerializeField]
     private List<ScriptEventInfo> _database;
 

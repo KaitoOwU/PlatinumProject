@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Hub _hub;
 
-    [Header("---Events---")]
+    //Public Unity Events
     [HideInInspector]
     public UnityEvent OnShuffleRooms;
     [HideInInspector]
@@ -85,8 +85,13 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public UnityEvent OnTimerEnd;
     [HideInInspector]
-    public UnityEvent OnEndPhase;
+    public UnityEvent OnEachEndPhase;
+    [HideInInspector]
     public UnityEvent OnEachMinute;
+    [HideInInspector]
+    public UnityEvent OnChangeToSplitScreen;
+    [HideInInspector]
+    public UnityEvent OnChangeToFullScreen;
 
     private SuspectData _murderer;
     private SuspectData _victim;
@@ -97,7 +102,7 @@ public class GameManager : MonoBehaviour
     private bool _isTimerGoing;
     private List<PickableData> _items = new();
 
-    private List<Clue> _foundClues;
+    private List<Clue> _foundClues = new();
 
     private RoomGeneration _roomGenerator;
 
@@ -177,7 +182,7 @@ public class GameManager : MonoBehaviour
         StartTimer();
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);
-        OnEndPhase.AddListener(TPAllPlayersToHub);
+        OnEachEndPhase.AddListener(TPAllPlayersToHub);
     }
 
     private void InitGame()
@@ -199,7 +204,11 @@ public class GameManager : MonoBehaviour
 
     public void DistributeClues()
     {
-
+        if(CurrentClues.Count == 0)
+        {
+            Debug.LogError("No Clues found");
+            return;
+        }
         List<Clue> puzzleClues = CurrentClues.ToList(); ///
         Debug.Log(puzzleClues.Count);
         if (FindObjectsOfType<Furniture>().Length > 0)
@@ -243,7 +252,7 @@ public class GameManager : MonoBehaviour
     {
         _onWin.RemoveListener(Win);
         _onLose.RemoveListener(Lose);
-        OnEndPhase.RemoveListener(TPAllPlayersToHub);
+        OnEachEndPhase.RemoveListener(TPAllPlayersToHub);
     }
 
     private void TPAllPlayersToHub()
@@ -291,9 +300,9 @@ public class GameManager : MonoBehaviour
                 //RETIRER APRES (faux timer UI)
                 _timerTxt.text = "" + _timer;
             }
-
         }
     }
+
     private void _AnalyseTimer()
     {
         if (_timer % 60 == 0)
@@ -307,7 +316,7 @@ public class GameManager : MonoBehaviour
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
                     OnFirstPhaseEnd?.Invoke();
-                    OnEndPhase?.Invoke();
+                    OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
                 }
@@ -317,7 +326,7 @@ public class GameManager : MonoBehaviour
                 {
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
-                    OnEndPhase?.Invoke();
+                    OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }
@@ -327,7 +336,7 @@ public class GameManager : MonoBehaviour
                 {
                     _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
-                    OnEndPhase?.Invoke();
+                    OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Third Phase End </color>" + _timer);
                     _isTimerGoing = false;
                     _timer = 0;
@@ -358,12 +367,14 @@ public class GameManager : MonoBehaviour
         switch(targetState)
         {
             case CameraState.FULL:
+                OnChangeToFullScreen?.Invoke();
                 _fullCamera.SetActive(true);
                 _splitCameraLeft.SetActive(false);
                 _splitCameraRight.SetActive(false);
                 CurrentCameraState = targetState;
                 return;
             case CameraState.SPLIT:
+                OnChangeToSplitScreen?.Invoke();
                 _fullCamera.SetActive(false);
                 _splitCameraLeft.SetActive(true);
                 _splitCameraRight.SetActive(true);

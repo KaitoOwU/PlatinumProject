@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using static UnityEngine.EventSystems.EventTrigger;
 [System.Serializable]
 public class Door : Interactable
 {
+    [HideInInspector] public UnityEvent OnChangeRoom;
+
     [SerializeField] private Transform[] _tpPoint;
     [SerializeField] private DoorType _doorTypeValue;
     [SerializeField] private Door _linkedDoor;
@@ -34,7 +37,8 @@ public class Door : Interactable
     {
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
-            int rand = Random.Range(0, 10);
+            OnChangeRoom?.Invoke();
+
             if (player.CurrentRoom is Hub)
             {
                 int countInHub = GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.HUB).Count;
@@ -46,7 +50,6 @@ public class Door : Interactable
                     GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
 
-                    //TP All players to next room depending on the door they're interacting with (after they all hold button)
                     hub.RoomDoorLeft.TP_Players(hub.RoomDoorLeft.LinkedDoor.TpPoint);
                     hub.RoomDoorRight.TP_Players(hub.RoomDoorRight.LinkedDoor.TpPoint);
 
@@ -70,7 +73,6 @@ public class Door : Interactable
             }
             else
             {
-
                 Room room = player.CurrentRoom;
 
                 if (_linkedDoor.room is Hub)
@@ -84,23 +86,7 @@ public class Door : Interactable
                     if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
                         _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
                     {
-                        if (rand < GameManager.Instance.CorridorChance)
-                        {
-                            int rand2 = Random.Range(0, _corridors.Count);
-                            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
-                            corridor.SetCorridor(player, LinkedDoor);
-                            TP_Players(corridor.Doors[0].TpPoint);
-                            TP_Camera(corridor);
-                            UpdateRoom(corridor);
-                            GameManager.Instance.CorridorChance = 10;
-                        }
-                        else
-                        {
-                            GameManager.Instance.CorridorChance --;
-                            TP_Players(_linkedDoor.TpPoint);
-                            TP_Camera(_linkedDoor.room);
-                            UpdateRoom(_linkedDoor.room);
-                        }
+                        TP_SidePlayers();
                     }
                 }
                 else if (room.RoomSide == Room.Side.LEFT)
@@ -108,32 +94,15 @@ public class Door : Interactable
                     if (GameManager.Instance.LeftPlayers.Count == _playersInRange.Count &&
                         _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
                     {
-                        if (rand < GameManager.Instance.CorridorChance)
-                        {
-                            int rand2 = Random.Range(0, _corridors.Count);
-                            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
-                            corridor.SetCorridor(player, LinkedDoor);
-                            TP_Players(corridor.Doors[0].TpPoint);
-                            TP_Camera(corridor);
-                            UpdateRoom(corridor);
-                            GameManager.Instance.CorridorChance = 10;
-                        }
-                        else
-                        {
-                            GameManager.Instance.CorridorChance--;
-                            TP_Players(_linkedDoor.TpPoint);
-                            TP_Camera(_linkedDoor.room);
-                            UpdateRoom(_linkedDoor.room);
-                        }
+                        TP_SidePlayers();
                     }
                 }
             }
         }
     }
 
-    public void TP_Players(Transform[] tpPoint)//TP  tous les joueurs qui intéragissent avec this porte
+    public void TP_Players(Transform[] tpPoint) // TP  tous les joueurs qui intéragissent avec this porte
     { 
-        //GARDER EN MEMOIRE LE NOMBRE DE JOUEUR POUR SAVOIR COMBIEN IL EN FAUT POUR PASSER A LA SALLE SUIVANTE DANS CHAQUE BRANCHE
         foreach(Player p in _playersInRange) if (p.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT))
         {
             p.gameObject.transform.position = tpPoint[p.Index-1].position;
@@ -170,6 +139,28 @@ public class Door : Interactable
                 }
             }
             p.CurrentRoom = room;
+        }
+    }
+    private void TP_SidePlayers()
+    {
+        int rand = Random.Range(0, 10);
+
+        if (rand < GameManager.Instance.CorridorChance)
+        {
+            int rand2 = Random.Range(0, _corridors.Count);
+            Corridor corridor = _corridors[rand2].GetComponent<Corridor>();
+            corridor.SetCorridor(_playersInRange[0], LinkedDoor);
+            TP_Players(corridor.Doors[0].TpPoint);
+            TP_Camera(corridor);
+            UpdateRoom(corridor);
+            GameManager.Instance.CorridorChance = 10;
+        }
+        else
+        {
+            GameManager.Instance.CorridorChance--;
+            TP_Players(_linkedDoor.TpPoint);
+            TP_Camera(_linkedDoor.room);
+            UpdateRoom(_linkedDoor.room);
         }
     }
 }

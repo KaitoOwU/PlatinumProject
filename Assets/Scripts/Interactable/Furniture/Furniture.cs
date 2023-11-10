@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SocialPlatforms;
@@ -10,50 +11,29 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class Furniture : Interactable
 {
     #region Fields
+    [HideInInspector] public UnityEvent OnClueFoundInFurniture;
+    [HideInInspector] public UnityEvent OnClueNotFoundInFurniture;
 
-    public UnityEvent OnClueFoundInFurniture;
-    public UnityEvent OnClueNotFoundInFurniture;
+    [HideInInspector] public UnityEvent OnBeginPushingFurniture;
+    [HideInInspector] public UnityEvent OnStopPushingFurniture;
 
-    public UnityEvent OnBeginPushingFurniture;
-    public UnityEvent OnStopPushingFurniture;
+    [HideInInspector] public UnityEvent OnBeginStrugglePushingFurniture;
 
-    public UnityEvent OnBeginStrugglePushingFurniture;
+    public EFurnitureType FurnitureType => _furnitureType;
+    public GameObject Model => _3Dmodel;
+    public int PlayersNeededNumber => _playersNeededNumber;
+    public Clue Clue { get => _clue; set => _clue = value;}
 
-    public EFurnitureType FurnitureType
-    {
-        get => _furnitureType;
-        set => _furnitureType = value;
-    }
-    public int NeededPlayersCount
-    {
-        get => _neededPlayersCount;
-        set => _neededPlayersCount = value;
-    }
-    public GameObject Model
-    {
-        get => _3Dmodel;
-        set => _3Dmodel = value;
-    }
-    public Clue Clue
-    {
-        get => _clue;
-        set => _clue = value;
-    }
-    public List<Player> PlayersPushing => _playersPushing;
-    
-    [Header("--Type--")]
     [SerializeField] private EFurnitureType _furnitureType;
-    [Header("--Number of Players needed to push--")]
-    //[ShowIf("showInt")]
-    [SerializeField] private int _neededPlayersCount;
-    [Header("--Ref--")]
     [SerializeField] private GameObject _3Dmodel;
+    [SerializeField] private int _playersNeededNumber;
+    [SerializeField] private Clue _clue;
 
     private List<Player> _playersPushing;
-    private Clue _clue;
+    private float _baseY;
+    private bool _searched = false;
 
-#endregion
-
+    #endregion
     public enum EFurnitureType
     {
         MOVABLE,
@@ -64,6 +44,7 @@ public class Furniture : Interactable
     {
         _playersPushing = new();
         _3Dmodel.layer = LayerMask.NameToLayer("Furniture");
+        _baseY = transform.position.y;
     }
 
     #region Overridden methods
@@ -87,6 +68,7 @@ public class Furniture : Interactable
     }
     protected override void OnTriggerExit(Collider other)
     {
+        //Debug.Log("Trigger exit " + other.gameObject.name);
         if (other.GetComponent<PlayerController>() == null)
             return;
 
@@ -96,6 +78,8 @@ public class Furniture : Interactable
             return;
 
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+        OnPushCanceled(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+
 
         p.Inputs.OnInteract?.RemoveListener(OnInteract);
         p.Inputs.OnPush?.RemoveListener(OnPush);
@@ -107,7 +91,7 @@ public class Furniture : Interactable
 
     protected override void OnInteract(Player player)
     {
-        if(_furnitureType == EFurnitureType.SEARCHABLE)
+        if(_furnitureType == EFurnitureType.SEARCHABLE && !_searched)
         {
             _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
             if(_clue != null)
@@ -121,12 +105,15 @@ public class Furniture : Interactable
                 OnClueNotFoundInFurniture?.Invoke();
                 Debug.Log("No Clue Found!");
             }
+            _searched = true;
         }
     }
 
     #region Push
     protected void OnPush(Player player)
     {
+        if(_playersPushing.Contains(player))
+            return;
         if (_furnitureType == EFurnitureType.MOVABLE)
         {
             Vector3 fwd = Vector3Int.RoundToInt(player.transform.TransformDirection(Vector3.forward));
@@ -139,21 +126,21 @@ public class Furniture : Interactable
             if (Physics.Raycast(player.transform.position, fwd, 50, LayerMask.GetMask("Furniture")))
             {
                 _playersPushing.Add(player);
-                if(_playersPushing.Count >= _neededPlayersCount)
+                if(_playersPushing.Count >= _playersNeededNumber)
                 {
                     OnBeginPushingFurniture?.Invoke();
                     float angle = -Mathf.Atan2(fwd.z, fwd.x) * Mathf.Rad2Deg + 90.0f;
                     angle = Mathf.Round(angle / 90.0f) * 90.0f;
                     foreach (var p in _playersPushing)
                     {
-                        Physics.IgnoreCollision(_collider, p.GetComponent<Collider>(), true);
                         p.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
                         p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1,0,0): new Vector3(0, 0, 1));
                     }
-                    transform.parent.parent = player.transform;
+                    transform.parent = player.transform;
                 }
                 else
                 {
+                    player.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH_BLOCKED);
                     OnBeginStrugglePushingFurniture?.Invoke();
                 }
             }
@@ -162,16 +149,24 @@ public class Furniture : Interactable
     protected void OnPushCanceled(Player player)
     {
         _playersPushing.Remove(player);
-        if (_playersPushing.Count < _neededPlayersCount)
+        if (transform.parent == player.transform && _playersPushing.Count != 0)
+        {
+            transform.parent = _playersPushing[0].transform;
+        }
+        if (_playersPushing.Count == 0)
         {
             OnStopPushingFurniture?.Invoke();
-            transform.parent.parent = null;
-            foreach (var p in _playersPushing)
+            transform.parent = null;
+            transform.position = new Vector3(transform.position.x, _baseY, transform.position.z);
+        }
+        else if(_playersPushing.Count < _playersNeededNumber)
+        {
+            foreach(var p in _playersPushing)
             {
-                Physics.IgnoreCollision(_collider, p.GetComponent<Collider>(), false);
-                p.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
+                p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH_BLOCKED);
             }
         }
+        player.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
     }
     #endregion
 
