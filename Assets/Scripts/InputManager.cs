@@ -11,14 +11,48 @@ using UnityEngine.Windows;
 
 public class InputManager : MonoBehaviour
 {
-    [Header("Events for each input")]
-    public UnityEvent OnMoveStarted;
-    public UnityEvent OnMoveCanceled;
-    public UnityEvent<Player> OnInteract;
-    public UnityEvent<Player> OnPush;
-    public UnityEvent<Player> OnPushCanceled;
-    public UnityEvent OnUseTool;
-    public UnityEvent OnPause;
+    public UnityEvent OnMoveStarted
+    {
+        get { return onMoveStarted; }
+        set { onMoveStarted = value; }
+    }
+    public UnityEvent OnMoveCanceled
+    {
+        get { return onMoveCanceled; }
+        set { onMoveCanceled = value; }
+    }
+    public UnityEvent<Player> OnInteract
+    {
+        get { return onInteract; }
+        set { onInteract = value; }
+    }
+    public UnityEvent<Player> OnPush
+    {
+        get { return onPush; }
+        set { onPush = value; }
+    }
+    public UnityEvent<Player> OnPushCanceled
+    {
+        get { return onPushCanceled; }
+        set { onPushCanceled = value; }
+    }
+    public UnityEvent OnUseTool
+    {
+        get { return onUseTool; }
+        set { onUseTool = value; }
+    }
+    public UnityEvent OnPause
+    {
+        get { return onPause; }
+        set { onPause = value; }
+    }
+    private UnityEvent onMoveStarted = new();
+    private UnityEvent onMoveCanceled = new();
+    private UnityEvent<Player> onInteract = new();
+    private UnityEvent<Player> onPush = new();
+    private UnityEvent<Player> onPushCanceled = new();
+    private UnityEvent onUseTool = new();
+    private UnityEvent onPause = new();
 
     private PlayerInput _inputs;
     [SerializeField]
@@ -65,9 +99,9 @@ public class InputManager : MonoBehaviour
     }
     #endregion
 
-    public T GetInputValue<T>(string buttonName) where T : struct
+    public float GetInputValue(string buttonName)
     {
-        return _inputs.actions[buttonName].ReadValue<T>();
+        return _inputs.actions[buttonName].ReadValue<float>();
     }
 
     #region Debug Methods
@@ -78,7 +112,7 @@ public class InputManager : MonoBehaviour
     private void _Move_started(InputAction.CallbackContext obj) => OnMoveStarted?.Invoke();
     private void _Move_canceled(InputAction.CallbackContext obj) => OnMoveCanceled?.Invoke();
     private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
-    private void _Push_performed(InputAction.CallbackContext obj) => OnPush?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
+    private void _Push_performed(InputAction.CallbackContext obj) => OnPush?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);  
     private void _Push_canceled(InputAction.CallbackContext obj) => OnPushCanceled?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
     private void _Tool_performed(InputAction.CallbackContext obj) => OnUseTool?.Invoke();
     private void _Pause_performed(InputAction.CallbackContext obj) => OnPause?.Invoke();

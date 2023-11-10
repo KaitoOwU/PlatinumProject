@@ -33,14 +33,15 @@ public class RoomGeneration : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.Instance.OnEndPhase.RemoveListener(Shuffle);
+        GameManager.Instance.OnEachEndPhase.RemoveListener(Shuffle);
     }
 
     #region Generation
     private void Start()
     {
         _maxRooms = 0;
-        GameManager.Instance.OnEndPhase.AddListener(Shuffle);
+        GameManager.Instance.OnEachEndPhase.AddListener(Shuffle);
+  
     }
     public IEnumerator GenerateRooms()
     {
@@ -420,6 +421,7 @@ public class RoomGeneration : MonoBehaviour
             _maxRooms = _roomsInPlay.Count / 2;
         else if (GameManager.Instance.CurrentTimerPhase == GameManager.TimerPhase.END)
             _maxRooms = 0;
+        //Debug.Log(_maxRooms);
         for (int i = 0; i < _maxRooms; i++)
         {
             foreach (Door door in FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).Doors)

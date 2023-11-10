@@ -6976,6 +6976,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1259153238061541977, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: room
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1303103703289309016, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7041,16 +7046,6 @@ PrefabInstance:
       propertyPath: _cameraPoint
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
-        type: 3}
-      propertyPath: _nextRoomDoor
-      value: 
-      objectReference: {fileID: 905576380753228828}
-    - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
-        type: 3}
-      propertyPath: _previousRoomDoor
-      value: 
-      objectReference: {fileID: 7609940457576197441}
     - target: {fileID: 3803561225509131696, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7086,6 +7081,16 @@ PrefabInstance:
       propertyPath: room
       value: 
       objectReference: {fileID: -4933583240055195963}
+    - target: {fileID: 8391289535384040196, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: room
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105892949080795235, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: room
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960, type: 3}
     m_RemovedGameObjects:
@@ -8654,9 +8659,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1980167634142278514}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &905576380753228828 stripped
+--- !u!114 &721594956480141611 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1723672576091293550, guid: c870671ee6471bb49827e26d1cbc2960,
+  m_CorrespondingSourceObject: {fileID: 1259153238061541977, guid: c870671ee6471bb49827e26d1cbc2960,
     type: 3}
   m_PrefabInstance: {fileID: 1980167634142278514}
   m_PrefabAsset: {fileID: 0}
@@ -8685,16 +8690,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _doors:
-  - {fileID: 905576380753228828}
-  - {fileID: 7609940457576197441}
+  - {fileID: 8000977509149704310}
+  - {fileID: 721594956480141611}
   _linkedRooms: []
   _roomSide: 2
   _tandem: {fileID: 0}
+  _reward: {fileID: 0}
   _cameraPoint: {fileID: 6654049696826231685}
+  _isRewardClue: 0
+  _canHaveReward: 0
   _roomLeft: {fileID: 0}
   _roomRight: {fileID: 0}
-  _roomDoorLeft: {fileID: 905576380753228828}
-  _roomDoorRight: {fileID: 7609940457576197441}
+  _roomDoorLeft: {fileID: 0}
+  _roomDoorRight: {fileID: 0}
   _spawnPoints:
   - {fileID: 7014610497458107035}
   - {fileID: 3424652784279245649}
@@ -8712,9 +8720,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1980167634142278514}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7609940457576197441 stripped
+--- !u!114 &8000977509149704310 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8277905828560068147, guid: c870671ee6471bb49827e26d1cbc2960,
+  m_CorrespondingSourceObject: {fileID: 8391289535384040196, guid: c870671ee6471bb49827e26d1cbc2960,
     type: 3}
   m_PrefabInstance: {fileID: 1980167634142278514}
   m_PrefabAsset: {fileID: 0}

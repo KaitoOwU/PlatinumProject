@@ -10,6 +10,7 @@ using UnityEditor.PackageManager;
 using Unity.VisualScripting;
 using DG.Tweening;
 using static System.Collections.Specialized.BitVector32;
+using static UnityEngine.Rendering.DebugUI;
 
 public class UnityEventManager : MonoBehaviour
 {
@@ -17,14 +18,16 @@ public class UnityEventManager : MonoBehaviour
     public static UnityEventManager Instance => instance;
 
     [Header("---References---")]
-    [SerializeField] private UnityEventData _eventsData;
+    [SerializeField]
+    UnityEventData _eventsData;
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private GameObject _camera;
+    [SerializeField] private GameObject _audioSourcesStorage;
 
-    //private List<UnityAction> _actions = new();
+    private List<SSoundRef> _soundsPlaying = new();
 
-    // from script name : get 
     List<SAction> _actions = new();
+
     struct SAction
     {
         public SAction(UnityEvent _eventRef, UnityAction _action)
@@ -38,11 +41,19 @@ public class UnityEventManager : MonoBehaviour
         UnityAction action;
     }
 
-    private void Awake()
+    private void Start()
     {
         instance = this;
-        InitEvents(_eventsData);
+        var events = Resources.LoadAll("CurrentEvents", typeof(UnityEventData));
+        if (events.Length == 0)
+            Debug.LogWarning("WARNING : Current events database wasn't found : --> Try to 'Update Database' in Event Tool Window.");
+        else
+        {
+            _eventsData = Resources.LoadAll("CurrentEvents", typeof(UnityEventData))[0] as UnityEventData;
+            InitEvents(_eventsData);
+        }
     }
+
     void InitEvents(UnityEventData data)
     {
         //get all scripts in scene and add listener from scriptable object
@@ -65,50 +76,112 @@ public class UnityEventManager : MonoBehaviour
                                 d = () => DebugMessage(eventAction.DebugMessage);
                                 break;
                             case EventTypeEnum.SCREENSHAKE:
-                                d = () => ScreenShake(eventAction.Intensity);
+                                if(eventAction.Intensity != 0)
+                                    d = () => ScreenShake(eventAction.Intensity);
                                 break;
-                            case EventTypeEnum.PLAY_SOUND:
-                                d = () => PlaySFX(eventAction.Clip);
+                            case EventTypeEnum.PLAY_SOUND_ONCE:
+                                if(eventAction.ClipAudio != null)
+                                    d = () => PlaySFX(eventAction.ClipAudio);
+                                break;
+                            case EventTypeEnum.PLAY_RANDOM_SOUND_ONCE:
+                                var nonNullClips = eventAction.ClipsAudio.Where(c => c != null).ToList();
+                                if(nonNullClips.Count != 0)
+                                    d = () => PlayRandomSFX(nonNullClips);
+                                break;
+                            case EventTypeEnum.START_PLAY_SOUND:
+                                if (eventAction.ClipAudio != null)
+                                    d = () => StartPlaySFX(instance as GameObject, eventAction.ClipAudio);
+                                break;
+                            case EventTypeEnum.STOP_PLAY_SOUND:
+                                if (eventAction.ClipAudio != null)
+                                    d = () => StopPlaySFX(instance as GameObject, eventAction.ClipAudio);
+                                break;
+                            case EventTypeEnum.VIBRATE_ALL_CONTROLLERS:
+                                if (eventAction.Intensity != 0)
+                                    d = () => Vibrate(eventAction.Intensity);
                                 break;
                         }
-                        if(d !=null)
+                        if(d != null)
+                        {
                             ((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance))).AddListener(d);
-                        Debug.Log(eventValue.EventName);
-                        Debug.Log((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance)));
-                        var t = (UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance));
-                        _actions.Add(new SAction(t,d));
-                    }
+                            var t = (UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance));
+                            _actions.Add(new SAction(t,d));
 
+                        }
+                    }
                 }
             }
         }
     }
+
     private void OnDisable()
     {
         foreach(var a in _actions)
         {
             a.EventRef.RemoveListener(a.Action);
         }
-        //((UnityEvent)(instance.GetType().GetField(eventValue.EventName).GetValue(instance))).RemoveListener(d);
     }
-    void CallAllEvents()
-    {
-        
-    }
- 
+
+    #region Linked Methods
     public void DebugMessage(string msg)
     {
         Debug.Log($"<color=cyan>{msg}</color>");
     }
-    public void PlaySFX(AudioClip audioClip)
+    public void PlaySFX(Clip audioClip)
     {
-        _audioSource.PlayOneShot(audioClip);
+        _audioSource.PlayOneShot(audioClip.Audioclip, audioClip.Volume);
+    }
+    public void PlayRandomSFX(List<Clip> audioClips)
+    {
+        int randIndex = UnityEngine.Random.Range(0,audioClips.Count);
+        _audioSource.PlayOneShot(audioClips[randIndex].Audioclip, audioClips[randIndex].Volume);
+    }
+    public void StartPlaySFX(GameObject instance, Clip audioClip)
+    { 
+        AudioSource newAudioSource = _audioSourcesStorage.AddComponent<AudioSource>();
+        newAudioSource.loop = true;
+        newAudioSource.clip = audioClip.Audioclip;
+        newAudioSource.volume = audioClip.Volume;
+        newAudioSource.Play();
+        _soundsPlaying.Add(new SSoundRef(newAudioSource, instance, newAudioSource.clip));
+    }
+    public void StopPlaySFX(GameObject instance, Clip audioClip)
+    {
+        List<SSoundRef> _soundRefs = _soundsPlaying.Where(t => t.InstanceRef == instance).ToList();
+        SSoundRef _soundRef = _soundRefs.FirstOrDefault(t => t.Clip == audioClip.Audioclip);
+        if(_soundRef != null)
+        {
+            _soundRef.AudioSource.Stop();
+            _soundsPlaying.Remove(_soundRef);
+            Destroy(_soundRef.AudioSource);
+        }
     }
     public void ScreenShake(float intensity)
     {
         _camera.transform.DOShakePosition(intensity);
+    }
+    public void Vibrate(float intensity)
+    {
+        _camera.transform.DOShakePosition(intensity);
         Debug.Log($"ScreenShake at intensity : {intensity}");
     }
+    #endregion
+}
+
+class SSoundRef
+{
+    public SSoundRef(AudioSource _audioSource, GameObject _instanceRef, AudioClip _action)
+    {
+        audioSource = _audioSource;
+        instanceRef = _instanceRef;
+        clip = _action;
+    }
+    public AudioSource AudioSource => audioSource;
+    public GameObject InstanceRef => instanceRef;
+    public AudioClip Clip => clip;
+    AudioSource audioSource;
+    GameObject instanceRef;
+    AudioClip clip;
 }
 
 [Serializable]
@@ -135,19 +208,8 @@ public class ScriptEventInfo
     [SerializeField]
     private List<UnityEventInfo> events;
 
-    //public void DebugMessage(string msg)
-    //{
-    //    UnityEventManager.Instance.DebugMessage(msg);
-    //}
-    //public void PlaySFX(AudioClip audioClip)
-    //{
-    //    UnityEventManager.Instance.PlaySFX(audioClip);
-    //}
-    //public void ScreenShake(float intensity)
-    //{
-    //    UnityEventManager.Instance.ScreenShake(intensity);
-    //}
 }
+
 [Serializable]
 public class UnityEventInfo
 {
@@ -171,27 +233,34 @@ public class UnityEventInfo
     [SerializeField]
     private List<EventAction> eventActions;
 }
+
 [Serializable]
 public enum EventTypeEnum
 {
     NONE,
     DEBUG,
-    PLAY_SOUND,
+    PLAY_SOUND_ONCE,
+    PLAY_RANDOM_SOUND_ONCE,
+    START_PLAY_SOUND,
+    STOP_PLAY_SOUND,
     SCREENSHAKE,
+    VIBRATE_ALL_CONTROLLERS,
 }
+
 [Serializable]
 public class EventAction
 {
     public EventAction() 
     {
         eventType = EventTypeEnum.NONE;
+        clipAudio = new();
+        clipsAudio = new();
     }
-
-
 
     public EventTypeEnum EventType
     {
-        get { return eventType; } set { eventType = value; }
+        get { return eventType; } 
+        set { eventType = value; }
     }
 
     public string DebugMessage
@@ -199,11 +268,18 @@ public class EventAction
         get { return debugMessage; }
         set { debugMessage = value; }
     }
-    public AudioClip Clip
+    public Clip ClipAudio
     {
-        get { return clip; }
-        set { clip = value; }
+        get { return clipAudio; }
+        set { clipAudio = value; }
     }
+
+    public List<Clip> ClipsAudio
+    {
+        get { return clipsAudio; }
+        set { clipsAudio = value; }
+    }
+
     public float Intensity
     {
         get { return intensity; }
@@ -215,7 +291,29 @@ public class EventAction
     [SerializeField]
     private string debugMessage;
     [SerializeField]
-    private AudioClip clip;
+    private Clip clipAudio;
     [SerializeField]
-    private float intensity;
+    private List<Clip> clipsAudio;
+    [SerializeField]
+    private float intensity = 1;
+
+}
+
+[Serializable]
+public class Clip
+{
+    public AudioClip Audioclip
+    {
+        get { return audioclip; }
+        set { audioclip = value; }
+    }
+    public float Volume
+    {
+        get { return volume; }
+        set { volume = value; }
+    }
+    [SerializeField]
+    AudioClip audioclip;
+    [SerializeField]
+    float volume = 1;
 }

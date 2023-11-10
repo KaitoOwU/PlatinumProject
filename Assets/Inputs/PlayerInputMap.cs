@@ -123,7 +123,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""id"": ""9b269a02-3021-458c-9ed6-cb992c7b2374"",
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""AxisDeadzone"",
                     ""groups"": """",
                     ""action"": ""Push"",
                     ""isComposite"": false,

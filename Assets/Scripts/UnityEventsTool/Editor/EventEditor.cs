@@ -25,7 +25,6 @@ public class EventEditor : EditorWindow
 
         _eventWindow = GetWindow<EventEditor>();
         _eventWindow.minSize = new Vector2(400, 410);
-        //_eventWindow.maxSize = new Vector2(400, 350);
         _eventWindow.titleContent = new GUIContent("Events");
         _eventWindow.Show();
 
@@ -36,7 +35,6 @@ public class EventEditor : EditorWindow
 
     private void OnGUI()
     {
-        //var font = (Font)AssetDatabase.LoadAssetAtPath("Assets/Fonts/Temporary/Raleway-Black.otf", typeof(Font));
         GUI.skin.font = font;
         if (!font)
         {
@@ -91,11 +89,20 @@ public class EventEditor : EditorWindow
         {
             if (EditorPrefs.GetString("CurrentDataDirectory") != "")
             {
-                var currentDatabase = AssetDatabase.LoadAllAssetsAtPath(EditorPrefs.GetString("CurrentDataDirectory"))[0];
-                if (currentDatabase != null)
+                if(AssetDatabase.LoadAllAssetsAtPath(EditorPrefs.GetString("CurrentDataDirectory")).Length == 0)
                 {
-                    Selection.activeObject = currentDatabase;
-                    EditorGUIUtility.PingObject(Selection.activeObject);
+                    EditorUtility.DisplayDialog("Warning",
+                    "No database has been found! \n\n-->Try to Update Database first",
+                    "OK", "NO!");
+                }
+                else
+                {
+                    var currentDatabase = AssetDatabase.LoadAllAssetsAtPath(EditorPrefs.GetString("CurrentDataDirectory"))[0];
+                    if (currentDatabase != null)
+                    {
+                        Selection.activeObject = currentDatabase;
+                        EditorGUIUtility.PingObject(Selection.activeObject);
+                    }
                 }
             }
         }

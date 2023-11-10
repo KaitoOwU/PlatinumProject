@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Windows;
 using UnityEngine.InputSystem;
 using static PlayerController;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,7 +24,9 @@ public class PlayerController : MonoBehaviour
     private float _currentVelocity;
     private EMoveState _moveState;
 
-    [SerializeField] private GameObject _playerUi;
+    [HideInInspector] public UnityEvent OnMoveStarted;
+    [HideInInspector] public UnityEvent OnMoveCanceled;
+    [HideInInspector] public UnityEvent OnPause;
 
     public enum EButtonType
     {
@@ -37,8 +40,9 @@ public class PlayerController : MonoBehaviour
     {
         NORMAL,
         PUSH,
+        PUSH_BLOCKED,
     }
-    private Vector3 _constraint;
+
     Dictionary<EButtonType, string> _inputNames = new()
     { { EButtonType.MOVE, "Move" },
     { EButtonType.INTERACT, "Interact" },
@@ -47,11 +51,10 @@ public class PlayerController : MonoBehaviour
     { EButtonType.PAUSE, "Pause" }};
 
     private void OnDisable() => _CleanUp();
-    RigidbodyConstraints _normalConstraints;
 
     public bool IsButtonHeld(EButtonType buttonType)
     {
-        return _inputManager.GetInputValue<bool>(_inputNames[buttonType]);
+        return _inputManager?.GetInputValue(_inputNames[buttonType]) > 0;
     }
 
     #region Set up & Clean up
@@ -68,21 +71,25 @@ public class PlayerController : MonoBehaviour
 
         GetComponent<Player>().Index = _playerIndex;
 
+
         _inputManager.OnInteract.AddListener(_Interact);
-        _inputManager.OnPush.AddListener(_Push);
         _inputManager.OnUseTool.AddListener(_UseTool);
         _inputManager.OnPause.AddListener(_Pause);
 
+        _inputManager.OnMoveStarted.AddListener(_StartMove);
+        _inputManager.OnMoveCanceled.AddListener(_StopMove);
+
         _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed;
         _moveState = EMoveState.NORMAL;
-        _normalConstraints = _rigidbody.constraints;
     }
     private void _CleanUp()
     {
         if (_inputManager != null)
         {
+            _inputManager.OnMoveStarted.RemoveListener(_StartMove);
+            _inputManager.OnMoveCanceled.RemoveListener(_StopMove);
+
             _inputManager.OnInteract.RemoveListener(_Interact);
-            _inputManager.OnPush.RemoveListener(_Push);
             _inputManager.OnUseTool.RemoveListener(_UseTool);
             _inputManager.OnPause.RemoveListener(_Pause);
         }
@@ -103,6 +110,9 @@ public class PlayerController : MonoBehaviour
                 else if (constraint.z != 0)
                     _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
                 _moveSpeed = GameManager.Instance.PlayerConstants.PushMoveSpeed; break;
+            case EMoveState.PUSH_BLOCKED:
+                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                _moveSpeed = 0; break;
         }
     }
 
@@ -124,6 +134,8 @@ public class PlayerController : MonoBehaviour
     {
         _rigidbody.velocity = new Vector3(dir.x * _moveSpeed, _rigidbody.velocity.y, dir.y * _moveSpeed);
     }
+    private void _StartMove() => OnMoveStarted?.Invoke();
+    private void _StopMove() => OnMoveCanceled?.Invoke();
     private void UpdatePlayerRotation(Vector3 dir)
     {
         var targetAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg, ref _currentVelocity, 0.05f);
@@ -146,7 +158,7 @@ public class PlayerController : MonoBehaviour
 
     private void _Pause()
     {
-        
+        OnPause?.Invoke();
     }
     #endregion
 }

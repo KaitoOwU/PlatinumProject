@@ -9,11 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e579df59fbc9a694196695bdcc4157ad, type: 3}
-  m_Name: Interaction6
+  m_Script: {fileID: 11500000, guid: 538c0dbe060e6b345b7267897db4f6db, type: 3}
+  m_Name: Clue0_21
   m_EditorClassIdentifier: 
-  _suspectDuo:
+  _name: 21
+  _id: 0
+  _prefab: {fileID: 651415574374227879, guid: c05568384fd177a478b55e0e60d8dbf2, type: 3}
+  _suspects:
     _victim: {fileID: 11400000, guid: 4d7cbbe551e9318479f93ea22b437ac3, type: 2}
-    _murderer: {fileID: 11400000, guid: 9d0bf5374626a1841b1c91c92563c9ca, type: 2}
-  _clues:
-  - {fileID: 3086518745707326911, guid: 2c0f2bf5a762b9d4c8bdf1747e3d38d4, type: 3}
+    _murderer: {fileID: 11400000, guid: 66700a1f3dcc1b845aa10c3111586c1b, type: 2}
+  _description: 
+  _sprite: {fileID: 0}

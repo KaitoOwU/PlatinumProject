@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc6dbed766a510e43bd900840650aa48, type: 3}
-  m_Name: EventData_3
+  m_Name: EventData_0
   m_EditorClassIdentifier: 
   _database:
   - scriptName: GameManager
@@ -27,16 +27,6 @@ MonoBehaviour:
       eventActions: []
     - eventName: OnEachMinute
       eventActions: []
-  - scriptName: InputManager
-    events:
-    - eventName: OnMoveStarted
-      eventActions: []
-    - eventName: OnMoveCanceled
-      eventActions: []
-    - eventName: OnUseTool
-      eventActions: []
-    - eventName: OnPause
-      eventActions: []
   - scriptName: Furniture
     events:
     - eventName: OnClueFoundInFurniture
@@ -44,20 +34,14 @@ MonoBehaviour:
     - eventName: OnClueNotFoundInFurniture
       eventActions: []
     - eventName: OnBeginPushingFurniture
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clip: {fileID: 8300000, guid: bfd6b19b3e3a52e4d9ad86cd22577b80, type: 3}
-        intensity: 0
-      - eventType: 3
-        debugMessage: 
-        clip: {fileID: 0}
-        intensity: 0.1
-      - eventType: 1
-        debugMessage: YOU'RE PUSHING
-        clip: {fileID: 0}
-        intensity: 0
+      eventActions: []
     - eventName: OnStopPushingFurniture
       eventActions: []
     - eventName: OnBeginStrugglePushingFurniture
+      eventActions: []
+  - scriptName: PlayerController
+    events:
+    - eventName: OnMoveStarted
+      eventActions: []
+    - eventName: OnMoveCanceled
       eventActions: []
