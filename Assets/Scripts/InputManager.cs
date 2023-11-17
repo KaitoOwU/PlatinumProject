@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.DualShock;
 using UnityEngine.Serialization;
 using UnityEngine.Windows;
+using static GameManager;
 
 public class InputManager : MonoBehaviour
 {
@@ -163,6 +164,8 @@ public class InputManager : MonoBehaviour
     private void _PickCharacter(InputAction.CallbackContext obj)
     {
         _nonSelectedPlayers.RemoveAt(_playerSelected);
+        if(_nonSelectedPlayers.Count == 0)
+            GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
         _CleanSelectEvents();
         _SetupEvents();
         _AddController();
