@@ -36,6 +36,8 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
+        if (GameManager.Instance.CurrentGamePhase == GameManager.GamePhase.SELECT_CHARACTER)
+            return;
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
             OnChangeRoom?.Invoke();

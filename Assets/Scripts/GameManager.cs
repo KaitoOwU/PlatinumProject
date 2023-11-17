@@ -125,14 +125,14 @@ public class GameManager : MonoBehaviour
     }
     int _validatedRooom = 0;
 
-
     public enum GamePhase
     {
-        MENU,
+        SELECT_CHARACTER,
         HUB,
         GAME,
+        EARLY_GUESS,
         GUESS,
-        END,
+        END
     }
     public enum TimerPhase
     {
@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        CurrentGamePhase = GamePhase.HUB;
+        CurrentGamePhase = GamePhase.SELECT_CHARACTER;
         StartTimer();
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);

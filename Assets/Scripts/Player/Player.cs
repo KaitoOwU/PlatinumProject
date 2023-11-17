@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
         set => _heldPickable = value;
     }
     public Room CurrentRoom { get => _currentRoom; set => _currentRoom = value; }
+    public bool Selected { get => _selected; set => _selected = value; }
+    public bool _selected;
 
     public int Index
     {

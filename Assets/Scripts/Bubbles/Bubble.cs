@@ -30,7 +30,7 @@ public class Bubble : MonoBehaviour
     }
     public Bubble Init(Player targetPlayer)
     {
-        Instantiate(_playerIconsPrefab[targetPlayer.Index - 1], transform);
+        Instantiate(_playerIconsPrefab[targetPlayer.Index], transform);
         _text.text = "";
         _playerRef = targetPlayer;
         _bubbleType = EBubbleType.PLAYER;

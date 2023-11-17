@@ -10,6 +10,7 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
+
     public int PlayerIndex => _playerIndex;
     public InputManager Inputs => _inputManager;
 
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _inputs;
     private float _currentVelocity;
     private EMoveState _moveState;
+
 
     [HideInInspector] public UnityEvent OnMoveStarted;
     [HideInInspector] public UnityEvent OnMoveCanceled;
