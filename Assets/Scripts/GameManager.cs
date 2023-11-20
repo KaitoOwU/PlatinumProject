@@ -92,7 +92,9 @@ public class GameManager : MonoBehaviour
     public UnityEvent OnChangeToSplitScreen;
     [HideInInspector]
     public UnityEvent OnChangeToFullScreen;
+    [HideInInspector]
     public UnityEvent OnTPToHubAfterTrap;
+    [HideInInspector]
     public UnityEvent OnTPToHub;
 
     private SuspectData _murderer;

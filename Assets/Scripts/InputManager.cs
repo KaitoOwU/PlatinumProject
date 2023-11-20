@@ -164,7 +164,7 @@ public class InputManager : MonoBehaviour
     private void _PickCharacter(InputAction.CallbackContext obj)
     {
         _nonSelectedPlayers.RemoveAt(_playerSelected);
-        if(_nonSelectedPlayers.Count == 0)
+        if(_nonSelectedPlayers.Count<4/*_nonSelectedPlayers.Count == 0*/)
             GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
         _CleanSelectEvents();
         _SetupEvents();
