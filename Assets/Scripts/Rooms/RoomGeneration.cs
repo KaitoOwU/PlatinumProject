@@ -23,6 +23,7 @@ public class RoomGeneration : MonoBehaviour
     private List<GameObject> _rewards= new List<GameObject>();
     [SerializeField] private GameObject arm;
     private List<GameObject> _rewardClueOnly = new List<GameObject>();
+    [SerializeField] private List<Material> _doormattMaterials = new List<Material>();
 
     public LayoutGenerator Layout { get => _layout; }
 
@@ -327,6 +328,7 @@ public class RoomGeneration : MonoBehaviour
         {
             room.name = "room "+room.Doors.Count+ " doors : " + room.transform.position;
             room.LinkedRooms.Clear();
+            room.UsedDoormats.Clear();
         }
         LinkRoom(_hall, FindRoomAtPosition(_hall.transform.position - new Vector3(_layout.BetweenRoomDistance, 0, 0)),_hall.Doors[0]);
         LinkRoom(_hall, FindRoomAtPosition(_hall.transform.position + new Vector3(_layout.BetweenRoomDistance, 0, 0)),_hall.Doors[1]);
@@ -388,14 +390,29 @@ public class RoomGeneration : MonoBehaviour
     }
     private void LinkRoom(Room room, Room roomToLink, Door door)
     {
+        Material doorMat = _doormattMaterials[0];
+        foreach(Material material in _doormattMaterials)
+        {
+            if (!room.UsedDoormats.Contains(material) && !roomToLink.UsedDoormats.Contains(material))
+            {
+                doorMat = material;
+                break;
+            }
+        }
         foreach (Door doorToLink in roomToLink.Doors)
         {
             if (doorToLink.LinkedDoor == null)
             {
+                room.UsedDoormats.Add(doorMat);
+                roomToLink.UsedDoormats.Add(doorMat);
+                door.DoormatMat = doorMat;
+                doorToLink.DoormatMat = doorMat;
                 room.LinkedRooms.Add(roomToLink);
                roomToLink.LinkedRooms.Add(room);
                 door.LinkedDoor = doorToLink;
-                doorToLink.LinkedDoor = door;                
+                doorToLink.LinkedDoor = door;
+                door.UpdateDoormat();
+                doorToLink.UpdateDoormat();
                 break;
             }
         }

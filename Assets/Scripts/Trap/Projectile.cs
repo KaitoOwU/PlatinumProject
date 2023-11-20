@@ -1,34 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    [SerializeField] private float _rotaSpeed;
     private Vector3 _dir;
-    private float _rota;
     void Start()
     {
-        _dir = Vector3.forward * _speed;
+        _dir = transform.forward * _speed;
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.position += _dir * Time.deltaTime;
-        _rota = _rotaSpeed * Time.deltaTime;
-        transform.rotation = new Quaternion(_rota, 0, 0, 0);
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Player>())
         {
-            Player[] players = new Player[GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == other.GetComponent<Player>().RelativePos).Count];
+
+            Player[] players = new Player[FindObjectsOfType<Player>().ToList().FindAll(player=>player.CurrentRoom== other.GetComponent<Player>().CurrentRoom).Count];
+            Debug.Log(players.Length);
             for (int i = 0; i < players.Length; i++)
             {
-                players[i] = GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == other.GetComponent<Player>().RelativePos)[i].PlayerRef; 
-            } 
+                players[i] = FindObjectsOfType<Player>().ToList().FindAll(player => player.CurrentRoom == other.GetComponent<Player>().CurrentRoom)[i]; 
+            }
+            GameManager.Instance.TPPlayerPostTrap(players);
         }
         Destroy(gameObject);
     }        

@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BookshelfTrap : MonoBehaviour
 {
@@ -11,18 +13,21 @@ public class BookshelfTrap : MonoBehaviour
     private int _playerInRoom;
     private bool _isShooting;
 
+    public UnityEvent ThrowBook;
     private void Start()
     {
+        _room=GetComponentInParent<Room>();
         _isShooting = false;
+        _playerInRoom = 0;
     }
 
     private void Update()
     {
-        _playerInRoom = 1; //PlayerInRoom();
+        _playerInRoom = _room.PlayerInRoom();
+
         if (_playerInRoom > 0&& !_isShooting)
         {
             _isShooting = true;
-            Debug.Log("aeaze");
             StartCoroutine(ShootBook());      
         }
         else if (_playerInRoom == 0)
@@ -30,25 +35,12 @@ public class BookshelfTrap : MonoBehaviour
             _isShooting = false;
         }
     }
-    private int PlayerInRoom()
-    {
-        int pInRoom = 0;
-        foreach (PlayerInfo p in GameManager.Instance.PlayerList.FindAll(player => player.PlayerController))
-        {
-            if (p.PlayerRef.CurrentRoom == _room)
-            {
-                pInRoom++;
-            }
-        }
-        return pInRoom;
-    }
     IEnumerator ShootBook()
     {
         while (_isShooting)
         {
-            Debug.Log("ah");
             yield return new WaitForSeconds(_cadence);
-            GameObject projectile = Instantiate(_book, _spawnPoint);
+            GameObject projectile = Instantiate(_book, _spawnPoint.position,_spawnPoint.rotation);
         }
     }
 }
