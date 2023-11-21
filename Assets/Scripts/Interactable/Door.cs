@@ -26,7 +26,7 @@ public class Door : Interactable
     public Room Room { get => room;}
     public Material DoormatMat { get => _doormatMat; set => _doormatMat = value; }
 
-    private void Awake()
+    private void Start()
     {
         _corridors= FindObjectsOfType<Corridor>().ToList();
         room = GetComponentInParent<Room>();
@@ -149,12 +149,10 @@ public class Door : Interactable
     private void TP_SidePlayers()
     {
         int rand = Random.Range(0, 10);
-        Debug.Log(GameManager.Instance.CorridorChance);
         if (rand > GameManager.Instance.CorridorChance)
         {
             int rand2 = Random.Range(0, _corridors.Count);
             Corridor corridor = _corridors[rand2];
-            Debug.Log(corridor.name);
             corridor.SetCorridor(_playersInRange[0], LinkedDoor);
             TP_Players(corridor.Doors[0].TpPoint);
             TP_Camera(corridor);
