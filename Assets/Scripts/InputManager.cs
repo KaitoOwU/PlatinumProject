@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.DualShock;
 using UnityEngine.Serialization;
 using UnityEngine.Windows;
+using static GameManager;
 
 public class InputManager : MonoBehaviour
 {
@@ -47,6 +48,11 @@ public class InputManager : MonoBehaviour
         get { return onPause; }
         set { onPause = value; }
     }
+    public UnityEvent OnBack
+    {
+        get { return onBack; }
+        set { onBack = value; }
+    }
     private UnityEvent onMoveStarted = new();
     private UnityEvent onMoveCanceled = new();
     private UnityEvent<Player> onInteract = new();
@@ -54,13 +60,13 @@ public class InputManager : MonoBehaviour
     private UnityEvent<Player> onPushCanceled = new();
     private UnityEvent onUseTool = new();
     private UnityEvent onPause = new();
+    private UnityEvent onBack = new();
 
     private PlayerInput _inputs;
-    [SerializeField]
-    private int _index;
+    private int _controllerIndex;
 
     // Character Select 
-    private int _playerSelected;
+    private int _playerSelectedIndex;
     private Player[] _players;
     private List<Player> _nonSelectedPlayers;
     private Bubble _playerSelectedBubble;
@@ -74,7 +80,7 @@ public class InputManager : MonoBehaviour
         //_SetupEvents();
         //_AddController();
 
-        _index = _inputs.playerIndex;
+        _controllerIndex = _inputs.playerIndex;
         _SetupSelectEvents();
         //Gamepad.all[_index].SetMotorSpeeds(1f, 1f);
         //Gamepad.all[_index + 1].SetMotorSpeeds(1f, 1f);
@@ -85,7 +91,7 @@ public class InputManager : MonoBehaviour
     private void _AddController()
     {
         //Get right character depending on controller index and launch set up (= controller corresponding character)
-        GameManager.Instance.PlayerList[_playerSelected].PlayerController.SetUp(this, _inputs, transform);
+        GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerController.SetUp(this, _inputs, transform);
     }
 
     #region Subscription Setup & Cleanup
@@ -98,6 +104,7 @@ public class InputManager : MonoBehaviour
         _inputs.actions["Push"].canceled += _Push_canceled;
         _inputs.actions["Tool"].started += _Tool_performed;
         _inputs.actions["Pause"].started += _Pause_performed;
+        _inputs.actions["Back"].started += _Back_performed;
     }
 
     private void _CleanEvents()
@@ -109,6 +116,7 @@ public class InputManager : MonoBehaviour
         _inputs.actions["Push"].canceled -= _Push_canceled;
         _inputs.actions["Tool"].started -= _Tool_performed;
         _inputs.actions["Pause"].started -= _Pause_performed;
+        _inputs.actions["Back"].started -= _Back_performed;
     }
     private void _SetupSelectEvents()
     {
@@ -116,8 +124,8 @@ public class InputManager : MonoBehaviour
         _inputs.actions["Interact"].started += _PickCharacter;
         _players = GameManager.Instance.PlayerList.Select(p => p.PlayerRef).ToArray();
         _nonSelectedPlayers = _players.ToList();
-        _playerSelected = 0;
-        _playerSelectedBubble = BubbleManager.Instance.ShowPlayerIcon(_nonSelectedPlayers[_playerSelected].transform, _nonSelectedPlayers[_playerSelected], (BubbleManager.EBubblePos)_index);
+        _playerSelectedIndex = 0;
+        _playerSelectedBubble = BubbleManager.Instance.ShowPlayerIcon(_nonSelectedPlayers[_playerSelectedIndex].transform, _nonSelectedPlayers[_playerSelectedIndex], (BubbleManager.EBubblePos)_controllerIndex);
     }
 
     private void _CleanSelectEvents()
@@ -140,9 +148,10 @@ public class InputManager : MonoBehaviour
     #region Invoking Methods
     private void _Move_started(InputAction.CallbackContext obj) => OnMoveStarted?.Invoke();
     private void _Move_canceled(InputAction.CallbackContext obj) => OnMoveCanceled?.Invoke();
-    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
-    private void _Push_performed(InputAction.CallbackContext obj) => OnPush?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);  
-    private void _Push_canceled(InputAction.CallbackContext obj) => OnPushCanceled?.Invoke(GameManager.Instance.PlayerList[_index].PlayerRef);
+    private void _Back_performed(InputAction.CallbackContext obj) => OnBack?.Invoke();
+    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+    private void _Push_performed(InputAction.CallbackContext obj) => OnPush?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);  
+    private void _Push_canceled(InputAction.CallbackContext obj) => OnPushCanceled?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
     private void _Tool_performed(InputAction.CallbackContext obj) => OnUseTool?.Invoke();
     private void _Pause_performed(InputAction.CallbackContext obj) => OnPause?.Invoke();
     #endregion
@@ -152,19 +161,19 @@ public class InputManager : MonoBehaviour
         if(_playerSelectedBubble != null)
             Destroy(_playerSelectedBubble.gameObject);
         if(_inputs.actions["Move"].ReadValue<Vector2>().x > 0)
-            _playerSelected = (_playerSelected + 1) % 4;
+            _playerSelectedIndex = (_playerSelectedIndex + 1) % 4;
         else
         {
-            _playerSelected = (_playerSelected - 1) % 4;
-            _playerSelected = _playerSelected < 0 ? 3 : _playerSelected;
+            _playerSelectedIndex = (_playerSelectedIndex - 1) % 4;
+            _playerSelectedIndex = _playerSelectedIndex < 0 ? 3 : _playerSelectedIndex;
         }
-        _playerSelectedBubble = BubbleManager.Instance.ShowPlayerIcon(_nonSelectedPlayers[_playerSelected].transform, _nonSelectedPlayers[_playerSelected], (BubbleManager.EBubblePos)_index);
+        _playerSelectedBubble = BubbleManager.Instance.ShowPlayerIcon(_nonSelectedPlayers[_playerSelectedIndex].transform, _nonSelectedPlayers[_playerSelectedIndex], (BubbleManager.EBubblePos)_controllerIndex);
     }
     private void _PickCharacter(InputAction.CallbackContext obj)
     {
-        _nonSelectedPlayers.RemoveAt(_playerSelected);
-        if(_nonSelectedPlayers.Count < 4/*_nonSelectedPlayers.Count == 0*/)
-            GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.HUB;
+        _nonSelectedPlayers.RemoveAt(_playerSelectedIndex);
+        if(_nonSelectedPlayers.Count<4/*_nonSelectedPlayers.Count == 0*/)
+            GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
         _CleanSelectEvents();
         _SetupEvents();
         _AddController();

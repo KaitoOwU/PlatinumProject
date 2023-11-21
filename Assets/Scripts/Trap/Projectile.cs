@@ -23,7 +23,6 @@ public class Projectile : MonoBehaviour
         {
 
             Player[] players = new Player[FindObjectsOfType<Player>().ToList().FindAll(player=>player.CurrentRoom== other.GetComponent<Player>().CurrentRoom).Count];
-            Debug.Log(players.Length);
             for (int i = 0; i < players.Length; i++)
             {
                 players[i] = FindObjectsOfType<Player>().ToList().FindAll(player => player.CurrentRoom == other.GetComponent<Player>().CurrentRoom)[i]; 
