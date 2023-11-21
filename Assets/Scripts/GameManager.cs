@@ -186,12 +186,6 @@ public class GameManager : MonoBehaviour
         _onLose.AddListener(Lose);
         OnEachEndPhase.AddListener(TPAllPlayersToHub);
     }
-
-    private void Update()
-    {
-        Debug.Log(CurrentGamePhase);
-    }
-
     private void InitGame()
     {
         _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
