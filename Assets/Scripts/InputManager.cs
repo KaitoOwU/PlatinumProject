@@ -67,10 +67,6 @@ public class InputManager : MonoBehaviour
 
         _SetupEvents();
         _AddController();
-
-        //Gamepad.all.ToList().ForEach(gamepad => gamepad.SetMotorSpeeds(1f, 1f));
-        Gamepad.all[_index].SetMotorSpeeds(1f, 1f);
-        Gamepad.all[_index + 1].SetMotorSpeeds(1f, 1f);
     }
 
     private void OnDisable() => _CleanEvents();
