@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -15,6 +16,8 @@ public class Interactable : MonoBehaviour
     [Header("--- EVENTS ---")]
     protected UnityEvent _onPlayerEnterRange;
     protected UnityEvent _onPlayerExitRange;
+
+    private List<Bubble> _bubbles = new();
     
     protected virtual void Awake()
     {
@@ -67,6 +70,36 @@ public class Interactable : MonoBehaviour
     protected virtual void OnInteract(Player player){}
     protected virtual void PlayAnimation(){}
 
+    #region Bubbles
+    protected virtual void AddBubble(Player p)
+    {
+        if(_bubbles.Count < 4 && _bubbles.FirstOrDefault(b => b.PlayerRef == p) == null)
+            _bubbles.Add(BubbleManager.Instance.ShowPlayerIcon(transform, p, (BubbleManager.EBubblePos)_bubbles.Count));
+    }
+
+    protected virtual void AddBubble(Player p, string s)
+    {
+        if (_bubbles.Count < 4)
+            _bubbles.Add(BubbleManager.Instance.ShowBubble(transform, p, s, (BubbleManager.EBubblePos)_bubbles.Count));
+    }
+    protected virtual void RemoveBubble(Player p)
+    {
+        Bubble target = _bubbles.FirstOrDefault(b => b.PlayerRef == p);
+        if (target != null)
+        {
+            _bubbles.Remove(target);
+            Destroy(target.gameObject);
+        }
+    }
+    protected virtual void RemoveAllBubbles()
+    {
+        foreach(var b in _bubbles)
+        {
+            _bubbles.Remove(b);
+            Destroy(b.gameObject);
+        }
+    }
+    #endregion
 }
 
 public interface IResettable
