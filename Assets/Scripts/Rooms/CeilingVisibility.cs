@@ -22,7 +22,6 @@ public class CeilingVisibility : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Entered trigger");
         if (other.GetComponent<PlayerController>() == null)
             return;
 
@@ -44,8 +43,6 @@ public class CeilingVisibility : MonoBehaviour
 
     protected virtual void OnTriggerExit(Collider other)
     {
-        Debug.Log("leave trigger");
-
         if (other.GetComponent<PlayerController>() == null)
             return;
 
@@ -66,8 +63,6 @@ public class CeilingVisibility : MonoBehaviour
 
     IEnumerator SwitchOpacity(float targetOpacity)
     {
-        Debug.Log("start opacity switch :: target  :  "+ targetOpacity);
-
         float _startOpacity = _materialInstance.GetFloat("_Opacity");
         float _index = 0;
         while(_index < 1)
@@ -88,7 +83,6 @@ public class CeilingVisibility : MonoBehaviour
             _meshRenderer.material = _materialInstance;
 
         }
-        Debug.Log("Finish coroutine");
         _coroutine = null;
     }
 }
