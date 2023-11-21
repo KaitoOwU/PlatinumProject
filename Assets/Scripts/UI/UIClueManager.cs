@@ -18,7 +18,7 @@ public class UIClueManager : MonoBehaviour
         if (current != null) return;
         current = this;
         
-        current.ShowClue(GameManager.Instance.CurrentClues[0], HubRelativePosition.HUB);
+        current.ShowClue(GameManager.Instance.CurrentClues[0].Data, HubRelativePosition.HUB);
     }
 
     public void ShowClue(ClueData clue, HubRelativePosition pos)
