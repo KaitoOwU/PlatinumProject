@@ -10,8 +10,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _timerTxt;
-
     public GamePhase CurrentGamePhase
     {
         get => _currentGamePhase; 
@@ -189,6 +187,11 @@ public class GameManager : MonoBehaviour
         OnEachEndPhase.AddListener(TPAllPlayersToHub);
     }
 
+    private void Update()
+    {
+        Debug.Log(CurrentGamePhase);
+    }
+
     private void InitGame()
     {
         _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
@@ -264,7 +267,7 @@ public class GameManager : MonoBehaviour
         SwitchCameraState(CameraState.FULL);
         foreach (Player p in PlayerList.Select(data => data.PlayerRef))
         {
-            p.gameObject.transform.position = _hub.Spawnpoints[p.Index-1].position;
+            p.gameObject.transform.position = _hub.Spawnpoints[p.Index].position;
             p.RelativePos = HubRelativePosition.HUB;
             p.CurrentRoom = _hub;
         }
@@ -319,6 +322,7 @@ public class GameManager : MonoBehaviour
             case TimerPhase.FIRST_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
+                    CurrentGamePhase = GamePhase.HUB;
                     OnFirstPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
@@ -328,6 +332,7 @@ public class GameManager : MonoBehaviour
             case TimerPhase.SECOND_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
+                    CurrentGamePhase = GamePhase.HUB;
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
@@ -338,6 +343,7 @@ public class GameManager : MonoBehaviour
             case TimerPhase.THIRD_PHASE:
                 if (_timer <= 0)
                 {
+                    CurrentGamePhase = GamePhase.EARLY_GUESS;
                     _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
