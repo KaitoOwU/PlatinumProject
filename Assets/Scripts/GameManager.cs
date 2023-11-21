@@ -413,9 +413,9 @@ public class GameManager : MonoBehaviour
     IEnumerator VestibuleMessages()
     {
         int i = 0;
-        while (i < 10)//à changer pour metttre les dialogues / explications
+        while (i < 5)//à changer pour metttre les dialogues / explications
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(3);
             i++;
         }
         TP_Camera(_fullCamera, Hub.CameraPoint);
