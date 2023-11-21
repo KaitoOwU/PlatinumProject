@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc6dbed766a510e43bd900840650aa48, type: 3}
+  m_Name: EventData_1
+  m_EditorClassIdentifier: 
+  _database:
+  - scriptName: GameManager
+    events:
+    - eventName: OnShuffleRooms
+      eventActions: []
+    - eventName: OnFirstPhaseEnd
+      eventActions: []
+    - eventName: OnSecondPhaseEnd
+      eventActions: []
+    - eventName: OnTimerEnd
+      eventActions: []
+    - eventName: OnEachEndPhase
+      eventActions: []
+    - eventName: OnEachMinute
+      eventActions: []
+    - eventName: OnChangeToSplitScreen
+      eventActions: []
+    - eventName: OnChangeToFullScreen
+      eventActions: []
+  - scriptName: GuessManager
+    events:
+    - eventName: OnIndividualVote
+      eventActions: []
+    - eventName: OnGroupFinalVote
+      eventActions: []
+  - scriptName: Door
+    events:
+    - eventName: OnChangeRoom
+      eventActions: []
+  - scriptName: Furniture
+    events:
+    - eventName: OnClueFoundInFurniture
+      eventActions: []
+    - eventName: OnClueNotFoundInFurniture
+      eventActions: []
+    - eventName: OnBeginPushingFurniture
+      eventActions:
+      - eventType: 4
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 4acbf46880c2ed64c93ac7c78237cf30, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnStopPushingFurniture
+      eventActions:
+      - eventType: 5
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 4acbf46880c2ed64c93ac7c78237cf30, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnBeginStrugglePushingFurniture
+      eventActions: []
+  - scriptName: PlayerController
+    events:
+    - eventName: OnMoveStarted
+      eventActions: []
+    - eventName: OnMoveCanceled
+      eventActions: []
+    - eventName: OnPause
+      eventActions: []

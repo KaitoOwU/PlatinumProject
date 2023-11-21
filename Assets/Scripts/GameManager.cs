@@ -6,11 +6,12 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _timerTxt;
-    
+
     public GamePhase CurrentGamePhase
     {
         get => _currentGamePhase; 
@@ -27,7 +28,19 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public int CorridorChance
+    { 
+        get => _corridorChance; 
+        set => _corridorChance = value;
+    }
+    
+    public List<Clue> FoundClues
+    {
+        get => _foundClues;
+        set => _foundClues = value;
+    }
     public GameData GameData => _gameData;
+    public PlayerConstants PlayerConstants => _playerConstants;
     public float Timer => _timer;
     public SuspectData Murderer => _murderer;
     public SuspectData Victim => _victim;
@@ -40,11 +53,15 @@ public class GameManager : MonoBehaviour
     public IReadOnlyList<PlayerInfo> LeftPlayers =>
         PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.LEFT_WING);
 
-    public IReadOnlyList<ItemData> Items => _items;
+    public IReadOnlyList<PickableData> Items => _items;
+    public IReadOnlyList<MurderScenario> MurderScenarios => Resources.LoadAll<MurderScenario>("Clues");
+    public IReadOnlyList<Clue> CurrentClues { get; private set; }
 
     [Header("---Constants---")]
     [SerializeField]
     private GameData _gameData;
+    [SerializeField]
+    private PlayerConstants _playerConstants;
 
     [Header("---References---")]
     [SerializeField]
@@ -58,12 +75,27 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Hub _hub;
 
-    [Header("---Events---")]
+    //Public Unity Events
+    [HideInInspector]
+    public UnityEvent OnShuffleRooms;
+    [HideInInspector]
     public UnityEvent OnFirstPhaseEnd;
+    [HideInInspector]
     public UnityEvent OnSecondPhaseEnd;
+    [HideInInspector]
     public UnityEvent OnTimerEnd;
-    public UnityEvent OnEndPhase;
+    [HideInInspector]
+    public UnityEvent OnEachEndPhase;
+    [HideInInspector]
     public UnityEvent OnEachMinute;
+    [HideInInspector]
+    public UnityEvent OnChangeToSplitScreen;
+    [HideInInspector]
+    public UnityEvent OnChangeToFullScreen;
+    [HideInInspector]
+    public UnityEvent OnTPToHubAfterTrap;
+    [HideInInspector]
+    public UnityEvent OnTPToHub;
 
     private SuspectData _murderer;
     private SuspectData _victim;
@@ -72,7 +104,11 @@ public class GameManager : MonoBehaviour
     private CameraState _currentCameraState;
     private float _timer;
     private bool _isTimerGoing;
-    private List<ItemData> _items = new();
+    private List<PickableData> _items = new();
+
+    private List<Clue> _foundClues = new();
+
+    private RoomGeneration _roomGenerator;
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -82,13 +118,25 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UnityEvent _onLose;
     public UnityEvent OnLose => _onLose;
 
+    public GameObject CurrentCamera => _currentCamera;
+    private GameObject _currentCamera; // A ASSIGNER
+    
+    int _corridorChance = 0;
+    public int ValidatedRooom
+    {
+        get => _validatedRooom;
+        set => _validatedRooom = value;
+    }
+    int _validatedRooom = 0;
+
     public enum GamePhase
     {
-        MENU,
+        SELECT_CHARACTER,
         HUB,
         GAME,
+        EARLY_GUESS,
         GUESS,
-        END,
+        END
     }
     public enum TimerPhase
     {
@@ -126,17 +174,19 @@ public class GameManager : MonoBehaviour
     {
         InitSingleton();
         InitGame();
-
+        _validatedRooom = 0;
+        _corridorChance = 10;
+        _roomGenerator = FindObjectOfType<RoomGeneration>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
     }
 
     void Start()
     {
-        CurrentGamePhase = GamePhase.HUB;
+        CurrentGamePhase = GamePhase.SELECT_CHARACTER;
         StartTimer();
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);
-        OnEndPhase.AddListener(TPAllPlayersToHub);
+        OnEachEndPhase.AddListener(TPAllPlayersToHub);
     }
 
     private void InitGame()
@@ -144,7 +194,58 @@ public class GameManager : MonoBehaviour
         _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
         _victim = GameData.SuspectsDatas[0]; //temporary
         //init game accordingly;
+
+        CurrentClues = MurderScenarios.ToList()
+            .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
+
+        _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+
+        foreach(RewardGenerator rewardGenerator in FindObjectsOfType<RewardGenerator>())
+        {
+            rewardGenerator.SetUp();
+        }
     }
+
+    public void DistributeClues()
+    {
+        if(CurrentClues.Count == 0)
+        {
+            Debug.LogError("No Clues found");
+            return;
+        }
+        List<Clue> puzzleClues = CurrentClues.ToList(); ///
+        //Debug.Log(puzzleClues.Count);
+        if (FindObjectsOfType<Furniture>().Length > 0)
+        {
+            List<Clue> furnitureClues = new();
+            for (int i = 0; i < _gameData.FurnitureCluesCount; i++)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
+                furnitureClues.Add(puzzleClues[randomIndex]);
+                puzzleClues.RemoveAt(randomIndex);
+                if (puzzleClues.Count == 0)
+                {
+                    break;
+                }
+            }
+            List<Furniture> allSearchableFurnitures = new List<Furniture>();
+            foreach (Furniture f in FindObjectsOfType<Furniture>())
+            {
+                if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
+                {
+                    allSearchableFurnitures.Add(f);
+                }
+            }
+            foreach (Clue clue in furnitureClues)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
+                allSearchableFurnitures[randomIndex].Clue = clue;
+                allSearchableFurnitures.RemoveAt(randomIndex);
+            }
+        }
+        _roomGenerator.SetRoomsRewards(puzzleClues);
+    }
+
     private void OnEnable()
     {
         //_onWin.AddListener(Win);
@@ -155,7 +256,7 @@ public class GameManager : MonoBehaviour
     {
         _onWin.RemoveListener(Win);
         _onLose.RemoveListener(Lose);
-        OnEndPhase.RemoveListener(TPAllPlayersToHub);
+        OnEachEndPhase.RemoveListener(TPAllPlayersToHub);
     }
 
     private void TPAllPlayersToHub()
@@ -166,6 +267,26 @@ public class GameManager : MonoBehaviour
             p.gameObject.transform.position = _hub.Spawnpoints[p.Index-1].position;
             p.RelativePos = HubRelativePosition.HUB;
             p.CurrentRoom = _hub;
+        }
+    }
+    public void TPPlayerPostTrap(Player[] players)
+    {
+        if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
+        {
+            _hub.Doors[0].IsLocked = true;
+            TP_RightCamera(_hub.CameraPoint);
+        }
+        else
+        {
+            _hub.Doors[1].IsLocked = true;
+            TP_LeftCamera(_hub.CameraPoint);
+        }
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].gameObject.transform.position = _hub.Spawnpoints[i].position;
+            players[i].RelativePos = HubRelativePosition.HUB;
+            players[i].CurrentRoom = _hub;
+            
         }
     }
 
@@ -182,13 +303,10 @@ public class GameManager : MonoBehaviour
             {
                 _timer -= 1;
                 _AnalyseTimer();
-                
-                //RETIRER APRES (faux timer UI)
-                _timerTxt.text = "" + _timer;
             }
-
         }
     }
+
     private void _AnalyseTimer()
     {
         if (_timer % 60 == 0)
@@ -202,7 +320,7 @@ public class GameManager : MonoBehaviour
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
                     OnFirstPhaseEnd?.Invoke();
-                    OnEndPhase?.Invoke();
+                    OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
                 }
@@ -210,8 +328,9 @@ public class GameManager : MonoBehaviour
             case TimerPhase.SECOND_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
+                    _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
-                    OnEndPhase?.Invoke();
+                    OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }
@@ -219,8 +338,9 @@ public class GameManager : MonoBehaviour
             case TimerPhase.THIRD_PHASE:
                 if (_timer <= 0)
                 {
+                    _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
-                    OnEndPhase?.Invoke();
+                    OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Third Phase End </color>" + _timer);
                     _isTimerGoing = false;
                     _timer = 0;
@@ -251,12 +371,14 @@ public class GameManager : MonoBehaviour
         switch(targetState)
         {
             case CameraState.FULL:
+                OnChangeToFullScreen?.Invoke();
                 _fullCamera.SetActive(true);
                 _splitCameraLeft.SetActive(false);
                 _splitCameraRight.SetActive(false);
                 CurrentCameraState = targetState;
                 return;
             case CameraState.SPLIT:
+                OnChangeToSplitScreen?.Invoke();
                 _fullCamera.SetActive(false);
                 _splitCameraLeft.SetActive(true);
                 _splitCameraRight.SetActive(true);
@@ -274,6 +396,10 @@ public class GameManager : MonoBehaviour
         camera.transform.rotation = newValues.rotation;
     }
     #endregion
+
+    public MurderScenario GetMurderScenario(SuspectData victim, SuspectData murderer) => MurderScenarios.ToList()
+        .FindAll(scenario => scenario.DuoSuspect.Victim == victim)
+        .Find(scenario => scenario.DuoSuspect.Murderer == murderer);
 }
 
 [Serializable]
@@ -293,8 +419,8 @@ public struct PlayerInfo
 
 public static class Helper
 {
-    public static List<ItemData> GetAllItemDatas()
+    public static List<PickableData> GetAllItemDatas()
     {
-        return Resources.LoadAll<ItemData>("Item/ItemsData").ToList();
+        return Resources.LoadAll<PickableData>("Item/ItemsData").ToList();
     }
 }
