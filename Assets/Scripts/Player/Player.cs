@@ -28,11 +28,7 @@ public class Player : MonoBehaviour
     public bool Selected { get => _selected; set => _selected = value; }
     public bool _selected;
 
-    public int Index
-    {
-        get;
-        set;
-    }
+    public int Index => _playerController.PlayerIndex;
 }
 
 public enum HubRelativePosition

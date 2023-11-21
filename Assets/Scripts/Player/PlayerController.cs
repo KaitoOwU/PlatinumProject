@@ -71,10 +71,9 @@ public class PlayerController : MonoBehaviour
 
         _rigidbody = GetComponent<Rigidbody>();
 
+        _inputManager.OnInteractStarted.AddListener(_Interact);
+        _inputManager.OnInteractCanceled.AddListener(_StopInteract);
         GetComponent<Player>().Index = _playerIndex;
-
-
-        _inputManager.OnInteract.AddListener(_Interact);
         _inputManager.OnUseTool.AddListener(_UseTool);
         _inputManager.OnPause.AddListener(_Pause);
 
