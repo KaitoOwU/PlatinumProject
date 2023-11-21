@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public UnityEvent OnMoveStarted;
     [HideInInspector] public UnityEvent OnMoveCanceled;
     [HideInInspector] public UnityEvent OnPause;
+    [HideInInspector] public UnityEvent OnBackUI;
 
     public enum EButtonType
     {
@@ -76,6 +77,7 @@ public class PlayerController : MonoBehaviour
         _inputManager.OnInteract.AddListener(_Interact);
         _inputManager.OnUseTool.AddListener(_UseTool);
         _inputManager.OnPause.AddListener(_Pause);
+        _inputManager.OnBack.AddListener(_Back);
 
         _inputManager.OnMoveStarted.AddListener(_StartMove);
         _inputManager.OnMoveCanceled.AddListener(_StopMove);
@@ -93,6 +95,7 @@ public class PlayerController : MonoBehaviour
             _inputManager.OnInteract.RemoveListener(_Interact);
             _inputManager.OnUseTool.RemoveListener(_UseTool);
             _inputManager.OnPause.RemoveListener(_Pause);
+            _inputManager.OnBack.RemoveListener(_Back);
         }
     }
     #endregion
@@ -160,6 +163,8 @@ public class PlayerController : MonoBehaviour
     private void _Pause()
     {
         OnPause?.Invoke();
-    }
+    }   
+    private void _Back() => OnBackUI?.Invoke();
+    
     #endregion
 }

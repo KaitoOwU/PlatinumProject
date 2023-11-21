@@ -48,6 +48,11 @@ public class InputManager : MonoBehaviour
         get { return onPause; }
         set { onPause = value; }
     }
+    public UnityEvent OnBack
+    {
+        get { return onBack; }
+        set { onBack = value; }
+    }
     private UnityEvent onMoveStarted = new();
     private UnityEvent onMoveCanceled = new();
     private UnityEvent<Player> onInteract = new();
@@ -55,6 +60,7 @@ public class InputManager : MonoBehaviour
     private UnityEvent<Player> onPushCanceled = new();
     private UnityEvent onUseTool = new();
     private UnityEvent onPause = new();
+    private UnityEvent onBack = new();
 
     private PlayerInput _inputs;
     private int _controllerIndex;
@@ -98,6 +104,7 @@ public class InputManager : MonoBehaviour
         _inputs.actions["Push"].canceled += _Push_canceled;
         _inputs.actions["Tool"].started += _Tool_performed;
         _inputs.actions["Pause"].started += _Pause_performed;
+        _inputs.actions["Back"].started += _Back_performed;
     }
 
     private void _CleanEvents()
@@ -109,6 +116,7 @@ public class InputManager : MonoBehaviour
         _inputs.actions["Push"].canceled -= _Push_canceled;
         _inputs.actions["Tool"].started -= _Tool_performed;
         _inputs.actions["Pause"].started -= _Pause_performed;
+        _inputs.actions["Back"].started -= _Back_performed;
     }
     private void _SetupSelectEvents()
     {
@@ -140,6 +148,7 @@ public class InputManager : MonoBehaviour
     #region Invoking Methods
     private void _Move_started(InputAction.CallbackContext obj) => OnMoveStarted?.Invoke();
     private void _Move_canceled(InputAction.CallbackContext obj) => OnMoveCanceled?.Invoke();
+    private void _Back_performed(InputAction.CallbackContext obj) => OnBack?.Invoke();
     private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
     private void _Push_performed(InputAction.CallbackContext obj) => OnPush?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);  
     private void _Push_canceled(InputAction.CallbackContext obj) => OnPushCanceled?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
