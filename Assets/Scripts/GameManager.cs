@@ -184,7 +184,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         SwitchCameraState(CameraState.FULL);
-        CurrentGamePhase = GamePhase.SELECT_CHARACTER;
         StartCoroutine(VestibuleMessages());
         TP_Camera(_fullCamera, Vestibule.CameraPoint);
         StartTimer();
@@ -246,7 +245,7 @@ public class GameManager : MonoBehaviour
                 allSearchableFurnitures.RemoveAt(randomIndex);
             }
         }
-        _roomGenerator.SetRoomsRewards(puzzleClues);
+        //_roomGenerator.SetRoomsRewards(puzzleClues);
     }
 
     private void OnEnable()
@@ -412,14 +411,10 @@ public class GameManager : MonoBehaviour
 
     IEnumerator VestibuleMessages()
     {
-        int i = 0;
-        while (i < 5)//à changer pour metttre les dialogues / explications
-        {
-            yield return new WaitForSeconds(3);
-            i++;
-        }
+        yield return new WaitForSeconds(5);
         TP_Camera(_fullCamera, Hub.CameraPoint);
-        foreach(Player p in Vestibule.GetComponentsInChildren<Player>())
+        CurrentGamePhase = GamePhase.SELECT_CHARACTER;
+        foreach (Player p in Vestibule.GetComponentsInChildren<Player>())
         {
             Destroy(p.gameObject);
         }
