@@ -431,9 +431,9 @@ public class RoomGeneration : MonoBehaviour
         }
         int validated = GameManager.Instance.ValidatedRooom;
         if (validated < 2)
-            _maxRooms = 2;
+            _maxRooms = 3;
         else if (validated < 5)
-            _maxRooms = 4;
+            _maxRooms = 5;
         else if (validated < 10)
             _maxRooms = _roomsInPlay.Count / 2;
         else if (GameManager.Instance.CurrentTimerPhase == GameManager.TimerPhase.END)

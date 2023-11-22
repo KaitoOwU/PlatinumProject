@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     public SuspectData Murderer => _murderer;
     public SuspectData Victim => _victim;
     public Hub Hub => _hub;
+    public Vestibule Vestibule => _vestibule;
     public TimerPhase CurrentTimerPhase => _currentTimerPhase;
     
     public IReadOnlyList<PlayerInfo> RightPlayers =>
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviour
     private GameObject _splitCameraRight;
     [SerializeField]
     private Hub _hub;
+    private Vestibule _vestibule;
 
     //Public Unity Events
     [HideInInspector]
@@ -175,12 +177,16 @@ public class GameManager : MonoBehaviour
         _validatedRooom = 0;
         _corridorChance = 10;
         _roomGenerator = FindObjectOfType<RoomGeneration>();
+        _vestibule = FindObjectOfType<Vestibule>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
     }
 
     void Start()
     {
+        SwitchCameraState(CameraState.FULL);
         CurrentGamePhase = GamePhase.SELECT_CHARACTER;
+        StartCoroutine(VestibuleMessages());
+        TP_Camera(_fullCamera, Vestibule.CameraPoint);
         StartTimer();
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);
@@ -338,6 +344,9 @@ public class GameManager : MonoBehaviour
                 if (_timer <= 0)
                 {
                     CurrentGamePhase = GamePhase.EARLY_GUESS;
+                    Vestibule.Doors[0].IsLocked = false;
+                    Hub.RoomDoorLeft.IsLocked = true;
+                    Hub.RoomDoorRight.IsLocked = true;
                     _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
@@ -400,6 +409,21 @@ public class GameManager : MonoBehaviour
     public MurderScenario GetMurderScenario(SuspectData victim, SuspectData murderer) => MurderScenarios.ToList()
         .FindAll(scenario => scenario.DuoSuspect.Victim == victim)
         .Find(scenario => scenario.DuoSuspect.Murderer == murderer);
+
+    IEnumerator VestibuleMessages()
+    {
+        int i = 0;
+        while (i < 5)//à changer pour metttre les dialogues / explications
+        {
+            yield return new WaitForSeconds(3);
+            i++;
+        }
+        TP_Camera(_fullCamera, Hub.CameraPoint);
+        foreach(Player p in Vestibule.GetComponentsInChildren<Player>())
+        {
+            Destroy(p.gameObject);
+        }
+    } 
 }
 
 [Serializable]

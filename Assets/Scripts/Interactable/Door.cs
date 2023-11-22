@@ -76,6 +76,15 @@ public class Door : Interactable
                     hub.RoomDoorLeft._isLocked = false;
                     hub.RoomDoorRight._isLocked = false;
                 }
+                else if(_linkedDoor.room is Vestibule)
+                {
+                    TP_Players(LinkedDoor.TpPoint);
+                    TP_Camera(_linkedDoor.room);
+                    UpdateRoom(_linkedDoor.room);
+
+                    _isLocked = true;
+                    GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GUESS;
+                }
             }
             else
             {
