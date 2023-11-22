@@ -25,6 +25,14 @@ public class PlayerController : MonoBehaviour
     private float _currentVelocity;
     private EMoveState _moveState;
 
+    public static Dictionary<EButtonType, string> INPUT_NAMES = new()
+    { { EButtonType.MOVE, "Move" },
+        { EButtonType.INTERACT, "Interact" },
+        { EButtonType.PUSH, "Push" },
+        { EButtonType.TOOL, "Tool" },
+        { EButtonType.PAUSE, "Pause" },
+        {EButtonType.ASK_TP_HUB, "AskTPHub"}
+    };
 
     [HideInInspector] public UnityEvent OnMoveStarted;
     [HideInInspector] public UnityEvent OnMoveCanceled;
@@ -37,7 +45,8 @@ public class PlayerController : MonoBehaviour
         INTERACT,
         PUSH,
         TOOL,
-        PAUSE
+        PAUSE,
+        ASK_TP_HUB
     }
     public enum EMoveState
     {
@@ -46,18 +55,11 @@ public class PlayerController : MonoBehaviour
         PUSH_BLOCKED,
     }
 
-    Dictionary<EButtonType, string> _inputNames = new()
-    { { EButtonType.MOVE, "Move" },
-    { EButtonType.INTERACT, "Interact" },
-    { EButtonType.PUSH, "Push" },
-    { EButtonType.TOOL, "Tool" },
-    { EButtonType.PAUSE, "Pause" }};
-
     private void OnDisable() => _CleanUp();
 
     public bool IsButtonHeld(EButtonType buttonType)
     {
-        return _inputManager?.GetInputValue(_inputNames[buttonType]) > 0;
+        return _inputManager?.GetInputValue(INPUT_NAMES[buttonType]) > 0;
     }
 
     #region Set up & Clean up

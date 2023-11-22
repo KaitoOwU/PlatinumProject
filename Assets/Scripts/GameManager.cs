@@ -256,7 +256,7 @@ public class GameManager : MonoBehaviour
         OnEachEndPhase.RemoveListener(TPAllPlayersToHub);
     }
 
-    private void TPAllPlayersToHub()
+    public void TPAllPlayersToHub()
     {
         SwitchCameraState(CameraState.FULL);
         foreach (Player p in PlayerList.Select(data => data.PlayerRef))
