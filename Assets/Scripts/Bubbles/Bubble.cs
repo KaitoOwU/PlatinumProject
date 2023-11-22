@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Bubble : MonoBehaviour
 {
     [SerializeField] GameObject[] _playerIconsPrefab;
+    [SerializeField] GameObject[] _controllersIconsPrefab;
     [SerializeField] TMP_Text _text;
 
-    public Player PlayerRef => _playerRef;
-    private Player _playerRef;
+    public int ControllerIndexRef => controllerIndexRef;
+    private int controllerIndexRef;
 
     public EBubbleType BubbleType => _bubbleType;
     public EBubbleType _bubbleType;
@@ -19,20 +21,33 @@ public class Bubble : MonoBehaviour
         TEXT,
         PLAYER
     }
+    private void Start()
+    {
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.Euler(Vector3.zero);
+    }
 
-
-    public Bubble Init(Player triggerPlayer, string text)
+    public Bubble InitText(int triggerPlayer, string text)
     {
         _text.text = text;
-        _playerRef = triggerPlayer;
+        controllerIndexRef = triggerPlayer;
         _bubbleType = EBubbleType.TEXT;
         return this;
     }
-    public Bubble Init(Player targetPlayer)
+    public Bubble InitPlayer(int targetPlayerIndex, int targetControllerIndex)
     {
-        Instantiate(_playerIconsPrefab[targetPlayer.Index], transform);
+        Instantiate(_playerIconsPrefab[targetPlayerIndex], transform);
         _text.text = "";
-        _playerRef = targetPlayer;
+        controllerIndexRef = targetControllerIndex;
+        _bubbleType = EBubbleType.PLAYER;
+        return this;
+    }
+    public Bubble InitController(int targetControllerIndex)
+    {
+        GetComponent<Image>().enabled = false;
+        Instantiate(_controllersIconsPrefab[targetControllerIndex], transform);
+        _text.text = "";
+        controllerIndexRef = targetControllerIndex;
         _bubbleType = EBubbleType.PLAYER;
         return this;
     }

@@ -1,52 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class BubbleManager : MonoBehaviour
 {
-    private static BubbleManager instance = null;
-    public static BubbleManager Instance => instance;
-
-    [SerializeField] Camera _cam;
     [SerializeField] Bubble _bubblePrefab;
+    [SerializeField] Transform _layout;
+    private List<Bubble> _instantiatedBubbles = new();
 
-    private void Awake()
+    public void AddBubble(int triggerController, string message)
     {
-        if (instance == null)
-            instance = this;
+        _instantiatedBubbles.Add(Instantiate(_bubblePrefab, Vector3.zero, Quaternion.identity, _layout).InitText(triggerController, message));
     }
 
-    public enum EBubblePos
+    public void AddPlayerIcon(int targetPlayer, int targetController)
     {
-        LEFT,
-        MIDDLE_LEFT,
-        MIDDLE_RIGHT,
-        RIGHT,
+        _instantiatedBubbles.Add(Instantiate(_bubblePrefab, Vector3.zero, Quaternion.identity, _layout).InitPlayer(targetPlayer, targetController));
+    }
+    public void AddControllerIcon(int targetController)
+    {
+        _instantiatedBubbles.Add(Instantiate(_bubblePrefab, Vector3.zero, Quaternion.identity, _layout).InitController(targetController));
     }
 
-    public Bubble ShowBubble(Transform objectPosition, Player triggerPlayer, string message, EBubblePos bubblePos)
+    public bool RemoveAssociatedBubble(int targetController)
     {
-        Bubble bubble = Instantiate(_bubblePrefab, Vector3.zero, Quaternion.identity, transform).Init(triggerPlayer, message);
-        bubble.GetComponent<RectTransform>().anchoredPosition = GetCanvasPos(objectPosition.position, bubblePos);
-        return bubble;
+        Bubble target = _instantiatedBubbles.FirstOrDefault(b => b.ControllerIndexRef == targetController);
+        if (target != null)
+        {
+            _instantiatedBubbles.Remove(target);
+            Destroy(target.gameObject);
+            return true;
+        }
+        return false;
     }
 
-    public Bubble ShowPlayerIcon(Transform objectPosition, Player targetPlayer, EBubblePos bubblePos)
+    public virtual void RemoveAllBubbles()
     {
-        Bubble bubble = Instantiate(_bubblePrefab, Vector3.zero, Quaternion.identity, transform).Init(targetPlayer);
-        bubble.GetComponent<RectTransform>().anchoredPosition = GetCanvasPos(objectPosition.position, bubblePos);
-        return bubble;
-    }
-
-    Vector3 GetCanvasPos(Vector3 worldPos, EBubblePos bubblePos)
-    {
-        RectTransform CanvasRect = this.GetComponent<RectTransform>();
-
-        Vector2 ViewportPosition = _cam.WorldToViewportPoint(worldPos);
-        Vector2 WorldObject_ScreenPosition = new Vector2(
-        (((ViewportPosition.x * CanvasRect.sizeDelta.x) - (CanvasRect.sizeDelta.x * 0.5f))) + (-75 + (50 * (int)bubblePos)),
-        ((ViewportPosition.y * CanvasRect.sizeDelta.y) - (CanvasRect.sizeDelta.y * 0.5f)) - 50);
-
-        return WorldObject_ScreenPosition;
+        for(int i = _instantiatedBubbles.Count-1; i >=0; i--)
+        {
+            Destroy(_instantiatedBubbles[i].gameObject);
+            _instantiatedBubbles.RemoveAt(i);
+        }
     }
 }

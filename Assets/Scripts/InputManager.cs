@@ -67,9 +67,12 @@ public class InputManager : MonoBehaviour
 
     // Character Select 
     private int _playerSelectedIndex;
+    private BubbleManager _playerSelectedBubbleManager;
     private Player[] _players;
-    private List<Player> _nonSelectedPlayers;
-    private Bubble _playerSelectedBubble;
+    [SerializeField]
+    //private static List<Player> _gm.NonSelectedPlayers;
+    GameManager _gm;
+    //private Bubble _playerSelectedBubble;
 
     private Gamepad _gamepad;
 
@@ -87,7 +90,7 @@ public class InputManager : MonoBehaviour
     }
 
     private void OnDisable() => _CleanEvents();
-    
+
     private void _AddController()
     {
         //Get right character depending on controller index and launch set up (= controller corresponding character)
@@ -120,19 +123,20 @@ public class InputManager : MonoBehaviour
     }
     private void _SetupSelectEvents()
     {
+        _gm = GameManager.Instance;
         _inputs.actions["Move"].started += _SwitchCharacter;
         _inputs.actions["Interact"].started += _PickCharacter;
-        _players = GameManager.Instance.PlayerList.Select(p => p.PlayerRef).ToArray();
-        _nonSelectedPlayers = _players.ToList();
+        _players = _gm.PlayerList.Select(p => p.PlayerRef).ToArray();
         _playerSelectedIndex = 0;
-        _playerSelectedBubble = BubbleManager.Instance.ShowPlayerIcon(_nonSelectedPlayers[_playerSelectedIndex].transform, _nonSelectedPlayers[_playerSelectedIndex], (BubbleManager.EBubblePos)_controllerIndex);
+        _playerSelectedBubbleManager = _gm.NonSelectedPlayers[_playerSelectedIndex].GetComponent<BubbleManager>();
+        _playerSelectedBubbleManager?.AddControllerIcon(_controllerIndex);
     }
 
     private void _CleanSelectEvents()
     {
         _inputs.actions["Move"].started -= _SwitchCharacter;
         _inputs.actions["Interact"].started -= _PickCharacter;
-        Destroy(_playerSelectedBubble.gameObject);
+        _playerSelectedBubbleManager?.RemoveAllBubbles();
     }
     #endregion
 
@@ -158,21 +162,29 @@ public class InputManager : MonoBehaviour
     #region Character Select Methods
     private void _SwitchCharacter(InputAction.CallbackContext obj)
     {
-        if(_playerSelectedBubble != null)
-            Destroy(_playerSelectedBubble.gameObject);
-        if(_inputs.actions["Move"].ReadValue<Vector2>().x > 0)
+        _playerSelectedBubbleManager?.RemoveAssociatedBubble(_controllerIndex);
+
+        _UpdateIndex(_inputs.actions["Move"].ReadValue<Vector2>().x);
+
+        _playerSelectedBubbleManager = _players[_playerSelectedIndex].GetComponent<BubbleManager>();
+        _playerSelectedBubbleManager?.AddControllerIcon(_controllerIndex);
+    }
+    private void _UpdateIndex(float x)
+    {
+        if (x > 0)
             _playerSelectedIndex = (_playerSelectedIndex + 1) % 4;
         else
         {
             _playerSelectedIndex = (_playerSelectedIndex - 1) % 4;
             _playerSelectedIndex = _playerSelectedIndex < 0 ? 3 : _playerSelectedIndex;
         }
-        _playerSelectedBubble = BubbleManager.Instance.ShowPlayerIcon(_nonSelectedPlayers[_playerSelectedIndex].transform, _nonSelectedPlayers[_playerSelectedIndex], (BubbleManager.EBubblePos)_controllerIndex);
+        if(!(_gm.NonSelectedPlayers.Contains(_players[_playerSelectedIndex])))
+            _UpdateIndex(x);
     }
     private void _PickCharacter(InputAction.CallbackContext obj)
     {
-        _nonSelectedPlayers.RemoveAt(_playerSelectedIndex);
-        if(_nonSelectedPlayers.Count<4/*_nonSelectedPlayers.Count == 0*/)
+        _gm.NonSelectedPlayers.RemoveAt(_playerSelectedIndex);
+        if(_gm.NonSelectedPlayers.Count<4/*_gm.NonSelectedPlayers.Count == 0*/)
             GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
         _CleanSelectEvents();
         _SetupEvents();

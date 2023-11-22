@@ -105,6 +105,8 @@ public class GameManager : MonoBehaviour
     private float _timer;
     private bool _isTimerGoing;
     private List<PickableData> _items = new();
+    public List<Player> NonSelectedPlayers { get=> _nonSelectedPlayers; set=> _nonSelectedPlayers = value; }
+    private List<Player> _nonSelectedPlayers { get; set; }
 
     private List<Clue> _foundClues = new();
 
@@ -179,6 +181,7 @@ public class GameManager : MonoBehaviour
         _roomGenerator = FindObjectOfType<RoomGeneration>();
         _vestibule = FindObjectOfType<Vestibule>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+        _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
     }
 
     void Start()

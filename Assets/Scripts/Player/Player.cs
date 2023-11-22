@@ -19,6 +19,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Room _currentRoom;
 
+    [SerializeField]
+    private Transform _UI;
+
     public PickableData HeldPickable
     {
         get => _heldPickable;
@@ -26,6 +29,7 @@ public class Player : MonoBehaviour
     }
     public Room CurrentRoom { get => _currentRoom; set => _currentRoom = value; }
     public bool Selected { get => _selected; set => _selected = value; }
+    public Transform UI => _UI;
     public bool _selected;
 
     public int Index
