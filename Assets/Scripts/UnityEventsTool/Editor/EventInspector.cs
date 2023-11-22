@@ -136,11 +136,23 @@ public class EventInspector : Editor
                             GUILayout.Label("Screenshake Intensity", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(0.9f, 0.6f, 0.8f) } });
                             eventAction.Intensity = EditorGUILayout.Slider(eventAction.Intensity, 0, 1, GUILayout.Width(200));
                             EditorGUILayout.EndHorizontal();
+                            EditorGUILayout.BeginHorizontal();
+                            GUILayout.Label("Vibration Duration", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(0.6f, 0.9f, 0.8f) } });
+                            eventAction.Duration = EditorGUILayout.Slider(eventAction.Duration, 0, 5, GUILayout.Width(200));
+                            EditorGUILayout.EndHorizontal();
                             break;
                         case EventTypeEnum.VIBRATE_ALL_CONTROLLERS:
                             EditorGUILayout.BeginHorizontal();
-                            GUILayout.Label("Screenshake Intensity", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(0.9f, 0.6f, 0.8f) } });
+                            GUILayout.Label("Left Motor Intensity", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(0.9f, 0.6f, 0.8f) } });
                             eventAction.Intensity = EditorGUILayout.Slider(eventAction.Intensity, 0, 1, GUILayout.Width(200));
+                            EditorGUILayout.EndHorizontal();
+                            EditorGUILayout.BeginHorizontal();
+                            GUILayout.Label("Right Motor Intensity", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(0.9f, 0.6f, 0.8f) } });
+                            eventAction.IntensityRight = EditorGUILayout.Slider(eventAction.IntensityRight, 0, 1, GUILayout.Width(200));
+                            EditorGUILayout.EndHorizontal();
+                            EditorGUILayout.BeginHorizontal();
+                            GUILayout.Label("Vibration Duration", new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic, normal = new GUIStyleState() { textColor = new Color(0.6f, 0.9f, 0.8f) } });
+                            eventAction.Duration = EditorGUILayout.Slider(eventAction.Duration, 0, 5, GUILayout.Width(200));
                             EditorGUILayout.EndHorizontal();
                             break;
                     }

@@ -77,7 +77,7 @@ public class UnityEventManager : MonoBehaviour
                                 break;
                             case EventTypeEnum.SCREENSHAKE:
                                 if(eventAction.Intensity != 0)
-                                    d = () => ScreenShake(eventAction.Intensity);
+                                    d = () => ScreenShake(eventAction.Intensity, eventAction.Duration);
                                 break;
                             case EventTypeEnum.PLAY_SOUND_ONCE:
                                 if(eventAction.ClipAudio != null)
@@ -98,7 +98,7 @@ public class UnityEventManager : MonoBehaviour
                                 break;
                             case EventTypeEnum.VIBRATE_ALL_CONTROLLERS:
                                 if (eventAction.Intensity != 0)
-                                    d = () => Vibrate(eventAction.Intensity);
+                                    d = () => Vibrate(eventAction.Intensity, eventAction.IntensityRight, eventAction.Duration);
                                 break;
                         }
                         if(d != null)
@@ -156,14 +156,13 @@ public class UnityEventManager : MonoBehaviour
             Destroy(_soundRef.AudioSource);
         }
     }
-    public void ScreenShake(float intensity)
+    public void ScreenShake(float intensity, float duration)
     {
-        _camera.transform.DOShakePosition(intensity);
+        _camera.transform.DOShakePosition(duration, intensity);
     }
-    public void Vibrate(float intensity)
+    public void Vibrate(float intensityLeft, float intensityRight, float duration)
     {
-        _camera.transform.DOShakePosition(intensity);
-        Debug.Log($"ScreenShake at intensity : {intensity}");
+
     }
     #endregion
 }
@@ -285,6 +284,16 @@ public class EventAction
         get { return intensity; }
         set { intensity = value; }
     }
+    public float IntensityRight
+    {
+        get { return intensityRight; }
+        set { intensityRight = value; }
+    }
+    public float Duration
+    {
+        get { return duration; }
+        set { duration = value; }
+    }
 
     [SerializeField]
     private EventTypeEnum eventType;
@@ -296,6 +305,10 @@ public class EventAction
     private List<Clip> clipsAudio;
     [SerializeField]
     private float intensity = 1;
+    [SerializeField]
+    private float intensityRight = 1;
+    [SerializeField]
+    private float duration = 1;
 
 }
 
