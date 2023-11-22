@@ -10,7 +10,9 @@ public class Player : MonoBehaviour
 
     [FormerlySerializedAs("_heldItem")] [SerializeField] private PickableData _heldPickable;
     [SerializeField] private PlayerController _playerController;
+    [SerializeField] private Color _associatedColor;
     public PlayerController PlayerController => _playerController;
+    public Color AssociatedColor => _associatedColor;
     
     [SerializeField] private HubRelativePosition _relativePos;
     public HubRelativePosition RelativePos { get => _relativePos; set => _relativePos = value; }

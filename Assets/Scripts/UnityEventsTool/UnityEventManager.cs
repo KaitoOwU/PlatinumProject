@@ -9,6 +9,7 @@ using System.Linq;
 using UnityEditor.PackageManager;
 using Unity.VisualScripting;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 using static System.Collections.Specialized.BitVector32;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -162,8 +163,10 @@ public class UnityEventManager : MonoBehaviour
     }
     public void Vibrate(float intensity)
     {
-        _camera.transform.DOShakePosition(intensity);
-        Debug.Log($"ScreenShake at intensity : {intensity}");
+        Gamepad.all.ToList().ForEach(controller =>
+        {
+            controller.SetMotorSpeeds(intensity, intensity);
+        });
     }
     #endregion
 }
