@@ -165,7 +165,7 @@ public class UnityEventManager : MonoBehaviour
     {
         Gamepad.all.ToList().ForEach(controller =>
         {
-            controller.SetMotorSpeeds(intensity, intensity);
+            controller.SetMotorSpeeds(intensityLeft, intensityRight);
         });
     }
     #endregion

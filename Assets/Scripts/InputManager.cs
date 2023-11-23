@@ -193,7 +193,7 @@ public class InputManager : MonoBehaviour
     {
         _playerSelectedBubbleManager?.RemoveAssociatedBubble(_controllerIndex);
 
-        _UpdateIndex(_inputs.actions["Move"].ReadValue<Vector2>().x);
+        _UpdateIndex(_map.actions["Move"].ReadValue<Vector2>().x);
 
         _playerSelectedBubbleManager = _players[_playerSelectedIndex].GetComponent<BubbleManager>();
         _playerSelectedBubbleManager?.AddControllerIcon(_controllerIndex);
