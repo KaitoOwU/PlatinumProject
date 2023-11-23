@@ -117,32 +117,14 @@ public class Door : Interactable
 
     public void TP_Players(Transform[] tpPoint) // TP  tous les joueurs qui intéragissent avec this porte
     {
-        StartCoroutine(CR_TP_Players(tpPoint));
-    }
-
-    private IEnumerator CR_TP_Players(Transform[] tpPoint)
-    {
         foreach(Player p in _playersInRange) if (p.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT))
         {
             p.gameObject.transform.position = tpPoint[p.Index-1].position;
         }
-
-        yield break;
     }
 
     public void TP_Camera(Room room)
     {
-        StartCoroutine(CR_TP_Camera(room));
-    }
-
-    private IEnumerator CR_TP_Camera(Room room) // Est-ce que tu bouges vers une room de l'aile gauche? alors tp cam de gauche
-    {
-        HubRelativePosition pos = _playersInRange[0].RelativePos;
-        yield return StartCoroutine(GameManager.Instance.Transitions.StartTransition(
-            pos == HubRelativePosition.RIGHT_WING
-                ? GameManager.Instance.Transitions.RightTransition
-                : GameManager.Instance.Transitions.LeftTransition));
-        
         switch (room.RoomSide)
         {
             case Room.Side.LEFT:
@@ -152,12 +134,8 @@ public class Door : Interactable
                 GameManager.Instance.TP_RightCamera(room.CameraPoint);
                 break;
         }
-        
-        yield return StartCoroutine(GameManager.Instance.Transitions.EndTransition(
-            pos == HubRelativePosition.RIGHT_WING
-                ? GameManager.Instance.Transitions.RightTransition
-                : GameManager.Instance.Transitions.LeftTransition));
     }
+    
     public void UpdateRoom(Room room)
     {
         foreach(Player p in _playersInRange)

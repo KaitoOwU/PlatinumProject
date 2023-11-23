@@ -42,6 +42,11 @@ public class UIValidateInputs : MonoBehaviour
             StartCoroutine(Reactive.AwaiterCompleted());
         }
     }
+
+    public void Unsetup(PlayerController.EButtonType input)
+    {
+        _inputAwaiters.ToList().ForEach(awaiter => awaiter.Unsetup(input));
+    }
 }
 
 [Serializable]
@@ -66,7 +71,7 @@ public class InputAwaiter
         player.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].canceled += InputCanceled;
     }
     
-    public void Unsetup(PlayerController.EButtonType buttonType)
+    internal void Unsetup(PlayerController.EButtonType buttonType)
     {
         foreach (PlayerInfo p in GameManager.Instance.PlayerList) if (p.PlayerRef.PlayerController.Inputs != null)
         {
