@@ -8,13 +8,17 @@ using UnityEngine;
 public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 {
     private List<PressurePlate> _pressurePlates = new();
-    private Vector3 _baseRotation;
-    [SerializeField] private Transform _doorAnchor;
+    
+    private List<Vector3> _baseRotations;
+    [SerializeField] private Transform[] _doorAnchors;
 
     private void Awake()
     {
         _pressurePlates = GetComponentsInChildren<PressurePlate>().ToList();
-        _baseRotation = _doorAnchor.rotation.eulerAngles;
+        for (int i = 0; i < _doorAnchors.Length; i++)
+        {
+            _baseRotations[i] = _doorAnchors[i].rotation.eulerAngles;
+        }
     }
 
     public void CheckIfValid()
@@ -31,11 +35,17 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 
     public void PuzzleCompleted()
     {
-        _doorAnchor.DORotate(new Vector3(0, _baseRotation.y - 90, 0), 1.5f);
+        for (int i = 0; i < _doorAnchors.Length; i++)
+        {
+            _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y - 90, 0), 1.5f);
+        }
     }
 
     private void UncompletePuzzle()
     {
-        _doorAnchor.DORotate(new Vector3(0, _baseRotation.y, 0), 1.5f);
+        for (int i = 0; i < _doorAnchors.Length; i++)
+        {
+            _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
+        }
     }
 }
