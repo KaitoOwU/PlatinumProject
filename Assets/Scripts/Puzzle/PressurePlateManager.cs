@@ -1,36 +1,18 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class PressurePlateManager : Puzzle
+public class PressurePlateManager : MonoBehaviour
 {
-    public Action<PressurePlate> OnPuzzleUpdate;
-
-    private List<PressurePlate> _pressurePlates = new();
-
-    protected override void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
-        base.Awake();
-        _pressurePlates = GetComponentsInChildren<PressurePlate>().ToList();
+        
     }
 
-    private void OnEnable()
+    // Update is called once per frame
+    void Update()
     {
-        OnPuzzleUpdate += PuzzleUpdateCheck;
-    }
-
-    private void OnDisable()
-    {
-        OnPuzzleUpdate -= PuzzleUpdateCheck;
-    }
-
-    private void PuzzleUpdateCheck(PressurePlate plate)
-    {
-        if (_pressurePlates.FindAll((plate) => plate.IsValid).Count == _pressurePlates.Count)
-        {
-            Reactive.PuzzleCompleted();
-        }
+        
     }
 }

@@ -10,7 +10,7 @@ public class Paints : Interactable
 
     public int Id { get => _id;}
 
-    private void Awake()
+    private void Start()
     {
         _manager = GetComponentInParent<PaintManager>();
     }

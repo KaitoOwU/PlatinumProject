@@ -31,7 +31,7 @@ public class PaintManager : Puzzle
         bool isComplete = true;
         Debug.Log(_soluce.PaintSelected.Count);
         Debug.Log(_paints.FindAll((paint) => paint.isTilted).Count);
-        if (_paints.FindAll((paint) => paint.isTilted).Count == _soluce.PaintSelected.Count) ;
+        if (_paints.FindAll((paint) => paint.isTilted).Count == _soluce.PaintSelected.Count)
         {
             foreach(int id in _soluce.PaintSelected)
             {
