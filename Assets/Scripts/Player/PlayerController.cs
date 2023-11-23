@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Start()
     {
-        _animator = GetComponent<Animator>();
+        //_animator = GetComponent<Animator>();
     }
     private void OnDisable() => _CleanUp();
 
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
         _inputManager = inputManager;
         _inputs = inputs;
         playerController.SetParent(transform);
-        _animator.SetTrigger("GetUp");
+        //_animator.SetTrigger("GetUp");
         //_playerUi.SetActive(true);
         //_playerUi.transform.DOScale(new Vector3(1, 1, 1), 0.5f);
 

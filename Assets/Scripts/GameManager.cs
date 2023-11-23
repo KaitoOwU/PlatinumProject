@@ -75,6 +75,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Hub _hub;
     [SerializeField] private UIRoomTransition _transitions;
+    [SerializeField] private TMP_Text _timerUI;
     public UIRoomTransition Transitions => _transitions;
     private Vestibule _vestibule;
 
@@ -100,6 +101,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public UnityEvent OnTPToHub;
 
+
+
     private SuspectData _murderer;
     private SuspectData _victim;
     private GamePhase _currentGamePhase;
@@ -121,7 +124,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UnityEvent _onWin;
     public UnityEvent OnWin => _onWin;
     [SerializeField] private UnityEvent _onLose;
+    private UnityEvent _onFadeMusic;
     public UnityEvent OnLose => _onLose;
+    public UnityEvent OnFadeMusic => _onLose;
+
 
     public GameObject CurrentCamera => _currentCamera;
     private GameObject _currentCamera; // A ASSIGNER
@@ -149,6 +155,7 @@ public class GameManager : MonoBehaviour
         FIRST_PHASE,
         SECOND_PHASE,
         THIRD_PHASE,
+        END_THIRD_PHASE,
         END,
     }
     public enum CameraState
@@ -343,6 +350,7 @@ public class GameManager : MonoBehaviour
 
     private void _AnalyseTimer()
     {
+        _timerUI.text = ((int)_timer).ToString();
         if (_timer % 60 == 0)
         {
             OnEachMinute?.Invoke();
@@ -372,6 +380,13 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
+                if (_timer <= 3)
+                {
+                    _onFadeMusic?.Invoke();
+                    _currentTimerPhase = TimerPhase.END_THIRD_PHASE;
+                }
+                break;
+            case TimerPhase.END_THIRD_PHASE:
                 if (_timer <= 0)
                 {
                     CurrentGamePhase = GamePhase.EARLY_GUESS;
