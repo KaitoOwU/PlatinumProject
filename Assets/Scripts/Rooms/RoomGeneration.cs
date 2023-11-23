@@ -86,6 +86,7 @@ public class RoomGeneration : MonoBehaviour
                 {
                      rand = Random.Range(0, remainingRooms[positionsList.DoorNumber - 1].Rooms.Count);
                      roomToBe = remainingRooms[positionsList.DoorNumber - 1].Rooms[rand];
+                    roomTo = roomToBe.GetComponent<Room>();
                 }
             }
             GameObject roomObj= Instantiate(roomToBe, positionsList.Position,transform.rotation, _generationParent);
@@ -130,19 +131,17 @@ public class RoomGeneration : MonoBehaviour
             }
             else
             {
-                if (remainingRooms[positionsList.DoorNumber - 1].Rooms[rand].GetComponent<Room>().Tandem != null)
-                {
-                    while (remainingRooms[positionsList.DoorNumber - 1].Rooms[rand].GetComponent<Room>().Tandem != null)
-                    {
-                        rand = Random.Range(0, remainingRooms[positionsList.DoorNumber - 1].Rooms.Count);
-                    }
-                }
+                Room tandem = remainingRooms[positionsList.DoorNumber - 1].Rooms[rand].GetComponent<Room>().Tandem;
+                while (tandem != null)
+                 {
+                    remainingRooms[positionsList.DoorNumber - 1].Rooms.RemoveAt(rand);
+                    rand = Random.Range(0, remainingRooms[positionsList.DoorNumber - 1].Rooms.Count);
+                    tandem = remainingRooms[positionsList.DoorNumber - 1].Rooms[rand].GetComponent<Room>().Tandem;
+                 }
                 roomObj = Instantiate(remainingRooms[positionsList.DoorNumber - 1].Rooms[rand], positionsList.Position, transform.rotation, _generationParent);
                 room = roomObj.GetComponent<Room>();
                 remainingRooms[positionsList.DoorNumber - 1].Rooms.RemoveAt(rand);
             }           
-            Debug.Log(positionsList.DoorNumber - 1);
-            Debug.Log(remainingRooms[positionsList.DoorNumber - 1].Rooms.Count);
             room.RoomSide = Room.Side.RIGHT;
             switch (positionsList.DoorNumber)
                 {
