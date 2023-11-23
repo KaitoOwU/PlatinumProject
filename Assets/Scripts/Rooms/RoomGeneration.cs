@@ -167,7 +167,7 @@ public class RoomGeneration : MonoBehaviour
         }
        
         SetRooms();
-        //LockedDoor();
+        LockedDoor();
         GameManager.Instance.DistributeClues();
     }
     #endregion

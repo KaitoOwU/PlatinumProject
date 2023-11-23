@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -73,6 +74,8 @@ public class GameManager : MonoBehaviour
     private GameObject _splitCameraRight;
     [SerializeField]
     private Hub _hub;
+    [SerializeField] private UIRoomTransition _transitions;
+    public UIRoomTransition Transitions => _transitions;
     private Vestibule _vestibule;
 
     //Public Unity Events
@@ -266,6 +269,14 @@ public class GameManager : MonoBehaviour
 
     public void TPAllPlayersToHub()
     {
+        StartCoroutine(CR_TPAllPlayersToHub());
+    }
+
+    private IEnumerator CR_TPAllPlayersToHub()
+    {
+        StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
+        yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
+        
         SwitchCameraState(CameraState.FULL);
         foreach (Player p in PlayerList.Select(data => data.PlayerRef))
         {
@@ -273,16 +284,32 @@ public class GameManager : MonoBehaviour
             p.RelativePos = HubRelativePosition.HUB;
             p.CurrentRoom = _hub;
         }
+        
+        StartCoroutine(_transitions.EndTransition(_transitions.RightTransition));
+        yield return StartCoroutine(_transitions.EndTransition(_transitions.LeftTransition));
     }
     public void TPPlayerPostTrap(Player[] players)
     {
+        StartCoroutine(CR_TPPlayerPostTrap(players));
+    }
+
+    private IEnumerator CR_TPPlayerPostTrap(Player[] players)
+    {
+        Image imgToCancel;
+        
         if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
         {
+            yield return StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
+            imgToCancel = _transitions.RightTransition;
+            
             _hub.Doors[0].IsLocked = true;
             TP_RightCamera(_hub.CameraPoint);
         }
         else
         {
+            yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
+            imgToCancel = _transitions.LeftTransition;
+            
             _hub.Doors[1].IsLocked = true;
             TP_LeftCamera(_hub.CameraPoint);
         }
@@ -291,8 +318,9 @@ public class GameManager : MonoBehaviour
             players[i].gameObject.transform.position = _hub.Spawnpoints[i].position;
             players[i].RelativePos = HubRelativePosition.HUB;
             players[i].CurrentRoom = _hub;
-            
         }
+
+        yield return StartCoroutine(_transitions.EndTransition(imgToCancel));
     }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
