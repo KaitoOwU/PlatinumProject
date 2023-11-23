@@ -133,6 +133,9 @@ public class Door : Interactable
             case Room.Side.RIGHT:
                 GameManager.Instance.TP_RightCamera(room.CameraPoint);
                 break;
+            case Room.Side.VESTIBULE:
+                GameManager.Instance.TP_Camera(GameManager.Instance.FullCamera, room.CameraPoint);
+                break;
         }
     }
     public void UpdateRoom(Room room)
