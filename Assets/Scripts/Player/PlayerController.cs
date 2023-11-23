@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _inputs;
     private float _currentVelocity;
     private EMoveState _moveState;
+    private Animator _animator;
 
     public static Dictionary<EButtonType, string> INPUT_NAMES = new()
     { { EButtonType.MOVE, "Move" },
@@ -54,7 +55,10 @@ public class PlayerController : MonoBehaviour
         PUSH,
         PUSH_BLOCKED,
     }
-
+    private void Start()
+    {
+        _animator = GetComponent<Animator>();
+    }
     private void OnDisable() => _CleanUp();
 
     public bool IsButtonHeld(EButtonType buttonType)
@@ -68,7 +72,7 @@ public class PlayerController : MonoBehaviour
         _inputManager = inputManager;
         _inputs = inputs;
         playerController.SetParent(transform);
-        
+        _animator.SetTrigger("GetUp");
         //_playerUi.SetActive(true);
         //_playerUi.transform.DOScale(new Vector3(1, 1, 1), 0.5f);
 
