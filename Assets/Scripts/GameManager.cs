@@ -131,6 +131,7 @@ public class GameManager : MonoBehaviour
     }
     int _validatedRooom = 0;
 
+    public GameObject FullCamera { get => _fullCamera; }
     public enum GamePhase
     {
         SELECT_CHARACTER,
@@ -401,7 +402,7 @@ public class GameManager : MonoBehaviour
     public void TP_LeftCamera(Transform newValues) => TP_Camera(_splitCameraLeft, newValues);
     public void TP_RightCamera(Transform newValues) => TP_Camera(_splitCameraRight, newValues);
 
-    private void TP_Camera(GameObject camera, Transform newValues)
+    public void TP_Camera(GameObject camera, Transform newValues)
     {
         camera.transform.position = newValues.position;
         camera.transform.rotation = newValues.rotation;

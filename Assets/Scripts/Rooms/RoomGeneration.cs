@@ -10,6 +10,7 @@ public class RoomGeneration : MonoBehaviour
     [SerializeField] private Transform _generationParent;
     [SerializeField] private bool _reseting;
     [SerializeField] private Hub _hall;
+    [SerializeField] private Vestibule _vestibule;
     private List<Room> _roomsInPlay1 = new List<Room>();
     private List<Room> _roomsInPlay2 = new List<Room>();
     private List<Room> _roomsInPlay3 = new List<Room>();
@@ -42,7 +43,7 @@ public class RoomGeneration : MonoBehaviour
     {
         _maxRooms = 0;
         GameManager.Instance.OnEachEndPhase.AddListener(Shuffle);
-  
+        _vestibule = FindObjectOfType<Vestibule>();
     }
     public IEnumerator GenerateRooms()
     {
@@ -167,7 +168,7 @@ public class RoomGeneration : MonoBehaviour
         }
        
         SetRooms();
-        //LockedDoor();
+        LockedDoor();
         GameManager.Instance.DistributeClues();
     }
     #endregion
@@ -343,6 +344,7 @@ public class RoomGeneration : MonoBehaviour
         }
         LinkRoom(_hall, FindRoomAtPosition(_hall.transform.position - new Vector3(_layout.BetweenRoomDistance, 0, 0)),_hall.Doors[0]);
         LinkRoom(_hall, FindRoomAtPosition(_hall.transform.position + new Vector3(_layout.BetweenRoomDistance, 0, 0)),_hall.Doors[1]);
+        LinkRoom(_hall, _vestibule,_hall.Doors[2]);
         foreach (Room room in _roomsInPlay)
         {
             foreach(Door door in room.Doors)
