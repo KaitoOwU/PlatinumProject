@@ -44,7 +44,7 @@ public class PaintManager : Puzzle
             Debug.Log(isComplete);
             if (isComplete)
             {
-                Debug.Log("ça marche");
+                Debug.Log("ï¿½a marche");
                 Reactive.PuzzleCompleted();
             }
         }
