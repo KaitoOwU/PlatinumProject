@@ -18,7 +18,7 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
         _pressurePlates = GetComponentsInChildren<PressurePlate>().ToList();
         for (int i = 0; i < _doorAnchors.Length; i++)
         {
-            _baseRotations[i] = _doorAnchors[i].rotation.eulerAngles;
+            _baseRotations.Add(_doorAnchors[i].rotation.eulerAngles);
         }
     }
 
