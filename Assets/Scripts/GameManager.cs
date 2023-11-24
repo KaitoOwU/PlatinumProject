@@ -256,10 +256,10 @@ public class GameManager : MonoBehaviour
                     allSearchableFurnitures.Add(f);
                 }
             }
-            foreach (Clue clue in furnitureClues)
+            for (int i= furnitureClues.Count-1; i>=0; i--) 
             {
                 int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
-                allSearchableFurnitures[randomIndex].Clue = clue;
+                allSearchableFurnitures[randomIndex].Clue = furnitureClues[i];
                 allSearchableFurnitures.RemoveAt(randomIndex);
             }
         }
