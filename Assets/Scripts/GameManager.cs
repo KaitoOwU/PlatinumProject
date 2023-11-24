@@ -207,8 +207,11 @@ public class GameManager : MonoBehaviour
     }
     private void InitGame()
     {
-        _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
-        _victim = GameData.SuspectsDatas[0]; //temporary
+        //_murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
+        //_victim = GameData.SuspectsDatas[0]; //temporary
+
+        _murderer = GameData.SuspectsDatas[0];
+        _victim = GameData.SuspectsDatas[2]; //temporary
         //init game accordingly;
 
         CurrentClues = MurderScenarios.ToList()
