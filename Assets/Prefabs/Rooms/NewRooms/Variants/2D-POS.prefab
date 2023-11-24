@@ -611,6 +611,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: -- PRESSURE PLATES -- (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6409571517129984880, guid: 61320ba58ed765b48bd373d5238cb643,
+        type: 3}
+      propertyPath: _doorAnchors.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6409571517129984880, guid: 61320ba58ed765b48bd373d5238cb643,
+        type: 3}
+      propertyPath: _doorAnchors.Array.data[0]
+      value: 
+      objectReference: {fileID: 6733840538370379375}
     - target: {fileID: 6455320954561021140, guid: 61320ba58ed765b48bd373d5238cb643,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -644,6 +654,12 @@ PrefabInstance:
 --- !u!4 &4182128675205632047 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4534957292358245012, guid: 61320ba58ed765b48bd373d5238cb643,
+    type: 3}
+  m_PrefabInstance: {fileID: 353110899853085371}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6733840538370379375 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6455320954561021140, guid: 61320ba58ed765b48bd373d5238cb643,
     type: 3}
   m_PrefabInstance: {fileID: 353110899853085371}
   m_PrefabAsset: {fileID: 0}
@@ -3665,12 +3681,12 @@ PrefabInstance:
     - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.51
+      value: -1.48
       objectReference: {fileID: 0}
     - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.01
+      value: -2.84
       objectReference: {fileID: 0}
     - target: {fileID: 5128783077591038199, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
@@ -3695,7 +3711,7 @@ PrefabInstance:
     - target: {fileID: 5891348937903672557, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8
+      value: -7.36
       objectReference: {fileID: 0}
     - target: {fileID: 5891348937903672557, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
@@ -3705,7 +3721,7 @@ PrefabInstance:
     - target: {fileID: 5891348937903672557, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.92
+      value: -2.75
       objectReference: {fileID: 0}
     - target: {fileID: 5891348937903672557, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
