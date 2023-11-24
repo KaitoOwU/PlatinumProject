@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SocialPlatforms;
 using static Furniture;
-using static UnityEditor.Experimental.GraphView.GraphView;
-
 public class Furniture : Interactable
 {
     #region Fields
