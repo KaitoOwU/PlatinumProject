@@ -50,14 +50,16 @@ public class Room : MonoBehaviour
     {
         Doors = GetComponentsInChildren<Door>().ToList();
     }
-
+    private void Start()
+    {
+        OnSetUp();
+    }
     public void OnSetUp()
     {
         if (!_doors[0].IsLocked && !_canHaveReward && RoomSide!=Side.HUB&&RoomSide!=Side.CORRIDOR)
         {
-            OnCompletedRoom();
+            GameManager.Instance.ValidatedRooom++;
         }
-
     }
     public void OnCompletedRoom()
     {

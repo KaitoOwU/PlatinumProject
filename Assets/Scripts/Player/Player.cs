@@ -39,6 +39,11 @@ public class Player : MonoBehaviour
         get;
         set;
     }
+
+    private void Start()
+    {
+        CurrentRoom = GameManager.Instance.Hub;
+    }
 }
 
 public enum HubRelativePosition

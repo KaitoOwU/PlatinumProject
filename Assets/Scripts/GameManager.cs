@@ -197,6 +197,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        _hub = FindObjectOfType<Hub>();
         SwitchCameraState(CameraState.FULL);
         StartCoroutine(VestibuleMessages());
         TP_Camera(_fullCamera, Vestibule.CameraPoint);
@@ -207,8 +208,11 @@ public class GameManager : MonoBehaviour
     }
     private void InitGame()
     {
-        _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
-        _victim = GameData.SuspectsDatas[0]; //temporary
+        //_murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
+        //_victim = GameData.SuspectsDatas[0]; //temporary
+
+        _murderer = GameData.SuspectsDatas[0];
+        _victim = GameData.SuspectsDatas[2]; //temporary
         //init game accordingly;
 
         CurrentClues = MurderScenarios.ToList()
@@ -252,10 +256,10 @@ public class GameManager : MonoBehaviour
                     allSearchableFurnitures.Add(f);
                 }
             }
-            foreach (Clue clue in furnitureClues)
+            for (int i= furnitureClues.Count-1; i>=0; i--) 
             {
                 int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
-                allSearchableFurnitures[randomIndex].Clue = clue;
+                allSearchableFurnitures[randomIndex].Clue = furnitureClues[i];
                 allSearchableFurnitures.RemoveAt(randomIndex);
             }
         }
@@ -278,11 +282,13 @@ public class GameManager : MonoBehaviour
     public void TPAllPlayersToHub()
     {
         SwitchCameraState(CameraState.FULL);
+        int i = 0;
         foreach (Player p in PlayerList.Select(data => data.PlayerRef))
         {
-            p.gameObject.transform.position = _hub.Spawnpoints[p.Index].position;
+            p.gameObject.transform.position = _hub.Spawnpoints[i].position;
             p.RelativePos = HubRelativePosition.HUB;
             p.CurrentRoom = _hub;
+            i++;
         }
     }
     
@@ -297,16 +303,16 @@ public class GameManager : MonoBehaviour
         
         if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
         {
-            yield return StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
-            imgToCancel = _transitions.RightTransition;
+            // return StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
+            //imgToCancel = _transitions.RightTransition;
             
             _hub.Doors[0].IsLocked = true;
             TP_RightCamera(_hub.CameraPoint);
         }
         else
         {
-            yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
-            imgToCancel = _transitions.LeftTransition;
+            //yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
+            //imgToCancel = _transitions.LeftTransition;
             
             _hub.Doors[1].IsLocked = true;
             TP_LeftCamera(_hub.CameraPoint);
@@ -318,7 +324,7 @@ public class GameManager : MonoBehaviour
             players[i].CurrentRoom = _hub;
         }
 
-        yield return StartCoroutine(_transitions.EndTransition(imgToCancel));
+        yield return null; //StartCoroutine(_transitions.EndTransition(imgToCancel));
     }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");

@@ -30,6 +30,7 @@ public class Door : Interactable
     {
         _corridors= FindObjectsOfType<Corridor>().ToList();
         room = GetComponentInParent<Room>();
+        
     }
     public enum DoorType
     {
@@ -41,6 +42,7 @@ public class Door : Interactable
     {
         if (GameManager.Instance.CurrentGamePhase == GameManager.GamePhase.SELECT_CHARACTER)
             return;
+        Debug.Log(player);
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
             OnChangeRoom?.Invoke();

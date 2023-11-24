@@ -11,6 +11,7 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
     
     private List<Vector3> _baseRotations;
     [SerializeField] private Transform[] _doorAnchors;
+    [SerializeField] private RewardGenerator _rewardGenerator;
 
     private void Awake()
     {
@@ -35,17 +36,31 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 
     public void PuzzleCompleted()
     {
-        for (int i = 0; i < _doorAnchors.Length; i++)
+        if (_rewardGenerator != null)
         {
-            _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y - 90, 0), 1.5f);
+            _rewardGenerator.PuzzleCompleted();
+        }
+        else
+        {
+            for (int i = 0; i < _doorAnchors.Length; i++)
+            {
+                _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y - 90, 0), 1.5f);
+            }
         }
     }
 
     private void UncompletePuzzle()
     {
-        for (int i = 0; i < _doorAnchors.Length; i++)
+        if (_rewardGenerator != null)
         {
-            _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < _doorAnchors.Length; i++)
+            {
+                _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
+            }
         }
     }
 }
