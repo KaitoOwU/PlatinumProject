@@ -326,6 +326,7 @@ public class RoomGeneration : MonoBehaviour
             }
         }
         SetRooms();
+        LockedDoor();
     }
     #endregion
     public void SetRooms()
@@ -399,6 +400,7 @@ public class RoomGeneration : MonoBehaviour
                     }
                 }
             }
+            room.OnSetUp();
         }
     }
     private void LinkRoom(Room room, Room roomToLink, Door door)
@@ -444,13 +446,14 @@ public class RoomGeneration : MonoBehaviour
         }
         int validated = GameManager.Instance.ValidatedRooom;
         if (validated < 2)
+        if (GameManager.Instance.CurrentTimerPhase == GameManager.TimerPhase.END)
+            _maxRooms = 0;
+        else if (validated < 2)
             _maxRooms = 3;
         else if (validated < 5)
             _maxRooms = 5;
-        else if (validated < 10)
+        else if (validated > 5)
             _maxRooms = _roomsInPlay.Count / 2;
-        else if (GameManager.Instance.CurrentTimerPhase == GameManager.TimerPhase.END)
-            _maxRooms = 0;
         //Debug.Log(_maxRooms);
         for (int i = 0; i < _maxRooms; i++)
         {
@@ -462,7 +465,6 @@ public class RoomGeneration : MonoBehaviour
             {
                 door.IsLocked = false;
             }
-            
         }
     }
     public void SetRoomsRewards(List<Clue> clues)
