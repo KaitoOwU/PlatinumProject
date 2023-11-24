@@ -9,6 +9,7 @@ public class SuspectData : ScriptableObject
 {
     [SerializeField] private string _name;
     [SerializeField] private Sprite _image;
+    [SerializeField, TextArea] private string _description; 
 
 
     public string Name
@@ -21,5 +22,7 @@ public class SuspectData : ScriptableObject
         get { return _image; }
         set { _image = value; }
     }
+    
+    public string Description => _description;
 
 }

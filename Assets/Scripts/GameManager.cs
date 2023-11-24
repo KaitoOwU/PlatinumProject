@@ -270,14 +270,6 @@ public class GameManager : MonoBehaviour
 
     public void TPAllPlayersToHub()
     {
-        StartCoroutine(CR_TPAllPlayersToHub());
-    }
-
-    private IEnumerator CR_TPAllPlayersToHub()
-    {
-        StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
-        yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
-        
         SwitchCameraState(CameraState.FULL);
         foreach (Player p in PlayerList.Select(data => data.PlayerRef))
         {
@@ -285,10 +277,8 @@ public class GameManager : MonoBehaviour
             p.RelativePos = HubRelativePosition.HUB;
             p.CurrentRoom = _hub;
         }
-        
-        StartCoroutine(_transitions.EndTransition(_transitions.RightTransition));
-        yield return StartCoroutine(_transitions.EndTransition(_transitions.LeftTransition));
     }
+    
     public void TPPlayerPostTrap(Player[] players)
     {
         StartCoroutine(CR_TPPlayerPostTrap(players));

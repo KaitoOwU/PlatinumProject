@@ -63,7 +63,7 @@ public class GuessManager : MonoBehaviour
                 return;
         };
 
-        CheckFinalGuess(GetFinalGuess());
+        StartCoroutine(CR_CheckFinalVote());
     }
 
     private SuspectData GetFinalGuess()
@@ -93,6 +93,13 @@ public class GuessManager : MonoBehaviour
             GameManager.Instance.OnWin?.Invoke();
         else
             GameManager.Instance.OnLose?.Invoke();
+    }
+
+    private IEnumerator CR_CheckFinalVote()
+    {
+        UIFinalVoteConfirm.instance.Init();
+        yield return new WaitUntil(() => UIFinalVoteConfirm.instance.IsValid);
+        CheckFinalGuess(GetFinalGuess());
     }
 
     private Portrait GetPortraitFromData(SuspectData suspectData) => _portraitsInfos.FirstOrDefault(e => e.SuspectData == suspectData);
