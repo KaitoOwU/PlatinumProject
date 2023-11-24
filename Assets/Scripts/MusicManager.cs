@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class MusicManager : MonoBehaviour
 {
@@ -19,15 +20,17 @@ public class MusicManager : MonoBehaviour
 
     private void StartMusic()
     {
-        if(GameManager.Instance.Timer < 2)
+        int count = GameManager.Instance.GameData.TimerValues.FirstPhaseTime
+        + GameManager.Instance.GameData.TimerValues.SecondPhaseTime
+        + GameManager.Instance.GameData.TimerValues.ThirdPhaseTime
+        - 60;
+        if (GameManager.Instance.Timer == count)
         {
-            Debug.Log("Start Music");
             _audioSource.Play();
         }
     }
     private void StopMusic()
     {
-        Debug.Log("Start stop Music");
         DOTween.To(x => _audioSource.volume = x, 1, 0, 3f);
     }
 }

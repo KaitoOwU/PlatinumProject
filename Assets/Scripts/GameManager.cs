@@ -330,7 +330,7 @@ public class GameManager : MonoBehaviour
         while (_isTimerGoing)
         {
             yield return new WaitForSeconds(1f);
-            if (PlayerList[0].PlayerRef.CurrentRoom != Hub)
+            if (PlayerList.Any(p => p.PlayerRef.CurrentRoom != Hub))
             {
                 _timer -= 1;
                 _AnalyseTimer();
@@ -340,11 +340,10 @@ public class GameManager : MonoBehaviour
 
     private void _AnalyseTimer()
     {
-        _timerUI.text = ((int)_timer).ToString();
+        _timerUI.text = _timer.ToString();
         if (_timer % 60 == 0)
         {
             OnEachMinute?.Invoke();
-            Debug.LogError("<color=cyan>Shuffle room </color>" + _timer);
         }
         switch (_currentTimerPhase)
         {
