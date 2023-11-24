@@ -16,107 +16,17 @@ MonoBehaviour:
   - scriptName: GameManager
     events:
     - eventName: OnShuffleRooms
-      eventActions:
-      - eventType: 6
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
-      - eventType: 7
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnFirstPhaseEnd
-      eventActions:
-      - eventType: 4
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnSecondPhaseEnd
-      eventActions:
-      - eventType: 4
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnTimerEnd
-      eventActions:
-      - eventType: 4
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnEachEndPhase
-      eventActions:
-      - eventType: 6
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
-      - eventType: 7
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnEachMinute
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnChangeToSplitScreen
       eventActions: []
     - eventName: OnChangeToFullScreen
@@ -128,106 +38,25 @@ MonoBehaviour:
   - scriptName: GuessManager
     events:
     - eventName: OnIndividualVote
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnGroupFinalVote
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
-      - eventType: 6
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
-      - eventType: 7
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 0.69
-        intensityRight: 0.563
-        duration: 1
+      eventActions: []
   - scriptName: Door
     events:
     - eventName: OnChangeRoom
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
   - scriptName: Furniture
     events:
     - eventName: OnClueFoundInFurniture
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnClueNotFoundInFurniture
       eventActions: []
     - eventName: OnBeginPushingFurniture
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnStopPushingFurniture
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnBeginStrugglePushingFurniture
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
   - scriptName: PlayerController
     events:
     - eventName: OnMoveStarted
@@ -235,28 +64,10 @@ MonoBehaviour:
     - eventName: OnMoveCanceled
       eventActions: []
     - eventName: OnPause
-      eventActions:
-      - eventType: 4
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnBackUI
       eventActions: []
   - scriptName: BookshelfTrap
     events:
     - eventName: ThrowBook
-      eventActions:
-      - eventType: 4
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 0}
-          volume: 1
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
