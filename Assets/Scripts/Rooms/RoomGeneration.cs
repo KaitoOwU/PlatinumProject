@@ -44,6 +44,7 @@ public class RoomGeneration : MonoBehaviour
         _maxRooms = 0;
         GameManager.Instance.OnEachEndPhase.AddListener(Shuffle);
         _vestibule = FindObjectOfType<Vestibule>();
+        _hall = FindObjectOfType<Hub>();
     }
     public IEnumerator GenerateRooms()
     {
@@ -428,6 +429,7 @@ public class RoomGeneration : MonoBehaviour
                 doorToLink.LinkedDoor = door;
                 door.UpdateDoormat();
                 doorToLink.UpdateDoormat();
+                Debug.Log("pk?");
                 break;
             }
         }

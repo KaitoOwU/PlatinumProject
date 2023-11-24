@@ -197,6 +197,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        _hub = FindObjectOfType<Hub>();
         SwitchCameraState(CameraState.FULL);
         StartCoroutine(VestibuleMessages());
         TP_Camera(_fullCamera, Vestibule.CameraPoint);

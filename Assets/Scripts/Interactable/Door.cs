@@ -30,6 +30,7 @@ public class Door : Interactable
     {
         _corridors= FindObjectsOfType<Corridor>().ToList();
         room = GetComponentInParent<Room>();
+        
     }
     public enum DoorType
     {
