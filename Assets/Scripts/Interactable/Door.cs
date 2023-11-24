@@ -40,15 +40,15 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
-        if (GameManager.Instance.CurrentGamePhase == GameManager.GamePhase.SELECT_CHARACTER)
-            return;
         Debug.Log(player);
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
             OnChangeRoom?.Invoke();
-
             if (player.CurrentRoom is Hub)
             {
+                if (GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count != GameManager.Instance.CurrentPlayersCount)
+                    return;
+
                 int countInHub = GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.HUB).Count;
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
 
@@ -119,7 +119,7 @@ public class Door : Interactable
 
     public void TP_Players(Transform[] tpPoint) // TP  tous les joueurs qui intéragissent avec this porte
     {
-        foreach(Player p in _playersInRange) if (p.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT))
+        foreach(Player p in _playersInRange) /* if (p.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT))*/
         {
             p.gameObject.transform.position = tpPoint[p.Index-1].position;
         }
