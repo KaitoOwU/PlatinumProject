@@ -271,11 +271,13 @@ public class GameManager : MonoBehaviour
     public void TPAllPlayersToHub()
     {
         SwitchCameraState(CameraState.FULL);
+        int i = 0;
         foreach (Player p in PlayerList.Select(data => data.PlayerRef))
         {
-            p.gameObject.transform.position = _hub.Spawnpoints[p.Index].position;
+            p.gameObject.transform.position = _hub.Spawnpoints[i].position;
             p.RelativePos = HubRelativePosition.HUB;
             p.CurrentRoom = _hub;
+            i++;
         }
     }
     
