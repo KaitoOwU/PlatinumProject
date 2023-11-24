@@ -299,16 +299,16 @@ public class GameManager : MonoBehaviour
         
         if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
         {
-            yield return StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
-            imgToCancel = _transitions.RightTransition;
+            // return StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
+            //imgToCancel = _transitions.RightTransition;
             
             _hub.Doors[0].IsLocked = true;
             TP_RightCamera(_hub.CameraPoint);
         }
         else
         {
-            yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
-            imgToCancel = _transitions.LeftTransition;
+            //yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
+            //imgToCancel = _transitions.LeftTransition;
             
             _hub.Doors[1].IsLocked = true;
             TP_LeftCamera(_hub.CameraPoint);
@@ -320,7 +320,7 @@ public class GameManager : MonoBehaviour
             players[i].CurrentRoom = _hub;
         }
 
-        yield return StartCoroutine(_transitions.EndTransition(imgToCancel));
+        yield return null; //StartCoroutine(_transitions.EndTransition(imgToCancel));
     }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
