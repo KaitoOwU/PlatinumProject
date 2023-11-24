@@ -8,6 +8,8 @@ using System.Linq;
 
 public class GuessManager : MonoBehaviour
 {
+    [HideInInspector] public UnityEvent OnIndividualVote;
+    [HideInInspector] public UnityEvent OnGroupFinalVote;
     public UnityEvent<Player, SuspectData> OnChoseSuspect;
 
     [Header("---References---")]
@@ -31,7 +33,7 @@ public class GuessManager : MonoBehaviour
     {
         foreach(var v in GameManager.Instance.PlayerList) // init dict
         {
-            _votes.Add(v.PlayerRef, null);
+            //_votes.Add(v.PlayerRef, null);
         }
         InitPortraits();
     }
@@ -47,6 +49,7 @@ public class GuessManager : MonoBehaviour
 
     private void Vote(Player player, SuspectData suspectData)
     {
+        OnIndividualVote?.Invoke();
         GetPortraitFromData(_votes[player])?.UpdateVote(player.Index - 1, false); //remove indicator from old vote portrait
 
         _votes[player] = suspectData;
@@ -60,7 +63,7 @@ public class GuessManager : MonoBehaviour
                 return;
         };
 
-        CheckFinalGuess(GetFinalGuess());
+        StartCoroutine(CR_CheckFinalVote());
     }
 
     private SuspectData GetFinalGuess()
@@ -84,10 +87,19 @@ public class GuessManager : MonoBehaviour
         Debug.LogError("finalGuess : "+finalGuess.Name);
         Debug.LogError("Murderer : " + GameManager.Instance.Murderer);
 
+        OnGroupFinalVote?.Invoke();
+
         if (finalGuess == GameManager.Instance.Murderer)
             GameManager.Instance.OnWin?.Invoke();
         else
             GameManager.Instance.OnLose?.Invoke();
+    }
+
+    private IEnumerator CR_CheckFinalVote()
+    {
+        UIFinalVoteConfirm.instance.Init();
+        yield return new WaitUntil(() => UIFinalVoteConfirm.instance.IsValid);
+        CheckFinalGuess(GetFinalGuess());
     }
 
     private Portrait GetPortraitFromData(SuspectData suspectData) => _portraitsInfos.FirstOrDefault(e => e.SuspectData == suspectData);

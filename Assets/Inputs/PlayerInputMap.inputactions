@@ -40,6 +40,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Push",
+                    "type": "Button",
+                    "id": "25016d82-86b1-466b-8847-64209691d880",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Back",
+                    "type": "Button",
+                    "id": "f2e56f68-15e1-4db9-abfc-185201b5758e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AskTPHub",
+                    "type": "Button",
+                    "id": "b3cc92db-eb9b-4c2f-b34b-e3358ab76339",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -57,7 +84,7 @@
                 {
                     "name": "",
                     "id": "3690bf48-c6f4-47dd-a4b3-ba4662b4ef3f",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -84,6 +111,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b269a02-3021-458c-9ed6-cb992c7b2374",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "AxisDeadzone",
+                    "groups": "",
+                    "action": "Push",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ec049225-1fd2-4bf7-8cf0-bee763d8870d",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Back",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "61f541f3-e57e-464f-95f8-a84b9b3bffe2",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AskTPHub",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -6,11 +6,11 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _timerTxt;
-    
     public GamePhase CurrentGamePhase
     {
         get => _currentGamePhase; 
@@ -27,11 +27,24 @@ public class GameManager : MonoBehaviour
         get => _playerList;
         set => _playerList = value;
     }
+    public int CorridorChance
+    { 
+        get => _corridorChance; 
+        set => _corridorChance = value;
+    }
+    
+    public List<Clue> FoundClues
+    {
+        get => _foundClues;
+        set => _foundClues = value;
+    }
     public GameData GameData => _gameData;
+    public PlayerConstants PlayerConstants => _playerConstants;
     public float Timer => _timer;
     public SuspectData Murderer => _murderer;
     public SuspectData Victim => _victim;
     public Hub Hub => _hub;
+    public Vestibule Vestibule => _vestibule;
     public TimerPhase CurrentTimerPhase => _currentTimerPhase;
     
     public IReadOnlyList<PlayerInfo> RightPlayers =>
@@ -40,11 +53,15 @@ public class GameManager : MonoBehaviour
     public IReadOnlyList<PlayerInfo> LeftPlayers =>
         PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.LEFT_WING);
 
-    public IReadOnlyList<ItemData> Items => _items;
+    public IReadOnlyList<PickableData> Items => _items;
+    public IReadOnlyList<MurderScenario> MurderScenarios => Resources.LoadAll<MurderScenario>("Clues");
+    public IReadOnlyList<Clue> CurrentClues { get; private set; }
 
     [Header("---Constants---")]
     [SerializeField]
     private GameData _gameData;
+    [SerializeField]
+    private PlayerConstants _playerConstants;
 
     [Header("---References---")]
     [SerializeField]
@@ -57,13 +74,34 @@ public class GameManager : MonoBehaviour
     private GameObject _splitCameraRight;
     [SerializeField]
     private Hub _hub;
+    [SerializeField] private UIRoomTransition _transitions;
+    [SerializeField] private TMP_Text _timerUI;
+    public UIRoomTransition Transitions => _transitions;
+    private Vestibule _vestibule;
 
-    [Header("---Events---")]
+    //Public Unity Events
+    [HideInInspector]
+    public UnityEvent OnShuffleRooms;
+    [HideInInspector]
     public UnityEvent OnFirstPhaseEnd;
+    [HideInInspector]
     public UnityEvent OnSecondPhaseEnd;
+    [HideInInspector]
     public UnityEvent OnTimerEnd;
-    public UnityEvent OnEndPhase;
+    [HideInInspector]
+    public UnityEvent OnEachEndPhase;
+    [HideInInspector]
     public UnityEvent OnEachMinute;
+    [HideInInspector]
+    public UnityEvent OnChangeToSplitScreen;
+    [HideInInspector]
+    public UnityEvent OnChangeToFullScreen;
+    [HideInInspector]
+    public UnityEvent OnTPToHubAfterTrap;
+    [HideInInspector]
+    public UnityEvent OnTPToHub;
+
+
 
     private SuspectData _murderer;
     private SuspectData _victim;
@@ -72,7 +110,13 @@ public class GameManager : MonoBehaviour
     private CameraState _currentCameraState;
     private float _timer;
     private bool _isTimerGoing;
-    private List<ItemData> _items = new();
+    private List<PickableData> _items = new();
+    public List<Player> NonSelectedPlayers { get=> _nonSelectedPlayers; set=> _nonSelectedPlayers = value; }
+    private List<Player> _nonSelectedPlayers { get; set; }
+
+    private List<Clue> _foundClues = new();
+
+    private RoomGeneration _roomGenerator;
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -80,21 +124,38 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UnityEvent _onWin;
     public UnityEvent OnWin => _onWin;
     [SerializeField] private UnityEvent _onLose;
+    private UnityEvent _onFadeMusic;
     public UnityEvent OnLose => _onLose;
+    public UnityEvent OnFadeMusic => _onLose;
 
+
+    public GameObject CurrentCamera => _currentCamera;
+    private GameObject _currentCamera; // A ASSIGNER
+    
+    int _corridorChance = 0;
+    public int ValidatedRooom
+    {
+        get => _validatedRooom;
+        set => _validatedRooom = value;
+    }
+    int _validatedRooom = 0;
+
+    public GameObject FullCamera { get => _fullCamera; }
     public enum GamePhase
     {
-        MENU,
+        SELECT_CHARACTER,
         HUB,
         GAME,
+        EARLY_GUESS,
         GUESS,
-        END,
+        END
     }
     public enum TimerPhase
     {
         FIRST_PHASE,
         SECOND_PHASE,
         THIRD_PHASE,
+        END_THIRD_PHASE,
         END,
     }
     public enum CameraState
@@ -126,25 +187,85 @@ public class GameManager : MonoBehaviour
     {
         InitSingleton();
         InitGame();
-
+        _validatedRooom = 0;
+        _corridorChance = 10;
+        _roomGenerator = FindObjectOfType<RoomGeneration>();
+        _vestibule = FindObjectOfType<Vestibule>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+        _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
     }
 
     void Start()
     {
-        CurrentGamePhase = GamePhase.HUB;
+        _hub = FindObjectOfType<Hub>();
+        SwitchCameraState(CameraState.FULL);
+        StartCoroutine(VestibuleMessages());
+        TP_Camera(_fullCamera, Vestibule.CameraPoint);
         StartTimer();
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);
-        OnEndPhase.AddListener(TPAllPlayersToHub);
+        OnEachEndPhase.AddListener(TPAllPlayersToHub);
     }
-
     private void InitGame()
     {
-        _murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
-        _victim = GameData.SuspectsDatas[0]; //temporary
+        //_murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
+        //_victim = GameData.SuspectsDatas[0]; //temporary
+
+        _murderer = GameData.SuspectsDatas[0];
+        _victim = GameData.SuspectsDatas[2]; //temporary
         //init game accordingly;
+
+        CurrentClues = MurderScenarios.ToList()
+            .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
+
+        _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+
+        foreach(RewardGenerator rewardGenerator in FindObjectsOfType<RewardGenerator>())
+        {
+            rewardGenerator.SetUp();
+        }
     }
+
+    public void DistributeClues()
+    {
+        if(CurrentClues.Count == 0)
+        {
+            Debug.LogError("No Clues found");
+            return;
+        }
+        List<Clue> puzzleClues = CurrentClues.ToList(); ///
+        //Debug.Log(puzzleClues.Count);
+        if (FindObjectsOfType<Furniture>().Length > 0)
+        {
+            List<Clue> furnitureClues = new();
+            for (int i = 0; i < _gameData.FurnitureCluesCount; i++)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
+                furnitureClues.Add(puzzleClues[randomIndex]);
+                puzzleClues.RemoveAt(randomIndex);
+                if (puzzleClues.Count == 0)
+                {
+                    break;
+                }
+            }
+            List<Furniture> allSearchableFurnitures = new List<Furniture>();
+            foreach (Furniture f in FindObjectsOfType<Furniture>())
+            {
+                if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
+                {
+                    allSearchableFurnitures.Add(f);
+                }
+            }
+            for (int i= furnitureClues.Count-1; i>=0; i--) 
+            {
+                int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
+                allSearchableFurnitures[randomIndex].Clue = furnitureClues[i];
+                allSearchableFurnitures.RemoveAt(randomIndex);
+            }
+        }
+        //_roomGenerator.SetRoomsRewards(puzzleClues);
+    }
+
     private void OnEnable()
     {
         //_onWin.AddListener(Win);
@@ -155,18 +276,55 @@ public class GameManager : MonoBehaviour
     {
         _onWin.RemoveListener(Win);
         _onLose.RemoveListener(Lose);
-        OnEndPhase.RemoveListener(TPAllPlayersToHub);
+        OnEachEndPhase.RemoveListener(TPAllPlayersToHub);
     }
 
-    private void TPAllPlayersToHub()
+    public void TPAllPlayersToHub()
     {
         SwitchCameraState(CameraState.FULL);
+        int i = 0;
         foreach (Player p in PlayerList.Select(data => data.PlayerRef))
         {
-            p.gameObject.transform.position = _hub.Spawnpoints[p.Index-1].position;
+            p.gameObject.transform.position = _hub.Spawnpoints[i].position;
             p.RelativePos = HubRelativePosition.HUB;
             p.CurrentRoom = _hub;
+            i++;
         }
+    }
+    
+    public void TPPlayerPostTrap(Player[] players)
+    {
+        StartCoroutine(CR_TPPlayerPostTrap(players));
+    }
+
+    private IEnumerator CR_TPPlayerPostTrap(Player[] players)
+    {
+        Image imgToCancel;
+        
+        if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
+        {
+            // return StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
+            //imgToCancel = _transitions.RightTransition;
+            
+            _hub.Doors[0].IsLocked = true;
+            TP_RightCamera(_hub.CameraPoint);
+        }
+        else
+        {
+            //yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
+            //imgToCancel = _transitions.LeftTransition;
+            
+            _hub.Doors[1].IsLocked = true;
+            TP_LeftCamera(_hub.CameraPoint);
+        }
+        for (int i = 0; i < players.Length; i++)
+        {
+            players[i].gameObject.transform.position = _hub.Spawnpoints[i].position;
+            players[i].RelativePos = HubRelativePosition.HUB;
+            players[i].CurrentRoom = _hub;
+        }
+
+        yield return null; //StartCoroutine(_transitions.EndTransition(imgToCancel));
     }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
@@ -178,31 +336,29 @@ public class GameManager : MonoBehaviour
         while (_isTimerGoing)
         {
             yield return new WaitForSeconds(1f);
-            if (PlayerList[0].PlayerRef.CurrentRoom != Hub)
+            if (PlayerList.Any(p => p.PlayerRef.CurrentRoom != Hub))
             {
                 _timer -= 1;
                 _AnalyseTimer();
-                
-                //RETIRER APRES (faux timer UI)
-                _timerTxt.text = "" + _timer;
             }
-
         }
     }
+
     private void _AnalyseTimer()
     {
+        _timerUI.text = _timer.ToString();
         if (_timer % 60 == 0)
         {
             OnEachMinute?.Invoke();
-            Debug.LogError("<color=cyan>Shuffle room </color>" + _timer);
         }
         switch (_currentTimerPhase)
         {
             case TimerPhase.FIRST_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
+                    CurrentGamePhase = GamePhase.HUB;
                     OnFirstPhaseEnd?.Invoke();
-                    OnEndPhase?.Invoke();
+                    OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
                 }
@@ -210,17 +366,31 @@ public class GameManager : MonoBehaviour
             case TimerPhase.SECOND_PHASE:
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
+                    CurrentGamePhase = GamePhase.HUB;
+                    _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
-                    OnEndPhase?.Invoke();
+                    OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
+                if (_timer <= 3)
+                {
+                    _onFadeMusic?.Invoke();
+                    _currentTimerPhase = TimerPhase.END_THIRD_PHASE;
+                }
+                break;
+            case TimerPhase.END_THIRD_PHASE:
                 if (_timer <= 0)
                 {
+                    CurrentGamePhase = GamePhase.EARLY_GUESS;
+                    Vestibule.Doors[0].IsLocked = false;
+                    Hub.RoomDoorLeft.IsLocked = true;
+                    Hub.RoomDoorRight.IsLocked = true;
+                    _currentTimerPhase = TimerPhase.END;
                     OnTimerEnd?.Invoke();
-                    OnEndPhase?.Invoke();
+                    OnEachEndPhase?.Invoke();
                     Debug.LogError("<color=cyan>Third Phase End </color>" + _timer);
                     _isTimerGoing = false;
                     _timer = 0;
@@ -251,12 +421,14 @@ public class GameManager : MonoBehaviour
         switch(targetState)
         {
             case CameraState.FULL:
+                OnChangeToFullScreen?.Invoke();
                 _fullCamera.SetActive(true);
                 _splitCameraLeft.SetActive(false);
                 _splitCameraRight.SetActive(false);
                 CurrentCameraState = targetState;
                 return;
             case CameraState.SPLIT:
+                OnChangeToSplitScreen?.Invoke();
                 _fullCamera.SetActive(false);
                 _splitCameraLeft.SetActive(true);
                 _splitCameraRight.SetActive(true);
@@ -268,12 +440,27 @@ public class GameManager : MonoBehaviour
     public void TP_LeftCamera(Transform newValues) => TP_Camera(_splitCameraLeft, newValues);
     public void TP_RightCamera(Transform newValues) => TP_Camera(_splitCameraRight, newValues);
 
-    private void TP_Camera(GameObject camera, Transform newValues)
+    public void TP_Camera(GameObject camera, Transform newValues)
     {
         camera.transform.position = newValues.position;
         camera.transform.rotation = newValues.rotation;
     }
     #endregion
+
+    public MurderScenario GetMurderScenario(SuspectData victim, SuspectData murderer) => MurderScenarios.ToList()
+        .FindAll(scenario => scenario.DuoSuspect.Victim == victim)
+        .Find(scenario => scenario.DuoSuspect.Murderer == murderer);
+
+    IEnumerator VestibuleMessages()
+    {
+        yield return new WaitForSeconds(5);
+        TP_Camera(_fullCamera, Hub.CameraPoint);
+        CurrentGamePhase = GamePhase.SELECT_CHARACTER;
+        foreach (Player p in Vestibule.GetComponentsInChildren<Player>())
+        {
+            Destroy(p.gameObject);
+        }
+    } 
 }
 
 [Serializable]
@@ -293,8 +480,8 @@ public struct PlayerInfo
 
 public static class Helper
 {
-    public static List<ItemData> GetAllItemDatas()
+    public static List<PickableData> GetAllItemDatas()
     {
-        return Resources.LoadAll<ItemData>("Item/ItemsData").ToList();
+        return Resources.LoadAll<PickableData>("Item/ItemsData").ToList();
     }
 }

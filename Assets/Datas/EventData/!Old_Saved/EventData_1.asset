@@ -1,0 +1,218 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc6dbed766a510e43bd900840650aa48, type: 3}
+  m_Name: EventData_1
+  m_EditorClassIdentifier: 
+  _database:
+  - scriptName: GameManager
+    events:
+    - eventName: OnShuffleRooms
+      eventActions:
+      - eventType: 6
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+      - eventType: 7
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnFirstPhaseEnd
+      eventActions:
+      - eventType: 4
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnSecondPhaseEnd
+      eventActions:
+      - eventType: 4
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnTimerEnd
+      eventActions:
+      - eventType: 4
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnEachEndPhase
+      eventActions:
+      - eventType: 6
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+      - eventType: 7
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnEachMinute
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnChangeToSplitScreen
+      eventActions: []
+    - eventName: OnChangeToFullScreen
+      eventActions: []
+    - eventName: OnTPToHubAfterTrap
+      eventActions: []
+    - eventName: OnTPToHub
+      eventActions: []
+  - scriptName: GuessManager
+    events:
+    - eventName: OnIndividualVote
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnGroupFinalVote
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+      - eventType: 6
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+      - eventType: 7
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+  - scriptName: Door
+    events:
+    - eventName: OnChangeRoom
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+  - scriptName: Furniture
+    events:
+    - eventName: OnClueFoundInFurniture
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnClueNotFoundInFurniture
+      eventActions: []
+    - eventName: OnBeginPushingFurniture
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnStopPushingFurniture
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+    - eventName: OnBeginStrugglePushingFurniture
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+  - scriptName: PlayerController
+    events:
+    - eventName: OnMoveStarted
+      eventActions: []
+    - eventName: OnMoveCanceled
+      eventActions: []
+    - eventName: OnPause
+      eventActions:
+      - eventType: 4
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+  - scriptName: BookshelfTrap
+    events:
+    - eventName: ThrowBook
+      eventActions:
+      - eventType: 4
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1

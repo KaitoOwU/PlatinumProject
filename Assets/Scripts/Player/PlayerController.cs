@@ -1,75 +1,165 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Windows;
 using UnityEngine.InputSystem;
+using static PlayerController;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
+
     public int PlayerIndex => _playerIndex;
-    public bool IsInteractHeld => _isInteractHeld;
     public InputManager Inputs => _inputManager;
 
     [Header("Parameters")]
-    [SerializeField]
-    private float _moveSpeed = 1;
+    private float _moveSpeed;
     [SerializeField]
     private int _playerIndex;
     private Rigidbody _rigidbody;
     [SerializeField]
     private InputManager _inputManager;
     private PlayerInput _inputs;
-    private bool _isInteractHeld;
+    private float _currentVelocity;
+    private EMoveState _moveState;
+    private Animator _animator;
 
+    public static Dictionary<EButtonType, string> INPUT_NAMES = new()
+    { { EButtonType.MOVE, "Move" },
+        { EButtonType.INTERACT, "Interact" },
+        { EButtonType.PUSH, "Push" },
+        { EButtonType.TOOL, "Tool" },
+        { EButtonType.PAUSE, "Pause" },
+        {EButtonType.ASK_TP_HUB, "AskTPHub"}
+    };
+
+    [HideInInspector] public UnityEvent OnMoveStarted;
+    [HideInInspector] public UnityEvent OnMoveCanceled;
+    [HideInInspector] public UnityEvent OnPause;
+    [HideInInspector] public UnityEvent OnBackUI;
+
+    public enum EButtonType
+    {
+        MOVE,
+        INTERACT,
+        PUSH,
+        TOOL,
+        PAUSE,
+        ASK_TP_HUB
+    }
+    public enum EMoveState
+    {
+        NORMAL,
+        PUSH,
+        PUSH_BLOCKED,
+    }
+    private void Start()
+    {
+        //_animator = GetComponent<Animator>();
+    }
     private void OnDisable() => _CleanUp();
+
+    public bool IsButtonHeld(EButtonType buttonType)
+    {
+        return _inputManager?.GetInputValue(INPUT_NAMES[buttonType]) > 0;
+    }
 
     #region Set up & Clean up
     public void SetUp(InputManager inputManager, PlayerInput inputs, Transform playerController)
     {
         _inputManager = inputManager;
         _inputs = inputs;
-        playerController.SetParent(transform); 
+        playerController.SetParent(transform);
+        //_animator.SetTrigger("GetUp");
+        //_playerUi.SetActive(true);
+        //_playerUi.transform.DOScale(new Vector3(1, 1, 1), 0.5f);
 
         _rigidbody = GetComponent<Rigidbody>();
 
         GetComponent<Player>().Index = _playerIndex;
 
-        _inputManager.OnInteractStarted.AddListener(_Interact);
-        _inputManager.OnInteractCanceled.AddListener(_StopInteract);
+        _inputManager.OnInteract.AddListener(_Interact);
         _inputManager.OnUseTool.AddListener(_UseTool);
         _inputManager.OnPause.AddListener(_Pause);
+        _inputManager.OnBack.AddListener(_Back);
+
+        _inputManager.OnMoveStarted.AddListener(_StartMove);
+        _inputManager.OnMoveCanceled.AddListener(_StopMove);
+
+        _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed;
+        _moveState = EMoveState.NORMAL;
     }
     private void _CleanUp()
     {
-        if(_inputManager != null)
+        if (_inputManager != null)
         {
-            _inputManager.OnInteractStarted.RemoveListener(_Interact);
-            _inputManager.OnInteractCanceled.RemoveListener(_StopInteract);
+            _inputManager.OnMoveStarted.RemoveListener(_StartMove);
+            _inputManager.OnMoveCanceled.RemoveListener(_StopMove);
+
+            _inputManager.OnInteract.RemoveListener(_Interact);
             _inputManager.OnUseTool.RemoveListener(_UseTool);
             _inputManager.OnPause.RemoveListener(_Pause);
+            _inputManager.OnBack.RemoveListener(_Back);
         }
     }
     #endregion
 
+    public void SwitchMoveState(EMoveState newMoveState, Vector3 constraint = new()) 
+    {
+        _moveState = newMoveState;
+        switch (newMoveState)
+        {
+            case EMoveState.NORMAL:
+                _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ; 
+                _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed; break;
+            case EMoveState.PUSH:
+                if (constraint.x != 0)
+                    _rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                else if (constraint.z != 0)
+                    _rigidbody.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+                _moveSpeed = GameManager.Instance.PlayerConstants.PushMoveSpeed; break;
+            case EMoveState.PUSH_BLOCKED:
+                _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                _moveSpeed = 0; break;
+        }
+    }
+
     private void FixedUpdate()
     {
-        if(_inputs != null)
+        if (_inputs != null)
         {
             if (_inputs.actions["Move"].ReadValue<Vector2>() != Vector2.zero)
+            {
+                if (_moveState == EMoveState.NORMAL)
+                    UpdatePlayerRotation(_inputs.actions["Move"].ReadValue<Vector2>());
                 _Move(_inputs.actions["Move"].ReadValue<Vector2>());
-        }        
+            }
+        }
     }
 
     #region Player Actions Methods
     private void _Move(Vector3 dir)
     {
-        //_rigidbody.AddForce((Quaternion.AngleAxis(90, Vector3.right) * dir) * _moveSpeed);
         _rigidbody.velocity = new Vector3(dir.x * _moveSpeed, _rigidbody.velocity.y, dir.y * _moveSpeed);
     }
+    private void _StartMove() => OnMoveStarted?.Invoke();
+    private void _StopMove() => OnMoveCanceled?.Invoke();
+    private void UpdatePlayerRotation(Vector3 dir)
+    {
+        var targetAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg, ref _currentVelocity, 0.05f);
+        transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+    }
+    private void _Interact(Player player) 
+    {
 
-    private void _Interact(Player player) => _isInteractHeld = true;
-    private void _StopInteract(Player player) => _isInteractHeld = false;
+    }
+
+    private void _Push(Player player)
+    {
+
+    }
 
     private void _UseTool()
     {
@@ -78,7 +168,9 @@ public class PlayerController : MonoBehaviour
 
     private void _Pause()
     {
-        
-    }
+        OnPause?.Invoke();
+    }   
+    private void _Back() => OnBackUI?.Invoke();
+    
     #endregion
 }

@@ -62,6 +62,33 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Push"",
+                    ""type"": ""Button"",
+                    ""id"": ""25016d82-86b1-466b-8847-64209691d880"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""f2e56f68-15e1-4db9-abfc-185201b5758e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AskTPHub"",
+                    ""type"": ""Button"",
+                    ""id"": ""b3cc92db-eb9b-4c2f-b34b-e3358ab76339"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -79,7 +106,7 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""3690bf48-c6f4-47dd-a4b3-ba4662b4ef3f"",
-                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -108,6 +135,39 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b269a02-3021-458c-9ed6-cb992c7b2374"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": ""AxisDeadzone"",
+                    ""groups"": """",
+                    ""action"": ""Push"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec049225-1fd2-4bf7-8cf0-bee763d8870d"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""61f541f3-e57e-464f-95f8-a84b9b3bffe2"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AskTPHub"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -120,6 +180,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
         m_Gameplay_Tool = m_Gameplay.FindAction("Tool", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
+        m_Gameplay_Push = m_Gameplay.FindAction("Push", throwIfNotFound: true);
+        m_Gameplay_Back = m_Gameplay.FindAction("Back", throwIfNotFound: true);
+        m_Gameplay_AskTPHub = m_Gameplay.FindAction("AskTPHub", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,6 +248,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Interact;
     private readonly InputAction m_Gameplay_Tool;
     private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_Push;
+    private readonly InputAction m_Gameplay_Back;
+    private readonly InputAction m_Gameplay_AskTPHub;
     public struct GameplayActions
     {
         private @PlayerInputMap m_Wrapper;
@@ -193,6 +259,9 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
         public InputAction @Tool => m_Wrapper.m_Gameplay_Tool;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @Push => m_Wrapper.m_Gameplay_Push;
+        public InputAction @Back => m_Wrapper.m_Gameplay_Back;
+        public InputAction @AskTPHub => m_Wrapper.m_Gameplay_AskTPHub;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -214,6 +283,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @Push.started += instance.OnPush;
+            @Push.performed += instance.OnPush;
+            @Push.canceled += instance.OnPush;
+            @Back.started += instance.OnBack;
+            @Back.performed += instance.OnBack;
+            @Back.canceled += instance.OnBack;
+            @AskTPHub.started += instance.OnAskTPHub;
+            @AskTPHub.performed += instance.OnAskTPHub;
+            @AskTPHub.canceled += instance.OnAskTPHub;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -230,6 +308,15 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @Push.started -= instance.OnPush;
+            @Push.performed -= instance.OnPush;
+            @Push.canceled -= instance.OnPush;
+            @Back.started -= instance.OnBack;
+            @Back.performed -= instance.OnBack;
+            @Back.canceled -= instance.OnBack;
+            @AskTPHub.started -= instance.OnAskTPHub;
+            @AskTPHub.performed -= instance.OnAskTPHub;
+            @AskTPHub.canceled -= instance.OnAskTPHub;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -253,5 +340,8 @@ public partial class @PlayerInputMap: IInputActionCollection2, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnTool(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnPush(InputAction.CallbackContext context);
+        void OnBack(InputAction.CallbackContext context);
+        void OnAskTPHub(InputAction.CallbackContext context);
     }
 }

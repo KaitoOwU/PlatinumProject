@@ -8,9 +8,11 @@ using UnityEngine.Serialization;
 public class Player : MonoBehaviour
 {
 
-    [SerializeField] private ItemData _heldItem;
+    [FormerlySerializedAs("_heldItem")] [SerializeField] private PickableData _heldPickable;
     [SerializeField] private PlayerController _playerController;
+    [SerializeField] private Color _associatedColor;
     public PlayerController PlayerController => _playerController;
+    public Color AssociatedColor => _associatedColor;
     
     [SerializeField] private HubRelativePosition _relativePos;
     public HubRelativePosition RelativePos { get => _relativePos; set => _relativePos = value; }
@@ -19,17 +21,28 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Room _currentRoom;
 
-    public ItemData HeldItem
+    [SerializeField]
+    private Transform _UI;
+
+    public PickableData HeldPickable
     {
-        get => _heldItem;
-        set => _heldItem = value;
+        get => _heldPickable;
+        set => _heldPickable = value;
     }
     public Room CurrentRoom { get => _currentRoom; set => _currentRoom = value; }
+    public bool Selected { get => _selected; set => _selected = value; }
+    public Transform UI => _UI;
+    public bool _selected;
 
     public int Index
     {
         get;
         set;
+    }
+
+    private void Start()
+    {
+        CurrentRoom = GameManager.Instance.Hub;
     }
 }
 
