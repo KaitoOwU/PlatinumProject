@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 563221743733572270}
   - component: {fileID: 1384806673898677561}
   m_Layer: 0
-  m_Name: FurnitureInteractable
+  m_Name: FurnitureInteractable 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,8 +84,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.61
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 2
+  m_Center: {x: 0, y: 0.8, z: 0.2}
 --- !u!1001 &2927079597638193057
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: -6536645751320502048, guid: e728b39b49efe4545a0b70b1a599af1f,
+      objectReference: {fileID: 8780371679454469378, guid: 77ef95db83b42634485a768f6632fc30,
         type: 3}
     - target: {fileID: 919132149155446097, guid: 77ef95db83b42634485a768f6632fc30,
         type: 3}
@@ -215,8 +215,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.015, y: 0.014999997, z: 0.015}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.02, y: 0.02, z: 0.02}
+  m_Center: {x: 0, y: 0, z: 0.01}
 --- !u!4 &3392804947639265354 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,
