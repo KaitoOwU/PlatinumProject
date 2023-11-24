@@ -9,7 +9,7 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 {
     private List<PressurePlate> _pressurePlates = new();
     
-    private List<Vector3> _baseRotations;
+    private List<Vector3> _baseRotations = new();
     [SerializeField] private Transform[] _doorAnchors;
     [SerializeField] private RewardGenerator _rewardGenerator;
 
