@@ -128,6 +128,12 @@ public class GameManager : MonoBehaviour
     public UnityEvent OnLose => _onLose;
     public UnityEvent OnFadeMusic => _onLose;
 
+    private int _currentPlayersCount;
+    public int CurrentPlayersCount
+    {
+        get => _currentPlayersCount;
+        set => _currentPlayersCount = value;
+    }
 
     public GameObject CurrentCamera => _currentCamera;
     private GameObject _currentCamera; // A ASSIGNER
