@@ -445,7 +445,6 @@ public class RoomGeneration : MonoBehaviour
             }
         }
         int validated = GameManager.Instance.ValidatedRooom;
-        if (validated < 2)
         if (GameManager.Instance.CurrentTimerPhase == GameManager.TimerPhase.END)
             _maxRooms = 0;
         else if (validated < 2)
@@ -454,7 +453,7 @@ public class RoomGeneration : MonoBehaviour
             _maxRooms = 5;
         else if (validated > 5)
             _maxRooms = _roomsInPlay.Count / 2;
-        //Debug.Log(_maxRooms);
+        Debug.Log(validated);
         for (int i = 0; i < _maxRooms; i++)
         {
             foreach (Door door in FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).Doors)

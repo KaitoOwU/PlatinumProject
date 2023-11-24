@@ -41,6 +41,7 @@ public class Door : Interactable
     {
         if (GameManager.Instance.CurrentGamePhase == GameManager.GamePhase.SELECT_CHARACTER)
             return;
+        Debug.Log(player);
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
             OnChangeRoom?.Invoke();
