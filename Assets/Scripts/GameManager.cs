@@ -264,12 +264,13 @@ public class GameManager : MonoBehaviour
             }
             for (int i= furnitureClues.Count-1; i>=0; i--) 
             {
+                Debug.Log(furnitureClues[i].name);
                 int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
                 allSearchableFurnitures[randomIndex].Clue = furnitureClues[i];
                 allSearchableFurnitures.RemoveAt(randomIndex);
             }
         }
-        //_roomGenerator.SetRoomsRewards(puzzleClues);
+        _roomGenerator.SetRoomsRewards(puzzleClues);
     }
 
     private void OnEnable()
