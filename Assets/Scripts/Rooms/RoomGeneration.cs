@@ -429,7 +429,7 @@ public class RoomGeneration : MonoBehaviour
                 doorToLink.LinkedDoor = door;
                 door.UpdateDoormat();
                 doorToLink.UpdateDoormat();
-                Debug.Log("pk?");
+                //Debug.Log("pk?");
                 break;
             }
         }
@@ -455,7 +455,7 @@ public class RoomGeneration : MonoBehaviour
             _maxRooms = 5;
         else if (validated > 5)
             _maxRooms = _roomsInPlay.Count / 2;
-        Debug.Log(validated);
+        //Debug.Log(validated);
         for (int i = 0; i < _maxRooms; i++)
         {
             foreach (Door door in FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).Doors)

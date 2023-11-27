@@ -30,6 +30,7 @@ public class Furniture : Interactable
     private List<Player> _playersPushing;
     private float _baseY;
     private bool _searched = false;
+    private Collider _furnitureModelCollider;
 
     #endregion
     public enum EFurnitureType
@@ -43,6 +44,7 @@ public class Furniture : Interactable
         _playersPushing = new();
         _3Dmodel.layer = LayerMask.NameToLayer("Furniture");
         _baseY = transform.position.y;
+        _furnitureModelCollider = _3Dmodel.GetComponent<Collider>();
     }
 
     #region Overridden methods
@@ -76,8 +78,6 @@ public class Furniture : Interactable
             return;
 
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
-        OnPushCanceled(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
-
 
         p.Inputs.OnInteract?.RemoveListener(OnInteract);
         p.Inputs.OnPush?.RemoveListener(OnPush);
@@ -118,11 +118,15 @@ public class Furniture : Interactable
             var x = Mathf.Max(Mathf.Abs(fwd.x), Mathf.Abs(fwd.z));
             fwd = x == Mathf.Abs(fwd.x) ? new Vector3(fwd.x, 0, 0) : new Vector3(0, 0, fwd.z);
 
-            Debug.DrawRay(player.transform.position, fwd * 50, Color.green);
-
+            Debug.DrawRay(player.transform.position, fwd * 10, Color.green);
+            RaycastHit hit = new RaycastHit();
             // Check if our raycast has hit furniture
-            if (Physics.Raycast(player.transform.position, fwd, 50, LayerMask.GetMask("Furniture")))
+            if (Physics.Raycast(player.transform.position, fwd * 10, out hit, 10, LayerMask.GetMask("Furniture")))
             {
+                if (hit.collider == null)
+                    return;                
+                if (hit.collider != _furnitureModelCollider)
+                    return;
                 _playersPushing.Add(player);
                 if(_playersPushing.Count >= _playersNeededNumber)
                 {
