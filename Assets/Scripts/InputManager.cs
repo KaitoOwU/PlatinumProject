@@ -90,8 +90,6 @@ public class InputManager : MonoBehaviour
     GameManager _gm;
     //private Bubble _playerSelectedBubble;
 
-    private Gamepad _gamepad;
-
     private void Start()
     {
         _map = GetComponent<PlayerInput>();
@@ -100,6 +98,7 @@ public class InputManager : MonoBehaviour
         //_AddController();
 
         _controllerIndex = _map.playerIndex;
+        ControllerManager.current.Connected(Gamepad.all[_controllerIndex]);
         _SetupSelectEvents();
         //Gamepad.all[_index].SetMotorSpeeds(1f, 1f);
         //Gamepad.all[_index + 1].SetMotorSpeeds(1f, 1f);
@@ -212,6 +211,7 @@ public class InputManager : MonoBehaviour
     }
     private void _PickCharacter(InputAction.CallbackContext obj)
     {
+        ControllerManager.current.Link(_players[_playerSelectedIndex], Gamepad.all[_controllerIndex]);
         _gm.NonSelectedPlayers.Remove(_players[_playerSelectedIndex]);
         if(_gm.NonSelectedPlayers.Count<4/*_gm.NonSelectedPlayers.Count == 0*/)
             GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
