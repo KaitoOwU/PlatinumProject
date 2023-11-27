@@ -17,7 +17,7 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
         {
             Instantiate(_reward, transform.position, transform.rotation);
         }
-        room.OnCompletedRoom();
+        room.CompletedRoom();
     }
 
 }

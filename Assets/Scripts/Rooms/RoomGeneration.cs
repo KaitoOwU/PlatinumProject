@@ -483,7 +483,7 @@ public class RoomGeneration : MonoBehaviour
         int k = 0;
         foreach (Room room2 in _roomsInPlay)
         {
-            if (room2.CanHaveReward)
+            if (room2.CanHaveReward && _rewards.Count > 0) 
             {
                 if(_roomsInPlay.Count - 1 - k > _rewards.Count)
                 {
@@ -507,6 +507,7 @@ public class RoomGeneration : MonoBehaviour
                 else
                 {
                     room2.Reward = _rewards[_roomsInPlay.Count - 1 - k];
+                    room2.Reward = _rewards[_roomsInPlay.Count - 2- k];
                 }
                 k++;
             }

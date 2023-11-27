@@ -366,6 +366,7 @@ public class GameManager : MonoBehaviour
                     CurrentGamePhase = GamePhase.HUB;
                     OnFirstPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
+                    OnShuffleRooms?.Invoke();
                     Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
                 }
@@ -377,6 +378,7 @@ public class GameManager : MonoBehaviour
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
+                    OnShuffleRooms?.Invoke();
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }
