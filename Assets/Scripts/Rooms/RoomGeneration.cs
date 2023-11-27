@@ -429,7 +429,6 @@ public class RoomGeneration : MonoBehaviour
                 doorToLink.LinkedDoor = door;
                 door.UpdateDoormat();
                 doorToLink.UpdateDoormat();
-                Debug.Log("pk?");
                 break;
             }
         }
@@ -455,7 +454,6 @@ public class RoomGeneration : MonoBehaviour
             _maxRooms = 5;
         else if (validated > 5)
             _maxRooms = _roomsInPlay.Count / 2;
-        Debug.Log(validated);
         for (int i = 0; i < _maxRooms; i++)
         {
             foreach (Door door in FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).Doors)
@@ -485,23 +483,31 @@ public class RoomGeneration : MonoBehaviour
         int k = 0;
         foreach (Room room2 in _roomsInPlay)
         {
-            if (room2.RoomSide != Room.Side.HUB&&room2.CanHaveReward)
+            if (room2.CanHaveReward && _rewards.Count > 0) 
             {
-                int rand = Random.Range(0, _roomsInPlay.Count-1 - k);
-                if (rand < _rewards.Count && !room2.IsRewardClue)
+                if(_roomsInPlay.Count - 1 - k > _rewards.Count)
                 {
-                    room2.Reward = _rewards[rand];
-                    _rewards.Remove(_rewards[rand]);
-                    if(rand < _rewardClueOnly.Count)
+                    int rand = Random.Range(0, _roomsInPlay.Count - 1 - k);
+                    if (rand < _rewards.Count && !room2.IsRewardClue)
                     {
+                        room2.Reward = _rewards[rand];
+                        _rewards.Remove(_rewards[rand]);
+                        if (rand < _rewardClueOnly.Count)
+                        {
+                            _rewardClueOnly.Remove(_rewardClueOnly[rand]);
+                        }
+                    }
+                    else if (rand < _rewardClueOnly.Count)
+                    {
+                        room2.Reward = _rewardClueOnly[rand];
                         _rewardClueOnly.Remove(_rewardClueOnly[rand]);
+                        _rewards.Remove(_rewards[rand]);
                     }
                 }
-                else if (rand < _rewardClueOnly.Count)
+                else
                 {
-                    room2.Reward = _rewardClueOnly[rand];
-                    _rewardClueOnly.Remove(_rewardClueOnly[rand]);
-                    _rewards.Remove(_rewards[rand]);
+                    room2.Reward = _rewards[_roomsInPlay.Count - 1 - k];
+                    room2.Reward = _rewards[_roomsInPlay.Count - 2- k];
                 }
                 k++;
             }

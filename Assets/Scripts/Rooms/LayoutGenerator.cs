@@ -52,7 +52,6 @@ public class LayoutGenerator : MonoBehaviour
         List<RoomPosition> threeDoorRoom = new List<RoomPosition>();
         List<RoomPosition> fourDoorRoom = new List<RoomPosition>();
         RoomPosition hubPosition;
-        Debug.Log(_hub.name);
         hubPosition = new RoomPosition(_hub.transform.position, 1);
         allAisleRoom.Add(hubPosition);
         _lineListLayout.Add(hubPosition.Position);
