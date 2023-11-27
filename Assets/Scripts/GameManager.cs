@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
 
     private List<Clue> _foundClues = new();
 
-    private RoomGeneration _roomGenerator;
+   [SerializeField] private RoomGeneration _roomGenerator;
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour
         InitGame();
         _validatedRooom = 0;
         _corridorChance = 10;
-        _roomGenerator = FindObjectOfType<RoomGeneration>();
+        Debug.Log(_roomGenerator);
         _vestibule = FindObjectOfType<Vestibule>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
         _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
@@ -203,6 +203,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        _roomGenerator = FindObjectOfType<RoomGeneration>();
         _hub = FindObjectOfType<Hub>();
         SwitchCameraState(CameraState.FULL);
         StartCoroutine(VestibuleMessages());
@@ -270,6 +271,7 @@ public class GameManager : MonoBehaviour
                 allSearchableFurnitures.RemoveAt(randomIndex);
             }
         }
+        Debug.Log(_roomGenerator);
         _roomGenerator.SetRoomsRewards(puzzleClues);
     }
 

@@ -19,6 +19,7 @@ public class Statue : Puzzle, IResettable
             player.HeldPickable = null;
             _statueArm.SetActive(true);
             _isRepaired = true;
+            Reactive.PuzzleCompleted();
         }
     }
 
