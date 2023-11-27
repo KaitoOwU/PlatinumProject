@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
     #region Set up & Clean up
     public void SetUp(InputManager inputManager, PlayerInput inputs, Transform playerController)
     {
+        GameManager.Instance.CurrentPlayersCount++;
         _inputManager = inputManager;
         _inputs = inputs;
         playerController.SetParent(transform);

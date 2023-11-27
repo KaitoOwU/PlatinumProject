@@ -212,7 +212,7 @@ public class InputManager : MonoBehaviour
     }
     private void _PickCharacter(InputAction.CallbackContext obj)
     {
-        _gm.NonSelectedPlayers.RemoveAt(_playerSelectedIndex);
+        _gm.NonSelectedPlayers.Remove(_players[_playerSelectedIndex]);
         if(_gm.NonSelectedPlayers.Count<4/*_gm.NonSelectedPlayers.Count == 0*/)
             GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
         _CleanSelectEvents();

@@ -14,7 +14,7 @@ public class Statue : Puzzle, IResettable
         if (player.HeldPickable == null)
             return;
         
-        if (!_isRepaired && player.HeldPickable.ID == 0) // BRAS DE STATUE
+        if (!_isRepaired && player.HeldPickable.ID == 10) // BRAS DE STATUE
         {
             player.HeldPickable = null;
             _statueArm.SetActive(true);
