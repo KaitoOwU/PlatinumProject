@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using static UnityEngine.EventSystems.EventTrigger;
 [System.Serializable]
 public class Door : Interactable
@@ -72,8 +74,6 @@ public class Door : Interactable
                 else if (_playersInRange.Count == countInHub && countInHub < 4)
                 {
                     TP_Players(LinkedDoor.TpPoint);
-                    TP_Camera(_linkedDoor.room);
-                    UpdateRoom(_linkedDoor.room);
 
                     hub.RoomDoorLeft._isLocked = false;
                     hub.RoomDoorRight._isLocked = false;
@@ -81,8 +81,6 @@ public class Door : Interactable
                 else if(_linkedDoor.room is Vestibule)
                 {
                     TP_Players(LinkedDoor.TpPoint);
-                    TP_Camera(_linkedDoor.room);
-                    UpdateRoom(_linkedDoor.room);
 
                     _isLocked = true;
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GUESS;
@@ -119,10 +117,28 @@ public class Door : Interactable
 
     public void TP_Players(Transform[] tpPoint) // TP  tous les joueurs qui intéragissent avec this porte
     {
+        StartCoroutine(CR_TP_Players(tpPoint));
+    }
+
+    private IEnumerator CR_TP_Players(Transform[] tpPoint)
+    {
+        if (_playersInRange.Count == 0)
+            yield break;
+        
+        Image imgToCancel = UIRoomTransition.current.RightTransition;
+        if (_playersInRange[0].RelativePos == HubRelativePosition.LEFT_WING)
+            imgToCancel = UIRoomTransition.current.LeftTransition;
+
+        yield return StartCoroutine(UIRoomTransition.current.StartTransition(imgToCancel));
+        
         foreach(Player p in _playersInRange) /* if (p.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT))*/
         {
             p.gameObject.transform.position = tpPoint[p.Index-1].position;
         }
+        TP_Camera(_linkedDoor.room);
+        UpdateRoom(_linkedDoor.room);
+        
+        yield return StartCoroutine(UIRoomTransition.current.EndTransition(imgToCancel));
     }
 
     public void TP_Camera(Room room)
