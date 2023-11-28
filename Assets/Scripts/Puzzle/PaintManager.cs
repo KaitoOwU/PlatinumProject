@@ -42,11 +42,16 @@ public class PaintManager : Puzzle
 
     private void SetPaint()
     {
+        List<Sprite> spriteCopy = new List<Sprite>();
+        foreach(Sprite sp in _imagesVar[_soluce.PaintSelected].sprites)
+        {
+            spriteCopy.Add(sp);
+        }
         for (int i = 0; i < _paints.Count; i++)
         {
             int rand = UnityEngine.Random.Range(0, _imagesVar[_soluce.PaintSelected].sprites.Count);
-            _paints[i].GetComponentInChildren<Image>().sprite = _imagesVar[_soluce.PaintSelected].sprites[rand];
-            _imagesVar[_soluce.PaintSelected].sprites.RemoveAt(rand);
+            _paints[i].GetComponentInChildren<Image>().sprite = spriteCopy[rand];
+            spriteCopy.RemoveAt(rand);
         }
     }
     private void PuzzleUpdateCheck(Paints paint)
