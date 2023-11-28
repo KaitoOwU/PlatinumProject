@@ -9,6 +9,7 @@ using static Furniture;
 public class Furniture : Interactable
 {
     #region Fields
+    [HideInInspector] public UnityEvent OnSearchFurniture;
     [HideInInspector] public UnityEvent OnClueFoundInFurniture;
     [HideInInspector] public UnityEvent OnClueNotFoundInFurniture;
 
@@ -92,7 +93,8 @@ public class Furniture : Interactable
         if(_furnitureType == EFurnitureType.SEARCHABLE && !_searched)
         {
             _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
-            if(_clue != null)
+            OnSearchFurniture?.Invoke();
+            if (_clue != null)
             {
                 GameManager.Instance.FoundClues.Add(_clue);
                 OnClueFoundInFurniture?.Invoke();
