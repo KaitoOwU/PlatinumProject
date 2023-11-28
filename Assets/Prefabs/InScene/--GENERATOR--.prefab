@@ -91,9 +91,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 166cdb98aa120374fb2c1a203f23c90b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _generationParent: {fileID: 0}
   _reseting: 0
   _hall: {fileID: 0}
+  _vestibule: {fileID: 0}
   _layout: {fileID: 6187120764720082186}
+  arm: {fileID: 0}
+  _doormattMaterials:
+  - {fileID: 2100000, guid: 802326bcd63a48a43a1ced80110e489b, type: 2}
+  - {fileID: 2100000, guid: 6ae8b625fb87b7049a04737ba84c4d14, type: 2}
+  - {fileID: 2100000, guid: 2768318417dc69348b0c84b93c3bed40, type: 2}
+  - {fileID: 2100000, guid: 87458f30397ebda4d86fd46c15423d57, type: 2}
 --- !u!1 &8816325919117355407
 GameObject:
   m_ObjectHideFlags: 0
