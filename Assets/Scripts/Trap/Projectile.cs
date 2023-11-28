@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
     {
         if (other.GetComponent<Player>())
         {
-
+            other.GetComponent<Player>().OnHit.Invoke();
             Player[] players = new Player[FindObjectsOfType<Player>().ToList().FindAll(player=>player.CurrentRoom== other.GetComponent<Player>().CurrentRoom).Count];
             for (int i = 0; i < players.Length; i++)
             {

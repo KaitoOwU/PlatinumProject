@@ -58,6 +58,7 @@ public class Ball : MonoBehaviour
         GameObject other = collision.gameObject;
         if (other.GetComponent<Player>())
         {
+            other.GetComponent<Player>().OnHit.Invoke();
             Player[] players = new Player[GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == other.GetComponent<Player>().RelativePos).Count];
             for (int i = 0; i < players.Length; i++)
             {

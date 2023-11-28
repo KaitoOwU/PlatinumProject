@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
@@ -14,16 +15,18 @@ public class Player : MonoBehaviour
     public PlayerController PlayerController => _playerController;
     public Color AssociatedColor => _associatedColor;
     public Color ControllerColor => _controllerColor;
-    
+
     [SerializeField] private HubRelativePosition _relativePos;
     public HubRelativePosition RelativePos { get => _relativePos; set => _relativePos = value; }
-    
+
 
     [SerializeField]
     private Room _currentRoom;
 
     [SerializeField]
     private Transform _UI;
+
+    [HideInInspector] public UnityEvent OnHit;
 
     public PickableData HeldPickable
     {
