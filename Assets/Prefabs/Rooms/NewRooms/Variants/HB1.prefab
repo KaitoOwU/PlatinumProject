@@ -2204,6 +2204,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -2.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1743942331450178003, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2120743160442838934, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3112,6 +3117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c3b581d432d2b944b6107cd7076ebf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnCompletedRoom:
+    m_PersistentCalls:
+      m_Calls: []
   _doors:
   - {fileID: 0}
   - {fileID: 0}
