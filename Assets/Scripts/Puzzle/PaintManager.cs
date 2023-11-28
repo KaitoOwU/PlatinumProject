@@ -3,19 +3,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PaintManager : Puzzle
 {
     public Action<Paints> OnPuzzleUpdate;
     private PaintSoluce _soluce;
     private List<Paints> _paints = new();
+    private bool _isComplete;
+    [SerializeField] private List<NestedSpriteLIst> _imagesVar = new();
+    [SerializeField]private bool _tandemDiscovered;
+
+    public bool IsComplete { get => _isComplete; }
+    public bool TandemDiscovered { get => _tandemDiscovered; }
 
     private void Start()
     {
         _paints = GetComponentsInChildren<Paints>().ToList();
         _soluce = GetComponentInParent<Room>().Tandem.GetComponentInChildren<PaintSoluce>();
+        SetPaint();
     }
-
+    private void Update()
+    {
+        if (GetComponentInParent<Room>().Tandem.PlayerInRoom() > 0 && !_tandemDiscovered)
+        {
+            _tandemDiscovered = true;
+        }
+    }
     private void OnEnable()
     {
         OnPuzzleUpdate += PuzzleUpdateCheck;
@@ -26,38 +40,33 @@ public class PaintManager : Puzzle
         OnPuzzleUpdate -= PuzzleUpdateCheck;
     }
 
+    private void SetPaint()
+    {
+        List<Sprite> spriteCopy = new List<Sprite>();
+        foreach(Sprite sp in _imagesVar[_soluce.PaintSelected].sprites)
+        {
+            spriteCopy.Add(sp);
+        }
+        for (int i = 0; i < _paints.Count; i++)
+        {
+            int rand = UnityEngine.Random.Range(0, _imagesVar[_soluce.PaintSelected].sprites.Count);
+            _paints[i].GetComponentInChildren<Image>().sprite = spriteCopy[rand];
+            spriteCopy.RemoveAt(rand);
+        }
+    }
     private void PuzzleUpdateCheck(Paints paint)
     {
-        bool isComplete = true;
-        Debug.Log(_soluce.PaintSelected.Count);
-        Debug.Log(_paints.FindAll((paint) => paint.isTilted).Count);
-        if (_paints.FindAll((paint) => paint.isTilted).Count == _soluce.PaintSelected.Count)
+        if (_paints.FindAll((paint) => paint.isTilted).Count == 1 && _paints.Find((paint) => paint.isTilted).GetComponentInChildren<Image>().sprite == _soluce.Paints[_soluce.PaintSelected]&&!IsComplete)
         {
-            foreach(int id in _soluce.PaintSelected)
-            {
-                Debug.Log(id);
-                if (!FindPaintWithID(id).isTilted)
-                {
-                    isComplete = false;
-                }
-            }
-            Debug.Log(isComplete);
-            if (isComplete)
-            {
-                Debug.Log("�a marche");
-                Reactive.PuzzleCompleted();
-            }
+            _isComplete = true;
+            Reactive.PuzzleCompleted();
         }
-    }
-    private Paints FindPaintWithID(int ID)
-    {
-        foreach(Paints p in _paints)
-        {
-            if (p.Id == ID)
-            {
-                return p;
-            }
-        }
-        return null;
     }
 }
+[System.Serializable]
+public class NestedSpriteLIst
+{
+   [SerializeField] public List<Sprite> sprites;
+}
+
+
