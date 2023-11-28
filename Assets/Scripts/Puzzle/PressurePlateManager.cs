@@ -25,7 +25,7 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 
     public void CheckIfValid()
     {
-        if((_pressurePlates.All(plate => plate.IsActive)&&_arePPlatesLinked)|| (!_arePPlatesLinked && _pressurePlates.FindAll(plate => plate.IsActive).Count == 1)
+        if((_pressurePlates.All(plate => plate.IsActive)&&_arePPlatesLinked)|| (!_arePPlatesLinked && _pressurePlates.FindAll(plate => plate.IsActive).Count >= 1)
 )
         {
             PuzzleCompleted();

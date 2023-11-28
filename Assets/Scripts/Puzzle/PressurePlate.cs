@@ -5,20 +5,19 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
-    private int _count;
     private PressurePlateManager _manager;
-    public bool IsActive => _count >= 1;
+    public bool IsActive=false;
 
     private void Awake()
     {
         _manager = GetComponentInParent<PressurePlateManager>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.GetComponent<Player>() || other.GetComponent<Furniture>())
+        if (other.GetComponent<Player>() || other.GetComponent<Furniture>() && !IsActive)
         {
-            _count++;
+            IsActive=true;
             _manager.CheckIfValid();
         }
     }
@@ -27,7 +26,7 @@ public class PressurePlate : MonoBehaviour
     {
         if (other.GetComponent<Player>() || other.GetComponent<Furniture>())
         {
-            _count--;
+            IsActive=false;
             _manager.CheckIfValid();
         }
     }
