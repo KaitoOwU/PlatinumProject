@@ -2857,6 +2857,11 @@ PrefabInstance:
       objectReference: {fileID: 6654049696826231685}
     - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
+      propertyPath: _canHaveReward
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
       propertyPath: _doors.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2894,6 +2899,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: 1D-OS
+      objectReference: {fileID: 0}
+    - target: {fileID: 9105892949080795235, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: _enigmaCount
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -3629,6 +3639,12 @@ Transform:
 --- !u!4 &679896283007718442 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1303103703289309016, guid: c870671ee6471bb49827e26d1cbc2960,
+    type: 3}
+  m_PrefabInstance: {fileID: 1980167634142278514}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1529659966945935494 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1026968437759702004, guid: c870671ee6471bb49827e26d1cbc2960,
     type: 3}
   m_PrefabInstance: {fileID: 1980167634142278514}
   m_PrefabAsset: {fileID: 0}
@@ -9790,6 +9806,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7271820841656196971, guid: 632c6b1a68d6a1a4e842d45d9102c101,
+        type: 3}
+      propertyPath: _reactive
+      value: 
+      objectReference: {fileID: 1529659966945935494}
     - target: {fileID: 8793274677629231648, guid: 632c6b1a68d6a1a4e842d45d9102c101,
         type: 3}
       propertyPath: m_Name
@@ -12083,6 +12104,11 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7271820841656196971, guid: 632c6b1a68d6a1a4e842d45d9102c101,
+        type: 3}
+      propertyPath: _reactive
+      value: 
+      objectReference: {fileID: 1529659966945935494}
     - target: {fileID: 8793274677629231648, guid: 632c6b1a68d6a1a4e842d45d9102c101,
         type: 3}
       propertyPath: m_Name
