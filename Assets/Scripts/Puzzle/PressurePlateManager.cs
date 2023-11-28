@@ -12,6 +12,7 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
     private List<Vector3> _baseRotations = new();
     [SerializeField] private Transform[] _doorAnchors;
     [SerializeField] private RewardGenerator _rewardGenerator;
+    [SerializeField] private bool _arePPlatesLinked;
 
     private void Awake()
     {
@@ -24,7 +25,8 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 
     public void CheckIfValid()
     {
-        if(_pressurePlates.All(plate => plate.IsActive))
+        if((_pressurePlates.All(plate => plate.IsActive)&&_arePPlatesLinked)|| (!_arePPlatesLinked && _pressurePlates.FindAll(plate => plate.IsActive).Count >= 1)
+)
         {
             PuzzleCompleted();
         }
