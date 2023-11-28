@@ -195,7 +195,6 @@ public class GameManager : MonoBehaviour
         InitGame();
         _validatedRooom = 0;
         _corridorChance = 10;
-        Debug.Log(_roomGenerator);
         _vestibule = FindObjectOfType<Vestibule>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
         _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
@@ -265,13 +264,11 @@ public class GameManager : MonoBehaviour
             }
             for (int i= furnitureClues.Count-1; i>=0; i--) 
             {
-                Debug.Log(furnitureClues[i].name);
                 int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
                 allSearchableFurnitures[randomIndex].Clue = furnitureClues[i];
                 allSearchableFurnitures.RemoveAt(randomIndex);
             }
         }
-        Debug.Log(_roomGenerator);
         _roomGenerator.SetRoomsRewards(puzzleClues);
     }
 
@@ -290,6 +287,14 @@ public class GameManager : MonoBehaviour
 
     public void TPAllPlayersToHub()
     {
+        StartCoroutine(CR_TPAllPlayersToHub());
+    }
+
+    private IEnumerator CR_TPAllPlayersToHub()
+    {
+        StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
+        yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
+        
         SwitchCameraState(CameraState.FULL);
         int i = 0;
         foreach (Player p in PlayerList.Select(data => data.PlayerRef))
@@ -299,6 +304,9 @@ public class GameManager : MonoBehaviour
             p.CurrentRoom = _hub;
             i++;
         }
+        
+        StartCoroutine(_transitions.EndTransition(_transitions.RightTransition));
+        yield return StartCoroutine(_transitions.EndTransition(_transitions.LeftTransition));
     }
     
     public void TPPlayerPostTrap(Player[] players)
@@ -312,16 +320,16 @@ public class GameManager : MonoBehaviour
         
         if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
         {
-            // return StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
-            //imgToCancel = _transitions.RightTransition;
+             yield return StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
+             imgToCancel = _transitions.RightTransition;
             
             _hub.Doors[0].IsLocked = true;
             TP_RightCamera(_hub.CameraPoint);
         }
         else
         {
-            //yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
-            //imgToCancel = _transitions.LeftTransition;
+            yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
+            imgToCancel = _transitions.LeftTransition;
             
             _hub.Doors[1].IsLocked = true;
             TP_LeftCamera(_hub.CameraPoint);
@@ -333,7 +341,7 @@ public class GameManager : MonoBehaviour
             players[i].CurrentRoom = _hub;
         }
 
-        yield return null; //StartCoroutine(_transitions.EndTransition(imgToCancel));
+        yield return StartCoroutine(_transitions.EndTransition(imgToCancel));
     }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
