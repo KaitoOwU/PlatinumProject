@@ -69,7 +69,16 @@ MonoBehaviour:
         intensityRight: 1
         duration: 1
     - eventName: OnEachEndPhase
-      eventActions: []
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 65a0efe31aca0d843bce254c1c5b1f93, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
     - eventName: OnEachMinute
       eventActions:
       - eventType: 2
@@ -86,9 +95,27 @@ MonoBehaviour:
     - eventName: OnChangeToFullScreen
       eventActions: []
     - eventName: OnTPToHubAfterTrap
-      eventActions: []
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 65a0efe31aca0d843bce254c1c5b1f93, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
     - eventName: OnTPToHub
-      eventActions: []
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 65a0efe31aca0d843bce254c1c5b1f93, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
   - scriptName: GuessManager
     events:
     - eventName: OnIndividualVote
@@ -120,7 +147,7 @@ MonoBehaviour:
       - eventType: 2
         debugMessage: 
         clipAudio:
-          audioclip: {fileID: 8300000, guid: d98b2bc443ee4e541bf7dcfcf26ac8f8, type: 3}
+          audioclip: {fileID: 8300000, guid: f0be1266beae88745a54ef757053d882, type: 3}
           volume: 1
         clipsAudio: []
         intensity: 1
