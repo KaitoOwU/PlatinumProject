@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     public int PlayerIndex => _playerIndex;
     public InputManager Inputs => _inputManager;
+    public EMoveState MoveState => _moveState;
 
     [Header("Parameters")]
     private float _moveSpeed;

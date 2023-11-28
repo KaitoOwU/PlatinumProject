@@ -3,15 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
+
 
 public class Room : MonoBehaviour
 {
-    
+
     /*[SerializeField] private Room _nextRoom;
     [SerializeField] private Room _previousRoom;
 
     [SerializeField] private Door _nextRoomDoor;
     [SerializeField] private Door _previousRoomDoor;*/
+    [HideInInspector] public UnityEvent OnCompletedRoom;
 
     [SerializeField] private  List<Door> _doors =new List<Door>();
     [SerializeField] private List<Room> _linkedRooms = new List<Room>();
@@ -61,9 +64,10 @@ public class Room : MonoBehaviour
             GameManager.Instance.ValidatedRooom++;
         }
     }
-    public void OnCompletedRoom()
+    public void CompletedRoom()
     {
         GameManager.Instance.ValidatedRooom++;
+        OnCompletedRoom?.Invoke();
         FindObjectOfType<RoomGeneration>().LockedDoor();
     }
     public int PlayerInRoom()

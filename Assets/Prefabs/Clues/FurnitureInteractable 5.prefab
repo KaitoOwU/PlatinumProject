@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4033724306214375581}
   - component: {fileID: 563221743733572270}
   - component: {fileID: 1384806673898677561}
+  - component: {fileID: 2175802472311962598}
   m_Layer: 0
   m_Name: FurnitureInteractable 5
   m_TagString: Untagged
@@ -86,6 +87,27 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.61
   m_Center: {x: 0, y: 1.09, z: 0}
+--- !u!65 &2175802472311962598
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6039085998932497878}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.72, y: 4.69, z: 6.13}
+  m_Center: {x: 0, y: 1.99, z: 0}
 --- !u!1001 &2927079597638193057
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -215,8 +237,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.03, y: 0.04, z: 0.02}
-  m_Center: {x: 0, y: 0, z: 0.01}
+  m_Size: {x: 0.03, y: 0.04, z: 0.03}
+  m_Center: {x: 0, y: 0, z: 0.017}
 --- !u!4 &3392804947639265354 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,

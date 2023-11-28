@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4033724306214375581}
   - component: {fileID: 563221743733572270}
-  - component: {fileID: 1384806673898677561}
+  - component: {fileID: 1145169171676446051}
   m_Layer: 0
   m_Name: FurnitureInteractable 6
   m_TagString: Untagged
@@ -65,8 +65,8 @@ MonoBehaviour:
   _3Dmodel: {fileID: 2620666943912915696}
   _playersNeededNumber: 2
   _clue: {fileID: 0}
---- !u!135 &1384806673898677561
-SphereCollider:
+--- !u!65 &1145169171676446051
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -84,8 +84,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.61
-  m_Center: {x: 0, y: 1.09, z: 0}
+  m_Size: {x: 4.57, y: 3.32, z: 3.4}
+  m_Center: {x: 0, y: 1.56, z: 0}
 --- !u!1001 &2927079597638193057
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -215,8 +215,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.03, y: 0.02, z: 0.02}
-  m_Center: {x: 0, y: 0, z: 0.01}
+  m_Size: {x: 0.030000007, y: 0.02, z: 0.033874977}
+  m_Center: {x: 0, y: -2.819844e-17, z: 0.019437518}
 --- !u!4 &3392804947639265354 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 77ef95db83b42634485a768f6632fc30,

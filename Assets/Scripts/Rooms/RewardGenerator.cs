@@ -4,20 +4,35 @@ using UnityEngine;
 
 public class RewardGenerator : MonoBehaviour, IPuzzleReactive
 {
-    private GameObject _reward;
-    [SerializeField] Room room;
+    [SerializeField]private GameObject _reward;
+    [SerializeField] Room _room;
+    [SerializeField] private int _enigmaCount;
+    private int _currentCount;
     public void SetUp()
     {
-        if(room)
-        _reward = room.Reward;
+        if (_room)
+        {
+            _reward = _room.Reward;
+        }
+        _currentCount = 0;
+    }
+    private void Start()
+    {
+        _room =GetComponentInParent<Room>();
     }
     public  void PuzzleCompleted()
     {
-        if (_reward)
+        _currentCount++;
+        Debug.Log(_currentCount);
+        if (_enigmaCount == _currentCount)
         {
-            Instantiate(_reward, transform.position, transform.rotation);
+            Debug.Log("a");
+            if (_reward)
+            {
+                Instantiate(_reward, transform.position, transform.rotation);
+            }
+            _room.CompletedRoom();
         }
-        room.OnCompletedRoom();
     }
 
 }
