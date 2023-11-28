@@ -22,20 +22,23 @@ public class BallTrap : MonoBehaviour
     {
         if (_room.PlayerInRoom() > 0)
         {
+            _ball.Speed = 4;
             if ((_ball.transform.position - nextPos.position).magnitude >= 0.4)
             {
                 _ball.Goal = nextPos.position;
+                _ball.OnBallRolling.Invoke();
             }
             else
             {
                 NextPoint();
             }
         }
-        else if(_ball.transform.position!=_route[0].position)
+        else if (_ball.transform.position != _route[0].position)
         {
             _ball.transform.position = _route[0].position;
             nextPos = _route[0];
             _currentPoint = 0;
+            _ball.Speed = 0;
         }
     }
     private void NextPoint()

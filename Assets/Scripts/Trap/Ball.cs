@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Ball : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Ball : MonoBehaviour
     public float Speed { get => _speed; set => _speed = value; }
     public Vector3 Goal { get => _goal; set => _goal = value; }
     public bool IsTurning { get => _isTurning; set => _isTurning = value; }
+    [HideInInspector] public UnityEvent OnBallRolling;
+
 
     private void Start()
     {
@@ -47,9 +50,8 @@ public class Ball : MonoBehaviour
         {
                 RotateBall();
         }
-        else
+        else if(Speed>0)
         {
-            _speed = _baseSpeed;
             transform.position += (_goal - transform.position).normalized * _speed * Time.deltaTime;
         }
     }
