@@ -40,7 +40,6 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
-        Debug.Log(player);
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
             OnChangeRoom?.Invoke();
