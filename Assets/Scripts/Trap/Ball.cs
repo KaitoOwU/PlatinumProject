@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] float _speed;
+    [SerializeField] float _baseSpeed;
+    private float _speed;
     private Vector3 _goal;
     private bool _isMoving;
     private bool _isTurning;
@@ -16,10 +17,12 @@ public class Ball : MonoBehaviour
     private void Start()
     {
         _goal = transform.position;
+        _speed = _baseSpeed;
+        _isTurning = false;
     }
     private void Update()
     {
-        if (((transform.position - _goal).magnitude >= 0.2) && _speed>0)
+        if ((transform.position - _goal).magnitude >= 0.2)
         {
             BallMov();
         }
@@ -31,7 +34,6 @@ public class Ball : MonoBehaviour
             float singleStep = _speed * Time.deltaTime;
             Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
             transform.rotation = Quaternion.LookRotation(newDirection);
-            Debug.Log(Vector3.Dot(targetDirection, newDirection) - (targetDirection.magnitude * newDirection.magnitude));
             if (Mathf.Abs(Vector3.Dot(targetDirection,newDirection)-(targetDirection.magnitude*newDirection.magnitude))<= 0.1)
             {
                 _isTurning = false;
@@ -44,10 +46,10 @@ public class Ball : MonoBehaviour
         if (_isTurning)
         {
                 RotateBall();
-                
         }
         else
         {
+            _speed = _baseSpeed;
             transform.position += (_goal - transform.position).normalized * _speed * Time.deltaTime;
         }
     }

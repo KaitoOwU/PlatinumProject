@@ -22,7 +22,7 @@ public class BallTrap : MonoBehaviour
     {
         if (_room.PlayerInRoom() > 0)
         {
-            if ((_ball.transform.position - nextPos.position).magnitude >= 0.2)
+            if ((_ball.transform.position - nextPos.position).magnitude >= 0.4)
             {
                 _ball.Goal = nextPos.position;
             }
@@ -34,6 +34,8 @@ public class BallTrap : MonoBehaviour
         else if(_ball.transform.position!=_route[0].position)
         {
             _ball.transform.position = _route[0].position;
+            nextPos = _route[0];
+            _currentPoint = 0;
         }
     }
     private void NextPoint()
