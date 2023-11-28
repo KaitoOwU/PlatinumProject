@@ -49,12 +49,9 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 
     private void UncompletePuzzle()
     {
-        else
+        for (int i = 0; i < _doorAnchors.Length; i++)
         {
-            for (int i = 0; i < _doorAnchors.Length; i++)
-            {
-                _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
-            }
+            _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
         }
     }
 }
