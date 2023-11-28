@@ -5,10 +5,9 @@ using UnityEngine;
 public class Paints : Interactable
 {
     private PaintManager _manager;
-    [SerializeField] private int _id;
     public bool isTilted;
 
-    public int Id { get => _id;}
+
 
     private void Start()
     {
@@ -43,15 +42,18 @@ public class Paints : Interactable
     }
     protected override void OnInteract(Player player)
     {
-        if (isTilted)
+        if (!_manager.IsComplete&&_manager.TandemDiscovered)
         {
-            isTilted = false;
-            transform.Rotate(0, 0, 30f);
-        }
-        else
-        {
-            isTilted = true;
-            transform.Rotate(0, 0, -30f);
+            if (isTilted)
+            {
+                isTilted = false;
+                transform.Rotate(0, 0, 30f);
+            }
+            else
+            {
+                isTilted = true;
+                transform.Rotate(0, 0, -30f);
+            }
         }
         _manager.OnPuzzleUpdate?.Invoke(this);
     }
