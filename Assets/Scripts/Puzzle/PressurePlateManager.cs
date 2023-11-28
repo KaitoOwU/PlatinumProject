@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 {
@@ -13,6 +14,8 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
     [SerializeField] private Transform[] _doorAnchors;
     [SerializeField] private RewardGenerator _rewardGenerator;
     [SerializeField] private bool _arePPlatesLinked;
+    [HideInInspector] public UnityEvent OnDoorOpen;
+    [HideInInspector] public UnityEvent OnDoorClose;
 
     private void Awake()
     {
@@ -46,6 +49,7 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
         {
             for (int i = 0; i < _doorAnchors.Length; i++)
             {
+                OnDoorOpen.Invoke();
                 _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y - 90, 0), 1.5f);
             }
         }
@@ -61,6 +65,7 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
         {
             for (int i = 0; i < _doorAnchors.Length; i++)
             {
+                OnDoorClose.Invoke();
                 _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
             }
         }

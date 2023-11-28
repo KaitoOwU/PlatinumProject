@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PressurePlate : MonoBehaviour
 {
     private PressurePlateManager _manager;
     public bool IsActive=false;
+    [HideInInspector] public UnityEvent OnPressPressurePlate;
+    [HideInInspector] public UnityEvent OnLeavePressurePlate;
 
     private void Awake()
     {
@@ -17,7 +20,8 @@ public class PressurePlate : MonoBehaviour
     {
         if (other.GetComponent<Player>() || other.GetComponent<Furniture>() && !IsActive)
         {
-            IsActive=true;
+            OnPressPressurePlate.Invoke();
+            IsActive =true;
             _manager.CheckIfValid();
         }
     }
@@ -26,6 +30,7 @@ public class PressurePlate : MonoBehaviour
     {
         if (other.GetComponent<Player>() || other.GetComponent<Furniture>())
         {
+            OnLeavePressurePlate.Invoke();
             IsActive=false;
             _manager.CheckIfValid();
         }
