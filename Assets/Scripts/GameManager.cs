@@ -208,7 +208,7 @@ public class GameManager : MonoBehaviour
         SwitchCameraState(CameraState.FULL);
         StartCoroutine(VestibuleMessages());
         TP_Camera(_fullCamera, Vestibule.CameraPoint);
-        StartTimer();
+        StartCoroutine(StartTimer());
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);
         OnEachEndPhase.AddListener(TPAllPlayersToHub);
@@ -345,11 +345,8 @@ public class GameManager : MonoBehaviour
         while (_isTimerGoing)
         {
             yield return new WaitForSeconds(1f);
-            if (PlayerList.Any(p => p.PlayerRef.CurrentRoom != Hub))
-            {
-                _timer -= 1;
-                _AnalyseTimer();
-            }
+            _timer -= 1;
+            _AnalyseTimer();
         }
     }
 
@@ -413,8 +410,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartTimer() 
+    private IEnumerator StartTimer() 
     {
+        yield return new WaitForSeconds(1);
+        yield return new WaitUntil(() => PlayerList.Any(p => p.PlayerRef.CurrentRoom != Hub) == true);
         _currentTimerPhase = TimerPhase.FIRST_PHASE;
         _timer = _gameData.TimerValues.FirstPhaseTime
                 + _gameData.TimerValues.SecondPhaseTime
