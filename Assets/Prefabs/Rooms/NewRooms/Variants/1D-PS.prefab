@@ -7984,6 +7984,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 0946cedc60f5d5f48a415c18cd8048e0, type: 2}
+    - target: {fileID: 9105892949080795235, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: _enigmaCount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9143873132112060932, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -9588,6 +9593,12 @@ Transform:
 --- !u!4 &679896283007718442 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1303103703289309016, guid: c870671ee6471bb49827e26d1cbc2960,
+    type: 3}
+  m_PrefabInstance: {fileID: 1980167634142278514}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1529659966945935494 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1026968437759702004, guid: c870671ee6471bb49827e26d1cbc2960,
     type: 3}
   m_PrefabInstance: {fileID: 1980167634142278514}
   m_PrefabAsset: {fileID: 0}
@@ -30340,6 +30351,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7271820841656196971, guid: 632c6b1a68d6a1a4e842d45d9102c101,
+        type: 3}
+      propertyPath: _reactive
+      value: 
+      objectReference: {fileID: 1529659966945935494}
     - target: {fileID: 8793274677629231648, guid: 632c6b1a68d6a1a4e842d45d9102c101,
         type: 3}
       propertyPath: m_Name
