@@ -24,10 +24,12 @@ public class UIRoomTransition : MonoBehaviour
     public IEnumerator StartTransition(Image img)
     {
         yield return img.DOColor(new(0, 0, 0, 1), 1f).WaitForCompletion();
+        yield return this;
     }
 
     public IEnumerator EndTransition(Image img)
     {
         yield return img.DOColor(new Color(0, 0, 0, 0), 1f).WaitForCompletion();
+        yield return this;
     }
 }

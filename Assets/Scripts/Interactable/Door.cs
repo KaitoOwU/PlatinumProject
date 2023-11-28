@@ -126,7 +126,7 @@ public class Door : Interactable
             yield break;
         
         Image imgToCancel = UIRoomTransition.current.RightTransition;
-        if (_playersInRange[0].RelativePos == HubRelativePosition.LEFT_WING)
+        if (_linkedDoor.room.RoomSide == Room.Side.LEFT)
             imgToCancel = UIRoomTransition.current.LeftTransition;
 
         yield return StartCoroutine(UIRoomTransition.current.StartTransition(imgToCancel));
