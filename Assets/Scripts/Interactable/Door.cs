@@ -42,14 +42,18 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
-        Debug.Log(player);
+        StartCoroutine(DoorInteraction(player));
+    }
+
+    private IEnumerator DoorInteraction(Player player)
+    {
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
             OnChangeRoom?.Invoke();
             if (player.CurrentRoom is Hub)
             {
                 if (GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count != GameManager.Instance.CurrentPlayersCount)
-                    return;
+                    yield break;
 
                 int countInHub = GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.HUB).Count;
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
@@ -57,6 +61,9 @@ public class Door : Interactable
                 Hub hub = (Hub)player.CurrentRoom;
                 if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 /*&& hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4*/) // POUR BUILD FINALE ==> ==4 !!!
                 {
+                    yield return StartCoroutine(
+                        UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
+                    
                     GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
 
@@ -69,18 +76,32 @@ public class Door : Interactable
                     hub.RoomDoorLeft.TP_Camera(hub.RoomDoorLeft.LinkedDoor.room);
                     hub.RoomDoorRight.TP_Camera(hub.RoomDoorRight.LinkedDoor.room);
 
+                    yield return StartCoroutine(
+                        UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition));
    
                 }
                 else if (_playersInRange.Count == countInHub && countInHub < 4)
                 {
+                    yield return StartCoroutine(
+                        UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
+                    
                     TP_Players(LinkedDoor.TpPoint);
+                    
+                    yield return StartCoroutine(
+                        UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
 
                     hub.RoomDoorLeft._isLocked = false;
                     hub.RoomDoorRight._isLocked = false;
                 }
                 else if(_linkedDoor.room is Vestibule)
                 {
+                    yield return StartCoroutine(
+                        UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
+                    
                     TP_Players(LinkedDoor.TpPoint);
+                    
+                    yield return StartCoroutine(
+                        UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
 
                     _isLocked = true;
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GUESS;
@@ -93,14 +114,20 @@ public class Door : Interactable
                 if (_linkedDoor.room is Hub)
                 {
                     GameManager.Instance.OnBackToHubRefused?.Invoke(this);
-                    return;
+                    yield break;
                 }
                 if (room.RoomSide == Room.Side.RIGHT)
                 {
                     if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
                         _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
                     {
+                        yield return StartCoroutine(
+                            UIRoomTransition.current.StartTransition(UIRoomTransition.current.RightTransition));
+                        
                         TP_SidePlayers();
+                        
+                        yield return StartCoroutine(
+                            UIRoomTransition.current.EndTransition(UIRoomTransition.current.RightTransition));
                     }
                 }
                 else if (room.RoomSide == Room.Side.LEFT)
@@ -108,7 +135,13 @@ public class Door : Interactable
                     if (GameManager.Instance.LeftPlayers.Count == _playersInRange.Count &&
                         _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
                     {
+                        yield return StartCoroutine(
+                            UIRoomTransition.current.StartTransition(UIRoomTransition.current.LeftTransition));
+                        
                         TP_SidePlayers();
+                        
+                        yield return StartCoroutine(
+                            UIRoomTransition.current.EndTransition(UIRoomTransition.current.LeftTransition));
                     }
                 }
             }
@@ -117,28 +150,10 @@ public class Door : Interactable
 
     public void TP_Players(Transform[] tpPoint) // TP  tous les joueurs qui intéragissent avec this porte
     {
-        StartCoroutine(CR_TP_Players(tpPoint));
-    }
-
-    private IEnumerator CR_TP_Players(Transform[] tpPoint)
-    {
-        if (_playersInRange.Count == 0)
-            yield break;
-        
-        Image imgToCancel = UIRoomTransition.current.RightTransition;
-        if (_linkedDoor.room.RoomSide == Room.Side.LEFT)
-            imgToCancel = UIRoomTransition.current.LeftTransition;
-
-        yield return StartCoroutine(UIRoomTransition.current.StartTransition(imgToCancel));
-        
         foreach(Player p in _playersInRange) /* if (p.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT))*/
         {
             p.gameObject.transform.position = tpPoint[p.Index-1].position;
         }
-        TP_Camera(_linkedDoor.room);
-        UpdateRoom(_linkedDoor.room);
-        
-        yield return StartCoroutine(UIRoomTransition.current.EndTransition(imgToCancel));
     }
 
     public void TP_Camera(Room room)
