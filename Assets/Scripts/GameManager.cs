@@ -195,7 +195,6 @@ public class GameManager : MonoBehaviour
         InitGame();
         _validatedRooom = 0;
         _corridorChance = 10;
-        Debug.Log(_roomGenerator);
         _vestibule = FindObjectOfType<Vestibule>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
         _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
@@ -265,13 +264,11 @@ public class GameManager : MonoBehaviour
             }
             for (int i= furnitureClues.Count-1; i>=0; i--) 
             {
-                Debug.Log(furnitureClues[i].name);
                 int randomIndex = UnityEngine.Random.Range(0, allSearchableFurnitures.Count);
                 allSearchableFurnitures[randomIndex].Clue = furnitureClues[i];
                 allSearchableFurnitures.RemoveAt(randomIndex);
             }
         }
-        Debug.Log(_roomGenerator);
         _roomGenerator.SetRoomsRewards(puzzleClues);
     }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CeilingVisibility : MonoBehaviour
 {
-    private List<Player> _playersInRange = new();
+    [SerializeField] private List<Player> _playersInRange = new();
     private Coroutine _coroutine;
     [SerializeField] private float _lerpTime;
     [SerializeField]
@@ -27,8 +27,8 @@ public class CeilingVisibility : MonoBehaviour
 
         PlayerController p = other.GetComponent<PlayerController>();
 
-        if (p.Inputs == null)
-            return;
+        //if (p.Inputs == null)
+        //    return;
 
         _playersInRange.Add(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
 
@@ -48,8 +48,8 @@ public class CeilingVisibility : MonoBehaviour
 
         PlayerController p = other.GetComponent<PlayerController>();
 
-        if (p.Inputs == null)
-            return;
+        //if (p.Inputs == null)
+        //    return;
 
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
 
