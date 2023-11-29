@@ -58,6 +58,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 7243be66836256044b89b343422d3ef8,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -5169578811043067064, guid: 7243be66836256044b89b343422d3ef8,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -121,8 +126,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.03, y: 0.02, z: 0.015}
+  m_Center: {x: 0, y: 0, z: 0.007}
 --- !u!114 &-2992153726556349798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,6 +140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2331c27cfe58a1d419546d8354e578dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnSearchFurniture:
+    m_PersistentCalls:
+      m_Calls: []
   OnClueFoundInFurniture:
     m_PersistentCalls:
       m_Calls: []
