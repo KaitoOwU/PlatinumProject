@@ -320,7 +320,7 @@ PrefabInstance:
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.size
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
@@ -376,27 +376,27 @@ PrefabInstance:
         type: 3}
       propertyPath: _doormattMaterials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 7becfdf94a09fd34fb9a34e7ca377cc2, type: 2}
+      objectReference: {fileID: 2100000, guid: 802326bcd63a48a43a1ced80110e489b, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 262632b710890284a8635f2fbada20d6, type: 2}
+      objectReference: {fileID: 2100000, guid: 6ae8b625fb87b7049a04737ba84c4d14, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 8dbc91a4bc54f9046b84718c9dfb1ec6, type: 2}
+      objectReference: {fileID: 2100000, guid: 2768318417dc69348b0c84b93c3bed40, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[3]
       value: 
-      objectReference: {fileID: 2100000, guid: ce3bbb07b11292a4fbd3212619a387a1, type: 2}
+      objectReference: {fileID: 2100000, guid: 87458f30397ebda4d86fd46c15423d57, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[4]
       value: 
-      objectReference: {fileID: 2100000, guid: ba06944e4082b8a47aa255c84dbc19d6, type: 2}
+      objectReference: {fileID: 2100000, guid: dfa0804791bfa164798f0f9ae56ddf78, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[5]
@@ -2341,6 +2341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2e08bbffdc67d42af6fcc2e144bad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playersInRange: []
   _lerpTime: 0.3
   _material: {fileID: 2100000, guid: 5b489ba41b1c89d429f179358a5a9c90, type: 2}
 --- !u!65 &771497568
