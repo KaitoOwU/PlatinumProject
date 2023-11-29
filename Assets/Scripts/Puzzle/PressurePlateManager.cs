@@ -25,8 +25,7 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 
     public void CheckIfValid()
     {
-        if((_pressurePlates.All(plate => plate.IsActive)&&_arePPlatesLinked)|| (!_arePPlatesLinked && _pressurePlates.FindAll(plate => plate.IsActive).Count >= 1)
-)
+        if((_pressurePlates.All(plate => plate.IsActive)&&_arePPlatesLinked)|| (!_arePPlatesLinked && _pressurePlates.FindAll(plate => plate.IsActive).Count >= 1))
         {
             PuzzleCompleted();
         }
@@ -42,27 +41,17 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
         {
             _rewardGenerator.PuzzleCompleted();
         }
-        else
+        for (int i = 0; i < _doorAnchors.Length; i++)
         {
-            for (int i = 0; i < _doorAnchors.Length; i++)
-            {
-                _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y - 90, 0), 1.5f);
-            }
+            _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y - 90, 0), 1.5f);
         }
     }
 
     private void UncompletePuzzle()
     {
-        if (_rewardGenerator != null)
+        for (int i = 0; i < _doorAnchors.Length; i++)
         {
-            return;
-        }
-        else
-        {
-            for (int i = 0; i < _doorAnchors.Length; i++)
-            {
-                _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
-            }
+            _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
         }
     }
 }
