@@ -134,9 +134,6 @@ public class GameManager : MonoBehaviour
         get => _currentPlayersCount;
         set => _currentPlayersCount = value;
     }
-
-    public GameObject CurrentCamera => _currentCamera;
-    private GameObject _currentCamera; // A ASSIGNER
     
     int _corridorChance = 0;
     public int ValidatedRooom
@@ -216,11 +213,10 @@ public class GameManager : MonoBehaviour
     {
         //_murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
         //_victim = GameData.SuspectsDatas[0]; //temporary
-
         _murderer = GameData.SuspectsDatas[0];
         _victim = GameData.SuspectsDatas[2]; //temporary
         //init game accordingly;
-
+        
         CurrentClues = MurderScenarios.ToList()
             .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
 
