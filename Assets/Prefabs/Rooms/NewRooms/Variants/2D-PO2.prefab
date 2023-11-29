@@ -7491,6 +7491,16 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2206271992423114431, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 2206271992423114431, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.96
+      objectReference: {fileID: 0}
     - target: {fileID: 2712080483962722682, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: _tandem
@@ -7586,6 +7596,11 @@ PrefabInstance:
       propertyPath: room
       value: 
       objectReference: {fileID: 4528872093061261832}
+    - target: {fileID: 9105892949080795235, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: _enigmaCount
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3044063481747396826, guid: c870671ee6471bb49827e26d1cbc2960, type: 3}
@@ -9360,6 +9375,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1980167634142278514}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7288045327900695313 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9105892949080795235, guid: c870671ee6471bb49827e26d1cbc2960,
+    type: 3}
+  m_PrefabInstance: {fileID: 1980167634142278514}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39bdc959fba8c09418c497f9bd6e9606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1982219615831034435
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31999,6 +32026,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: -- PRESSURE PLATES -- (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6409571517129984880, guid: 61320ba58ed765b48bd373d5238cb643,
+        type: 3}
+      propertyPath: _rewardGenerator
+      value: 
+      objectReference: {fileID: 7288045327900695313}
     - target: {fileID: 6455320954561021140, guid: 61320ba58ed765b48bd373d5238cb643,
         type: 3}
       propertyPath: m_LocalPosition.x
