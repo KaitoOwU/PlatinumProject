@@ -354,7 +354,6 @@ GameObject:
   - component: {fileID: 6886875586708411251}
   - component: {fileID: 3737552141523183635}
   - component: {fileID: 824128594325169538}
-  - component: {fileID: 5872312250259534636}
   m_Layer: 0
   m_Name: Plate (4)
   m_TagString: Untagged
@@ -449,19 +448,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.8, y: 15, z: 0.8}
   m_Center: {x: 0, y: 7.5, z: 0}
---- !u!114 &5872312250259534636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5920323488397525656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d64146bd29320f3429de7b4d0f92842a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsActive: 0
 --- !u!1 &7883945780213291403
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,7 +460,6 @@ GameObject:
   - component: {fileID: 212807711288662888}
   - component: {fileID: 4764418869495123893}
   - component: {fileID: 2873731487211314240}
-  - component: {fileID: 7876912051927519935}
   m_Layer: 0
   m_Name: Plate (3)
   m_TagString: Untagged
@@ -569,19 +554,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.8, y: 15, z: 0.8}
   m_Center: {x: 0, y: 7.5, z: 0}
---- !u!114 &7876912051927519935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7883945780213291403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d64146bd29320f3429de7b4d0f92842a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsActive: 0
 --- !u!1 &9067604122533659838
 GameObject:
   m_ObjectHideFlags: 0
@@ -9596,12 +9568,12 @@ PrefabInstance:
     - target: {fileID: 4447591489068924898, guid: 61320ba58ed765b48bd373d5238cb643,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.9311
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 4447591489068924898, guid: 61320ba58ed765b48bd373d5238cb643,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 4.3240237
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4447591489068924898, guid: 61320ba58ed765b48bd373d5238cb643,
         type: 3}
@@ -9611,12 +9583,12 @@ PrefabInstance:
     - target: {fileID: 4447591489068924898, guid: 61320ba58ed765b48bd373d5238cb643,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.16
+      value: 0.63
       objectReference: {fileID: 0}
     - target: {fileID: 4447591489068924898, guid: 61320ba58ed765b48bd373d5238cb643,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.43
+      value: -6.77
       objectReference: {fileID: 0}
     - target: {fileID: 4534957292358245012, guid: 61320ba58ed765b48bd373d5238cb643,
         type: 3}
@@ -9682,6 +9654,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: -- PRESSURE PLATES --
+      objectReference: {fileID: 0}
+    - target: {fileID: 6409571517129984880, guid: 61320ba58ed765b48bd373d5238cb643,
+        type: 3}
+      propertyPath: _arePPlatesLinked
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6455320954561021140, guid: 61320ba58ed765b48bd373d5238cb643,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6455320954561021140, guid: 61320ba58ed765b48bd373d5238cb643,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6455320954561021140, guid: 61320ba58ed765b48bd373d5238cb643,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6455320954561021140, guid: 61320ba58ed765b48bd373d5238cb643,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6455320954561021140, guid: 61320ba58ed765b48bd373d5238cb643,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

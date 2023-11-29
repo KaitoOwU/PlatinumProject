@@ -173,6 +173,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsActive: 0
+  OnPressPressurePlate:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeavePressurePlate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4298603126642014325
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +299,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsActive: 0
+  OnPressPressurePlate:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeavePressurePlate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5744529002562056897
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,6 +356,12 @@ MonoBehaviour:
   - {fileID: 6455320954561021140}
   _rewardGenerator: {fileID: 0}
   _arePPlatesLinked: 0
+  OnDoorOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDoorClose:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6097818890165623679
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +444,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.679, y: 0, z: -0.007}
-  m_LocalScale: {x: 2.25, y: 6, z: 0.4}
+  m_LocalScale: {x: 2.5, y: 6, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6455320954561021140}
@@ -459,7 +477,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ce3bbb07b11292a4fbd3212619a387a1, type: 2}
+  - {fileID: 2100000, guid: e94084d328cd04d48a1530499ca66fe1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

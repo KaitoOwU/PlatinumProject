@@ -18,8 +18,9 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.GetComponent<Player>() || other.GetComponent<Furniture>() && !IsActive)
+        if ((other.GetComponent<Player>() || other.GetComponent<Furniture>()) && !IsActive)
         {
+            Debug.Log(IsActive);
             OnPressPressurePlate.Invoke();
             IsActive =true;
             _manager.CheckIfValid();
@@ -28,7 +29,7 @@ public class PressurePlate : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Player>() || other.GetComponent<Furniture>())
+        if ((other.GetComponent<Player>() || other.GetComponent<Furniture>())&&IsActive)
         {
             OnLeavePressurePlate.Invoke();
             IsActive=false;
