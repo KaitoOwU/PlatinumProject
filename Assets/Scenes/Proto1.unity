@@ -2341,6 +2341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2e08bbffdc67d42af6fcc2e144bad4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playersInRange: []
   _lerpTime: 0.3
   _material: {fileID: 2100000, guid: 5b489ba41b1c89d429f179358a5a9c90, type: 2}
 --- !u!65 &771497568
@@ -4109,12 +4110,12 @@ PrefabInstance:
     - target: {fileID: 3032309049989273251, guid: 7fe78c014f023df4ab0fe1346751b6b9,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 4294967295
+      value: 16311
       objectReference: {fileID: 0}
     - target: {fileID: 5962674641380624789, guid: 7fe78c014f023df4ab0fe1346751b6b9,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 1911
+      value: 16247
       objectReference: {fileID: 0}
     - target: {fileID: 6113237826922498531, guid: 7fe78c014f023df4ab0fe1346751b6b9,
         type: 3}

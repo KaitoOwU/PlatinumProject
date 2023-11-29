@@ -10,22 +10,24 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
-
     public int PlayerIndex => _playerIndex;
     public InputManager Inputs => _inputManager;
     public EMoveState MoveState => _moveState;
+    public Animator Animator => _animator;
 
     [Header("Parameters")]
     private float _moveSpeed;
     [SerializeField]
     private int _playerIndex;
-    private Rigidbody _rigidbody;
+    [Header("References")]
     [SerializeField]
     private InputManager _inputManager;
+    [SerializeField]
+    private Animator _animator;
+    private Rigidbody _rigidbody;
     private PlayerInput _inputs;
     private float _currentVelocity;
     private EMoveState _moveState;
-    private Animator _animator;
 
     public static Dictionary<EButtonType, string> INPUT_NAMES = new()
     { { EButtonType.MOVE, "Move" },
@@ -56,10 +58,7 @@ public class PlayerController : MonoBehaviour
         PUSH,
         PUSH_BLOCKED,
     }
-    private void Start()
-    {
-        //_animator = GetComponent<Animator>();
-    }
+
     private void OnDisable() => _CleanUp();
 
     public bool IsButtonHeld(EButtonType buttonType)
@@ -68,15 +67,15 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Set up & Clean up
-    public void SetUp(InputManager inputManager, PlayerInput inputs, Transform playerController)
+    public IEnumerator SetUp(InputManager inputManager, PlayerInput inputs, Transform playerController)
     {
+        _animator.SetTrigger("GetUp");
+        yield return new WaitForSeconds(8.6f); // Wait for end of animation
+
         GameManager.Instance.CurrentPlayersCount++;
         _inputManager = inputManager;
         _inputs = inputs;
         playerController.SetParent(transform);
-        //_animator.SetTrigger("GetUp");
-        //_playerUi.SetActive(true);
-        //_playerUi.transform.DOScale(new Vector3(1, 1, 1), 0.5f);
 
         _rigidbody = GetComponent<Rigidbody>();
 
@@ -93,6 +92,7 @@ public class PlayerController : MonoBehaviour
         _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed;
         _moveState = EMoveState.NORMAL;
     }
+
     private void _CleanUp()
     {
         if (_inputManager != null)
@@ -145,6 +145,19 @@ public class PlayerController : MonoBehaviour
     private void _Move(Vector3 dir)
     {
         _rigidbody.velocity = new Vector3(dir.x * _moveSpeed, _rigidbody.velocity.y, dir.y * _moveSpeed);
+        if (_moveState != EMoveState.NORMAL)
+        {
+            if(Vector3.Dot(dir, transform.forward) > 0)
+            {
+                _animator.SetBool("IsPushing", true);
+                _animator.SetBool("IsPulling", false);
+            }
+            else
+            {
+                _animator.SetBool("IsPulling", true);
+                _animator.SetBool("IsPushing", false);
+            }
+        }
     }
     private void _StartMove() => OnMoveStarted?.Invoke();
     private void _StopMove() => OnMoveCanceled?.Invoke();
