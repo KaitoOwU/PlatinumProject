@@ -92,7 +92,7 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         _map = GetComponent<PlayerInput>();
-
+        InputLocked = true;
         //_SetupEvents();
         //_AddController();
 
@@ -249,6 +249,8 @@ public class InputManager : MonoBehaviour
     #region Character Select Methods
     private void _SwitchCharacter(InputAction.CallbackContext obj)
     {
+        if (_inputLocked)
+            return;
         _playerSelectedBubbleManager?.RemoveAssociatedBubble(_controllerIndex);
 
         _UpdateIndex(_map.actions["Move"].ReadValue<Vector2>().x);
@@ -270,6 +272,8 @@ public class InputManager : MonoBehaviour
     }
     private void _PickCharacter(InputAction.CallbackContext obj)
     {
+        if (_inputLocked)
+            return;
         ControllerManager.current.Link(_players[_playerSelectedIndex], Gamepad.all[_controllerIndex]);
         _gm.NonSelectedPlayers.Remove(_players[_playerSelectedIndex]);
         if(_gm.NonSelectedPlayers.Count<4/*_gm.NonSelectedPlayers.Count == 0*/)
