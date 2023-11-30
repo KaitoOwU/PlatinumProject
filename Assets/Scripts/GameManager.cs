@@ -284,6 +284,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator CR_TPAllPlayersToHub()
     {
+        PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
+        
         StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
         yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
         
@@ -299,6 +301,9 @@ public class GameManager : MonoBehaviour
         
         StartCoroutine(_transitions.EndTransition(_transitions.RightTransition));
         yield return StartCoroutine(_transitions.EndTransition(_transitions.LeftTransition));
+        
+        PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
+        //A VOIR SI ILS PEUVENT REBOUGER AVANT LA FIN DU FADE OUT
     }
     
     public void TPPlayerPostTrap(Player[] players)
@@ -309,6 +314,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator CR_TPPlayerPostTrap(Player[] players)
     {
         Image imgToCancel;
+        players.ToList().Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
         
         if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
         {
@@ -334,6 +340,7 @@ public class GameManager : MonoBehaviour
         }
 
         yield return StartCoroutine(_transitions.EndTransition(imgToCancel));
+        players.ToList().Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
     }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");

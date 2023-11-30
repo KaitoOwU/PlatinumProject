@@ -13,6 +13,7 @@ public class UIPortrait : MonoBehaviour, IInputAwaiterReactive
 
     [SerializeField] private Image _portrait;
     [SerializeField] private TextMeshProUGUI _name, _description;
+    [SerializeField] private CanvasGroup _group;
 
     private void Awake()
     {
@@ -29,13 +30,13 @@ public class UIPortrait : MonoBehaviour, IInputAwaiterReactive
         _description.text = suspect.Description;
 
         _validator.Setup(PlayerController.EButtonType.INTERACT, "A", GameManager.Instance.PlayerList.ToArray());
-        transform.DOLocalMoveY(0, 1.5f);
+        _group.DOFade(1f, 1.5f);
     }
     
     public IEnumerator AwaiterCompleted()
     {
         _validator.Unsetup(PlayerController.EButtonType.INTERACT);
         yield return new WaitForSecondsRealtime(1f);
-        yield return transform.DOLocalMoveY(-1131f, 1.5f).WaitForCompletion();
+        yield return _group.DOFade(0f, 1.5f).WaitForCompletion();
     }
 }

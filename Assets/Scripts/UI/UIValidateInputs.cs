@@ -19,7 +19,7 @@ public class UIValidateInputs : MonoBehaviour
 
     public void Setup(PlayerController.EButtonType type, string input, params PlayerInfo[] players)
     {
-        for (var index = 0; index < players.Length; index++)
+        for (var index = 0; index < GameManager.Instance.PlayerList.Count; index++)
         {
             PlayerInfo p = GameManager.Instance.PlayerList[index];
             if (players.ToList().Contains(p) && p.PlayerController.Inputs != null)

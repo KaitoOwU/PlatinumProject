@@ -16,6 +16,7 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
     [SerializeField] private HubRelativePosition _position;
     [SerializeField] private Image _clueVisual;
     [SerializeField] private TextMeshProUGUI _clueText, _clueDescription;
+    [SerializeField] private CanvasGroup _group;
     
     public bool IsActive { get; private set; }
     public Image ClueVisual => _clueVisual;
@@ -62,12 +63,12 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
             _inputValidator.Setup(PlayerController.EButtonType.INTERACT, "A", GameManager.Instance.RightPlayers.ToArray());
         }
 
-        transform.DOLocalMoveY(0f, 1.5f);
+        _group.DOFade(1f, 1.5f);
     }
     
     private void ClearUI()
     {
-        transform.DOLocalMoveY(-1131, 0f);
+        _group.DOFade(0f, 1.5f);
     }
 
     public IEnumerator AwaiterCompleted()

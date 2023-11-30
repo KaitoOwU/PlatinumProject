@@ -51,6 +51,7 @@ public class Door : Interactable
     {
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
+            
             OnChangeRoom?.Invoke();
             if (player.CurrentRoom is Hub)
             {
@@ -63,6 +64,7 @@ public class Door : Interactable
                 Hub hub = (Hub)player.CurrentRoom;
                 if (hub.RoomDoorLeft.PlayersInRange.Count >= 1 /*&& hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4*/) // POUR BUILD FINALE ==> ==4 !!!
                 {
+                    GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                     yield return StartCoroutine(
                         UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
                     
@@ -80,10 +82,12 @@ public class Door : Interactable
 
                     yield return StartCoroutine(
                         UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition));
+                    GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
    
                 }
                 else if (_playersInRange.Count == countInHub && countInHub < 4)
                 {
+                    GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                     yield return StartCoroutine(
                         UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
                     
@@ -91,12 +95,14 @@ public class Door : Interactable
                     
                     yield return StartCoroutine(
                         UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
+                    GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
 
                     hub.RoomDoorLeft._isLocked = false;
                     hub.RoomDoorRight._isLocked = false;
                 }
                 else if(_linkedDoor.room is Vestibule)
                 {
+                    GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                     yield return StartCoroutine(
                         UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
                     
@@ -105,6 +111,7 @@ public class Door : Interactable
                     
                     yield return StartCoroutine(
                         UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition));
+                    GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
 
                     _isLocked = true;
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GUESS;
@@ -124,6 +131,7 @@ public class Door : Interactable
                     if (GameManager.Instance.RightPlayers.Count == _playersInRange.Count &&
                         _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
                     {
+                        GameManager.Instance.RightPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                         yield return StartCoroutine(
                             UIRoomTransition.current.StartTransition(UIRoomTransition.current.RightTransition));
                         
@@ -131,10 +139,12 @@ public class Door : Interactable
                         
                         yield return StartCoroutine(
                             UIRoomTransition.current.EndTransition(UIRoomTransition.current.RightTransition));
+                        GameManager.Instance.RightPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
                     }
                 }
                 else if (room.RoomSide == Room.Side.LEFT)
                 {
+                    GameManager.Instance.LeftPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                     if (GameManager.Instance.LeftPlayers.Count == _playersInRange.Count &&
                         _playersInRange.All(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)))
                     {
@@ -146,6 +156,7 @@ public class Door : Interactable
                         yield return StartCoroutine(
                             UIRoomTransition.current.EndTransition(UIRoomTransition.current.LeftTransition));
                     }
+                    GameManager.Instance.LeftPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
                 }
             }
         }
