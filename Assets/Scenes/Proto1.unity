@@ -320,7 +320,7 @@ PrefabInstance:
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.size
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
@@ -376,27 +376,27 @@ PrefabInstance:
         type: 3}
       propertyPath: _doormattMaterials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 7becfdf94a09fd34fb9a34e7ca377cc2, type: 2}
+      objectReference: {fileID: 2100000, guid: 802326bcd63a48a43a1ced80110e489b, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 262632b710890284a8635f2fbada20d6, type: 2}
+      objectReference: {fileID: 2100000, guid: 6ae8b625fb87b7049a04737ba84c4d14, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 8dbc91a4bc54f9046b84718c9dfb1ec6, type: 2}
+      objectReference: {fileID: 2100000, guid: 2768318417dc69348b0c84b93c3bed40, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[3]
       value: 
-      objectReference: {fileID: 2100000, guid: ce3bbb07b11292a4fbd3212619a387a1, type: 2}
+      objectReference: {fileID: 2100000, guid: 87458f30397ebda4d86fd46c15423d57, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[4]
       value: 
-      objectReference: {fileID: 2100000, guid: ba06944e4082b8a47aa255c84dbc19d6, type: 2}
+      objectReference: {fileID: 2100000, guid: dfa0804791bfa164798f0f9ae56ddf78, type: 2}
     - target: {fileID: 6730754769244606395, guid: fc6fe0f8ca460e04697f75e62c4cd9c7,
         type: 3}
       propertyPath: _doormattMaterials.Array.data[5]
@@ -484,6 +484,11 @@ PrefabInstance:
       propertyPath: _fullCamera
       value: 
       objectReference: {fileID: 2120400645}
+    - target: {fileID: 2744998676336695786, guid: 2d8d2288e0b97b94293ccc4ede262aac,
+        type: 3}
+      propertyPath: _transitions
+      value: 
+      objectReference: {fileID: 228870689}
     - target: {fileID: 2744998676336695786, guid: 2d8d2288e0b97b94293ccc4ede262aac,
         type: 3}
       propertyPath: _playerConstants
@@ -853,6 +858,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 228797724}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &228870689 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6248386355247340781, guid: 242dd52d90efb664697445ab10326fb2,
+    type: 3}
+  m_PrefabInstance: {fileID: 522851760}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 296f9163428c44742871748eadeaa59b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &289712926
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2699,7 +2716,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _eventsData
       value: 
-      objectReference: {fileID: 11400000, guid: ce20297d8c2e8e243816d6c247c110c0,
+      objectReference: {fileID: 11400000, guid: 40365eddeee441546af586d60b9c9546,
         type: 2}
     - target: {fileID: 5809297908048904983, guid: 59f68adff5a10b4408d033c6e3e1fa4b,
         type: 3}
