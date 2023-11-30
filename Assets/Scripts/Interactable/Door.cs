@@ -9,6 +9,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 [System.Serializable]
 public class Door : Interactable
 {
+
     [HideInInspector] public UnityEvent OnChangeRoom;
     [HideInInspector] public UnityEvent OnLockedDoorInterract;
 
@@ -150,7 +151,7 @@ public class Door : Interactable
         }
         else
         {
-            OnLockedDoor?.Invoke();
+            OnLockedDoorInterract?.Invoke();
         }
     }
 
