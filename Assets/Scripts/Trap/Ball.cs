@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using DG.Tweening;
 
 public class Ball : MonoBehaviour
 {
@@ -10,10 +11,13 @@ public class Ball : MonoBehaviour
     private Vector3 _goal;
     private bool _isMoving;
     private bool _isTurning;
+    private float _rotaTimer;
 
     public float Speed { get => _speed; set => _speed = value; }
     public Vector3 Goal { get => _goal; set => _goal = value; }
     public bool IsTurning { get => _isTurning; set => _isTurning = value; }
+    public bool IsMoving { get => _isMoving; set => _isMoving = value; }
+
     [HideInInspector] public UnityEvent OnBallRollingBegin;
     [HideInInspector] public UnityEvent OnBallRollingEnd;
 
@@ -34,13 +38,15 @@ public class Ball : MonoBehaviour
     public void RotateBall()
     {
         {
+            _rotaTimer += Time.deltaTime;
             Vector3 targetDirection = _goal - transform.position;
-            float singleStep = _speed * Time.deltaTime;
-            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
-            transform.rotation = Quaternion.LookRotation(newDirection);
-            if (Mathf.Abs(Vector3.Dot(targetDirection,newDirection)-(targetDirection.magnitude*newDirection.magnitude))<= 0.1)
+            transform.forward= Vector3.RotateTowards(transform.forward, targetDirection, Mathf.PI*Time.deltaTime, 0.0f);
+            Quaternion rotation = Quaternion.LookRotation(targetDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * _speed);
+            if (_rotaTimer > .3f)
             {
                 _isTurning = false;
+                _rotaTimer = 0;
             }
         }
     }
@@ -51,9 +57,11 @@ public class Ball : MonoBehaviour
         {
                 RotateBall();
         }
-        else if(Speed>0)
+        else if(Speed>0&&_isMoving)
         {
             transform.position += (_goal - transform.position).normalized * _speed * Time.deltaTime;
+            if (Mathf.Abs(_goal.y -transform.position.y) <= 0.4)
+                transform.Rotate(_speed * Time.deltaTime * 100, 0, 0);
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -62,6 +70,7 @@ public class Ball : MonoBehaviour
         if (other.GetComponent<Player>())
         {
             other.GetComponent<Player>().OnHit.Invoke();
+            _isMoving = false;
             Player[] players = new Player[GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == other.GetComponent<Player>().RelativePos).Count];
             for (int i = 0; i < players.Length; i++)
             {

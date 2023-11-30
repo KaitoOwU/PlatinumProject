@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using DG.Tweening;
 
 public class Projectile : MonoBehaviour
 {
@@ -9,14 +10,14 @@ public class Projectile : MonoBehaviour
     private Vector3 _dir;
     void Start()
     {
-        _dir = transform.forward * _speed;
+        _dir = transform.up * _speed;
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.position += _dir * Time.deltaTime;
-        //DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
+        transform.Rotate(0,0,180 * _speed * Time.deltaTime);
     }
     private void OnTriggerEnter(Collider other)
     {

@@ -9,6 +9,7 @@ public class PaintManager : Puzzle
 {
     public Action<Paints> OnPuzzleUpdate;
     private PaintSoluce _soluce;
+    private Room _soluceRoom;
     private List<Paints> _paints = new();
     private bool _isComplete;
     [SerializeField] private List<NestedSpriteLIst> _imagesVar = new();
@@ -20,12 +21,14 @@ public class PaintManager : Puzzle
     private void Start()
     {
         _paints = GetComponentsInChildren<Paints>().ToList();
-        _soluce = GetComponentInParent<Room>().Tandem.GetComponentInChildren<PaintSoluce>();
+        _soluceRoom = GetComponentInParent<Room>().Tandem;
+        _soluce = _soluceRoom.GetComponentInChildren<PaintSoluce>();
+
         SetPaint();
     }
     private void Update()
     {
-        if (GetComponentInParent<Room>().Tandem.PlayerInRoom() > 0 && !_tandemDiscovered)
+        if (_soluceRoom.PlayerInRoom() > 0 && !_tandemDiscovered)
         {
             _tandemDiscovered = true;
         }

@@ -26,7 +26,8 @@ public class BallTrap : MonoBehaviour
         {
             if (!_hasBegun)
             {
-                _ball.OnBallRollingBegin.Invoke();
+                _ball.IsMoving = true;
+                _ball.OnBallRollingBegin?.Invoke();
                 _hasBegun = true;
             }
             _ball.Speed = 4;
@@ -45,6 +46,7 @@ public class BallTrap : MonoBehaviour
             nextPos = _route[0];
             _currentPoint = 0;
             _ball.Speed = 0;
+            _hasBegun = false;
         }
     }
     private void NextPoint()
@@ -52,7 +54,7 @@ public class BallTrap : MonoBehaviour
         if (_currentPoint >= _route.Count - 1)
         {
             _ball.Speed = 0;
-            _ball.OnBallRollingEnd.Invoke();
+            _ball.OnBallRollingEnd?.Invoke();
         }
         else
         {

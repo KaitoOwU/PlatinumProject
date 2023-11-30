@@ -24,6 +24,7 @@ public class Room : MonoBehaviour
     [SerializeField] protected Transform _cameraPoint;
     [SerializeField] private bool _isRewardClue;
     [SerializeField] private bool _canHaveReward;
+    [SerializeField] private bool _discovered;
     private List<Material> _usedDoormats = new List<Material>();
     public enum Side
     {
