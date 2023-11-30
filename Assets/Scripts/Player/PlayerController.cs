@@ -69,8 +69,8 @@ public class PlayerController : MonoBehaviour
     #region Set up & Clean up
     public IEnumerator SetUp(InputManager inputManager, PlayerInput inputs, Transform playerController)
     {
-        _animator.SetTrigger("GetUp");
-        yield return new WaitForSeconds(8.6f); // Wait for end of animation
+        _animator.SetTrigger("WakeUp");
+        yield return new WaitForSeconds(2f); // Wait for end of animation
 
         GameManager.Instance.CurrentPlayersCount++;
         _inputManager = inputManager;
@@ -138,6 +138,11 @@ public class PlayerController : MonoBehaviour
                     UpdatePlayerRotation(_inputs.actions["Move"].ReadValue<Vector2>());
                 _Move(_inputs.actions["Move"].ReadValue<Vector2>());
             }
+            else
+            {
+                _animator.SetBool("IsMoving", false);
+                Debug.Log("IsMoving false");
+            }
         }
     }
 
@@ -147,7 +152,7 @@ public class PlayerController : MonoBehaviour
         _rigidbody.velocity = new Vector3(dir.x * _moveSpeed, _rigidbody.velocity.y, dir.y * _moveSpeed);
         if (_moveState != EMoveState.NORMAL)
         {
-            if(Vector3.Dot(dir, transform.forward) > 0)
+            if (Vector3.Dot(dir, transform.forward) > 0)
             {
                 _animator.SetBool("IsPushing", true);
                 _animator.SetBool("IsPulling", false);
@@ -158,6 +163,11 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("IsPushing", false);
             }
         }
+        else
+        {
+            _animator.SetBool("IsMoving", true);
+        }
+
     }
     private void _StartMove() => OnMoveStarted?.Invoke();
     private void _StopMove() => OnMoveCanceled?.Invoke();
