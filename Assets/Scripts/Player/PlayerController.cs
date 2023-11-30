@@ -144,6 +144,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_inputManager.InputLocked)
+            return;
         if (_inputs != null)
         {
             if (_inputs.actions["Move"].ReadValue<Vector2>() != Vector2.zero)
