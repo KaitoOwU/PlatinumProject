@@ -130,7 +130,8 @@ public class Furniture : Interactable
                 if (hit.collider != _furnitureModelCollider)
                     return;
                 _playersPushing.Add(player);
-                if(_playersPushing.Count >= _playersNeededNumber)
+
+                if (_playersPushing.Count >= _playersNeededNumber)
                 {
                     OnBeginPushingFurniture?.Invoke();
                     float angle = -Mathf.Atan2(fwd.z, fwd.x) * Mathf.Rad2Deg + 90.0f;
@@ -160,6 +161,8 @@ public class Furniture : Interactable
         if (_playersPushing.Count == 0)
         {
             OnStopPushingFurniture?.Invoke();
+            player.PlayerController.Animator.SetBool("IsPushing", false);
+            player.PlayerController.Animator.SetBool("IsPulling", false);
             transform.parent = null;
             transform.position = new Vector3(transform.position.x, _baseY, transform.position.z);
         }
