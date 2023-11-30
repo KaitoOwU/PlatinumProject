@@ -195,6 +195,7 @@ public class GameManager : MonoBehaviour
         _vestibule = FindObjectOfType<Vestibule>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
         _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
+        OnEachEndPhase.AddListener(TPAllPlayersToHub);
     }
 
     void Start()
@@ -207,7 +208,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(StartTimer());
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);
-        OnEachEndPhase.AddListener(TPAllPlayersToHub);
+        
     }
     private void InitGame()
     {
@@ -348,7 +349,11 @@ public class GameManager : MonoBehaviour
             _AnalyseTimer();
         }
     }
-
+    private IEnumerator ShuffleTimer()
+    {
+        yield return new WaitForSeconds(1f);
+        OnShuffleRooms?.Invoke();
+    }
     private void _AnalyseTimer()
     {
         _timerUI.text = _timer.ToString();
@@ -364,7 +369,7 @@ public class GameManager : MonoBehaviour
                     CurrentGamePhase = GamePhase.HUB;
                     OnFirstPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
-                    OnShuffleRooms?.Invoke();
+                    StartCoroutine(ShuffleTimer());
                     Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
                 }
@@ -376,7 +381,7 @@ public class GameManager : MonoBehaviour
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
-                    OnShuffleRooms?.Invoke();
+                    StartCoroutine(ShuffleTimer());
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }

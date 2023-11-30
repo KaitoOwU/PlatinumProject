@@ -42,7 +42,7 @@ public class RoomGeneration : MonoBehaviour
     private void Start()
     {
         _maxRooms = 0;
-        GameManager.Instance.OnEachEndPhase.AddListener(Shuffle);
+        GameManager.Instance.OnShuffleRooms.AddListener(Shuffle);
         _vestibule = FindObjectOfType<Vestibule>();
         _hall = FindObjectOfType<Hub>();
     }
