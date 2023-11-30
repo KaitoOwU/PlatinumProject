@@ -10,7 +10,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class Door : Interactable
 {
     [HideInInspector] public UnityEvent OnChangeRoom;
-    [HideInInspector] public UnityEvent OnLockedDoor;
+    [HideInInspector] public UnityEvent OnLockedDoorInterract;
 
     [SerializeField] private Transform[] _tpPoint;
     [SerializeField] private DoorType _doorTypeValue;

@@ -46,6 +46,8 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
         }
         for (int i = 0; i < _doorAnchors.Length; i++)
         {
+            if(i==0)
+                OnDoorOpen?.Invoke();
             Debug.Log("aa");
             _doorAnchors[i].DOMoveY(_baseY[i]-6, 1.5f);
         }
@@ -55,6 +57,8 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
     {
         for (int i = 0; i < _doorAnchors.Length; i++)
         {
+            if (i == 0)
+                OnDoorClose?.Invoke();
             Debug.Log("aa1");
             _doorAnchors[i].DOMoveY(_baseY[i]+1.7f, 1.5f); ;
         }

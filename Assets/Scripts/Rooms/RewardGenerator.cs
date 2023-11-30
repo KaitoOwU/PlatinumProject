@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RewardGenerator : MonoBehaviour, IPuzzleReactive
 {
+    [HideInInspector] public UnityEvent OnClueSpawn;
+
     [SerializeField]private GameObject _reward;
     [SerializeField] Room _room;
     [SerializeField] private int _enigmaCount;
@@ -25,6 +28,7 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
         {
             if (_reward)
             {
+                OnClueSpawn?.Invoke();
                 Instantiate(_reward, transform.position, transform.rotation);
             }
             _room.CompletedRoom();

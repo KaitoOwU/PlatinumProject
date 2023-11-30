@@ -12,14 +12,15 @@ public class Item : Interactable
     [FormerlySerializedAs("_itemData")]
     [Header("--- DATA ---")]
     [SerializeField] private PickableData _pickableData;
-    
+    [HideInInspector] public UnityEvent OnPickUpArm;
+
     public PickableData PickableData { get => _pickableData; set => _pickableData = value; }
 
     protected override void OnInteract(Player player)
     {
         if (player.HeldPickable != null)
             return;
-        
+        OnPickUpArm?.Invoke();
         player.HeldPickable = _pickableData;
         Destroy(gameObject);
     }

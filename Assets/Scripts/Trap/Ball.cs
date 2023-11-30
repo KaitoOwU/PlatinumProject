@@ -14,7 +14,8 @@ public class Ball : MonoBehaviour
     public float Speed { get => _speed; set => _speed = value; }
     public Vector3 Goal { get => _goal; set => _goal = value; }
     public bool IsTurning { get => _isTurning; set => _isTurning = value; }
-    [HideInInspector] public UnityEvent OnBallRolling;
+    [HideInInspector] public UnityEvent OnBallRollingBegin;
+    [HideInInspector] public UnityEvent OnBallRollingEnd;
 
 
     private void Start()
