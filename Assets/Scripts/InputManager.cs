@@ -237,7 +237,7 @@ public class InputManager : MonoBehaviour
         if (_inputLocked)
             return;
         OnAskTPHubStarted?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
-        UIHubTpManager.instance.PrintUI(20, "X");
+        UIHubTpManager.instance.PrintUI(_players[_playerSelectedIndex], 20, "X");
     }
     
     #endregion

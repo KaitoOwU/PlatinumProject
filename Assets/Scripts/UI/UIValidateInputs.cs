@@ -25,7 +25,7 @@ public class UIValidateInputs : MonoBehaviour
             if (players.ToList().Contains(p) && p.PlayerController.Inputs != null)
             {
                 _inputAwaiters[index].SetActive(true);
-                _inputAwaiters[index].Setup(this, type, p.PlayerRef);
+                _inputAwaiters[index].Setup(this, input, type, p.PlayerRef);
             }
             else
             {
@@ -64,9 +64,10 @@ public class InputAwaiter
     public bool Activated => _activated;
     public bool IsActiveInHierarchy => surround.transform.parent.gameObject.activeInHierarchy;
 
-    public void Setup(UIValidateInputs inputAwaiter, PlayerController.EButtonType buttonType, Player player)
+    public void Setup(UIValidateInputs inputAwaiter, string input, PlayerController.EButtonType buttonType, Player player)
     {
         _inputAwaiter = inputAwaiter;
+        inputTxt.text = input;
         player.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].started += InputValidate;
         player.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].canceled += InputCanceled;
     }
