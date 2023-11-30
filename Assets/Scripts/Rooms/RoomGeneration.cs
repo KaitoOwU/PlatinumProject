@@ -167,7 +167,6 @@ public class RoomGeneration : MonoBehaviour
             _tandemRoom[j].Tandem = _tandemRoom[j + _tandemRoom.Count / 2];
             _tandemRoom[_tandemRoom.Count / 2 + j].Tandem = _tandemRoom[j];
         }
-       
         SetRooms();
         LockedDoor();
         GameManager.Instance.DistributeClues();
@@ -401,7 +400,6 @@ public class RoomGeneration : MonoBehaviour
                     }
                 }
             }
-            room.OnSetUp();
         }
     }
     private void LinkRoom(Room room, Room roomToLink, Door door)
@@ -464,6 +462,8 @@ public class RoomGeneration : MonoBehaviour
             {
                 door.IsLocked = false;
             }
+            FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).OnSetUp();
+            FindRoomAtPosition(_layout.AisleRightInOrder[i].Position).OnSetUp();
         }
     }
     public void SetRoomsRewards(List<Clue> clues)

@@ -23,7 +23,6 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
         Debug.Log(_currentCount);
         if (_enigmaCount == _currentCount)
         {
-            Debug.Log(_reward.name) ;
             if (_reward)
             {
                 Instantiate(_reward, transform.position, transform.rotation);

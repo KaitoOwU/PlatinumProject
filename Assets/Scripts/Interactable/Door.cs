@@ -10,6 +10,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class Door : Interactable
 {
     [HideInInspector] public UnityEvent OnChangeRoom;
+    [HideInInspector] public UnityEvent OnLockedDoor;
 
     [SerializeField] private Transform[] _tpPoint;
     [SerializeField] private DoorType _doorTypeValue;
@@ -99,9 +100,10 @@ public class Door : Interactable
                         UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
                     
                     TP_Players(LinkedDoor.TpPoint);
+                    TP_Camera(LinkedDoor.room);
                     
                     yield return StartCoroutine(
-                        UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
+                        UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition));
 
                     _isLocked = true;
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GUESS;
@@ -145,6 +147,10 @@ public class Door : Interactable
                     }
                 }
             }
+        }
+        else
+        {
+            OnLockedDoor?.Invoke();
         }
     }
 
