@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class UIHubTpManager : MonoBehaviour, IInputAwaiterReactive
 {
     public static UIHubTpManager instance;
-
+    
     [SerializeField] private UIValidateInputs _inputValidator;
     [SerializeField] private Image _timer;
     
@@ -25,12 +25,13 @@ public class UIHubTpManager : MonoBehaviour, IInputAwaiterReactive
         instance = this;
     }
 
-    public void PrintUI(float seconds, string input = "X")
+    public void PrintUI(Player player, float seconds, string input = "X")
     {
         if (_isActive)
             return;
-        
-        if(UIClue.right.IsActive || UIClue.left.IsActive)
+
+        if (player.RelativePos == HubRelativePosition.HUB)
+            return;
 
         _isActive = true;
         _timer.color = Color.white;
