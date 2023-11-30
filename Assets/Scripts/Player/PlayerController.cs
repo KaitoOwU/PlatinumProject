@@ -40,6 +40,11 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public UnityEvent OnPause;
     [HideInInspector] public UnityEvent OnBackUI;
 
+    [HideInInspector] public UnityEvent OnPickCharacter1;
+    [HideInInspector] public UnityEvent OnPickCharacter2;
+    [HideInInspector] public UnityEvent OnPickCharacter3;
+    [HideInInspector] public UnityEvent OnPickCharacter4;
+
     public enum EButtonType
     {
         MOVE,
@@ -66,13 +71,26 @@ public class PlayerController : MonoBehaviour
     #region Set up & Clean up
     public void SetUp(InputManager inputManager, PlayerInput inputs, Transform playerController)
     {
+        switch (_playerIndex)
+        {
+            case 1:
+                OnPickCharacter1?.Invoke();
+                break;
+            case 2:
+                OnPickCharacter2?.Invoke();
+                break;
+            case 3:
+                OnPickCharacter3?.Invoke();
+                break;
+            case 4:
+                OnPickCharacter4?.Invoke();
+                break;
+
+        }
         GameManager.Instance.CurrentPlayersCount++;
         _inputManager = inputManager;
         _inputs = inputs;
         playerController.SetParent(transform);
-        //_animator.SetTrigger("GetUp");
-        //_playerUi.SetActive(true);
-        //_playerUi.transform.DOScale(new Vector3(1, 1, 1), 0.5f);
 
         _rigidbody = GetComponent<Rigidbody>();
 
