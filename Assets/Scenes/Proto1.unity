@@ -486,6 +486,11 @@ PrefabInstance:
       objectReference: {fileID: 2120400645}
     - target: {fileID: 2744998676336695786, guid: 2d8d2288e0b97b94293ccc4ede262aac,
         type: 3}
+      propertyPath: _transitions
+      value: 
+      objectReference: {fileID: 228870689}
+    - target: {fileID: 2744998676336695786, guid: 2d8d2288e0b97b94293ccc4ede262aac,
+        type: 3}
       propertyPath: _playerConstants
       value: 
       objectReference: {fileID: 11400000, guid: c50b8bc2fb53b4d48b4a798a8560c80d,
@@ -853,6 +858,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 228797724}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &228870689 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6248386355247340781, guid: 242dd52d90efb664697445ab10326fb2,
+    type: 3}
+  m_PrefabInstance: {fileID: 522851760}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 296f9163428c44742871748eadeaa59b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &289712926
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2699,7 +2716,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _eventsData
       value: 
-      objectReference: {fileID: 11400000, guid: ce20297d8c2e8e243816d6c247c110c0,
+      objectReference: {fileID: 11400000, guid: 40365eddeee441546af586d60b9c9546,
         type: 2}
     - target: {fileID: 5809297908048904983, guid: 59f68adff5a10b4408d033c6e3e1fa4b,
         type: 3}

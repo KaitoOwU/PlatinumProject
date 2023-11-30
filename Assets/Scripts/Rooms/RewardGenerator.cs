@@ -8,17 +8,14 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
     [SerializeField] Room _room;
     [SerializeField] private int _enigmaCount;
     private int _currentCount;
-    public void SetUp()
+    private void Start()
     {
-        if (_room)
+        _room =GetComponentInParent<Room>();
+        if (_room.Reward)
         {
             _reward = _room.Reward;
         }
         _currentCount = 0;
-    }
-    private void Start()
-    {
-        _room =GetComponentInParent<Room>();
     }
     public  void PuzzleCompleted()
     {
@@ -26,7 +23,7 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
         Debug.Log(_currentCount);
         if (_enigmaCount == _currentCount)
         {
-            Debug.Log("a");
+            Debug.Log(_reward.name) ;
             if (_reward)
             {
                 Instantiate(_reward, transform.position, transform.rotation);

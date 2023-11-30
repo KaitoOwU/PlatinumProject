@@ -221,11 +221,6 @@ public class GameManager : MonoBehaviour
             .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
 
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
-
-        foreach(RewardGenerator rewardGenerator in FindObjectsOfType<RewardGenerator>())
-        {
-            rewardGenerator.SetUp();
-        }
     }
 
     public void DistributeClues()
