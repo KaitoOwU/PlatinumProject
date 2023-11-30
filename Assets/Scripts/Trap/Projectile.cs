@@ -16,12 +16,13 @@ public class Projectile : MonoBehaviour
     void Update()
     {
         transform.position += _dir * Time.deltaTime;
+        //DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Player>())
         {
-
+            other.GetComponent<Player>().OnHit.Invoke();
             Player[] players = new Player[FindObjectsOfType<Player>().ToList().FindAll(player=>player.CurrentRoom== other.GetComponent<Player>().CurrentRoom).Count];
             for (int i = 0; i < players.Length; i++)
             {

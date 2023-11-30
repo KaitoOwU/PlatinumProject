@@ -4,22 +4,25 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
 {
     private List<PressurePlate> _pressurePlates = new();
     
-    private List<Vector3> _baseRotations = new();
+    private List<float> _baseY = new();
     [SerializeField] private Transform[] _doorAnchors;
     [SerializeField] private RewardGenerator _rewardGenerator;
     [SerializeField] private bool _arePPlatesLinked;
+    [HideInInspector] public UnityEvent OnDoorOpen;
+    [HideInInspector] public UnityEvent OnDoorClose;
 
     private void Awake()
     {
         _pressurePlates = GetComponentsInChildren<PressurePlate>().ToList();
         for (int i = 0; i < _doorAnchors.Length; i++)
         {
-            _baseRotations.Add(_doorAnchors[i].rotation.eulerAngles);
+            _baseY.Add(_doorAnchors[i].localPosition.y);
         }
     }
 
@@ -43,7 +46,10 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
         }
         for (int i = 0; i < _doorAnchors.Length; i++)
         {
-            _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y - 90, 0), 1.5f);
+            if(i==0)
+                OnDoorOpen?.Invoke();
+            Debug.Log("aa");
+            _doorAnchors[i].DOMoveY(_baseY[i]-6, 1.5f);
         }
     }
 
@@ -51,7 +57,10 @@ public class PressurePlateManager : MonoBehaviour, IPuzzleReactive
     {
         for (int i = 0; i < _doorAnchors.Length; i++)
         {
-            _doorAnchors[i].DORotate(new Vector3(0, _baseRotations[i].y, 0), 1.5f);
+            if (i == 0)
+                OnDoorClose?.Invoke();
+            Debug.Log("aa1");
+            _doorAnchors[i].DOMoveY(_baseY[i]+1.7f, 1.5f); ;
         }
     }
 }

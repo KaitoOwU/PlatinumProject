@@ -44,6 +44,12 @@ public class UnityEventManager : MonoBehaviour
     private void Start()
     {
         instance = this;
+        StartCoroutine(WaitForInit());
+    }
+
+    IEnumerator WaitForInit()
+    {
+        yield return new WaitForSeconds(0.1f);
         var events = Resources.LoadAll("CurrentEvents", typeof(UnityEventData));
         if (events.Length == 0)
             Debug.LogWarning("WARNING : Current events database wasn't found : --> Try to 'Update Database' in Event Tool Window.");

@@ -1,14 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.DualShock;
-using UnityEngine.Serialization;
-using UnityEngine.Windows;
 using static GameManager;
 
 public class InputManager : MonoBehaviour
@@ -65,6 +58,11 @@ public class InputManager : MonoBehaviour
         get { return onBack; }
         set { onBack = value; }
     }
+    public bool InputLocked
+    {
+        get { return _inputLocked; }
+        set { _inputLocked = value; }
+    }
     private UnityEvent onMoveStarted = new();
     private UnityEvent onMoveCanceled = new();
     private UnityEvent<Player> onInteract = new();
@@ -76,6 +74,7 @@ public class InputManager : MonoBehaviour
     private UnityEvent onPause = new();
     private UnityEvent onBack = new();
 
+    private bool _inputLocked;
     private PlayerInput _map;
     private int _controllerIndex;
 
@@ -170,18 +169,73 @@ public class InputManager : MonoBehaviour
     #endregion
 
     #region Invoking Methods
-    private void _Move_started(InputAction.CallbackContext obj) => OnMoveStarted?.Invoke();
-    private void _Move_canceled(InputAction.CallbackContext obj) => OnMoveCanceled?.Invoke();
-    private void _Back_performed(InputAction.CallbackContext obj) => OnBack?.Invoke();
-    private void _Interact_performed(InputAction.CallbackContext obj) => OnInteract?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
-    private void _Push_performed(InputAction.CallbackContext obj) => OnPush?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);  
-    private void _Push_canceled(InputAction.CallbackContext obj) => OnPushCanceled?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
-    private void _Tool_performed(InputAction.CallbackContext obj) => OnUseTool?.Invoke();
-    private void _Pause_performed(InputAction.CallbackContext obj) => OnPause?.Invoke();
-    private void _AskTPHub_canceled(InputAction.CallbackContext obj) => OnAskTPHubCanceled?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+    private void _Move_started(InputAction.CallbackContext obj)
+    {
+        if (_inputLocked)
+            return;
+        OnMoveStarted?.Invoke();
+    }
+
+    private void _Move_canceled(InputAction.CallbackContext obj)
+    {
+        if (_inputLocked)
+            return;
+        OnMoveCanceled?.Invoke();
+    }
+
+    private void _Back_performed(InputAction.CallbackContext obj)
+    {
+        if (_inputLocked)
+            return;
+        OnBack?.Invoke();
+    }
+
+    private void _Interact_performed(InputAction.CallbackContext obj)
+    {
+        if (_inputLocked)
+            return;
+        OnInteract?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+    }
+
+    private void _Push_performed(InputAction.CallbackContext obj)
+    {
+        if (_inputLocked)
+            return;
+        OnPush?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+    }
+
+    private void _Push_canceled(InputAction.CallbackContext obj)
+    {
+        if (_inputLocked)
+            return;
+        OnPushCanceled?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+    }
+
+    private void _Tool_performed(InputAction.CallbackContext obj)
+    {
+        if (_inputLocked)
+            return;
+        OnUseTool?.Invoke();
+    }
+
+    private void _Pause_performed(InputAction.CallbackContext obj)
+    {
+        if (_inputLocked)
+            return;
+        OnPause?.Invoke();
+    }
+
+    private void _AskTPHub_canceled(InputAction.CallbackContext obj)
+    {
+        if (_inputLocked)
+            return;
+        OnAskTPHubCanceled?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+    }
 
     private void _AskTPHub_started(InputAction.CallbackContext obj)
     {
+        if (_inputLocked)
+            return;
         OnAskTPHubStarted?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
         UIHubTpManager.instance.PrintUI(20, "X");
     }

@@ -134,9 +134,6 @@ public class GameManager : MonoBehaviour
         get => _currentPlayersCount;
         set => _currentPlayersCount = value;
     }
-
-    public GameObject CurrentCamera => _currentCamera;
-    private GameObject _currentCamera; // A ASSIGNER
     
     int _corridorChance = 0;
     public int ValidatedRooom
@@ -198,6 +195,7 @@ public class GameManager : MonoBehaviour
         _vestibule = FindObjectOfType<Vestibule>();
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
         _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
+        OnEachEndPhase.AddListener(TPAllPlayersToHub);
     }
 
     void Start()
@@ -210,26 +208,20 @@ public class GameManager : MonoBehaviour
         StartCoroutine(StartTimer());
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);
-        OnEachEndPhase.AddListener(TPAllPlayersToHub);
+        
     }
     private void InitGame()
     {
         //_murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
         //_victim = GameData.SuspectsDatas[0]; //temporary
-
         _murderer = GameData.SuspectsDatas[0];
         _victim = GameData.SuspectsDatas[2]; //temporary
         //init game accordingly;
-
+        
         CurrentClues = MurderScenarios.ToList()
             .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
 
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
-
-        foreach(RewardGenerator rewardGenerator in FindObjectsOfType<RewardGenerator>())
-        {
-            rewardGenerator.SetUp();
-        }
     }
 
     public void DistributeClues()
@@ -357,7 +349,11 @@ public class GameManager : MonoBehaviour
             _AnalyseTimer();
         }
     }
-
+    private IEnumerator ShuffleTimer()
+    {
+        yield return new WaitForSeconds(1f);
+        OnShuffleRooms?.Invoke();
+    }
     private void _AnalyseTimer()
     {
         _timerUI.text = _timer.ToString();
@@ -373,7 +369,7 @@ public class GameManager : MonoBehaviour
                     CurrentGamePhase = GamePhase.HUB;
                     OnFirstPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
-                    OnShuffleRooms?.Invoke();
+                    StartCoroutine(ShuffleTimer());
                     Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
                 }
@@ -385,7 +381,7 @@ public class GameManager : MonoBehaviour
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                     OnSecondPhaseEnd?.Invoke();
                     OnEachEndPhase?.Invoke();
-                    OnShuffleRooms?.Invoke();
+                    StartCoroutine(ShuffleTimer());
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
                 }

@@ -50,7 +50,8 @@ public class GuessManager : MonoBehaviour
     private void Vote(Player player, SuspectData suspectData)
     {
         OnIndividualVote?.Invoke();
-        GetPortraitFromData(_votes[player])?.UpdateVote(player.Index - 1, false); //remove indicator from old vote portrait
+        if (_votes.ContainsKey(player))
+            GetPortraitFromData(_votes[player])?.UpdateVote(player.Index - 1, false); //remove indicator from old vote portrait
 
         _votes[player] = suspectData;
 

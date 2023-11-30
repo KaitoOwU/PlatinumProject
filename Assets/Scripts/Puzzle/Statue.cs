@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Statue : Puzzle, IResettable
 {
+        [HideInInspector] public UnityEvent OnRepaired;
 
     private bool _isRepaired;
     [SerializeField] private GameObject _statueArm;
@@ -16,6 +18,7 @@ public class Statue : Puzzle, IResettable
         
         if (!_isRepaired && player.HeldPickable.ID == 10) // BRAS DE STATUE
         {
+            OnRepaired?.Invoke();
             player.HeldPickable = null;
             _statueArm.SetActive(true);
             _isRepaired = true;
