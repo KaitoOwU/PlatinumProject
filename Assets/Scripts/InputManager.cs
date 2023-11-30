@@ -92,7 +92,7 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         _map = GetComponent<PlayerInput>();
-        InputLocked = true;
+        InputLocked = false;
         //_SetupEvents();
         //_AddController();
 
@@ -108,7 +108,7 @@ public class InputManager : MonoBehaviour
     private void _AddController()
     {
         //Get right character depending on controller index and launch set up (= controller corresponding character)
-        GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerController.SetUp(this, _map, transform);
+        StartCoroutine(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerController.SetUp(this, _map, transform));
     }
 
     #region Subscription Setup & Cleanup

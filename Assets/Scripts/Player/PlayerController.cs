@@ -90,6 +90,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
         }
+        //Debug.Log("WakeUP");
         _animator.SetTrigger("WakeUp");
         yield return new WaitForSeconds(2f); // Wait for end of animation
 
@@ -151,10 +152,10 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_inputManager.InputLocked)
-            return;
         if (_inputs != null)
         {
+            if (_inputManager.InputLocked)
+                return;
             if (_inputs.actions["Move"].ReadValue<Vector2>() != Vector2.zero)
             {
                 if (_moveState == EMoveState.NORMAL)
