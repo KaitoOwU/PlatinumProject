@@ -62,8 +62,15 @@ public class Door : Interactable
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
 
                 Hub hub = (Hub)player.CurrentRoom;
-                if (hub.RoomDoorRight.PlayersInRange.Count >= 1 && count == 4)
+                
+                #if UNITY_EDITOR
+                if ((hub.RoomDoorRight.PlayersInRange.Count >= 1 || hub.RoomDoorLeft.PlayersInRange.Count >= 1) && count >= 1)
                 {
+                #else
+                if (hub.RoomDoorRight.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count == 4)
+                {
+                #endif
+                    
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                     yield return StartCoroutine(
                         UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
