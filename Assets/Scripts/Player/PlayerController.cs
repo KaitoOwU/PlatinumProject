@@ -10,7 +10,6 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
-
     public int PlayerIndex => _playerIndex;
     public InputManager Inputs => _inputManager;
     public EMoveState MoveState => _moveState;
@@ -56,10 +55,7 @@ public class PlayerController : MonoBehaviour
         PUSH,
         PUSH_BLOCKED,
     }
-    private void Start()
-    {
-        //_animator = GetComponent<Animator>();
-    }
+
     private void OnDisable() => _CleanUp();
 
     public bool IsButtonHeld(EButtonType buttonType)
