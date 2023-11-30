@@ -90,10 +90,10 @@ public class PlayerController : MonoBehaviour
                 break;
 
         }
-        
+        //Debug.Log("WakeUP");
         _animator.SetTrigger("WakeUp");
         yield return new WaitForSeconds(2f); // Wait for end of animation
-        
+
         GameManager.Instance.CurrentPlayersCount++;
         _inputManager = inputManager;
         _inputs = inputs;
