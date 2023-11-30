@@ -11,7 +11,7 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
     private void Start()
     {
         _room =GetComponentInParent<Room>();
-        if (_room)
+        if (_room.Reward)
         {
             _reward = _room.Reward;
         }
