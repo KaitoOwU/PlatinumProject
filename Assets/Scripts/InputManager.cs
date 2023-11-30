@@ -101,6 +101,11 @@ public class InputManager : MonoBehaviour
         _SetupSelectEvents();
         //Gamepad.all[_index].SetMotorSpeeds(1f, 1f);
         //Gamepad.all[_index + 1].SetMotorSpeeds(1f, 1f);
+
+        StartCoroutine(UIMessageGenerator.instance.Init(
+            new UIMessageData("Duchesse", "WOA LA DINGUERIE C'EST UN DIALOGUE DE FOU NAN C'EST INSANE !!!!", 1f),
+            new UIMessageData("Cook", "Oui en effet c'est assez technique de fou", 1f)
+            ));
     }
 
     private void OnDisable() => _CleanEvents();
