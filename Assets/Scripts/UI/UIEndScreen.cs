@@ -14,8 +14,8 @@ public class UIEndScreen : MonoBehaviour
 
     public void Init(bool isWon)
     {
-        _title.text = isWon ? "You Won !" : "You Lost...";
         gameObject.SetActive(true);
+        _title.text = isWon ? "You Won !" : "You Lost...";
         EventSystem.current.SetSelectedGameObject(_button.gameObject);
     }
 }
