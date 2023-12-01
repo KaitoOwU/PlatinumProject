@@ -49,6 +49,7 @@ public class Furniture : Interactable
         _baseY = transform.position.y;
         _furnitureModelCollider = _3Dmodel.GetComponent<Collider>();
         _room = GetComponentInParent<Room>();
+        GameManager.Instance.OnEachEndPhase.AddListener(ForceStopPush);
     }
 
     #region Overridden methods
@@ -207,6 +208,14 @@ public class Furniture : Interactable
             GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnInteract?.RemoveListener(OnInteract);
             GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnPush?.RemoveListener(OnPush);
             GameManager.Instance.PlayerList[p.Index - 1].PlayerController.Inputs.OnPushCanceled?.RemoveListener(OnPushCanceled);
+        }
+    }
+    private void ForceStopPush()
+    {
+        transform.parent = _room.transform;
+        foreach (Player p in _playersPushing)
+        {
+            OnPushCanceled(p);
         }
     }
 }
