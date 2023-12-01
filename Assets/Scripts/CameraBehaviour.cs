@@ -19,6 +19,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private Camera _camera;
     private Vector3 _velocity = Vector3.zero;
+    [SerializeField]
     private ECameraBehaviourState _behaviourState;
 
     public enum ECameraBehaviourState
@@ -47,8 +48,10 @@ public class CameraBehaviour : MonoBehaviour
         }
     }
 
-    public void ChangeCameraState(ECameraBehaviourState newState, List<GameObject> playersInRoom)
+    public void ChangeCameraState(ECameraBehaviourState newState, GameObject[] playersInRoom)
     {
+        if (newState == _behaviourState)
+            return;
         _behaviourState = newState;
         if(newState == ECameraBehaviourState.FOLLOW)
         {
@@ -56,7 +59,7 @@ public class CameraBehaviour : MonoBehaviour
         }
     }
 
-    IEnumerator Follow(List<GameObject> playersInRoom)
+    IEnumerator Follow(GameObject[] playersInRoom)
     {
         while(_behaviourState == ECameraBehaviourState.FOLLOW)
         {
@@ -66,9 +69,9 @@ public class CameraBehaviour : MonoBehaviour
         }
     }
 
-    private int CalculateDirection(List<GameObject> playersInRoom)
+    private int CalculateDirection(GameObject[] playersInRoom)
     {
-        float averageX = playersInRoom.Sum(p => p.transform.position.x)/playersInRoom.Count;
+        float averageX = playersInRoom.Sum(p => p.transform.position.x)/playersInRoom.Length;
         //float averageY = playersInRoom.Sum(p => p.transform.position.x)/playersInRoom.Count;
         //if (_camera.WorldToScreenPoint(new Vector2(averageX, 0)).x < Screen.width / 2)
         if(averageX < _startXPosition)

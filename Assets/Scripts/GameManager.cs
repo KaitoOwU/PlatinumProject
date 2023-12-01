@@ -6,8 +6,10 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static CameraBehaviour;
 
 public class GameManager : MonoBehaviour
 {
@@ -68,10 +70,17 @@ public class GameManager : MonoBehaviour
     private List<PlayerInfo> _playerList = new(4);
     [SerializeField]
     private GameObject _fullCamera;
+
     [SerializeField]
     private GameObject _splitCameraLeft;
+    private CameraBehaviour _splitCameraLeftBehaviour;
+    public CameraBehaviour SplitCameraLeftBehaviour { get => _splitCameraLeftBehaviour; set => _splitCameraLeftBehaviour = value; }
+
     [SerializeField]
     private GameObject _splitCameraRight;
+    private CameraBehaviour _splitCameraRightBehaviour;
+    public CameraBehaviour SplitCameraRightBehaviour { get => _splitCameraRightBehaviour; set => _splitCameraRightBehaviour = value; }
+
     [SerializeField]
     private Hub _hub;
     [SerializeField] private UIRoomTransition _transitions;
@@ -222,6 +231,9 @@ public class GameManager : MonoBehaviour
             .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
 
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+
+        _splitCameraLeftBehaviour = _splitCameraLeft.GetComponent<CameraBehaviour>();
+        _splitCameraRightBehaviour = _splitCameraRight.GetComponent<CameraBehaviour>();
     }
 
     public void DistributeClues()
@@ -323,6 +335,7 @@ public class GameManager : MonoBehaviour
             
             _hub.Doors[0].IsLocked = true;
             TP_RightCamera(_hub.CameraPoint);
+            _splitCameraRight.GetComponent<CameraBehaviour>().ChangeCameraState(ECameraBehaviourState.FOLLOW, players.Select(p => p.gameObject).ToArray());
         }
         else
         {
@@ -331,6 +344,7 @@ public class GameManager : MonoBehaviour
             
             _hub.Doors[1].IsLocked = true;
             TP_LeftCamera(_hub.CameraPoint);
+            _splitCameraLeft.GetComponent<CameraBehaviour>().ChangeCameraState(ECameraBehaviourState.FOLLOW, players.Select(p => p.gameObject).ToArray());
         }
         for (int i = 0; i < players.Length; i++)
         {
@@ -371,6 +385,11 @@ public class GameManager : MonoBehaviour
         switch (_currentTimerPhase)
         {
             case TimerPhase.FIRST_PHASE:
+                if (Math.Abs(_timer - (_gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime) - 15f) < 0.1f)
+                {
+                    StartCoroutine(ControllerManager.current.HeartBeat(13f, 1f, .1f));
+                }
+                
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
                     CurrentGamePhase = GamePhase.HUB;
@@ -382,6 +401,11 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case TimerPhase.SECOND_PHASE:
+                if (Math.Abs(_timer - _gameData.TimerValues.ThirdPhaseTime - 15f) < 0.1f)
+                {
+                    StartCoroutine(ControllerManager.current.HeartBeat(13f, 1f, .1f));
+                }
+                
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
                     CurrentGamePhase = GamePhase.HUB;
@@ -394,6 +418,11 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
+                if (Math.Abs(_timer - 15f) < 0.1f)
+                {
+                    StartCoroutine(ControllerManager.current.HeartBeat(13f, 1f, .1f));
+                }
+                
                 if (_timer <= 3)
                 {
                     _onFadeMusic?.Invoke();
@@ -474,8 +503,23 @@ public class GameManager : MonoBehaviour
 
     IEnumerator VestibuleMessages()
     {
-        yield return new WaitForSeconds(5);
+        //yield return StartCoroutine(UIMessageGenerator.instance.Init(
+        //    new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.05f, 3f),
+        //    new UIMessageData("The Manor",
+        //        "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
+        //        0.05f, 3f),
+        //    new UIMessageData("The Manor",
+        //        "You'll have to find clues about the murder that took place here and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
+        //        0.05f, 3f),
+        //    new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.05f,
+        //        3f),
+        //    new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.2f, 3f)
+        //));
+
+        yield return new WaitForSecondsRealtime(2f);
+        yield return UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition);
         TP_Camera(_fullCamera, Hub.CameraPoint);
+        yield return UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition);
         CurrentGamePhase = GamePhase.SELECT_CHARACTER;
         foreach (Player p in Vestibule.GetComponentsInChildren<Player>())
         {
