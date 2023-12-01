@@ -52,11 +52,7 @@ public class Furniture : Interactable
         _room = GetComponentInParent<Room>();
         _isBeingPushed = false;
     }
-    private void Update()
-    {
-        if(_isBeingPushed) 
-            Debug.Log("_playersPushing.Count " + _playersPushing.Count);
-    }
+
     #region Overridden methods
     protected override void OnTriggerEnter(Collider other)
     {
@@ -91,7 +87,6 @@ public class Furniture : Interactable
 
         OnPushCanceled(other.GetComponent<Player>());
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
-        Debug.Log("Trigger exit");
 
 
         p.Inputs.OnInteract?.RemoveListener(OnInteract);
