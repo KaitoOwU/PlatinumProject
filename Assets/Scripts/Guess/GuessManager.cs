@@ -66,6 +66,8 @@ public class GuessManager : MonoBehaviour
             if (v == null)
                 return;
         }
+
+        StartCoroutine(GetFinalGuess());
     }
 
     private IEnumerator GetFinalGuess()
