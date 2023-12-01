@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using static CameraBehaviour;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using static UnityEngine.EventSystems.EventTrigger;
 [System.Serializable]
 public class Door : Interactable
 {
@@ -57,6 +55,10 @@ public class Door : Interactable
             OnChangeRoom?.Invoke();
             if (player.CurrentRoom is Hub) // IF PLAYERS IN HUB
             {
+                //
+                GameManager.Instance.SplitCameraLeftBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p => p.gameObject).ToArray());
+                GameManager.Instance.SplitCameraRightBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p => p.gameObject).ToArray());
+
 #if UNITY_EDITOR
 #else
                 var playersInRoom = GameManager.Instance.PlayerList.FindAll(p => p.PlayerRef.CurrentRoom is Hub).ToList();
