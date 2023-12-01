@@ -1,0 +1,580 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc6dbed766a510e43bd900840650aa48, type: 3}
+  m_Name: EventData_10
+  m_EditorClassIdentifier: 
+  _database:
+  - scriptName: Clue
+    events:
+    - eventName: OnGetClues
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 03480b5f703ca724688b5af7c0f00135, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: GameManager
+    events:
+    - eventName: OnShuffleRooms
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 5e5b13c04a5278542ae7e09582e9fbb8, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+      - eventType: 6
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 3
+      - eventType: 7
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 0.5
+        intensityRight: 0.5
+        duration: 0.1
+    - eventName: OnFirstPhaseEnd
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 5e5b13c04a5278542ae7e09582e9fbb8, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+      - eventType: 6
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 3
+      - eventType: 7
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 0.5
+        intensityRight: 0.5
+        duration: 0.1
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 4fe4c23a5b60eba489edc9e6380e001f, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnSecondPhaseEnd
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 5e5b13c04a5278542ae7e09582e9fbb8, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+      - eventType: 6
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 3
+      - eventType: 7
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 0.5
+        intensityRight: 0.5
+        duration: 0.1
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 4fe4c23a5b60eba489edc9e6380e001f, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnTimerEnd
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 5e5b13c04a5278542ae7e09582e9fbb8, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+      - eventType: 6
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 3
+      - eventType: 7
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 0.5
+        intensityRight: 0.5
+        duration: 0.1
+    - eventName: OnEachEndPhase
+      eventActions: []
+    - eventName: OnEachMinute
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 5e5b13c04a5278542ae7e09582e9fbb8, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnChangeToSplitScreen
+      eventActions: []
+    - eventName: OnChangeToFullScreen
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 7f96d7675879fc7478b7b622db21d059, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnTPToHubAfterTrap
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 46b95584931f59f4dae90516ebaed9ed, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+      - eventType: 6
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 0.3
+        intensityRight: 1
+        duration: 0.2
+    - eventName: OnTPToHub
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 46b95584931f59f4dae90516ebaed9ed, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+      - eventType: 6
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 0}
+          volume: 1
+        clipsAudio: []
+        intensity: 0.3
+        intensityRight: 1
+        duration: 0.2
+  - scriptName: GuessManager
+    events:
+    - eventName: OnIndividualVote
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: d874e6094179ce644aa45ad06375853c, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 5e5b13c04a5278542ae7e09582e9fbb8, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnGroupFinalVote
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: d874e6094179ce644aa45ad06375853c, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 5e5b13c04a5278542ae7e09582e9fbb8, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: Door
+    events:
+    - eventName: OnChangeRoom
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 1a2e418186c9ad247bf2222e7cbb5138, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnLockedDoorInterract
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: bbb22e1e0d588024cb1b6f4b64471200, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: Furniture
+    events:
+    - eventName: OnSearchFurniture
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: a6ebb46ec3dc4824181c6ec316c5ca77, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnClueFoundInFurniture
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: a5b4f83239c88fb4eae1c6116b6df2b2, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnClueNotFoundInFurniture
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 32dc532d245af1147a344b1e0f725365, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnBeginPushingFurniture
+      eventActions:
+      - eventType: 4
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 8b7307da0eb9e554cac989c66d786fac, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnStopPushingFurniture
+      eventActions:
+      - eventType: 5
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 8b7307da0eb9e554cac989c66d786fac, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnBeginStrugglePushingFurniture
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 3ce3d35e6c1ca9c47b891262f8ad6f4e, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: Item
+    events:
+    - eventName: OnPickUpArm
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 96f0b53577c91e942b692c49a63191de, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: Player
+    events:
+    - eventName: OnHit
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 797bcdb57694cd140ae933f5a6f39533, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: PlayerController
+    events:
+    - eventName: OnMoveStarted
+      eventActions: []
+    - eventName: OnMoveCanceled
+      eventActions: []
+    - eventName: OnPause
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 3d4fb48bfa3cffb4e874b94863ce4bd9, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnBackUI
+      eventActions: []
+    - eventName: OnPickCharacter1
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 9798e129eefe89d4d9bca213b0b81f6f, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnPickCharacter2
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 4a64a67823c241f4e8c3b6915eb03148, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnPickCharacter3
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 1a61720a162b9814a8411de46cb417d4, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnPickCharacter4
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: cc830bd076de1fe45947443f1afa3b4e, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: PressurePlate
+    events:
+    - eventName: OnPressPressurePlate
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 51e01ef5d01b4bb41a05dc93b3cb2451, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnLeavePressurePlate
+      eventActions: []
+  - scriptName: PressurePlateManager
+    events:
+    - eventName: OnDoorOpen
+      eventActions: []
+    - eventName: OnDoorClose
+      eventActions: []
+  - scriptName: Statue
+    events:
+    - eventName: OnRepaired
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: a257d8f8add96544aafbc7bccdbb1b09, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: Corridor
+    events:
+    - eventName: OnCompletedRoom
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 26198dd33c491ee4fa48d0d9370037d4, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: Hub
+    events:
+    - eventName: OnCompletedRoom
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 26198dd33c491ee4fa48d0d9370037d4, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: RewardGenerator
+    events:
+    - eventName: OnClueSpawn
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: a5b4f83239c88fb4eae1c6116b6df2b2, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: Room
+    events:
+    - eventName: OnCompletedRoom
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 26198dd33c491ee4fa48d0d9370037d4, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: Vestibule
+    events:
+    - eventName: OnCompletedRoom
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 26198dd33c491ee4fa48d0d9370037d4, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+  - scriptName: Ball
+    events:
+    - eventName: OnBallRollingBegin
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 99160d3425938494ba7c013693df58ec, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
+    - eventName: OnBallRollingEnd
+      eventActions: []
+  - scriptName: BookshelfTrap
+    events:
+    - eventName: ThrowBook
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: 2917a812cfa344040ab7e07ddbd1279b, type: 3}
+          volume: 1
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
