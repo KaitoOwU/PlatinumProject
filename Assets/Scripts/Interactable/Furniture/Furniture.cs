@@ -29,10 +29,12 @@ public class Furniture : Interactable
     [SerializeField] private Clue _clue;
     private Room _room;
 
+    [SerializeField]
     private List<Player> _playersPushing;
     private float _baseY;
     private bool _searched = false;
     private Collider _furnitureModelCollider;
+    private bool _isBeingPushed;
 
     #endregion
     public enum EFurnitureType
@@ -48,12 +50,16 @@ public class Furniture : Interactable
         _baseY = transform.position.y;
         _furnitureModelCollider = _3Dmodel.GetComponent<Collider>();
         _room = GetComponentInParent<Room>();
+        _isBeingPushed = false;
     }
-
+    private void Update()
+    {
+        if(_isBeingPushed) 
+            Debug.Log("_playersPushing.Count " + _playersPushing.Count);
+    }
     #region Overridden methods
     protected override void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
         if (other.GetComponent<PlayerController>() == null)
             return;
 
@@ -82,9 +88,10 @@ public class Furniture : Interactable
             return;
 
 
-        _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
 
         OnPushCanceled(other.GetComponent<Player>());
+        _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+        Debug.Log("Trigger exit");
 
 
         p.Inputs.OnInteract?.RemoveListener(OnInteract);
@@ -123,7 +130,6 @@ public class Furniture : Interactable
     #region Push
     protected void OnPush(Player player)
     {
-        Debug.Log("start push "+ player.gameObject.name);
         if(_playersPushing.Contains(player))
             return;
         if (_furnitureType == EFurnitureType.MOVABLE)
@@ -142,30 +148,36 @@ public class Furniture : Interactable
                 if (hit.collider != _furnitureModelCollider)
                     return;
                 _playersPushing.Add(player);
-
                 if (_playersPushing.Count >= _playersNeededNumber)
                 {
+                    _isBeingPushed = true;
                     OnBeginPushingFurniture?.Invoke();
                     float angle = -Mathf.Atan2(fwd.z, fwd.x) * Mathf.Rad2Deg + 90.0f;
                     angle = Mathf.Round(angle / 90.0f) * 90.0f;
-                    foreach (var p in _playersPushing)
-                    {
-                        p.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
-                        p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1,0,0): new Vector3(0, 0, 1));
-                    }
-                    transform.parent = player.transform;
+                    player.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
+                    player.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1, 0, 0) : new Vector3(0, 0, 1));
+
+                    //foreach (var p in _playersPushing)
+                    //{
+                    //    p.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
+                    //    p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1,0,0): new Vector3(0, 0, 1));
+                    //}
                 }
                 else
                 {
                     player.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH_BLOCKED);
                     OnBeginStrugglePushingFurniture?.Invoke();
                 }
+
+                if(_playersPushing.Count == 1)
+                    transform.parent = player.transform;
             }
         }
     }
     protected void OnPushCanceled(Player player)
     {
         _playersPushing.Remove(player);
+        Debug.Log("Remove");
         if (transform.parent == player.transform && _playersPushing.Count != 0)
         {
             transform.parent = _playersPushing[0].transform;
@@ -173,10 +185,12 @@ public class Furniture : Interactable
         if (_playersPushing.Count == 0)
         {
             OnStopPushingFurniture?.Invoke();
+            player.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
             player.PlayerController.Animator.SetBool("IsPushing", false);
             player.PlayerController.Animator.SetBool("IsPulling", false);
             transform.parent = _room.transform;
             transform.position = new Vector3(transform.position.x, _baseY, transform.position.z);
+
         }
         else if(_playersPushing.Count < _playersNeededNumber)
         {
@@ -185,7 +199,13 @@ public class Furniture : Interactable
                 p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH_BLOCKED);
             }
         }
-        player.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
+        else
+        {
+            player.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
+            player.PlayerController.Animator.SetBool("IsPushing", false);
+            player.PlayerController.Animator.SetBool("IsPulling", false);
+
+        }
     }
     #endregion
 
