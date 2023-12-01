@@ -168,10 +168,7 @@ public class UnityEventManager : MonoBehaviour
     }
     public void Vibrate(float intensityLeft, float intensityRight, float duration)
     {
-        Gamepad.all.ToList().ForEach(controller =>
-        {
-            controller.SetMotorSpeeds(intensityLeft, intensityRight);
-        });
+        StartCoroutine(ControllerManager.current.Vibrate(duration, intensityLeft, intensityRight));
     }
     #endregion
 }

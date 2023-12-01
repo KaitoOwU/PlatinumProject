@@ -371,6 +371,11 @@ public class GameManager : MonoBehaviour
         switch (_currentTimerPhase)
         {
             case TimerPhase.FIRST_PHASE:
+                if (Math.Abs(_timer - (_gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime) - 15f) < 0.1f)
+                {
+                    StartCoroutine(ControllerManager.current.HeartBeat(13f, 1f, .1f));
+                }
+                
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime + _gameData.TimerValues.SecondPhaseTime)
                 {
                     CurrentGamePhase = GamePhase.HUB;
@@ -382,6 +387,11 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case TimerPhase.SECOND_PHASE:
+                if (Math.Abs(_timer - _gameData.TimerValues.ThirdPhaseTime - 15f) < 0.1f)
+                {
+                    StartCoroutine(ControllerManager.current.HeartBeat(13f, 1f, .1f));
+                }
+                
                 if (_timer <= _gameData.TimerValues.ThirdPhaseTime)
                 {
                     CurrentGamePhase = GamePhase.HUB;
@@ -394,6 +404,11 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
+                if (Math.Abs(_timer - 15f) < 0.1f)
+                {
+                    StartCoroutine(ControllerManager.current.HeartBeat(13f, 1f, .1f));
+                }
+                
                 if (_timer <= 3)
                 {
                     _onFadeMusic?.Invoke();
@@ -474,8 +489,23 @@ public class GameManager : MonoBehaviour
 
     IEnumerator VestibuleMessages()
     {
-        yield return new WaitForSeconds(5);
+        yield return StartCoroutine(UIMessageGenerator.instance.Init(
+            new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.05f, 3f),
+            new UIMessageData("The Manor",
+                "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
+                0.05f, 3f),
+            new UIMessageData("The Manor",
+                "You'll have to find clues about the murder that took place here and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
+                0.05f, 3f),
+            new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.05f,
+                3f),
+            new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.2f, 3f)
+        ));
+
+        yield return new WaitForSecondsRealtime(2f);
+        yield return UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition);
         TP_Camera(_fullCamera, Hub.CameraPoint);
+        yield return UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition);
         CurrentGamePhase = GamePhase.SELECT_CHARACTER;
         foreach (Player p in Vestibule.GetComponentsInChildren<Player>())
         {

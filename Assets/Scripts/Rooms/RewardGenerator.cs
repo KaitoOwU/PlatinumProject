@@ -23,7 +23,6 @@ public class RewardGenerator : MonoBehaviour, IPuzzleReactive
     public  void PuzzleCompleted()
     {
         _currentCount++;
-        Debug.Log(_currentCount);
         if (_enigmaCount == _currentCount)
         {
             if (_reward)

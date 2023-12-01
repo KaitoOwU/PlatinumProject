@@ -27,9 +27,11 @@ public class UIMessageGenerator : MonoBehaviour
         {
             _narrator.text = message.narrator;
             _message.text = string.Empty;
+            _message.color = Color.white;
 
-            yield return _message.DOText(message.text, message.printDuration).SetEase(Ease.Linear).WaitForCompletion();
+            yield return _message.DOText(message.text, message.printDurationPerLetter * message.text.Length).SetEase(Ease.Linear).WaitForCompletion();
             yield return new WaitForSecondsRealtime(message.stayDuration);
+            yield return _message.DOColor(new Color(1, 1, 1, 0), 1f).WaitForCompletion();
         }
 
         yield return _group.DOFade(0f, 1f);
@@ -40,14 +42,14 @@ public struct UIMessageData
 {
     public string narrator;
     public string text;
-    public float printDuration;
+    public float printDurationPerLetter;
     public float stayDuration;
 
-    public UIMessageData(string narrator, string text, float printDuration = 3f, float stayDuration = 5f)
+    public UIMessageData(string narrator, string text, float printDurationPerLetter = 0.1f, float stayDuration = 5f)
     {
         this.narrator = narrator;
         this.text = text;
-        this.printDuration = printDuration;
+        this.printDurationPerLetter = printDurationPerLetter;
         this.stayDuration = stayDuration;
     }
 }

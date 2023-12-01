@@ -62,9 +62,9 @@ public class GuessManager : MonoBehaviour
         {
             if (v == null)
                 return;
-        };
-
-        StartCoroutine(CR_CheckFinalVote());
+            
+            StartCoroutine(CR_CheckFinalVote());
+        }
     }
 
     private SuspectData GetFinalGuess()
