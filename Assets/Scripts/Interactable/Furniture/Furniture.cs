@@ -27,6 +27,7 @@ public class Furniture : Interactable
     [SerializeField] private GameObject _3Dmodel;
     [SerializeField] private int _playersNeededNumber;
     [SerializeField] private Clue _clue;
+    private Room _room;
 
     private List<Player> _playersPushing;
     private float _baseY;
@@ -46,6 +47,7 @@ public class Furniture : Interactable
         _3Dmodel.layer = LayerMask.NameToLayer("Furniture");
         _baseY = transform.position.y;
         _furnitureModelCollider = _3Dmodel.GetComponent<Collider>();
+        _room = GetComponentInParent<Room>();
     }
 
     #region Overridden methods
@@ -173,7 +175,7 @@ public class Furniture : Interactable
             OnStopPushingFurniture?.Invoke();
             player.PlayerController.Animator.SetBool("IsPushing", false);
             player.PlayerController.Animator.SetBool("IsPulling", false);
-            transform.parent = null;
+            transform.parent = _room.transform;
             transform.position = new Vector3(transform.position.x, _baseY, transform.position.z);
         }
         else if(_playersPushing.Count < _playersNeededNumber)
