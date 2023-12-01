@@ -191,11 +191,9 @@ public class Furniture : Interactable
                 p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH_BLOCKED);
             }
         }
-        else
-        {
-            player.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
-            player.PlayerController.Animator.SetBool("IsPushing", false);
-            player.PlayerController.Animator.SetBool("IsPulling", false);
+        player.PlayerController.SwitchMoveState(PlayerController.EMoveState.NORMAL);
+        player.PlayerController.Animator.SetBool("IsPushing", false);
+        player.PlayerController.Animator.SetBool("IsPulling", false);
 
         }
     }
