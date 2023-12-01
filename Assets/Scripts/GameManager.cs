@@ -537,6 +537,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(p.gameObject);
         }
+
+        StartCoroutine(UIMessageGenerator.instance.Init(false,
+            new UIMessageData("", "Press A and use your Left Joystick to select and awake your puppet.", 0.01f, 10f)));
     } 
 }
 

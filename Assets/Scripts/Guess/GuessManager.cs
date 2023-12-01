@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using System;
 using Unity.VisualScripting;
 using System.Linq;
+using TMPro;
 
 public class GuessManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class GuessManager : MonoBehaviour
 
     [Header("---References---")]
     [SerializeField] private Portrait[] _portraitsInfos;
+
+    [SerializeField] private UIEndScreen _endScreen;
 
     [Header("---Debug---")]
     [SerializeField] private Dictionary<Player, SuspectData> _votes = new(); //vote from each player
@@ -62,12 +65,10 @@ public class GuessManager : MonoBehaviour
         {
             if (v == null)
                 return;
-            
-            StartCoroutine(CR_CheckFinalVote());
         }
     }
 
-    private SuspectData GetFinalGuess()
+    private IEnumerator GetFinalGuess()
     {
         Debug.LogError("Final Guess");
         Dictionary<SuspectData, int> finalVotes = new(); //vote for each suspect
@@ -77,30 +78,29 @@ public class GuessManager : MonoBehaviour
         foreach (var vote in _votes) {
             finalVotes[vote.Value] += 1; 
         }
+
+        UIFinalVoteConfirm.instance.Init();
+        yield return new WaitUntil(() => UIFinalVoteConfirm.instance.IsValid);
         
         int maxVotes = finalVotes.Values.Max();
         SuspectData[] finalSuspects = finalVotes.Where(vote => vote.Value == maxVotes).Select(kv => kv.Key).ToArray();
-        return finalSuspects[UnityEngine.Random.Range(0, finalSuspects.Count())];
+        CheckFinalGuess(finalSuspects[UnityEngine.Random.Range(0, finalSuspects.Count())]);
     }
 
     private void CheckFinalGuess(SuspectData finalGuess)
     {
-        Debug.LogError("finalGuess : "+finalGuess.Name);
-        Debug.LogError("Murderer : " + GameManager.Instance.Murderer);
-
         OnGroupFinalVote?.Invoke();
 
         if (finalGuess == GameManager.Instance.Murderer)
+        {
             GameManager.Instance.OnWin?.Invoke();
+            _endScreen.Init(true);
+        }
         else
+        {
             GameManager.Instance.OnLose?.Invoke();
-    }
-
-    private IEnumerator CR_CheckFinalVote()
-    {
-        UIFinalVoteConfirm.instance.Init();
-        yield return new WaitUntil(() => UIFinalVoteConfirm.instance.IsValid);
-        CheckFinalGuess(GetFinalGuess());
+            _endScreen.Init(false);
+        }
     }
 
     private Portrait GetPortraitFromData(SuspectData suspectData) => _portraitsInfos.FirstOrDefault(e => e.SuspectData == suspectData);

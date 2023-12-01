@@ -34,7 +34,6 @@ public class Furniture : Interactable
     private float _baseY;
     private bool _searched = false;
     private Collider _furnitureModelCollider;
-    private bool _isBeingPushed;
 
     #endregion
     public enum EFurnitureType
@@ -50,7 +49,6 @@ public class Furniture : Interactable
         _baseY = transform.position.y;
         _furnitureModelCollider = _3Dmodel.GetComponent<Collider>();
         _room = GetComponentInParent<Room>();
-        _isBeingPushed = false;
     }
 
     #region Overridden methods
@@ -145,7 +143,6 @@ public class Furniture : Interactable
                 _playersPushing.Add(player);
                 if (_playersPushing.Count >= _playersNeededNumber)
                 {
-                    _isBeingPushed = true;
                     OnBeginPushingFurniture?.Invoke();
                     float angle = -Mathf.Atan2(fwd.z, fwd.x) * Mathf.Rad2Deg + 90.0f;
                     angle = Mathf.Round(angle / 90.0f) * 90.0f;
