@@ -244,6 +244,12 @@ public class GameManager : MonoBehaviour
         _onLose.AddListener(Lose);
         
     }
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+    
     private void InitGame()
     {
         CurrentGamePhase = GamePhase.INTRO;
