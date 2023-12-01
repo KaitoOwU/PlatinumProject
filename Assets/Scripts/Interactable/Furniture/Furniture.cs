@@ -98,7 +98,10 @@ public class Furniture : Interactable
             {
                 GameManager.Instance.FoundClues.Add(_clue);
                 OnClueFoundInFurniture?.Invoke();
-                FindObjectOfType<UIClueManager>().ShowClue(_clue.Data, player.RelativePos);
+                if (player.RelativePos == HubRelativePosition.LEFT_WING)
+                    UIClue.left.Init(_clue.Data);
+                else if (player.RelativePos == HubRelativePosition.RIGHT_WING)
+                    UIClue.right.Init(_clue.Data);
                 Debug.Log("Found Clue !");
             }
             else

@@ -503,7 +503,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator VestibuleMessages()
     {
-        yield return StartCoroutine(UIMessageGenerator.instance.Init(
+       /* yield return StartCoroutine(UIMessageGenerator.instance.Init(
             new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.05f, 3f),
             new UIMessageData("The Manor",
                 "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
@@ -514,7 +514,7 @@ public class GameManager : MonoBehaviour
             new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.05f,
                 3f),
             new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.2f, 3f)
-        ));
+        ));*/
 
         yield return new WaitForSecondsRealtime(2f);
         yield return UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition);
