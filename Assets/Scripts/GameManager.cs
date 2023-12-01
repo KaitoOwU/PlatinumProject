@@ -155,6 +155,7 @@ public class GameManager : MonoBehaviour
     public GameObject FullCamera { get => _fullCamera; }
     public enum GamePhase
     {
+        INTRO,
         SELECT_CHARACTER,
         HUB,
         GAME,
@@ -221,6 +222,8 @@ public class GameManager : MonoBehaviour
     }
     private void InitGame()
     {
+        CurrentGamePhase = GamePhase.INTRO;
+
         //_murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
         //_victim = GameData.SuspectsDatas[0]; //temporary
         _murderer = GameData.SuspectsDatas[0];
@@ -521,6 +524,7 @@ public class GameManager : MonoBehaviour
         yield return UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition);
         TP_Camera(_fullCamera, Hub.CameraPoint);
         yield return UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition);
+        FindObjectsOfType<InputManager>().ToList().ForEach(i => i.InputLocked = false);
         CurrentGamePhase = GamePhase.SELECT_CHARACTER;
         foreach (Player p in Vestibule.GetComponentsInChildren<Player>())
         {

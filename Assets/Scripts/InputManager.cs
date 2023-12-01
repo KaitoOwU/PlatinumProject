@@ -74,6 +74,7 @@ public class InputManager : MonoBehaviour
     private UnityEvent onPause = new();
     private UnityEvent onBack = new();
 
+    [SerializeField]
     private bool _inputLocked;
     private PlayerInput _map;
     private int _controllerIndex;
@@ -92,7 +93,11 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         _map = GetComponent<PlayerInput>();
-        InputLocked = false;
+        if(GameManager.Instance.CurrentGamePhase == GamePhase.INTRO)
+            InputLocked = true;
+        else
+            InputLocked = false;
+
         //_SetupEvents();
         //_AddController();
 
@@ -269,13 +274,16 @@ public class InputManager : MonoBehaviour
     {
         if (_inputLocked)
             return;
-        ControllerManager.current.Link(_players[_playerSelectedIndex], Gamepad.all[_controllerIndex]);
-        _gm.NonSelectedPlayers.Remove(_players[_playerSelectedIndex]);
-        if(_gm.NonSelectedPlayers.Count<4/*_gm.NonSelectedPlayers.Count == 0*/)
-            GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
-        _CleanSelectEvents();
-        _SetupEvents();
-        _AddController();
+        if (_gm.NonSelectedPlayers.Contains(_players[_playerSelectedIndex]))
+        {
+            _gm.NonSelectedPlayers.Remove(_players[_playerSelectedIndex]);
+            ControllerManager.current.Link(_players[_playerSelectedIndex], Gamepad.all[_controllerIndex]);
+            if(_gm.NonSelectedPlayers.Count == 0/*_gm.NonSelectedPlayers.Count == 0*/)
+                GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
+            _CleanSelectEvents();
+            _SetupEvents();
+            _AddController();
+        }
     }
     #endregion
 }

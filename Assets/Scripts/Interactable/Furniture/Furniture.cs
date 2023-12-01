@@ -27,6 +27,7 @@ public class Furniture : Interactable
     [SerializeField] private GameObject _3Dmodel;
     [SerializeField] private int _playersNeededNumber;
     [SerializeField] private Clue _clue;
+    private Room _room;
 
     private List<Player> _playersPushing;
     private float _baseY;
@@ -46,11 +47,13 @@ public class Furniture : Interactable
         _3Dmodel.layer = LayerMask.NameToLayer("Furniture");
         _baseY = transform.position.y;
         _furnitureModelCollider = _3Dmodel.GetComponent<Collider>();
+        _room = GetComponentInParent<Room>();
     }
 
     #region Overridden methods
     protected override void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject.name);
         if (other.GetComponent<PlayerController>() == null)
             return;
 
@@ -78,7 +81,11 @@ public class Furniture : Interactable
         if (p.Inputs == null)
             return;
 
+
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+
+        OnPushCanceled(other.GetComponent<Player>());
+
 
         p.Inputs.OnInteract?.RemoveListener(OnInteract);
         p.Inputs.OnPush?.RemoveListener(OnPush);
@@ -98,6 +105,10 @@ public class Furniture : Interactable
             {
                 GameManager.Instance.FoundClues.Add(_clue);
                 OnClueFoundInFurniture?.Invoke();
+                if (player.RelativePos == HubRelativePosition.LEFT_WING)
+                    UIClue.left.Init(_clue.Data);
+                else if (player.RelativePos == HubRelativePosition.RIGHT_WING)
+                    UIClue.right.Init(_clue.Data);
                 Debug.Log("Found Clue !");
             }
             else
@@ -112,6 +123,7 @@ public class Furniture : Interactable
     #region Push
     protected void OnPush(Player player)
     {
+        Debug.Log("start push "+ player.gameObject.name);
         if(_playersPushing.Contains(player))
             return;
         if (_furnitureType == EFurnitureType.MOVABLE)
@@ -123,7 +135,7 @@ public class Furniture : Interactable
             Debug.DrawRay(player.transform.position, fwd * 10, Color.green);
             RaycastHit hit = new RaycastHit();
             // Check if our raycast has hit furniture
-            if (Physics.Raycast(player.transform.position, fwd * 10, out hit, 10, LayerMask.GetMask("Furniture")))
+            if (Physics.Raycast(player.transform.position + new Vector3(0,3,0), fwd * 10, out hit, 10, LayerMask.GetMask("Furniture")))
             {
                 if (hit.collider == null)
                     return;                
@@ -163,7 +175,7 @@ public class Furniture : Interactable
             OnStopPushingFurniture?.Invoke();
             player.PlayerController.Animator.SetBool("IsPushing", false);
             player.PlayerController.Animator.SetBool("IsPulling", false);
-            transform.parent = null;
+            transform.parent = _room.transform;
             transform.position = new Vector3(transform.position.x, _baseY, transform.position.z);
         }
         else if(_playersPushing.Count < _playersNeededNumber)

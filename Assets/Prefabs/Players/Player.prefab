@@ -84,6 +84,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerIndex: 0
   _inputManager: {fileID: 0}
+  _animator: {fileID: 0}
   OnMoveStarted:
     m_PersistentCalls:
       m_Calls: []
@@ -94,6 +95,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnBackUI:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPickCharacter1:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPickCharacter2:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPickCharacter3:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPickCharacter4:
     m_PersistentCalls:
       m_Calls: []
 --- !u!136 &2423820674682253852
@@ -161,9 +174,13 @@ MonoBehaviour:
   _heldPickable: {fileID: 0}
   _playerController: {fileID: 0}
   _associatedColor: {r: 0, g: 0, b: 0, a: 0}
+  _controllerColor: {r: 0, g: 0, b: 0, a: 0}
   _relativePos: 0
   _currentRoom: {fileID: 0}
   _UI: {fileID: 0}
+  OnHit:
+    m_PersistentCalls:
+      m_Calls: []
   _selected: 0
 --- !u!114 &2103306106774988657
 MonoBehaviour:
@@ -288,10 +305,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6075129486698092919, guid: b3f858513f2fbec4f9d2a156a97ff77c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 5000
+      objectReference: {fileID: 0}
     - target: {fileID: 7915352679762565257, guid: b3f858513f2fbec4f9d2a156a97ff77c,
         type: 3}
       propertyPath: m_Name
       value: Object_UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 9122212595767688338, guid: b3f858513f2fbec4f9d2a156a97ff77c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 5000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
