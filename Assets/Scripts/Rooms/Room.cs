@@ -15,6 +15,7 @@ public class Room : MonoBehaviour
     [SerializeField] private Door _nextRoomDoor;
     [SerializeField] private Door _previousRoomDoor;*/
     [HideInInspector] public UnityEvent OnCompletedRoom;
+    [HideInInspector] public UnityEvent OnUnlocked;
 
     [SerializeField] private  List<Door> _doors =new List<Door>();
     [SerializeField] private List<Room> _linkedRooms = new List<Room>();
@@ -56,7 +57,7 @@ public class Room : MonoBehaviour
     }
     public void OnSetUp()
     {
-        if (!_doors[0].IsLocked && !_canHaveReward &&( RoomSide!=Side.HUB&&RoomSide!=Side.CORRIDOR))
+        if (!_doors[0].IsLocked && !_canHaveReward && (RoomSide != Side.HUB && RoomSide != Side.CORRIDOR))
         {
             Debug.Log(GameManager.Instance.ValidatedRooom);
             GameManager.Instance.ValidatedRooom++;
@@ -67,6 +68,10 @@ public class Room : MonoBehaviour
         GameManager.Instance.ValidatedRooom++;
         OnCompletedRoom?.Invoke();
         FindObjectOfType<RoomGeneration>().LockedDoor();
+        if(GameManager.Instance.ValidatedRooom==6|| GameManager.Instance.ValidatedRooom == 10)
+        {
+            OnUnlocked?.Invoke();
+        }
     }
     public int PlayerInRoom()
     {

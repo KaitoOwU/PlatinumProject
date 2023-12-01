@@ -446,11 +446,11 @@ public class RoomGeneration : MonoBehaviour
         int validated = GameManager.Instance.ValidatedRooom;
         if (GameManager.Instance.CurrentTimerPhase == GameManager.TimerPhase.END)
             _maxRooms = 0;
-        else if (validated < 2)
+        else if (validated < 6)
             _maxRooms = 3;
-        else if (validated < 5)
+        else if (validated < 10)
             _maxRooms = 5;
-        else if (validated > 5)
+        else if (validated > 10)
             _maxRooms = _roomsInPlay.Count / 2;
         for (int i = 0; i < _maxRooms; i++)
         {
@@ -464,6 +464,10 @@ public class RoomGeneration : MonoBehaviour
             }
             FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).OnSetUp();
             FindRoomAtPosition(_layout.AisleRightInOrder[i].Position).OnSetUp();
+        }
+        if (GameManager.Instance.FoundClues.Count == GameManager.Instance.CurrentClues.Count)
+        {
+            _vestibule.Doors[0].IsLocked = false;
         }
     }
     public void SetRoomsRewards(List<Clue> clues)
