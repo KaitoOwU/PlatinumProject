@@ -10,6 +10,7 @@ using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static CameraBehaviour;
+using Random = System.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -206,6 +207,29 @@ public class GameManager : MonoBehaviour
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
         _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
         OnEachEndPhase.AddListener(TPAllPlayersToHub);
+        OnEachEndPhase.AddListener(RandomMessage);
+    }
+
+    private void RandomMessage()
+    {
+        int i = UnityEngine.Random.Range(0, 2);
+        switch (i)
+        {
+            case 0:
+                StartCoroutine(UIMessageGenerator.instance.Init(false,
+                    new UIMessageData("The Manor", "You've been brought back here? How strange...", 0.03f, 5f)));
+                break;
+            
+            case 1:
+                StartCoroutine(UIMessageGenerator.instance.Init(false,
+                    new UIMessageData("The Manor", "Strange, someone must be behind this teleportation.", 0.03f, 5f)));
+                break;
+            
+            case 2:
+                StartCoroutine(UIMessageGenerator.instance.Init(false,
+                    new UIMessageData("The Manor", "Hehehe, back here? I'm going to believe you love this room.", 0.03f, 5f)));
+                break;
+        }
     }
 
     void Start()
