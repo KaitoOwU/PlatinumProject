@@ -22,7 +22,7 @@ public class UIFinalVoteConfirm : MonoBehaviour, IInputAwaiterReactive
     public void Init()
     {
         IsValid = false;
-        _validator.Setup(PlayerController.EButtonType.INTERACT, "A", GameManager.Instance.PlayerList.ToArray());
+        _validator.Setup(PlayerController.EButtonType.TOOL, "B", GameManager.Instance.PlayerList.ToArray());
         transform.DOLocalMoveY(190f, 1.5f);
     }
     

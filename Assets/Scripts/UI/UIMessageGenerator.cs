@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -11,9 +12,9 @@ public class UIMessageGenerator : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _narrator, _message;
     [SerializeField] private Image _state;
     [SerializeField] private CanvasGroup _group, _skipGroup;
-    [SerializeField] private InputAction _input;
 
-    private int _totalSkip = 0;
+    private SkipMessage _input;
+    private List<int> _validatedControllers;
     public Coroutine messages;
 
     private void Awake()
@@ -26,13 +27,6 @@ public class UIMessageGenerator : MonoBehaviour
 
     public IEnumerator Init(bool skippable, params UIMessageData[] messages)
     {
-        if (skippable)
-        {
-            _input.started += StartSkipInput;
-            _input.canceled += CancelSkipInput;
-            _input.Enable();
-        }
-        
         _narrator.text = messages[0].narrator;
         _message.text = string.Empty;
 
@@ -50,30 +44,6 @@ public class UIMessageGenerator : MonoBehaviour
         }
 
         yield return _group.DOFade(0f, 1f).WaitForCompletion();
-    }
-
-    private void StartSkipInput(InputAction.CallbackContext obj)
-    {
-        _totalSkip++;
-        _state.DOFillAmount(_totalSkip / 4f, 1f);
-        if (_totalSkip == 1)
-        {
-            _skipGroup.DOFade(1f, 1f);
-        } else if (_totalSkip == 4)
-        {
-            StopCoroutine(messages);
-            _group.DOFade(0f, 1f);
-        }
-    }
-
-    private void CancelSkipInput(InputAction.CallbackContext obj)
-    {
-        _totalSkip--;
-        _state.DOFillAmount(_totalSkip / 4f, 1f);
-        if (_totalSkip == 0)
-        {
-            _skipGroup.DOFade(0f, 1f);
-        }
     }
 }
 
