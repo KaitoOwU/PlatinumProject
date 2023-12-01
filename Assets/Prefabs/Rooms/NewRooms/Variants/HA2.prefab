@@ -7824,7 +7824,7 @@ PrefabInstance:
     - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.66
+      value: -12.27
       objectReference: {fileID: 0}
     - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
@@ -7834,22 +7834,32 @@ PrefabInstance:
     - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.18
+      value: -7.978
       objectReference: {fileID: 0}
     - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.0000009685754
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3656528010967908701, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 3708868998995502818, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
@@ -9020,6 +9030,7 @@ MonoBehaviour:
   _cameraPoint: {fileID: 6654049696826231685}
   _isRewardClue: 0
   _canHaveReward: 0
+  _discovered: 0
 --- !u!4 &6654049696826231685 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5128783077591038199, guid: c870671ee6471bb49827e26d1cbc2960,
