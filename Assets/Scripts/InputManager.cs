@@ -269,13 +269,16 @@ public class InputManager : MonoBehaviour
     {
         if (_inputLocked)
             return;
-        ControllerManager.current.Link(_players[_playerSelectedIndex], Gamepad.all[_controllerIndex]);
-        _gm.NonSelectedPlayers.Remove(_players[_playerSelectedIndex]);
-        if(_gm.NonSelectedPlayers.Count<4/*_gm.NonSelectedPlayers.Count == 0*/)
-            GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
-        _CleanSelectEvents();
-        _SetupEvents();
-        _AddController();
+        if (_gm.NonSelectedPlayers.Contains(_players[_playerSelectedIndex]))
+        {
+            _gm.NonSelectedPlayers.Remove(_players[_playerSelectedIndex]);
+            ControllerManager.current.Link(_players[_playerSelectedIndex], Gamepad.all[_controllerIndex]);
+            if(_gm.NonSelectedPlayers.Count<4/*_gm.NonSelectedPlayers.Count == 0*/)
+                GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
+            _CleanSelectEvents();
+            _SetupEvents();
+            _AddController();
+        }
     }
     #endregion
 }
