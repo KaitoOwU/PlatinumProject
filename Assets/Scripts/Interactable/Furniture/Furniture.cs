@@ -51,6 +51,7 @@ public class Furniture : Interactable
     #region Overridden methods
     protected override void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject.name);
         if (other.GetComponent<PlayerController>() == null)
             return;
 
@@ -78,7 +79,11 @@ public class Furniture : Interactable
         if (p.Inputs == null)
             return;
 
+
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+
+        OnPushCanceled(other.GetComponent<Player>());
+
 
         p.Inputs.OnInteract?.RemoveListener(OnInteract);
         p.Inputs.OnPush?.RemoveListener(OnPush);
@@ -113,6 +118,7 @@ public class Furniture : Interactable
     #region Push
     protected void OnPush(Player player)
     {
+        Debug.Log("start push "+ player.gameObject.name);
         if(_playersPushing.Contains(player))
             return;
         if (_furnitureType == EFurnitureType.MOVABLE)
@@ -124,7 +130,7 @@ public class Furniture : Interactable
             Debug.DrawRay(player.transform.position, fwd * 10, Color.green);
             RaycastHit hit = new RaycastHit();
             // Check if our raycast has hit furniture
-            if (Physics.Raycast(player.transform.position, fwd * 10, out hit, 10, LayerMask.GetMask("Furniture")))
+            if (Physics.Raycast(player.transform.position + new Vector3(0,3,0), fwd * 10, out hit, 10, LayerMask.GetMask("Furniture")))
             {
                 if (hit.collider == null)
                     return;                
