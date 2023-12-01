@@ -195,7 +195,7 @@ public class Furniture : Interactable
         player.PlayerController.Animator.SetBool("IsPushing", false);
         player.PlayerController.Animator.SetBool("IsPulling", false);
 
-        }
+        
     }
     #endregion
 
