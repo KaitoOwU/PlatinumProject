@@ -2,12 +2,19 @@ using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class UIMessageGenerator : MonoBehaviour
 {
     public static UIMessageGenerator instance;
     [SerializeField] private TextMeshProUGUI _narrator, _message;
-    [SerializeField] private CanvasGroup _group;
+    [SerializeField] private Image _state;
+    [SerializeField] private CanvasGroup _group, _skipGroup;
+    [SerializeField] private InputAction _input;
+
+    private int _totalSkip = 0;
+    public Coroutine messages;
 
     private void Awake()
     {
@@ -17,11 +24,18 @@ public class UIMessageGenerator : MonoBehaviour
         instance = this;
     }
 
-    public IEnumerator Init(params UIMessageData[] messages)
+    public IEnumerator Init(bool skippable, params UIMessageData[] messages)
     {
+        if (skippable)
+        {
+            _input.started += StartSkipInput;
+            _input.canceled += CancelSkipInput;
+            _input.Enable();
+        }
+        
         _narrator.text = messages[0].narrator;
         _message.text = string.Empty;
-        
+
         yield return _group.DOFade(1f, 1f).WaitForCompletion();
         foreach (UIMessageData message in messages)
         {
@@ -29,12 +43,37 @@ public class UIMessageGenerator : MonoBehaviour
             _message.text = string.Empty;
             _message.color = Color.white;
 
-            yield return _message.DOText(message.text, message.printDurationPerLetter * message.text.Length).SetEase(Ease.Linear).WaitForCompletion();
+            yield return _message.DOText(message.text, message.printDurationPerLetter * message.text.Length)
+                .SetEase(Ease.Linear).WaitForCompletion();
             yield return new WaitForSecondsRealtime(message.stayDuration);
             yield return _message.DOColor(new Color(1, 1, 1, 0), 1f).WaitForCompletion();
         }
 
-        yield return _group.DOFade(0f, 1f);
+        yield return _group.DOFade(0f, 1f).WaitForCompletion();
+    }
+
+    private void StartSkipInput(InputAction.CallbackContext obj)
+    {
+        _totalSkip++;
+        _state.DOFillAmount(_totalSkip / 4f, 1f);
+        if (_totalSkip == 1)
+        {
+            _skipGroup.DOFade(1f, 1f);
+        } else if (_totalSkip == 4)
+        {
+            StopCoroutine(messages);
+            _group.DOFade(0f, 1f);
+        }
+    }
+
+    private void CancelSkipInput(InputAction.CallbackContext obj)
+    {
+        _totalSkip--;
+        _state.DOFillAmount(_totalSkip / 4f, 1f);
+        if (_totalSkip == 0)
+        {
+            _skipGroup.DOFade(0f, 1f);
+        }
     }
 }
 

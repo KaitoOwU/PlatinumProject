@@ -1163,6 +1163,12 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.02961095, y: 0.019999996, z: 0.008402543}
   m_Center: {x: 0.009690078, y: 0.0066403956, z: -0.0024561924}
+--- !u!225 &300936519 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 8535383944556880383, guid: 242dd52d90efb664697445ab10326fb2,
+    type: 3}
+  m_PrefabInstance: {fileID: 522851760}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &338249944
 GameObject:
   m_ObjectHideFlags: 0
@@ -1806,6 +1812,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2762278645808284851, guid: 242dd52d90efb664697445ab10326fb2,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 164.3269
+      objectReference: {fileID: 0}
+    - target: {fileID: 2762278645808284851, guid: 242dd52d90efb664697445ab10326fb2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -34.926907
+      objectReference: {fileID: 0}
+    - target: {fileID: 2943532457397390119, guid: 242dd52d90efb664697445ab10326fb2,
+        type: 3}
+      propertyPath: _group
+      value: 
+      objectReference: {fileID: 2088309751}
+    - target: {fileID: 2943532457397390119, guid: 242dd52d90efb664697445ab10326fb2,
+        type: 3}
+      propertyPath: _skipGroup
+      value: 
+      objectReference: {fileID: 300936519}
     - target: {fileID: 3487896927363638593, guid: 242dd52d90efb664697445ab10326fb2,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1934,7 +1960,7 @@ PrefabInstance:
     - target: {fileID: 6635973138834580985, guid: 242dd52d90efb664697445ab10326fb2,
         type: 3}
       propertyPath: m_Alpha
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7026742432101278991, guid: 242dd52d90efb664697445ab10326fb2,
         type: 3}
@@ -3547,6 +3573,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c4674fc96f2017419152c9e1544b6d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &2088309751 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 6635973138834580985, guid: 242dd52d90efb664697445ab10326fb2,
+    type: 3}
+  m_PrefabInstance: {fileID: 522851760}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2111794989
 PrefabInstance:
   m_ObjectHideFlags: 0
