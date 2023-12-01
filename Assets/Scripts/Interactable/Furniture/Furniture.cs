@@ -150,13 +150,12 @@ public class Furniture : Interactable
                     float angle = -Mathf.Atan2(fwd.z, fwd.x) * Mathf.Rad2Deg + 90.0f;
                     angle = Mathf.Round(angle / 90.0f) * 90.0f;
                     player.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
-                    player.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1, 0, 0) : new Vector3(0, 0, 1));
+                    //player.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1, 0, 0) : new Vector3(0, 0, 1));
 
-                    //foreach (var p in _playersPushing)
-                    //{
-                    //    p.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up);
-                    //    p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1,0,0): new Vector3(0, 0, 1));
-                    //}
+                    foreach (var p in _playersPushing)
+                    {
+                        p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1, 0, 0) : new Vector3(0, 0, 1));
+                    }
                 }
                 else
                 {
