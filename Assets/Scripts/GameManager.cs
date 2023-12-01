@@ -246,7 +246,15 @@ public class GameManager : MonoBehaviour
             Debug.LogError("No Clues found");
             return;
         }
+        List<Furniture> allSearchableFurnitures = new List<Furniture>();
         List<Clue> puzzleClues = CurrentClues.ToList(); ///
+        foreach(Furniture f in FindObjectsOfType<Furniture>())
+        {
+            if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
+            {
+                allSearchableFurnitures.Add(f);
+            }
+        }
         //Debug.Log(puzzleClues.Count);
         if (FindObjectsOfType<Furniture>().Length > 0)
         {
@@ -256,12 +264,11 @@ public class GameManager : MonoBehaviour
                 int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
                 furnitureClues.Add(puzzleClues[randomIndex]);
                 puzzleClues.RemoveAt(randomIndex);
-                if (puzzleClues.Count == 0)
+                if (puzzleClues.Count == 0||furnitureClues.Count== FindObjectsOfType<Furniture>().Length)
                 {
                     break;
                 }
             }
-            List<Furniture> allSearchableFurnitures = new List<Furniture>();
             foreach (Furniture f in FindObjectsOfType<Furniture>())
             {
                 if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)

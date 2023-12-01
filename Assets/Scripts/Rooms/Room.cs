@@ -66,6 +66,7 @@ public class Room : MonoBehaviour
     public void CompletedRoom()
     {
         GameManager.Instance.ValidatedRooom++;
+        Debug.Log(GameManager.Instance.ValidatedRooom);
         OnCompletedRoom?.Invoke();
         FindObjectOfType<RoomGeneration>().LockedDoor();
         if(GameManager.Instance.ValidatedRooom==6|| GameManager.Instance.ValidatedRooom == 10)

@@ -462,8 +462,11 @@ public class RoomGeneration : MonoBehaviour
             {
                 door.IsLocked = false;
             }
-            FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).OnSetUp();
-            FindRoomAtPosition(_layout.AisleRightInOrder[i].Position).OnSetUp();
+            if (validated == 0)
+            {
+                FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).OnSetUp();
+                FindRoomAtPosition(_layout.AisleRightInOrder[i].Position).OnSetUp();
+            }
         }
         if (GameManager.Instance.FoundClues.Count == GameManager.Instance.CurrentClues.Count)
         {
@@ -485,36 +488,22 @@ public class RoomGeneration : MonoBehaviour
             }
         }
         int k = 0;
-        foreach (Room room2 in _roomsInPlay)
+       List<Room> rewardRoom=new();
+        foreach(Room room in _roomsInPlay)
         {
-            if (room2.CanHaveReward && _rewards.Count > 0) 
+            if (room.CanHaveReward)
             {
-                if(_roomsInPlay.Count - 1 - k > _rewards.Count)
-                {
-                    int rand = Random.Range(0, _roomsInPlay.Count - 1 - k);
-                    if (rand < _rewards.Count && !room2.IsRewardClue)
-                    {
-                        room2.Reward = _rewards[rand];
-                        _rewards.Remove(_rewards[rand]);
-                        if (rand < _rewardClueOnly.Count)
-                        {
-                            _rewardClueOnly.Remove(_rewardClueOnly[rand]);
-                        }
-                    }
-                    else if (rand < _rewardClueOnly.Count)
-                    {
-                        room2.Reward = _rewardClueOnly[rand];
-                        _rewardClueOnly.Remove(_rewardClueOnly[rand]);
-                        _rewards.Remove(_rewards[rand]);
-                    }
-                }
-                else
-                {
-                    room2.Reward = _rewards[_roomsInPlay.Count - 1 - k];
-                    room2.Reward = _rewards[_roomsInPlay.Count - 2- k];
-                }
-                k++;
+                rewardRoom.Add(room);
             }
+        }
+        foreach (GameObject reward in _rewardClueOnly)
+        {
+            int rand = Random.Range(0, rewardRoom.Count);
+            rewardRoom[rand].Reward = reward;
+            Debug.Log(rewardRoom[rand].Reward);
+            rewardRoom.RemoveAt(rand);
+            if (rewardRoom.Count == 0)
+                break;
         }
     }
     public Room FindRoomAtPosition(Vector3 pos)

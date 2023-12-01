@@ -54,7 +54,7 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
     {
         IsActive = true;
         GameManager.Instance.OnEachEndPhase.AddListener(ClearUI);
-        
+        ClearUI();
         if (_position == HubRelativePosition.LEFT_WING)
         {
             _inputValidator.Setup(PlayerController.EButtonType.INTERACT, "A", GameManager.Instance.LeftPlayers.ToArray());
