@@ -5,6 +5,8 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static CameraBehaviour;
+using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEngine.EventSystems.EventTrigger;
 [System.Serializable]
 public class Door : Interactable
@@ -53,10 +55,14 @@ public class Door : Interactable
         {
             
             OnChangeRoom?.Invoke();
-            if (player.CurrentRoom is Hub)
+            if (player.CurrentRoom is Hub) // IF PLAYERS IN HUB
             {
-                if (GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count != GameManager.Instance.CurrentPlayersCount)
+#if UNITY_EDITOR
+#else
+                var playersInRoom = GameManager.Instance.PlayerList.FindAll(p => p.PlayerRef.CurrentRoom is Hub).ToList();
+                if (playersInRoom.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count != playersInRoom.Count)
                     yield break;
+#endif
 
                 int countInHub = GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.HUB).Count;
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
@@ -64,17 +70,18 @@ public class Door : Interactable
                 Hub hub = (Hub)player.CurrentRoom;
                 
                 #if UNITY_EDITOR
-                if ((hub.RoomDoorRight.PlayersInRange.Count >= 1 || hub.RoomDoorLeft.PlayersInRange.Count >= 1) && count >= 1)
+                if ((hub.RoomDoorRight.PlayersInRange.Count >= 1 || hub.RoomDoorLeft.PlayersInRange.Count >= 1) && count >= 1 && countInHub == 4)
                 {
-                #else
-                if (hub.RoomDoorRight.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count == 4)
+#else
+                if (hub.RoomDoorRight.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count == 4  && countInHub == 4)
                 {
-                #endif
-                    
+#endif
+
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                     yield return StartCoroutine(
-                        UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
-                    
+                    UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
+
+
                     GameManager.Instance.SwitchCameraState(GameManager.CameraState.SPLIT);
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GAME;
 
@@ -95,13 +102,33 @@ public class Door : Interactable
                 else if (_playersInRange.Count == countInHub && countInHub < 4)
                 {
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
-                    yield return StartCoroutine(
-                        UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
+
                     
-                    TP_Players(LinkedDoor.TpPoint);
+
+                    if (LinkedDoor.room.RoomSide == Room.Side.LEFT)
+                    {
+                        yield return StartCoroutine(
+                            UIRoomTransition.current.StartTransition(UIRoomTransition.current.LeftTransition));
+                        GameManager.Instance.SplitCameraLeftBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p=> p.gameObject).ToArray());
+                        TP_Players(LinkedDoor.TpPoint);
+                        TP_Camera(LinkedDoor.room);
+
+                        yield return StartCoroutine(
+                            UIRoomTransition.current.EndTransition(UIRoomTransition.current.LeftTransition));
+                    }
+                    else
+                    {
+                        yield return StartCoroutine(
+                            UIRoomTransition.current.StartTransition(UIRoomTransition.current.RightTransition));
+                        GameManager.Instance.SplitCameraRightBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p=> p.gameObject).ToArray());
+                        TP_Players(LinkedDoor.TpPoint);
+                        TP_Camera(LinkedDoor.room);
+
+                        yield return StartCoroutine(
+                            UIRoomTransition.current.EndTransition(UIRoomTransition.current.RightTransition));
+                    }
                     
-                    yield return StartCoroutine(
-                        UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
+
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
 
                     hub.RoomDoorLeft._isLocked = false;
@@ -124,7 +151,7 @@ public class Door : Interactable
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GUESS;
                 }
             }
-            else
+            else // IF PLAYERS IN ROOM
             {
                 Room room = player.CurrentRoom;
 
@@ -205,11 +232,13 @@ public class Door : Interactable
             {
                 if (room.RoomSide == Room.Side.RIGHT)
                 {
+
                     p.RelativePos =
                         HubRelativePosition.RIGHT_WING;
                 }
                 else if(room.RoomSide == Room.Side.LEFT)
                 {
+
                     p.RelativePos =
                         HubRelativePosition.LEFT_WING;
                 }
