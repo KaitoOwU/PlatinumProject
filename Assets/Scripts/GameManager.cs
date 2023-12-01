@@ -6,8 +6,10 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static CameraBehaviour;
 
 public class GameManager : MonoBehaviour
 {
@@ -68,10 +70,17 @@ public class GameManager : MonoBehaviour
     private List<PlayerInfo> _playerList = new(4);
     [SerializeField]
     private GameObject _fullCamera;
+
     [SerializeField]
     private GameObject _splitCameraLeft;
+    private CameraBehaviour _splitCameraLeftBehaviour;
+    public CameraBehaviour SplitCameraLeftBehaviour { get => _splitCameraLeftBehaviour; set => _splitCameraLeftBehaviour = value; }
+
     [SerializeField]
     private GameObject _splitCameraRight;
+    private CameraBehaviour _splitCameraRightBehaviour;
+    public CameraBehaviour SplitCameraRightBehaviour { get => _splitCameraRightBehaviour; set => _splitCameraRightBehaviour = value; }
+
     [SerializeField]
     private Hub _hub;
     [SerializeField] private UIRoomTransition _transitions;
@@ -222,6 +231,9 @@ public class GameManager : MonoBehaviour
             .Find(scenario => scenario.DuoSuspect == new MurderScenario.SuspectDuo(_victim, _murderer)).Clues;
 
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
+
+        _splitCameraLeftBehaviour = _splitCameraLeft.GetComponent<CameraBehaviour>();
+        _splitCameraRightBehaviour = _splitCameraRight.GetComponent<CameraBehaviour>();
     }
 
     public void DistributeClues()
@@ -323,6 +335,7 @@ public class GameManager : MonoBehaviour
             
             _hub.Doors[0].IsLocked = true;
             TP_RightCamera(_hub.CameraPoint);
+            _splitCameraRight.GetComponent<CameraBehaviour>().ChangeCameraState(ECameraBehaviourState.FOLLOW, players.Select(p => p.gameObject).ToArray());
         }
         else
         {
@@ -331,6 +344,7 @@ public class GameManager : MonoBehaviour
             
             _hub.Doors[1].IsLocked = true;
             TP_LeftCamera(_hub.CameraPoint);
+            _splitCameraLeft.GetComponent<CameraBehaviour>().ChangeCameraState(ECameraBehaviourState.FOLLOW, players.Select(p => p.gameObject).ToArray());
         }
         for (int i = 0; i < players.Length; i++)
         {
