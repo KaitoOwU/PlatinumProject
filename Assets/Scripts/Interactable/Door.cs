@@ -71,7 +71,7 @@ public class Door : Interactable
 
                 Hub hub = (Hub)player.CurrentRoom;
                 
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 if ((hub.RoomDoorRight.PlayersInRange.Count >= 1 || hub.RoomDoorLeft.PlayersInRange.Count >= 1) && count >= 1 && countInHub == 4)
                 {
 #else
@@ -103,12 +103,9 @@ public class Door : Interactable
                 }
                 else if (_playersInRange.Count == countInHub && countInHub < 4)
                 {
-                    GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
-
-                    
-
                     if (LinkedDoor.room.RoomSide == Room.Side.LEFT)
                     {
+                        GameManager.Instance.LeftPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                         yield return StartCoroutine(
                             UIRoomTransition.current.StartTransition(UIRoomTransition.current.LeftTransition));
                         GameManager.Instance.SplitCameraLeftBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p=> p.gameObject).ToArray());
@@ -117,9 +114,11 @@ public class Door : Interactable
 
                         yield return StartCoroutine(
                             UIRoomTransition.current.EndTransition(UIRoomTransition.current.LeftTransition));
+                        GameManager.Instance.LeftPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
                     }
                     else
                     {
+                        GameManager.Instance.RightPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                         yield return StartCoroutine(
                             UIRoomTransition.current.StartTransition(UIRoomTransition.current.RightTransition));
                         GameManager.Instance.SplitCameraRightBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p=> p.gameObject).ToArray());
@@ -128,10 +127,8 @@ public class Door : Interactable
 
                         yield return StartCoroutine(
                             UIRoomTransition.current.EndTransition(UIRoomTransition.current.RightTransition));
+                        GameManager.Instance.RightPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
                     }
-                    
-
-                    GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
 
                     hub.RoomDoorLeft._isLocked = false;
                     hub.RoomDoorRight._isLocked = false;
