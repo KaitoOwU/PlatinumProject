@@ -35,7 +35,8 @@ public class PlayerController : MonoBehaviour
         { EButtonType.PUSH, "Push" },
         { EButtonType.TOOL, "Tool" },
         { EButtonType.PAUSE, "Pause" },
-        {EButtonType.ASK_TP_HUB, "AskTPHub"}
+        {EButtonType.ASK_TP_HUB, "AskTPHub"},
+        { EButtonType.BACK, "Back"}
     };
 
     [HideInInspector] public UnityEvent OnMoveStarted;
@@ -55,7 +56,8 @@ public class PlayerController : MonoBehaviour
         PUSH,
         TOOL,
         PAUSE,
-        ASK_TP_HUB
+        ASK_TP_HUB,
+        BACK
     }
     public enum EMoveState
     {

@@ -487,8 +487,7 @@ public class RoomGeneration : MonoBehaviour
                 _rewards.Add(arm);
             }
         }
-        int k = 0;
-       List<Room> rewardRoom=new();
+        List<Room> rewardRoom=new();
         foreach(Room room in _roomsInPlay)
         {
             if (room.CanHaveReward)

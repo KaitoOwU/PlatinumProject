@@ -79,6 +79,11 @@ public class InputAwaiter
             p.PlayerRef.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].started -= InputValidate;
             p.PlayerRef.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].canceled -= InputCanceled;
         }
+
+        inputTxt.color = new Color(0, 0, 0, 1);
+        surround.color = new Color(1, 1, 1, 1);
+        button.color = new Color(1, 1, 1, 1);
+        validator.color = new Color(1, 1, 1, 0);
     }
 
     public void SetActive(bool state) => surround.transform.parent.gameObject.SetActive(state);
