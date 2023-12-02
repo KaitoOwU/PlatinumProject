@@ -31,21 +31,12 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
             left = this;
         else Destroy(gameObject);
     }
-
-    public void Init(Sprite clueVisual, string clueDesc, string clueText = "")
-    {
-        _clueVisual.sprite = clueVisual;
-        _clueDescription.text = clueDesc;
-        _clueText.text = clueText;
-
-        InitUI();
-    }
     
     public void Init(ClueData clue)
     {
         _clueDescription.text = clue.Description ?? string.Empty;
         _clueText.text = clue.Content ?? string.Empty;
-        _clueVisual.sprite = clue.Sprite ?? null;
+        _clueVisual.sprite = clue.Sprite ? clue.Sprite : null;
 
         InitUI();
     }
@@ -62,6 +53,15 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
         {
             _inputValidator.Setup(PlayerController.EButtonType.INTERACT, "A", GameManager.Instance.RightPlayers.ToArray());
         }
+        
+        if (_position == HubRelativePosition.LEFT_WING)
+        {
+            GameManager.Instance.LeftPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
+        }
+        else
+        {
+            GameManager.Instance.RightPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
+        }
 
         _group.DOFade(1f, 1.5f);
     }
@@ -69,12 +69,20 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
     private void ClearUI()
     {
         _group.DOFade(0f, 1.5f);
+        if (_position == HubRelativePosition.LEFT_WING)
+        {
+            GameManager.Instance.LeftPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
+        }
+        else
+        {
+            GameManager.Instance.RightPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
+        }
     }
 
     public IEnumerator AwaiterCompleted()
     {
         _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.Unsetup(PlayerController.EButtonType.INTERACT));
         yield return new WaitForSecondsRealtime(1.5f);
-        transform.DOLocalMoveY(-1131, 1.5f);
+        ClearUI();
     }
 }
