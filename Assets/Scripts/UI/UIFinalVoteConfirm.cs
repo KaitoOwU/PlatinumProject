@@ -8,6 +8,7 @@ public class UIFinalVoteConfirm : MonoBehaviour, IInputAwaiterReactive
 {
     public static UIFinalVoteConfirm instance;
     [SerializeField] private UIValidateInputs _validator;
+    [SerializeField] private CanvasGroup _group;
 
     public bool IsValid { get; private set; } = false;
 
@@ -22,13 +23,13 @@ public class UIFinalVoteConfirm : MonoBehaviour, IInputAwaiterReactive
     public void Init()
     {
         IsValid = false;
-        _validator.Setup(PlayerController.EButtonType.TOOL, "B", GameManager.Instance.PlayerList.ToArray());
-        transform.DOLocalMoveY(190f, 1.5f);
+        _validator.Setup(PlayerController.EButtonType.BACK, "B", GameManager.Instance.PlayerList.ToArray());
+        _group.DOFade(1f, 1.5f);
     }
     
     public IEnumerator AwaiterCompleted()
     {
-        yield return transform.DOLocalMoveY(-500f, 1.5f).WaitForCompletion();
+        yield return _group.DOFade(0f, 1.5f);;
         IsValid = true;
     }
 }

@@ -72,6 +72,9 @@ public class GuessManager : MonoBehaviour
 
     private IEnumerator GetFinalGuess()
     {
+        UIFinalVoteConfirm.instance.Init();
+        yield return new WaitUntil(() => UIFinalVoteConfirm.instance.IsValid);
+        
         Debug.LogError("Final Guess");
         Dictionary<SuspectData, int> finalVotes = new(); //vote for each suspect
         foreach (var v in GameManager.Instance.GameData.SuspectsDatas) { //init dict
@@ -80,9 +83,6 @@ public class GuessManager : MonoBehaviour
         foreach (var vote in _votes) {
             finalVotes[vote.Value] += 1; 
         }
-
-        UIFinalVoteConfirm.instance.Init();
-        yield return new WaitUntil(() => UIFinalVoteConfirm.instance.IsValid);
         
         int maxVotes = finalVotes.Values.Max();
         SuspectData[] finalSuspects = finalVotes.Where(vote => vote.Value == maxVotes).Select(kv => kv.Key).ToArray();
