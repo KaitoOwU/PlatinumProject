@@ -49,12 +49,12 @@ public class UIMessageGenerator : MonoBehaviour
 
 public struct UIMessageData
 {
-    public string narrator;
-    public string text;
-    public float printDurationPerLetter;
-    public float stayDuration;
+    public readonly string narrator;
+    public readonly string text;
+    public readonly float printDurationPerLetter;
+    public readonly float stayDuration;
 
-    public UIMessageData(string narrator, string text, float printDurationPerLetter = 0.1f, float stayDuration = 5f)
+    public UIMessageData(string narrator, string text, float printDurationPerLetter = 0.1f, float stayDuration = 3f)
     {
         this.narrator = narrator;
         this.text = text;
