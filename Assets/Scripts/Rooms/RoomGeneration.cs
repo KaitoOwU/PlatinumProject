@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 public class RoomGeneration : MonoBehaviour
@@ -25,6 +26,8 @@ public class RoomGeneration : MonoBehaviour
     [SerializeField] private GameObject arm;
     private List<GameObject> _rewardClueOnly = new List<GameObject>();
     [SerializeField] private List<Material> _doormattMaterials = new List<Material>();
+
+    [HideInInspector] public UnityEvent OnAllClueFound;
 
     public LayoutGenerator Layout { get => _layout; }
 
@@ -470,6 +473,7 @@ public class RoomGeneration : MonoBehaviour
         }
         if (GameManager.Instance.FoundClues.Count == GameManager.Instance.CurrentClues.Count)
         {
+            OnAllClueFound?.Invoke();
             _vestibule.Doors[0].IsLocked = false;
         }
     }

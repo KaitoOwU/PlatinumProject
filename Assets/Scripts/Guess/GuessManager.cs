@@ -11,6 +11,9 @@ public class GuessManager : MonoBehaviour
 {
     [HideInInspector] public UnityEvent OnIndividualVote;
     [HideInInspector] public UnityEvent OnGroupFinalVote;
+    [HideInInspector] public UnityEvent OnVoteWrong;
+    [HideInInspector] public UnityEvent OnVoteRight;
+
     public UnityEvent<Player, SuspectData> OnChoseSuspect;
 
     [Header("---References---")]
@@ -86,20 +89,31 @@ public class GuessManager : MonoBehaviour
         
         int maxVotes = finalVotes.Values.Max();
         SuspectData[] finalSuspects = finalVotes.Where(vote => vote.Value == maxVotes).Select(kv => kv.Key).ToArray();
-        CheckFinalGuess(finalSuspects[UnityEngine.Random.Range(0, finalSuspects.Count())]);
+        StartCoroutine(CheckFinalGuess(finalSuspects[UnityEngine.Random.Range(0, finalSuspects.Length)]));
     }
 
-    private void CheckFinalGuess(SuspectData finalGuess)
+    private IEnumerator CheckFinalGuess(SuspectData finalGuess)
     {
         OnGroupFinalVote?.Invoke();
 
+        yield return new WaitForSecondsRealtime(1f);
+        
         if (finalGuess == GameManager.Instance.Murderer)
         {
+            OnVoteRight?.Invoke();
+            yield return StartCoroutine(UIMessageGenerator.instance.Init(false,
+                new UIMessageData("The Manor", "No...\nIt can't be...\nYou guessed right?!"),
+                new UIMessageData("The Manor", "You were not supposed to succeed! How could this happen!\nWell.. Get out of here! BEGONE! I don't want to ever see you again!")));
             GameManager.Instance.OnWin?.Invoke();
             _endScreen.Init(true);
         }
         else
         {
+            OnVoteWrong?.Invoke();
+            yield return StartCoroutine(UIMessageGenerator.instance.Init(false,
+                new UIMessageData("The Manor", "Obviously, you didn't got it right.\nI don't even know why you tried."),
+                new UIMessageData("The Manor", "Don't try to escape, the door is locked..."),
+                new UIMessageData("The Manor", "It will be forever.", 0.2f, 1f)));
             GameManager.Instance.OnLose?.Invoke();
             _endScreen.Init(false);
         }
