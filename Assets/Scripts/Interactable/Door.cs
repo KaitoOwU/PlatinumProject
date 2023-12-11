@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 using static CameraBehaviour;
+using DG.Tweening;
+
 [System.Serializable]
 public class Door : Interactable
 {
@@ -20,6 +20,7 @@ public class Door : Interactable
     [SerializeField] private bool _isLocked;
     List<Corridor> _corridors;
     [SerializeField] private MeshRenderer _doormat;
+    [SerializeField] private GameObject _doorModel;
     private Material _doormatMat;
 
     public Transform[] TpPoint => _tpPoint;
@@ -55,9 +56,6 @@ public class Door : Interactable
             OnChangeRoom?.Invoke();
             if (player.CurrentRoom is Hub) // IF PLAYERS IN HUB
             {
-                //
-                GameManager.Instance.SplitCameraLeftBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p => p.gameObject).ToArray());
-                GameManager.Instance.SplitCameraRightBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p => p.gameObject).ToArray());
 
 #if UNITY_EDITOR
 #else
@@ -72,10 +70,10 @@ public class Door : Interactable
                 Hub hub = (Hub)player.CurrentRoom;
                 
 #if UNITY_EDITOR
-                if ((hub.RoomDoorRight.PlayersInRange.Count >= 1 || hub.RoomDoorLeft.PlayersInRange.Count >= 1) && count >= 1 && countInHub == 4)
+                if ((hub.RoomDoorRight.PlayersInRange.Count >= 1 || hub.RoomDoorLeft.PlayersInRange.Count >= 1) && count >= 1 && countInHub == 4) //TP FROM HUB AT GAME START
                 {
 #else
-                if (hub.RoomDoorRight.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count == 4  && countInHub == 4)
+                if (hub.RoomDoorRight.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count == 4  && countInHub == 4) 
                 {
 #endif
 
@@ -99,9 +97,12 @@ public class Door : Interactable
                     yield return StartCoroutine(
                         UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition));
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
+
+                    GameManager.Instance.SplitCameraLeftBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p => p.gameObject).ToArray());
+                    GameManager.Instance.SplitCameraRightBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p => p.gameObject).ToArray());
    
                 }
-                else if (_playersInRange.Count == countInHub && countInHub < 4)
+                else if (_playersInRange.Count == countInHub && countInHub < 4) //TP FROM HUB AFTER SPLITING
                 {
                     if (LinkedDoor.room.RoomSide == Room.Side.LEFT)
                     {
@@ -149,6 +150,7 @@ public class Door : Interactable
                     _isLocked = true;
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GUESS;
                 }
+
             }
             else // IF PLAYERS IN ROOM
             {
@@ -196,6 +198,7 @@ public class Door : Interactable
         else
         {
             OnLockedDoorInterract?.Invoke();
+            StartCoroutine(LockedFeedback());
         }
     }
 
@@ -269,5 +272,11 @@ public class Door : Interactable
     public void UpdateDoormat()
     {
         _doormat.material = _doormatMat;
+    }
+    private IEnumerator LockedFeedback()
+    {
+        _doorModel.transform.DOShakePosition(1f, new Vector3(0f, 0, 0.05f),20);
+        yield return null;
+            
     }
 }

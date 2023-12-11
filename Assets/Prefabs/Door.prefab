@@ -164,6 +164,9 @@ MonoBehaviour:
   OnChangeRoom:
     m_PersistentCalls:
       m_Calls: []
+  OnLockedDoorInterract:
+    m_PersistentCalls:
+      m_Calls: []
   _tpPoint:
   - {fileID: 8225119876731183544}
   - {fileID: 5968401720586509524}
@@ -174,6 +177,7 @@ MonoBehaviour:
   room: {fileID: 0}
   _isLocked: 0
   _doormat: {fileID: 8171727976031486361}
+  _doorModel: {fileID: 8799707119432572849}
 --- !u!1 &4963907825542069323
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,6 +519,12 @@ PrefabInstance:
 --- !u!4 &8166441934889501963 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3dcb8e067adb2e54d91d0227e834c047,
+    type: 3}
+  m_PrefabInstance: {fileID: 8565774823040230112}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8799707119432572849 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3dcb8e067adb2e54d91d0227e834c047,
     type: 3}
   m_PrefabInstance: {fileID: 8565774823040230112}
   m_PrefabAsset: {fileID: 0}
