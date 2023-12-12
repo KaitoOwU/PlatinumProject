@@ -25,12 +25,6 @@ public class Item : Interactable
         OnPickUpArm?.Invoke();
         player.HeldPickable = _pickableData;
 
-        StartCoroutine(_Destroy());
-    }
-    IEnumerator _Destroy()
-    {
-        gameObject.SetActive(false);
-        yield return new WaitForSeconds(1);
         Destroy(gameObject);
     }
 }

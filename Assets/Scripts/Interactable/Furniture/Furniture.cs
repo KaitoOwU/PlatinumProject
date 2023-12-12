@@ -107,7 +107,7 @@ public class Furniture : Interactable
 
         if (_message != null && _message.gameObject.activeSelf && _onRangeMessage != "")
         {
-            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+            TutorialManager.Instance.HideBubble(_message, 0);
         }
     }
     #endregion
@@ -145,7 +145,7 @@ public class Furniture : Interactable
     {
         if (_message != null && _message.gameObject.activeSelf)
         {
-            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+            TutorialManager.Instance.HideBubble(_message, 0);
             _message = null;
         }
         if (_playersPushing.Contains(player))

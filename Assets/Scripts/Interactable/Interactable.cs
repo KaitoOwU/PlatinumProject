@@ -69,7 +69,7 @@ public class Interactable : MonoBehaviour
         _onPlayerExitRange?.Invoke();
         if (_message != null && _message.gameObject.activeSelf && _onRangeMessage != "")
         {
-            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+            TutorialManager.Instance.HideBubble(_message, 0);
         }
     }
 
@@ -86,7 +86,7 @@ public class Interactable : MonoBehaviour
     {
         if (_message != null && _message.gameObject.activeSelf)
         {
-            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+            TutorialManager.Instance.HideBubble(_message, 0);
             _message = null;
         }
         if ((_message == null || !_message.gameObject.activeSelf) && _onInteractMessage != "")
