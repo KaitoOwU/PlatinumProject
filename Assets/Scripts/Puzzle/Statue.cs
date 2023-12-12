@@ -35,15 +35,17 @@ public class Statue : Puzzle, IResettable
         if ((_message == null || !_message.gameObject.activeSelf))
         {
             if(GameManager.Instance.PlayerList[p.PlayerIndex-1].PlayerRef.HeldPickable == null && _onRangeMessage != "")
-                _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage);
+                _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage, TutorialManager.E_DisplayStyle.STAY);
             else if(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef.HeldPickable != null && _onRangeWithArmMessage != "")
-                _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeWithArmMessage);
+                _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeWithArmMessage, TutorialManager.E_DisplayStyle.STAY);
 
         }
     }
 
     protected override void OnInteract(Player player)
     {
+        base.OnInteract(player);
+
         if (player.HeldPickable == null)
             return;
         

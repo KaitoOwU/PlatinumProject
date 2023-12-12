@@ -6,9 +6,19 @@ using UnityEngine.UI;
 
 public class Bubble : MonoBehaviour
 {
+
     [SerializeField] GameObject[] _playerIconsPrefab;
     [SerializeField] GameObject[] _controllersIconsPrefab;
     [SerializeField] TMP_Text _text;
+    [SerializeField] CanvasGroup _canvasGroup;
+    [SerializeField] GameObject _shortBackground;
+    [SerializeField] GameObject _longBackground;
+
+    public CanvasGroup CanvasGroup { get => _canvasGroup; set => _canvasGroup = value; }
+    public GameObject ShortBackground { get => _shortBackground; set => _shortBackground = value; }
+    public GameObject LongBackground { get => _longBackground; set => _longBackground = value; }
+    public TMP_Text Text => _text;
+
 
     public int ControllerIndexRef => controllerIndexRef;
     private int controllerIndexRef;

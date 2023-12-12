@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2331c27cfe58a1d419546d8354e578dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _onRangeMessage: Press A to search
+  _onRangeMessage: A
   _onInteractMessage: 
   OnSearchFurniture:
     m_PersistentCalls:
@@ -71,6 +71,7 @@ MonoBehaviour:
   _playersNeededNumber: 1
   _clue: {fileID: 0}
   _playersPushing: []
+  _onTooHeavyMessage: 
 --- !u!65 &5927059127390026698
 BoxCollider:
   m_ObjectHideFlags: 0

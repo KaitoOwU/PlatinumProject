@@ -76,7 +76,7 @@ public class Furniture : Interactable
 
         if ((_message == null || !_message.gameObject.activeSelf) && _onRangeMessage != "")
         {
-            _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage);
+            _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage, TutorialManager.E_DisplayStyle.STAY);
         }
 
     }
@@ -104,6 +104,11 @@ public class Furniture : Interactable
         p.Inputs.OnPushCanceled?.RemoveListener(OnPushCanceled);
 
         _onPlayerExitRange?.Invoke();
+
+        if (_message != null && _message.gameObject.activeSelf && _onRangeMessage != "")
+        {
+            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+        }
     }
     #endregion
 
@@ -137,7 +142,12 @@ public class Furniture : Interactable
     #region Push
     protected void OnPush(Player player)
     {
-        if(_playersPushing.Contains(player))
+        if (_message != null && _message.gameObject.activeSelf)
+        {
+            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+            _message = null;
+        }
+        if (_playersPushing.Contains(player))
             return;
         if (_furnitureType == EFurnitureType.MOVABLE)
         {
@@ -173,11 +183,9 @@ public class Furniture : Interactable
                 {
                     player.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH_BLOCKED);
                     OnBeginStrugglePushingFurniture?.Invoke();
-                    if ((_message != null && _message.gameObject.activeSelf) && _onTooHeavyMessage != "")
-                        _message.gameObject.SetActive(false);
                     if ((_message == null || !_message.gameObject.activeSelf) && _onTooHeavyMessage != "")
                     {
-                        _message = TutorialManager.Instance.ShowBubbleMessage(player.Index, transform, player.PlayerController.Inputs.ControllerIndex, _onTooHeavyMessage);
+                        _message = TutorialManager.Instance.ShowBubbleMessage(player.Index, transform, player.PlayerController.Inputs.ControllerIndex, _onTooHeavyMessage, TutorialManager.E_DisplayStyle.FADE);
                     }
                 }
 
