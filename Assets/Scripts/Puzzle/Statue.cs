@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class Statue : Puzzle, IResettable
 {
-        [HideInInspector] public UnityEvent OnRepaired;
+    [HideInInspector] public UnityEvent OnRepaired;
 
     private bool _isRepaired;
     [SerializeField]

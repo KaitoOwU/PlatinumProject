@@ -69,6 +69,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8333f0b6ae85d0409f37e19e1f0a6eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onRangeMessage: A
+  _onInteractMessage: 
   _sprite: {fileID: 383635052376098118}
   _suspect: {fileID: 0}
 --- !u!1 &3642942203672228993
@@ -256,12 +258,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6358152778206029738}
     m_Modifications:
-    - target: {fileID: 2504686465500303964, guid: 5c3df05c24e12ea478c97e91aa1f06a1,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: -1802099418106009854, guid: d719847fa4908454e874125f97acc2ec,
-        type: 3}
     - target: {fileID: 202900316716528059, guid: 5d3990d4e84e36e47a1e4689a282bdc5,
         type: 3}
       propertyPath: m_Name
@@ -337,6 +333,12 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2504686465500303964, guid: 5c3df05c24e12ea478c97e91aa1f06a1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -1802099418106009854, guid: d719847fa4908454e874125f97acc2ec,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

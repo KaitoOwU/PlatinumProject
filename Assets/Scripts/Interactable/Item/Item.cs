@@ -24,6 +24,7 @@ public class Item : Interactable
             return;
         OnPickUpArm?.Invoke();
         player.HeldPickable = _pickableData;
+
         Destroy(gameObject);
     }
 }

@@ -80,7 +80,7 @@ public class TutorialManager : MonoBehaviour
             _ShowLongMessage(bubble);
         }
         if (displayStyle == E_DisplayStyle.FADE)
-            StartCoroutine(_HideBubble(bubble, 1f));
+            HideBubble(bubble, 1f);
         return bubble;
     }
 
@@ -101,7 +101,11 @@ public class TutorialManager : MonoBehaviour
         bubble.CanvasGroup.DOFade(1, 0.1f);
         bubble.transform.DOScale(0.8f, 0.5f).SetEase(_elasticIn);
     }
-    public IEnumerator _HideBubble(Bubble bubble, float waitTime)
+    public void HideBubble(Bubble bubble, float waitTime)
+    {
+        StartCoroutine(_HideBubbleCoroutine(bubble, waitTime));
+    }
+    private IEnumerator _HideBubbleCoroutine(Bubble bubble, float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         if(bubble.Text.text.Count() <= 2)
@@ -117,7 +121,7 @@ public class TutorialManager : MonoBehaviour
         {
             if (bubble.gameObject.activeSelf)
             {
-                StartCoroutine(_HideBubble(bubble, 0));
+                HideBubble(bubble, 0);
             }
         }
     }
