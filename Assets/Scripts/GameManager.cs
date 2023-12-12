@@ -216,22 +216,21 @@ public class GameManager : MonoBehaviour
 
     private void RandomMessage()
     {
-        int i = UnityEngine.Random.Range(0, 2);
-        switch (i)
+        switch (CurrentTimerPhase)
         {
-            case 0:
+            case TimerPhase.FIRST_PHASE:
                 StartCoroutine(UIMessageGenerator.instance.Init(false,
-                    new UIMessageData("The Manor", "You've been brought back here? How strange...", 0.03f, 5f)));
+                    new UIMessageData("The Manor", "Not so fast! Let me shuffle the rooms around a bit for you so it's not too easy. Wouldn't want you to get bored to death...", 0.03f, 5f)));
                 break;
             
-            case 1:
+            case TimerPhase.SECOND_PHASE:
                 StartCoroutine(UIMessageGenerator.instance.Init(false,
-                    new UIMessageData("The Manor", "Strange, someone must be behind this teleportation.", 0.03f, 5f)));
+                    new UIMessageData("The Manor", "Aaand let me shuffle the rooms again. You only got 5 minutes left to find the murderer, sounds good for me..", 0.03f, 5f)));
                 break;
             
-            case 2:
+            case TimerPhase.THIRD_PHASE:
                 StartCoroutine(UIMessageGenerator.instance.Init(false,
-                    new UIMessageData("The Manor", "Hehehe, back here? I'm going to believe you love this room.", 0.03f, 5f)));
+                    new UIMessageData("The Manor", "Time's up! You can't explore the manor anymore so look at what you've found and then enter the vestibule to give me your final answer.", 0.03f, 5f)));
                 break;
         }
     }

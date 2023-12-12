@@ -31,7 +31,6 @@ public class DimmingLight : MonoBehaviour
             float dim = Mathf.Lerp(0f, -0.4f, _curve.Evaluate(_timer / GameManager.Instance.GameData.TimerValues.FirstPhaseTime));
             foreach (Volume v in FindObjectsOfType<Volume>())
             {
-                Debug.Log(v.name);
                 v.profile.TryGet<LiftGammaGain>(out _gamma);
                 _gamma.gamma.value = new Vector4(1f, 1f, 1f, dim);
             }
