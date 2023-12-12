@@ -133,6 +133,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
+    public bool IsTimerGoing { get => _isTimerGoing;}
 
     [SerializeField] private UnityEvent _onWin;
     public UnityEvent OnWin => _onWin;
@@ -183,6 +184,7 @@ public class GameManager : MonoBehaviour
     #region Singleton
     private static GameManager instance = null;
     public static GameManager Instance => instance;
+
 
     private void InitSingleton()
     {

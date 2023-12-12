@@ -16,6 +16,7 @@ public class Room : MonoBehaviour
     [SerializeField] private Door _previousRoomDoor;*/
     [HideInInspector] public UnityEvent OnCompletedRoom;
     [HideInInspector] public UnityEvent OnUnlocked;
+    [HideInInspector] public UnityEvent OnNewRoom;
 
     [SerializeField] private  List<Door> _doors =new List<Door>();
     [SerializeField] private List<Room> _linkedRooms = new List<Room>();
@@ -72,6 +73,14 @@ public class Room : MonoBehaviour
         if(GameManager.Instance.ValidatedRooom==6|| GameManager.Instance.ValidatedRooom == 10)
         {
             OnUnlocked?.Invoke();
+        }
+    }
+    public void EnterRoom()
+    {
+        if (!_discovered)
+        {
+            _discovered = true;
+            OnNewRoom?.Invoke();
         }
     }
     public int PlayerInRoom()

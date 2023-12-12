@@ -12,6 +12,7 @@ public class Door : Interactable
 
     [HideInInspector] public UnityEvent OnChangeRoom;
     [HideInInspector] public UnityEvent OnLockedDoorInterract;
+    [HideInInspector] public UnityEvent OnLeavingHub;
 
     [SerializeField] private Transform[] _tpPoint;
     [SerializeField] private DoorType _doorTypeValue;
@@ -77,6 +78,7 @@ public class Door : Interactable
                 if (hub.RoomDoorRight.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count == 4  && countInHub == 4) 
                 {
 #endif
+                    OnLeavingHub?.Invoke();
 
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
                     yield return StartCoroutine(
@@ -102,6 +104,8 @@ public class Door : Interactable
                     GameManager.Instance.SplitCameraLeftBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p => p.gameObject).ToArray());
                     GameManager.Instance.SplitCameraRightBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p => p.gameObject).ToArray());
    
+                    hub.RoomDoorRight.Room.EnterRoom();
+                    hub.RoomDoorLeft.Room.EnterRoom();
                 }
                 else if (_playersInRange.Count == countInHub && countInHub < 4) //TP FROM HUB AFTER SPLITING
                 {
@@ -117,6 +121,9 @@ public class Door : Interactable
                         yield return StartCoroutine(
                             UIRoomTransition.current.EndTransition(UIRoomTransition.current.LeftTransition));
                         GameManager.Instance.LeftPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
+
+                        LinkedDoor.Room.EnterRoom();
+
                     }
                     else
                     {
@@ -130,6 +137,9 @@ public class Door : Interactable
                         yield return StartCoroutine(
                             UIRoomTransition.current.EndTransition(UIRoomTransition.current.RightTransition));
                         GameManager.Instance.RightPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
+
+                        LinkedDoor.Room.EnterRoom();
+
                     }
 
                     hub.RoomDoorLeft._isLocked = false;
@@ -148,6 +158,7 @@ public class Door : Interactable
                         UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition));
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
 
+                    LinkedDoor.Room.EnterRoom();
                     _isLocked = true;
                     GameManager.Instance.CurrentGamePhase = GameManager.GamePhase.GUESS;
                 }
