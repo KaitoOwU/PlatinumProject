@@ -82,11 +82,11 @@ public class MainMenuUIManager : MonoBehaviour
     
     IEnumerator CR_UnloadCredits()
     {
-        yield return _credits.DOFade(1f, 1f);
-        
         _background.transform.DOScale(1f, 5f).SetEase(Ease.OutExpo);
-        _events.SetSelectedGameObject(_buttons[0].gameObject);
-        _mainMenu.DOFade(0f, 1f).WaitForCompletion();
+        yield return _credits.DOFade(0f, 1f).WaitForCompletion();
+        
+        _events.SetSelectedGameObject(_buttons[1].gameObject);
+        _mainMenu.DOFade(1f, 1f);
     }
 
     public void QuitGame()
