@@ -3267,10 +3267,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6458946094703585345, guid: abb5b59b72a685042839cac58709eb32,
         type: 3}
+      propertyPath: m_fontSize
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6458946094703585345, guid: abb5b59b72a685042839cac58709eb32,
+        type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: 815781dab445760488cccce764cc6c96,
         type: 2}
+    - target: {fileID: 6458946094703585345, guid: abb5b59b72a685042839cac58709eb32,
+        type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6458946094703585345, guid: abb5b59b72a685042839cac58709eb32,
         type: 3}
       propertyPath: m_fontColor.b
@@ -3288,6 +3298,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6458946094703585345, guid: abb5b59b72a685042839cac58709eb32,
         type: 3}
+      propertyPath: m_fontSizeBase
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6458946094703585345, guid: abb5b59b72a685042839cac58709eb32,
+        type: 3}
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 7469535248466557872, guid: 815781dab445760488cccce764cc6c96,
@@ -3301,6 +3316,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_VerticalAlignment
       value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 6458946094703585345, guid: abb5b59b72a685042839cac58709eb32,
+        type: 3}
+      propertyPath: m_horizontalMapping
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6458946094703585345, guid: abb5b59b72a685042839cac58709eb32,
         type: 3}
@@ -3490,7 +3510,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856819279890377592}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -3509,6 +3529,7 @@ MonoBehaviour:
   _inputValidator: {fileID: 2260722964347091004}
   _textOnSprite: {fileID: 1923093592712015346}
   _description: {fileID: 8608161475801256251}
+  _sprite: {fileID: 8618748843731209148}
   _group: {fileID: 5024264125991474860}
 --- !u!114 &1923093592712015346 stripped
 MonoBehaviour:
@@ -3550,6 +3571,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8618748843731209148 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3785566061604212239, guid: abb5b59b72a685042839cac58709eb32,
+    type: 3}
+  m_PrefabInstance: {fileID: 4833200427499111859}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &6301040929111822492

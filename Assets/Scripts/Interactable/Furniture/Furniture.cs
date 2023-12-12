@@ -124,7 +124,8 @@ public class Furniture : Interactable
             {
                 GameManager.Instance.FoundClues.Add(_clue);
                 OnClueFoundInFurniture?.Invoke();
-                if (player.RelativePos == HubRelativePosition.LEFT_WING)
+                UIItemFrameManager.instance.ClueAcquired(_clue.Data);
+                if (player.RelativePos == HubRelativePosition.LEFT_WING /*Retirer*/|| player.RelativePos == HubRelativePosition.HUB)
                     UIClue.left.Init(_clue.Data);
                 else if (player.RelativePos == HubRelativePosition.RIGHT_WING)
                     UIClue.right.Init(_clue.Data);
