@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -12,9 +13,11 @@ public class UIMessageGenerator : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _narrator, _message;
     [SerializeField] private Image _state;
     [SerializeField] private CanvasGroup _group, _skipGroup;
-
-    private SkipMessage _input;
+    [SerializeField] private InputAction _input;
+    
     private List<int> _validatedControllers;
+    private bool _isInputPressed = false;
+    private bool _skippable;
     public Coroutine messages;
 
     private void Awake()
@@ -25,10 +28,53 @@ public class UIMessageGenerator : MonoBehaviour
         instance = this;
     }
 
+    private void Update()
+    {
+        if (_skippable)
+        {
+            if (_isInputPressed)
+            {
+                _state.fillAmount = Mathf.Clamp01(_state.fillAmount + Time.deltaTime);
+                if (_state.fillAmount >= 1f)
+                {
+                    StartCoroutine(SkipMessage());
+                }
+            }
+            else
+            {
+                _state.fillAmount = Mathf.Clamp01(_state.fillAmount - Time.deltaTime);
+            }
+        }
+    }
+
+    private void Start()
+    {
+        if (_skippable)
+        {
+            _input.started += SetActionValidatedTrue;
+            _input.canceled += SetActionValidatedFalse;
+
+            _input.Enable();
+        }
+    }
+
+    private void SetActionValidatedTrue(InputAction.CallbackContext obj)
+    {
+        _isInputPressed = true;
+        _skipGroup.DOFade(1f, 1f);
+    }
+
+    private void SetActionValidatedFalse(InputAction.CallbackContext obj)
+    {
+        _isInputPressed = false;
+        _skipGroup.DOFade(0f, 1f);
+    }
+
     public IEnumerator Init(bool skippable, params UIMessageData[] messages)
     {
         _narrator.text = messages[0].narrator;
         _message.text = string.Empty;
+        _skippable = skippable;
 
         yield return _group.DOFade(1f, 1f).WaitForCompletion();
         foreach (UIMessageData message in messages)
@@ -43,6 +89,12 @@ public class UIMessageGenerator : MonoBehaviour
             yield return _message.DOColor(new Color(1, 1, 1, 0), 1f).WaitForCompletion();
         }
 
+        yield return _group.DOFade(0f, 1f).WaitForCompletion();
+    }
+
+    private IEnumerator SkipMessage()
+    {
+        StopCoroutine(messages);
         yield return _group.DOFade(0f, 1f).WaitForCompletion();
     }
 }
