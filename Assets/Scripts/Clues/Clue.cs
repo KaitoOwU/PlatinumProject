@@ -18,14 +18,16 @@ public class Clue : Interactable
         base.OnInteract(player);
 
         
-        if (player.CurrentRoom.RoomSide == Room.Side.LEFT || player.CurrentRoom.RoomSide == Room.Side.HUB)
+        if (player.CurrentRoom.RoomSide == Room.Side.LEFT)
         {
             UIItemFrameManager.instance.ClueAcquired(_data);
+            UIClue.left.Init(_data);
             OnGetClues?.Invoke();
             Destroy(gameObject);
         } else if (player.CurrentRoom.RoomSide == Room.Side.RIGHT)
         {
             UIItemFrameManager.instance.ClueAcquired(_data);
+            UIClue.right.Init(_data);
             OnGetClues?.Invoke();
             Destroy(gameObject);
         }
