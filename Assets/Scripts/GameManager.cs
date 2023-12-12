@@ -121,6 +121,7 @@ public class GameManager : MonoBehaviour
     private GamePhase _currentGamePhase;
     private TimerPhase _currentTimerPhase;
     private CameraState _currentCameraState;
+    private int _shuffleCount=0;
     private float _timer;
     private bool _isTimerGoing;
     private List<PickableData> _items = new();
@@ -211,28 +212,29 @@ public class GameManager : MonoBehaviour
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
         _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
         OnEachEndPhase.AddListener(TPAllPlayersToHub);
-        OnEachEndPhase.AddListener(RandomMessage);
     }
 
     private void RandomMessage()
     {
-        switch (CurrentTimerPhase)
+        Debug.Log(_shuffleCount);
+        switch (_shuffleCount)
         {
-            case TimerPhase.FIRST_PHASE:
+            case 0:
                 StartCoroutine(UIMessageGenerator.instance.Init(false,
                     new UIMessageData("The Manor", "Not so fast! Let me shuffle the rooms around a bit for you so it's not too easy. Wouldn't want you to get bored to death...", 0.03f, 5f)));
                 break;
             
-            case TimerPhase.SECOND_PHASE:
+            case 1:
                 StartCoroutine(UIMessageGenerator.instance.Init(false,
                     new UIMessageData("The Manor", "Aaand let me shuffle the rooms again. You only got 5 minutes left to find the murderer, sounds good for me..", 0.03f, 5f)));
                 break;
             
-            case TimerPhase.THIRD_PHASE:
+            case 2:
                 StartCoroutine(UIMessageGenerator.instance.Init(false,
                     new UIMessageData("The Manor", "Time's up! You can't explore the manor anymore so look at what you've found and then enter the vestibule to give me your final answer.", 0.03f, 5f)));
                 break;
         }
+        _shuffleCount++;
     }
 
     void Start()
@@ -445,6 +447,7 @@ public class GameManager : MonoBehaviour
                     StartCoroutine(ShuffleTimer());
                     Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
+                    RandomMessage();
                 }
                 break;
             case TimerPhase.SECOND_PHASE:
@@ -462,6 +465,7 @@ public class GameManager : MonoBehaviour
                     StartCoroutine(ShuffleTimer());
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
+                    RandomMessage();
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
@@ -490,6 +494,7 @@ public class GameManager : MonoBehaviour
                     _isTimerGoing = false;
                     _timer = 0;
                     _currentTimerPhase = TimerPhase.END;
+                    RandomMessage();
                 }
                 break;
             case TimerPhase.END:
