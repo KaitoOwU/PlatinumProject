@@ -226,7 +226,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83bc3e3c9e79fcc429e79f055f955c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onRangeMessage: Something is missing...
+  _onInteractMessage: 
   _reactive: {fileID: 0}
+  OnRepaired:
+    m_PersistentCalls:
+      m_Calls: []
+  _onRangeWithArmMessage: Press A to interact
   _statueArm: {fileID: 3195847263942461639}
 --- !u!135 &5543628815525566247
 SphereCollider:

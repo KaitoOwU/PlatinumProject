@@ -74,10 +74,10 @@ public class InputManager : MonoBehaviour
     private UnityEvent onPause = new();
     private UnityEvent onBack = new();
 
-    [SerializeField]
+    public int ControllerIndex => _controllerIndex;
+    private int _controllerIndex;
     private bool _inputLocked;
     private PlayerInput _map;
-    private int _controllerIndex;
 
     public PlayerInput Map => _map;
 

@@ -46,6 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2331c27cfe58a1d419546d8354e578dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onRangeMessage: Press R to grab
+  _onInteractMessage: 
+  OnSearchFurniture:
+    m_PersistentCalls:
+      m_Calls: []
   OnClueFoundInFurniture:
     m_PersistentCalls:
       m_Calls: []
@@ -65,6 +70,8 @@ MonoBehaviour:
   _3Dmodel: {fileID: 2620666943912915696}
   _playersNeededNumber: 2
   _clue: {fileID: 0}
+  _playersPushing: []
+  _onTooHeavyMessage: This is too heavy for one person...
 --- !u!65 &4388157113217338779
 BoxCollider:
   m_ObjectHideFlags: 0

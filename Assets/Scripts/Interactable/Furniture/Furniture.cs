@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
@@ -34,6 +35,8 @@ public class Furniture : Interactable
     private float _baseY;
     private bool _searched = false;
     private Collider _furnitureModelCollider;
+    [SerializeField]
+    protected string _onTooHeavyMessage;
 
     #endregion
     public enum EFurnitureType
@@ -70,10 +73,18 @@ public class Furniture : Interactable
         p.Inputs.OnInteract.AddListener(OnInteract);
         p.Inputs.OnPush.AddListener(OnPush);
         p.Inputs.OnPushCanceled.AddListener(OnPushCanceled);
+
+        if ((_message == null || !_message.gameObject.activeSelf) && _onRangeMessage != "")
+        {
+            _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage);
+        }
+
     }
     protected override void OnTriggerExit(Collider other)
     {
         //Debug.Log("Trigger exit " + other.gameObject.name);
+        if (other.gameObject.layer == 8)
+            return;
         if (other.GetComponent<PlayerController>() == null)
             return;
 
@@ -83,8 +94,8 @@ public class Furniture : Interactable
             return;
 
 
-
-        OnPushCanceled(other.GetComponent<Player>());
+        if(p.PushedFurniture != null && p.PushedFurniture == this)
+            OnPushCanceled(other.GetComponent<Player>());
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
 
 
@@ -98,7 +109,9 @@ public class Furniture : Interactable
 
     protected override void OnInteract(Player player)
     {
-        if(_furnitureType == EFurnitureType.SEARCHABLE && !_searched)
+        base.OnInteract(player);
+
+        if (_furnitureType == EFurnitureType.SEARCHABLE && !_searched)
         {
             _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
             OnSearchFurniture?.Invoke();
@@ -153,12 +166,19 @@ public class Furniture : Interactable
                     foreach (var p in _playersPushing)
                     {
                         p.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH, fwd.x != 0 ? new Vector3(1, 0, 0) : new Vector3(0, 0, 1));
+                        p.PlayerController.PushedFurniture = this;
                     }
                 }
                 else
                 {
                     player.PlayerController.SwitchMoveState(PlayerController.EMoveState.PUSH_BLOCKED);
                     OnBeginStrugglePushingFurniture?.Invoke();
+                    if ((_message != null && _message.gameObject.activeSelf) && _onTooHeavyMessage != "")
+                        _message.gameObject.SetActive(false);
+                    if ((_message == null || !_message.gameObject.activeSelf) && _onTooHeavyMessage != "")
+                    {
+                        _message = TutorialManager.Instance.ShowBubbleMessage(player.Index, transform, player.PlayerController.Inputs.ControllerIndex, _onTooHeavyMessage);
+                    }
                 }
 
                 if(_playersPushing.Count == 1)
@@ -169,7 +189,6 @@ public class Furniture : Interactable
     protected void OnPushCanceled(Player player)
     {
         _playersPushing.Remove(player);
-        Debug.Log("Remove");
         if (transform.parent == player.transform && _playersPushing.Count != 0)
         {
             transform.parent = _playersPushing[0].transform;

@@ -9,8 +9,36 @@ public class Statue : Puzzle, IResettable
         [HideInInspector] public UnityEvent OnRepaired;
 
     private bool _isRepaired;
+    [SerializeField]
+    protected string _onRangeWithArmMessage;
     [SerializeField] private GameObject _statueArm;
-    
+
+    protected override void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<PlayerController>() == null)
+            return;
+
+        PlayerController p = other.GetComponent<PlayerController>();
+
+        if (p.Inputs == null)
+            return;
+
+        _playersInRange.Add(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+
+        p.Inputs.OnInteract.AddListener(OnInteract);
+
+        _onPlayerEnterRange?.Invoke();
+
+        if ((_message == null || !_message.gameObject.activeSelf))
+        {
+            if(GameManager.Instance.PlayerList[p.PlayerIndex-1].PlayerRef.HeldPickable == null && _onRangeMessage != "")
+                _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage);
+            else if(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef.HeldPickable != null && _onRangeWithArmMessage != "")
+                _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeWithArmMessage);
+
+        }
+    }
+
     protected override void OnInteract(Player player)
     {
         if (player.HeldPickable == null)

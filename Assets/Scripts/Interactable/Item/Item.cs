@@ -18,6 +18,8 @@ public class Item : Interactable
 
     protected override void OnInteract(Player player)
     {
+        base.OnInteract(player);
+
         if (player.HeldPickable != null)
             return;
         OnPickUpArm?.Invoke();

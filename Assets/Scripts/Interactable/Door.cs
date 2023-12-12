@@ -45,6 +45,7 @@ public class Door : Interactable
 
     protected override void OnInteract(Player player)
     {
+        base.OnInteract(player);
         StartCoroutine(DoorInteraction(player));
     }
 
@@ -221,7 +222,7 @@ public class Door : Interactable
                 GameManager.Instance.TP_RightCamera(room.CameraPoint);
                 break;
             case Room.Side.VESTIBULE:
-                GameManager.Instance.TP_Camera(GameManager.Instance.FullCamera, room.CameraPoint);
+                GameManager.Instance.TP_Camera(GameManager.Instance.FullCamera.gameObject, room.CameraPoint);
                 break;
         }
     }
@@ -230,6 +231,7 @@ public class Door : Interactable
     {
         foreach(Player p in _playersInRange)
         {
+            p.PlayerController.Animator.SetBool("IsMoving", false);
             if (p.CurrentRoom is Hub)
             {
                 if (room.RoomSide == Room.Side.RIGHT)

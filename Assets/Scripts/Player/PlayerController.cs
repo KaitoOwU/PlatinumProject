@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public InputManager Inputs => _inputManager;
     public EMoveState MoveState => _moveState;
     public Animator Animator => _animator;
+    public Furniture PushedFurniture { get => _pushedFurniture; set => _pushedFurniture = value; }
+    private Furniture _pushedFurniture;
 
     [Header("Parameters")]
     private float _moveSpeed;
@@ -139,6 +141,7 @@ public class PlayerController : MonoBehaviour
         {
             case EMoveState.NORMAL:
                 _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ; 
+                _pushedFurniture = null;
                 _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed; break;
             case EMoveState.PUSH:
                 if (constraint.x != 0)

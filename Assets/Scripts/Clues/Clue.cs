@@ -15,6 +15,8 @@ public class Clue : Interactable
 
     protected override void OnInteract(Player player)
     {
+        base.OnInteract(player);
+
         if (player.CurrentRoom.RoomSide == Room.Side.LEFT)
         {
             UIClue.left.Init(_data);

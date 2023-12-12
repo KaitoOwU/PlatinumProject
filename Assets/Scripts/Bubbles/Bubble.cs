@@ -23,7 +23,7 @@ public class Bubble : MonoBehaviour
     }
     private void Start()
     {
-        transform.localPosition = Vector3.zero;
+        //transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.Euler(Vector3.zero);
     }
 

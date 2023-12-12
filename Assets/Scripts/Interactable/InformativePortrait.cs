@@ -16,6 +16,8 @@ public class InformativePortrait : Interactable
 
     protected override void OnInteract(Player player)
     {
+        base.OnInteract(player);
+
         UIPortrait.instance.Init(_suspect);
     }
 }

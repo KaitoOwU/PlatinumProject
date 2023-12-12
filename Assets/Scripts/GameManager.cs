@@ -69,16 +69,19 @@ public class GameManager : MonoBehaviour
     [Header("---References---")]
     [SerializeField]
     private List<PlayerInfo> _playerList = new(4);
+    public Camera FullCamera { get => _fullCamera; }
     [SerializeField]
-    private GameObject _fullCamera;
+    private Camera _fullCamera;
 
+    public Camera CameraLeft => _splitCameraLeft; 
     [SerializeField]
-    private GameObject _splitCameraLeft;
+    private Camera _splitCameraLeft;
     private CameraBehaviour _splitCameraLeftBehaviour;
     public CameraBehaviour SplitCameraLeftBehaviour { get => _splitCameraLeftBehaviour; set => _splitCameraLeftBehaviour = value; }
 
+    public Camera CameraRight => _splitCameraRight;
     [SerializeField]
-    private GameObject _splitCameraRight;
+    private Camera _splitCameraRight;
     private CameraBehaviour _splitCameraRightBehaviour;
     public CameraBehaviour SplitCameraRightBehaviour { get => _splitCameraRightBehaviour; set => _splitCameraRightBehaviour = value; }
 
@@ -122,7 +125,7 @@ public class GameManager : MonoBehaviour
     private bool _isTimerGoing;
     private List<PickableData> _items = new();
     public List<Player> NonSelectedPlayers { get=> _nonSelectedPlayers; set=> _nonSelectedPlayers = value; }
-    private List<Player> _nonSelectedPlayers { get; set; }
+    private List<Player> _nonSelectedPlayers = new();
 
     private List<Clue> _foundClues = new();
 
@@ -153,7 +156,6 @@ public class GameManager : MonoBehaviour
     }
     int _validatedRooom = 0;
 
-    public GameObject FullCamera { get => _fullCamera; }
     public enum GamePhase
     {
         INTRO,
@@ -238,7 +240,7 @@ public class GameManager : MonoBehaviour
         _hub = FindObjectOfType<Hub>();
         SwitchCameraState(CameraState.FULL);
         StartCoroutine(VestibuleMessages());
-        TP_Camera(_fullCamera, Vestibule.CameraPoint);
+        TP_Camera(_fullCamera.gameObject, Vestibule.CameraPoint);
         StartCoroutine(StartTimer());
         _onWin.AddListener(Win);
         _onLose.AddListener(Lose);
@@ -512,23 +514,23 @@ public class GameManager : MonoBehaviour
         {
             case CameraState.FULL:
                 OnChangeToFullScreen?.Invoke();
-                _fullCamera.SetActive(true);
-                _splitCameraLeft.SetActive(false);
-                _splitCameraRight.SetActive(false);
+                _fullCamera.gameObject.SetActive(true);
+                _splitCameraLeft.gameObject.SetActive(false);
+                _splitCameraRight.gameObject.SetActive(false);
                 CurrentCameraState = targetState;
                 return;
             case CameraState.SPLIT:
                 OnChangeToSplitScreen?.Invoke();
-                _fullCamera.SetActive(false);
-                _splitCameraLeft.SetActive(true);
-                _splitCameraRight.SetActive(true);
+                _fullCamera.gameObject.SetActive(false);
+                _splitCameraLeft.gameObject.SetActive(true);
+                _splitCameraRight.gameObject.SetActive(true);
                 CurrentCameraState = targetState;
                 return;
         }
     }
 
-    public void TP_LeftCamera(Transform newValues) => TP_Camera(_splitCameraLeft, newValues);
-    public void TP_RightCamera(Transform newValues) => TP_Camera(_splitCameraRight, newValues);
+    public void TP_LeftCamera(Transform newValues) => TP_Camera(_splitCameraLeft.gameObject, newValues);
+    public void TP_RightCamera(Transform newValues) => TP_Camera(_splitCameraRight.gameObject, newValues);
 
     public void TP_Camera(GameObject camera, Transform newValues)
     {
@@ -559,7 +561,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(2f);
         yield return UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition);
-        TP_Camera(_fullCamera, Hub.CameraPoint);
+        TP_Camera(_fullCamera.gameObject, Hub.CameraPoint);
         yield return UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition);
         FindObjectsOfType<InputManager>().ToList().ForEach(i => i.InputLocked = false);
         CurrentGamePhase = GamePhase.SELECT_CHARACTER;

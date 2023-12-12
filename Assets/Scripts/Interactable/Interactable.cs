@@ -12,12 +12,19 @@ public class Interactable : MonoBehaviour
     protected List<Player> _playersInRange = new();
     protected Collider _collider;
     public IReadOnlyList<Player> PlayersInRange => _playersInRange;
-    
-    [Header("--- EVENTS ---")]
+
+    [Header("--- Messages ---")]
+    [SerializeField]
+    protected string _onRangeMessage;
+    [SerializeField]
+    protected string _onInteractMessage;
+
     protected UnityEvent _onPlayerEnterRange;
     protected UnityEvent _onPlayerExitRange;
 
-    
+    protected Bubble _message;
+
+
     protected virtual void Awake()
     {
         _collider = GetComponent<Collider>();
@@ -38,6 +45,11 @@ public class Interactable : MonoBehaviour
         p.Inputs.OnInteract.AddListener(OnInteract);
         
         _onPlayerEnterRange?.Invoke();
+        
+        if ((_message == null || !_message.gameObject.activeSelf) && _onRangeMessage != "")
+        {
+            _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage);
+        }
     }
 
     protected virtual void OnTriggerExit(Collider other)
@@ -66,7 +78,13 @@ public class Interactable : MonoBehaviour
             
     }
 
-    protected virtual void OnInteract(Player player){}
+    protected virtual void OnInteract(Player player)
+    {
+        if ((_message == null || !_message.gameObject.activeSelf) && _onInteractMessage != "")
+        {
+            _message = TutorialManager.Instance.ShowBubbleMessage(player.Index, transform, player.PlayerController.Inputs.ControllerIndex, _onInteractMessage);
+        }
+    }
     protected virtual void PlayAnimation(){}
 
 }

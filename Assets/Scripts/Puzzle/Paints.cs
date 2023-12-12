@@ -26,6 +26,11 @@ public class Paints : Interactable
             _playersInRange.Add(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
             _onPlayerEnterRange?.Invoke();
             p.Inputs.OnInteract.AddListener(OnInteract);
+
+            if ((_message == null || !_message.gameObject.activeSelf) && _onRangeMessage != "")
+            {
+                _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage);
+            }
         }
     }
     protected override void OnTriggerExit(Collider other)
@@ -42,6 +47,7 @@ public class Paints : Interactable
     }
     protected override void OnInteract(Player player)
     {
+        base.OnInteract(player);
         if (!_manager.IsComplete&&_manager.TandemDiscovered)
         {
             if (isTilted)

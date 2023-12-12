@@ -35,6 +35,7 @@ public class Portrait : Interactable
 
     protected override void OnInteract(Player player)
     {
+        base.OnInteract(player);
         _guessManager.OnChoseSuspect?.Invoke(player, _suspectData);
     }
 
