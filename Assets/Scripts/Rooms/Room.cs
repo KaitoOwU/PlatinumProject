@@ -56,6 +56,14 @@ public class Room : MonoBehaviour
     {
         Doors = GetComponentsInChildren<Door>().ToList();
     }
+    private void Update()
+    {
+        if (PlayerInRoom() > 0 && !_discovered)
+        {
+            _discovered = true;
+            OnSetUp();
+        }
+    }
     public void OnSetUp()
     {
         if (!_doors[0].IsLocked && !_canHaveReward && (RoomSide != Side.HUB && RoomSide != Side.CORRIDOR))

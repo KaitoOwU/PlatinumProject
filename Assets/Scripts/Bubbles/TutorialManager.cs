@@ -1,6 +1,8 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using static TutorialManager;
 
@@ -10,10 +12,19 @@ public class TutorialManager : MonoBehaviour
     public static TutorialManager Instance => instance;
 
     [SerializeField] Bubble _messageBubblePrefab;
+    [SerializeField] float _messageDisplayTime;
     [SerializeField] int _poolSize;
     [SerializeField] float _bubbleYOffset = -50;
     [SerializeField] List<Bubble> _bubblePool = new();
+    [SerializeField] AnimationCurve _elasticIn;
     RectTransform _canvasRect;
+
+    public enum E_DisplayStyle
+    {
+        STAY,
+        FADE,
+    }
+
 
     private void Awake()
     {
@@ -21,6 +32,11 @@ public class TutorialManager : MonoBehaviour
             instance = this;
         _canvasRect = GetComponent<RectTransform>();
         _InitPool(_poolSize);
+    }
+    private void Start()
+    {
+        GameManager.Instance.OnTPToHub.AddListener(_HideAllBubbles);    
+        
     }
 
     private void _InitPool(int poolSize)
@@ -44,25 +60,66 @@ public class TutorialManager : MonoBehaviour
         return null;
     }
 
-    public Bubble ShowBubbleMessage(int playerIndex, Transform objectPosition, int triggerController, string message)
+    public Bubble ShowBubbleMessage(int playerIndex, Transform objectPosition, int triggerController, string message, E_DisplayStyle displayStyle)
     {
-
         Bubble bubble = GetPoolBubble().InitText(triggerController, message);
         if (bubble == null)
             return null;
         bubble.InitText(triggerController, message);
         bubble.transform.localPosition = _GetCanvasPos(playerIndex, objectPosition.position);
-        bubble.gameObject.SetActive(true);
-
-        StartCoroutine(_WaitToDestroy(bubble));
+        if(message.Count() <= 2) //if message short
+        {
+            bubble.ShortBackground.SetActive(true);
+            bubble.LongBackground.SetActive(false);
+            _ShowShortMessage(bubble);
+        }
+        else //if message long
+        {
+            bubble.ShortBackground.SetActive(false);
+            bubble.LongBackground.SetActive(true);
+            _ShowLongMessage(bubble);
+        }
+        if (displayStyle == E_DisplayStyle.FADE)
+            StartCoroutine(_HideBubble(bubble, 1f));
         return bubble;
     }
 
-    private IEnumerator _WaitToDestroy(Bubble bubble)
+    private void _ShowLongMessage(Bubble bubble)
     {
+        bubble.transform.localScale = new Vector3(0, 0, 0);
+        bubble.CanvasGroup.alpha = 0;
+        bubble.gameObject.SetActive(true);
+        bubble.CanvasGroup.DOFade(1, 0.5f);
+        bubble.transform.DOScale(0.8f, 0.5f).SetEase(Ease.OutCirc);
 
-        yield return new WaitForSeconds(1f);
+    }
+    private void _ShowShortMessage(Bubble bubble)
+    {
+        bubble.transform.localScale = new Vector3(0,0,0);
+        bubble.CanvasGroup.alpha = 0;
+        bubble.gameObject.SetActive(true);
+        bubble.CanvasGroup.DOFade(1, 0.1f);
+        bubble.transform.DOScale(0.8f, 0.5f).SetEase(_elasticIn);
+    }
+    public IEnumerator _HideBubble(Bubble bubble, float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        if(bubble.Text.text.Count() <= 2)
+            bubble.transform.DOScale(0, 0.5f).SetEase(Ease.InExpo);
+        yield return new WaitForSeconds(0.4f);
+        yield return bubble.CanvasGroup.DOFade(0, 0.1f).WaitForCompletion();
         bubble.gameObject.SetActive(false);
+    }
+
+    private void _HideAllBubbles()
+    {
+        foreach (Bubble bubble in _bubblePool)
+        {
+            if (bubble.gameObject.activeSelf)
+            {
+                StartCoroutine(_HideBubble(bubble, 0));
+            }
+        }
     }
 
     private Vector3 _GetCanvasPos(int playerIndex, Vector3 worldPos)

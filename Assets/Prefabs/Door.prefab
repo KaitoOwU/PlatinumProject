@@ -161,12 +161,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c4674fc96f2017419152c9e1544b6d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _onRangeMessage: Press A to Interact
+  _onRangeMessage: A
   _onInteractMessage: 
   OnChangeRoom:
     m_PersistentCalls:
       m_Calls: []
   OnLockedDoorInterract:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeavingHub:
     m_PersistentCalls:
       m_Calls: []
   _tpPoint:
