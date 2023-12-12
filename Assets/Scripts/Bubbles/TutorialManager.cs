@@ -90,7 +90,7 @@ public class TutorialManager : MonoBehaviour
         bubble.CanvasGroup.alpha = 0;
         bubble.gameObject.SetActive(true);
         bubble.CanvasGroup.DOFade(1, 0.5f);
-        bubble.transform.DOScale(1, 0.5f).SetEase(Ease.OutCirc);
+        bubble.transform.DOScale(0.8f, 0.5f).SetEase(Ease.OutCirc);
 
     }
     private void _ShowShortMessage(Bubble bubble)
@@ -99,7 +99,7 @@ public class TutorialManager : MonoBehaviour
         bubble.CanvasGroup.alpha = 0;
         bubble.gameObject.SetActive(true);
         bubble.CanvasGroup.DOFade(1, 0.1f);
-        bubble.transform.DOScale(1, 0.5f).SetEase(_elasticIn);
+        bubble.transform.DOScale(0.8f, 0.5f).SetEase(_elasticIn);
     }
     public IEnumerator _HideBubble(Bubble bubble, float waitTime)
     {
