@@ -29,7 +29,7 @@ public class Paints : Interactable
 
             if ((_message == null || !_message.gameObject.activeSelf) && _onRangeMessage != "")
             {
-                _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage);
+                _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage, TutorialManager.E_DisplayStyle.STAY);
             }
         }
     }
@@ -44,6 +44,11 @@ public class Paints : Interactable
         _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
         p.Inputs.OnInteract?.RemoveListener(OnInteract);
         _onPlayerExitRange?.Invoke();
+
+        if (_message != null && _message.gameObject.activeSelf && _onRangeMessage != "")
+        {
+            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+        }
     }
     protected override void OnInteract(Player player)
     {

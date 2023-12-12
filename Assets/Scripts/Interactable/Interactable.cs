@@ -48,7 +48,7 @@ public class Interactable : MonoBehaviour
         
         if ((_message == null || !_message.gameObject.activeSelf) && _onRangeMessage != "")
         {
-            _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage);
+            _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage, TutorialManager.E_DisplayStyle.STAY);
         }
     }
 
@@ -67,6 +67,10 @@ public class Interactable : MonoBehaviour
         p.Inputs.OnInteract?.RemoveListener(OnInteract);
 
         _onPlayerExitRange?.Invoke();
+        if (_message != null && _message.gameObject.activeSelf && _onRangeMessage != "")
+        {
+            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+        }
     }
 
     protected virtual void OnDestroy()
@@ -80,9 +84,14 @@ public class Interactable : MonoBehaviour
 
     protected virtual void OnInteract(Player player)
     {
+        if (_message != null && _message.gameObject.activeSelf)
+        {
+            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+            _message = null;
+        }
         if ((_message == null || !_message.gameObject.activeSelf) && _onInteractMessage != "")
         {
-            _message = TutorialManager.Instance.ShowBubbleMessage(player.Index, transform, player.PlayerController.Inputs.ControllerIndex, _onInteractMessage);
+            _message = TutorialManager.Instance.ShowBubbleMessage(player.Index, transform, player.PlayerController.Inputs.ControllerIndex, _onInteractMessage, TutorialManager.E_DisplayStyle.FADE);
         }
     }
     protected virtual void PlayAnimation(){}
