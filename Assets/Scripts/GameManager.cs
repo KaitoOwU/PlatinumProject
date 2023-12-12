@@ -282,6 +282,7 @@ public class GameManager : MonoBehaviour
         }
         List<Furniture> allSearchableFurnitures = new List<Furniture>();
         List<Clue> puzzleClues = CurrentClues.ToList(); ///
+        Debug.Log(puzzleClues.Count);
         foreach(Furniture f in FindObjectsOfType<Furniture>())
         {
             if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
@@ -317,6 +318,7 @@ public class GameManager : MonoBehaviour
                 allSearchableFurnitures.RemoveAt(randomIndex);
             }
         }
+        Debug.Log(puzzleClues.Count);
         _roomGenerator.SetRoomsRewards(puzzleClues);
     }
 
