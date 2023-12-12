@@ -29,6 +29,9 @@ public class Statue : Puzzle, IResettable
 
         _onPlayerEnterRange?.Invoke();
 
+        if (_isRepaired)
+            return;
+
         if ((_message == null || !_message.gameObject.activeSelf))
         {
             if(GameManager.Instance.PlayerList[p.PlayerIndex-1].PlayerRef.HeldPickable == null && _onRangeMessage != "")
