@@ -12,8 +12,7 @@ public class UIMessageGenerator : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _narrator, _message;
     [SerializeField] private Image _state;
     [SerializeField] private CanvasGroup _group, _skipGroup;
-
-    private SkipMessage _input;
+    
     private List<int> _validatedControllers;
     public Coroutine messages;
 
