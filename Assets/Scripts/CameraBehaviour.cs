@@ -53,10 +53,12 @@ public class CameraBehaviour : MonoBehaviour
         if (newState == _behaviourState)
             return;
         _behaviourState = newState;
-        if(newState == ECameraBehaviourState.FOLLOW)
+        if (newState == ECameraBehaviourState.FOLLOW)
         {
             StartCoroutine(Follow(playersInRoom));
         }
+        else
+            _velocity = Vector3.zero;
     }
 
     IEnumerator Follow(GameObject[] playersInRoom)

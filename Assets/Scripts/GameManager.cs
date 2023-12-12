@@ -367,12 +367,15 @@ public class GameManager : MonoBehaviour
     public void TPPlayerPostTrap(Player[] players)
     {
         StartCoroutine(CR_TPPlayerPostTrap(players));
+        foreach(Player p in players)
+        {
+            StartCoroutine(p.PlayerController.Fall());
+        }
     }
 
     private IEnumerator CR_TPPlayerPostTrap(Player[] players)
     {
         Image imgToCancel;
-        players.ToList().Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
         
         if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
         {
@@ -400,7 +403,6 @@ public class GameManager : MonoBehaviour
         }
 
         yield return StartCoroutine(_transitions.EndTransition(imgToCancel));
-        players.ToList().Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
     }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
