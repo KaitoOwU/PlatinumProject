@@ -450,11 +450,17 @@ public class RoomGeneration : MonoBehaviour
         if (GameManager.Instance.CurrentTimerPhase == GameManager.TimerPhase.END)
             _maxRooms = 0;
         else if (validated < 4)
+        {
             _maxRooms = 3;
+        }
         else if (validated < 7)
+        {
             _maxRooms = 5;
+        }
         else if (validated > 12)
+        {
             _maxRooms = _roomsInPlay.Count / 2;
+        }
         for (int i = 0; i < _maxRooms; i++)
         {
             foreach (Door door in FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).Doors)
@@ -464,11 +470,6 @@ public class RoomGeneration : MonoBehaviour
             foreach(Door door in FindRoomAtPosition(_layout.AisleRightInOrder[i].Position).Doors)
             {
                 door.IsLocked = false;
-            }
-            if (validated == 0)
-            {
-                FindRoomAtPosition(_layout.AisleLeftInOrder[i].Position).OnSetUp();
-                FindRoomAtPosition(_layout.AisleRightInOrder[i].Position).OnSetUp();
             }
         }
         if (GameManager.Instance.FoundClues.Count == GameManager.Instance.CurrentClues.Count)
