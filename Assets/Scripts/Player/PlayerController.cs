@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public EMoveState MoveState => _moveState;
     public Animator Animator => _animator;
     public Furniture PushedFurniture { get => _pushedFurniture; set => _pushedFurniture = value; }
+    public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
+
     private Furniture _pushedFurniture;
 
     [Header("Parameters")]
