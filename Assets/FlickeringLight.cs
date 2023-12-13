@@ -8,6 +8,7 @@ public class FlickeringLight : MonoBehaviour
     [SerializeField]AnimationCurve _curve;
     float _timer;
     bool _flick;
+    float _intensity;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +20,7 @@ public class FlickeringLight : MonoBehaviour
         _timer += Time.deltaTime;
         if (_flick)
         {
-            _light.intensity = Mathf.Lerp(0.43f, 0.13f, _curve.Evaluate(_timer));
+            _light.intensity = Mathf.Lerp(_intensity, 0.13f, _curve.Evaluate(_timer));
 
         }
         if (_timer > 1)
@@ -30,6 +31,7 @@ public class FlickeringLight : MonoBehaviour
     // Update is called once per frame
     void Flickers()
     {
+        _intensity = _light.intensity;
         _timer = 0;
         _flick = true;
     }
