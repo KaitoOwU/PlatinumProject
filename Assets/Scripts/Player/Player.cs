@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [FormerlySerializedAs("_heldItem")] [SerializeField] private PickableData _heldPickable;
     [SerializeField] private PlayerController _playerController;
     [SerializeField] private Color _associatedColor, _controllerColor;
+    [SerializeField] private Transform _itemPos;
     public PlayerController PlayerController => _playerController;
     public Color AssociatedColor => _associatedColor;
     public Color ControllerColor => _controllerColor;
@@ -31,7 +32,11 @@ public class Player : MonoBehaviour
     public PickableData HeldPickable
     {
         get => _heldPickable;
-        set => _heldPickable = value;
+        set
+        {
+            _heldPickable = value;
+            SetupItem(value);
+        }
     }
     public Room CurrentRoom { get => _currentRoom; set => _currentRoom = value; }
     public bool Selected { get => _selected; set => _selected = value; }
@@ -47,6 +52,25 @@ public class Player : MonoBehaviour
     private void Start()
     {
         CurrentRoom = GameManager.Instance.Hub;
+    }
+
+    private void SetupItem(PickableData item)
+    {
+        if (item == null)
+        {
+            for (int i = 0; i < _itemPos.childCount; i++)
+            {
+                Destroy(_itemPos.GetChild(i).gameObject);
+            }
+        }
+        else
+        {
+            GameObject obj = Instantiate(item.Prefab, _itemPos);
+            
+            obj.transform.localPosition = Vector3.zero;
+            Destroy(obj.GetComponent<Item>());
+            Destroy(obj.transform.GetChild(0).gameObject);
+        }
     }
 }
 

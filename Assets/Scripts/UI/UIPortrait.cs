@@ -51,6 +51,7 @@ public class UIPortrait : MonoBehaviour, IInputAwaiterReactive
         _validator.Unsetup(PlayerController.EButtonType.INTERACT);
         GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
         yield return new WaitForSecondsRealtime(1f);
+        _validator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
         yield return _group.DOFade(0f, 1.5f).WaitForCompletion();
     }
 }
