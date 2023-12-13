@@ -22,6 +22,7 @@ public class Door : Interactable
     List<Corridor> _corridors;
     [SerializeField] private MeshRenderer _doormat;
     [SerializeField] private GameObject _doorModel;
+    [SerializeField] private string _onInteractLockedVestibuleMessage;
     private Material _doormatMat;
 
     public Transform[] TpPoint => _tpPoint;
@@ -52,6 +53,18 @@ public class Door : Interactable
 
     private IEnumerator DoorInteraction(Player player)
     {
+        if(GameManager.Instance.CurrentGamePhase != GameManager.GamePhase.EARLY_GUESS && _linkedDoor.room is Vestibule)
+        {
+            if (_message != null && _message.gameObject.activeSelf)
+            {
+                TutorialManager.Instance.HideBubble(_message, 0);
+                _message = null;
+            }
+            if ((_message == null || !_message.gameObject.activeSelf) && _onInteractMessage != "")
+            {
+                _message = TutorialManager.Instance.ShowBubbleMessage(player.Index, transform, player.PlayerController.Inputs.ControllerIndex, _onInteractLockedVestibuleMessage, TutorialManager.E_DisplayStyle.FADE);
+            }
+        }
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
             

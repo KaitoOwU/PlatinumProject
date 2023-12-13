@@ -54,6 +54,16 @@ public class Furniture : Interactable
         _furnitureModelCollider = _3Dmodel.GetComponent<Collider>();
         _room = GetComponentInParent<Room>();
         GameManager.Instance.OnEachEndPhase.AddListener(ForceStopPush);
+
+        switch (_furnitureType)
+        {
+            case EFurnitureType.MOVABLE:
+                _onRangeMessage = "LR";
+                break;
+            case EFurnitureType.SEARCHABLE:
+                _onRangeMessage = "A";
+                break;
+        }
     }
 
     #region Overridden methods
