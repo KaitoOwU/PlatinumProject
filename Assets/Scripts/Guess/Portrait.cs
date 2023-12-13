@@ -11,8 +11,7 @@ public class Portrait : Interactable
 {
     [Header("---References---")]
     [SerializeField] private GuessManager _guessManager;
-    [SerializeField] private Image _imageComponent;
-    [SerializeField] private TMP_Text _textComponent;
+    [SerializeField] private Image _imageComponent, _blood;
     [SerializeField] private GameObject[] _votesIndicators;
     private SuspectData _suspectData;
     public SuspectData SuspectData => _suspectData;
@@ -21,12 +20,12 @@ public class Portrait : Interactable
     public void InitPortrait(SuspectData suspect)
     {
         _suspectData = suspect;
-        _textComponent.text = suspect.Name;
         _imageComponent.sprite = suspect.Image;
     }
     public void UpdateToVictim()
     {
-        _imageComponent.color = Color.red;
+        _blood.gameObject.SetActive(true);
+        _imageComponent.color = Color.gray;
         GetComponent<Collider>().enabled = false;
     }
 
