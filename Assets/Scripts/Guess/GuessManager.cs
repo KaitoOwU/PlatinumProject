@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using System;
 using Unity.VisualScripting;
 using System.Linq;
+using System.Numerics;
 using TMPro;
 
 public class GuessManager : MonoBehaviour
@@ -94,6 +95,11 @@ public class GuessManager : MonoBehaviour
 
     private IEnumerator CheckFinalGuess(SuspectData finalGuess)
     {
+        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
+        {
+            p.PlayerController.Inputs.InputLocked = true;
+            p.PlayerController.Rigidbody.velocity = UnityEngine.Vector3.zero;
+        });
         OnGroupFinalVote?.Invoke();
 
         yield return new WaitForSecondsRealtime(1f);
