@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -239,9 +240,17 @@ public class Furniture : Interactable
     private void ForceStopPush()
     {
         transform.parent = _room.transform;
-        foreach (Player p in _playersPushing)
+        for (var index = 0; index < _playersPushing.Count; index++)
         {
-            OnPushCanceled(p);
+            try
+            {
+                Player p = _playersPushing[index];
+                OnPushCanceled(p);
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                continue;
+            }
         }
     }
 }
