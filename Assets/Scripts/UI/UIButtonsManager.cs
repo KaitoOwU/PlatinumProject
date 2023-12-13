@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class UIButtonsManager : MonoBehaviour
@@ -9,6 +10,7 @@ public class UIButtonsManager : MonoBehaviour
     [SerializeField] protected GameObject _firstSelected;
     [SerializeField] protected Transform _selector;
     [SerializeField] protected float _timer;
+    public UnityEvent OnButtonHover;
     
     protected UIButton[] _buttons;
 
@@ -24,5 +26,6 @@ public class UIButtonsManager : MonoBehaviour
         
         _selector.position = _firstSelected.transform.position;
         EventSystem.current.SetSelectedGameObject(_firstSelected);
+        OnButtonHover?.Invoke();
     }
 }
