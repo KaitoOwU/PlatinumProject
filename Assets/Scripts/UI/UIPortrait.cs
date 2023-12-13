@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -29,6 +30,7 @@ public class UIPortrait : MonoBehaviour, IInputAwaiterReactive
         _name.text = suspect.Name;
         _description.text = suspect.Description;
 
+        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
         _validator.Setup(PlayerController.EButtonType.INTERACT, "A", GameManager.Instance.PlayerList.ToArray());
         _group.DOFade(1f, 1.5f);
     }
@@ -36,6 +38,7 @@ public class UIPortrait : MonoBehaviour, IInputAwaiterReactive
     public IEnumerator AwaiterCompleted()
     {
         _validator.Unsetup(PlayerController.EButtonType.INTERACT);
+        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
         yield return new WaitForSecondsRealtime(1f);
         yield return _group.DOFade(0f, 1.5f).WaitForCompletion();
     }

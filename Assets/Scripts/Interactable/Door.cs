@@ -59,25 +59,25 @@ public class Door : Interactable
             if (player.CurrentRoom is Hub) // IF PLAYERS IN HUB
             {
 
-#if UNITY_EDITOR
-#else
+//#if UNITY_EDITOR
+//#else
                 var playersInRoom = GameManager.Instance.PlayerList.FindAll(p => p.PlayerRef.CurrentRoom is Hub).ToList();
                 if (playersInRoom.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count != playersInRoom.Count)
                     yield break;
-#endif
+//#endif
 
                 int countInHub = GameManager.Instance.PlayerList.FindAll(player => player.PlayerRef.RelativePos == HubRelativePosition.HUB).Count;
                 int count = GameManager.Instance.PlayerList.FindAll(player => player.PlayerController.IsButtonHeld(PlayerController.EButtonType.INTERACT)).Count;
 
                 Hub hub = (Hub)player.CurrentRoom;
                 
-#if UNITY_EDITOR
-                if ((hub.RoomDoorRight.PlayersInRange.Count >= 1 || hub.RoomDoorLeft.PlayersInRange.Count >= 1) && count >= 1 && countInHub == 4) //TP FROM HUB AT GAME START
-                {
-#else
+//#if UNITY_EDITOR
+//                if ((hub.RoomDoorRight.PlayersInRange.Count >= 1 || hub.RoomDoorLeft.PlayersInRange.Count >= 1) && count >= 1 && countInHub == 4) //TP FROM HUB AT GAME START
+//                {
+//#else
                 if (hub.RoomDoorRight.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count == 4  && countInHub == 4 && hub.RoomDoorRight.PlayersInRange.Count + hub.RoomDoorLeft.PlayersInRange.Count == 4) 
                 {
-#endif
+//#endif
                     OnLeavingHub?.Invoke();
 
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
