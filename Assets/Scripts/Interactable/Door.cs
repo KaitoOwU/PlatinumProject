@@ -53,7 +53,7 @@ public class Door : Interactable
 
     private IEnumerator DoorInteraction(Player player)
     {
-        if(GameManager.Instance.CurrentGamePhase != GameManager.GamePhase.EARLY_GUESS && _linkedDoor.room is Vestibule)
+        if(_isLocked && _linkedDoor.room is Vestibule)
         {
             if (_message != null && _message.gameObject.activeSelf)
             {
