@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ad82a591-267b-454e-8808-fec20011c7ba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PlatinumProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PlatinumProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Datas/GameData.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Datas/GameData.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interactable/Furniture/Furniture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interactable/Furniture/Furniture.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +67,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.22193211&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev2&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;test&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -86,7 +85,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="$PROJECT_DIR$/../../Unity Build/PlatinumProject 0.2.8\PlatinumProject.exe" />
+      <option name="EXE_PATH" value="$PROJECT_DIR$/../../Unity Builds/PPV0.4\WhispersOfTheDollHouse.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="C:\Users\adves\Documents\Unity\Unity Builds\PlatinumProject" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -94,7 +93,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity\Unity Versions\2022.3.10f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="C:\Users\adves\Documents\Unity\Unity Versions\2022.3.10f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;C:\Users\adves\Documents\Unity\Unity Projects\PlatinumProject&quot; -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\adves\Documents\Unity\Unity Projects\PlatinumProject" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -102,7 +101,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity\Unity Versions\2022.3.10f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="C:\Users\adves\Documents\Unity\Unity Versions\2022.3.10f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;C:\Users\adves\Documents\Unity\Unity Projects\PlatinumProject&quot; -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\adves\Documents\Unity\Unity Projects\PlatinumProject" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -200,6 +199,7 @@
       <workItem from="1701561423550" duration="1165000" />
       <workItem from="1702371597497" duration="1255000" />
       <workItem from="1702399314368" duration="2578000" />
+      <workItem from="1702480988168" duration="487000" />
     </task>
     <servers />
   </component>
@@ -237,6 +237,20 @@
           <line>17</line>
           <properties documentPath="D:\Unity\Unity Projects\PlatinumProject\Assets\Scripts\UI\UIItemFrame.cs" initialLine="17" containingFunctionPresentation="Method 'Add'" />
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UI/UIObtainedClue.cs</url>
+          <line>31</line>
+          <properties documentPath="C:\Users\adves\Documents\Unity\Unity Projects\PlatinumProject\Assets\Scripts\UI\UIObtainedClue.cs" initialLine="31" isMultiMethodBreakpoint="true">
+            <option name="multiMethodBreakpoint" value="true" />
+            <startOffsets>
+              <option value="-1" />
+            </startOffsets>
+            <endOffsets>
+              <option value="-1" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
