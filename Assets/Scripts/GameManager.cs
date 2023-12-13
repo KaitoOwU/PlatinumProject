@@ -344,7 +344,8 @@ public class GameManager : MonoBehaviour
     private IEnumerator CR_TPAllPlayersToHub()
     {
         PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
-        
+        _hub.Doors[0].IsLocked = false;
+        _hub.Doors[1].IsLocked = false;
         StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
         yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
         
