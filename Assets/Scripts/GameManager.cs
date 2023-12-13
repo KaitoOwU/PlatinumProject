@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
     private CameraState _currentCameraState;
     private int _shuffleCount=0;
     private float _timer;
-    private bool _isTimerGoing;
+    private bool _isTimerGoing=false;
     private List<PickableData> _items = new();
     public List<Player> NonSelectedPlayers { get=> _nonSelectedPlayers; set=> _nonSelectedPlayers = value; }
     private List<Player> _nonSelectedPlayers = new();

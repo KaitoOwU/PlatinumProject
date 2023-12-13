@@ -39,8 +39,8 @@ public class BookshelfTrap : MonoBehaviour
     {
         while (_isShooting)
         {
-            yield return new WaitForSeconds(_cadence);
             GameObject projectile = Instantiate(_book, _spawnPoint.position,_spawnPoint.rotation);
+            yield return new WaitForSeconds(_cadence);
         }
     }
 }
