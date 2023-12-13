@@ -27,6 +27,7 @@ public class Room : MonoBehaviour
     [SerializeField] private bool _isRewardClue;
     [SerializeField] private bool _canHaveReward;
     [SerializeField] private bool _discovered;
+        [SerializeField]private bool _hasSearchable;
     private List<FlickeringLight> _lights = new List<FlickeringLight>();
     private List<Material> _usedDoormats = new List<Material>();
     public enum Side
@@ -59,9 +60,19 @@ public class Room : MonoBehaviour
         _lights = GetComponentsInChildren<FlickeringLight>().ToList();
     }
     private void Start()
-    {
-        if (_canHaveReward==false&&_roomSide!=Side.CORRIDOR)
+    { 
+         _hasSearchable = false;
+        Debug.Log(name + "  " + GetComponentsInChildren<Furniture>().Length);
+        foreach (Furniture f in GetComponentsInChildren<Furniture>())
         {
+            if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
+            {
+                _hasSearchable = true;
+            }
+        }
+        if ((_canHaveReward==false&&!_hasSearchable)&&_roomSide!=Side.CORRIDOR)
+        {
+            Debug.Log(name);
             CompletedLights();
         }
     }
