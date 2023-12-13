@@ -44,8 +44,8 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.9622642, g: 0.83165586, b: 0.44845137, a: 1}
-  m_Intensity: 0.56
+  m_Color: {r: 0.4470588, g: 0.69421977, b: 0.9607843, a: 1}
+  m_Intensity: 0.02
   m_Range: 7.53
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -323,3 +323,46 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _curveC:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.13778043
+      value: 0.9937558
+      inSlope: -0.023870721
+      outSlope: -0.023870721
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6837758
+      value: 0.9911918
+      inSlope: -0.003421653
+      outSlope: -0.003421653
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.5783583
+    - serializedVersion: 3
+      time: 1
+      value: 0.10140991
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _completeIntiensity: 0.5

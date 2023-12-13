@@ -27,6 +27,7 @@ public class Room : MonoBehaviour
     [SerializeField] private bool _isRewardClue;
     [SerializeField] private bool _canHaveReward;
     [SerializeField] private bool _discovered;
+    private List<FlickeringLight> _lights = new List<FlickeringLight>();
     private List<Material> _usedDoormats = new List<Material>();
     public enum Side
     {
@@ -55,6 +56,14 @@ public class Room : MonoBehaviour
     private void Awake()
     {
         Doors = GetComponentsInChildren<Door>().ToList();
+        _lights = GetComponentsInChildren<FlickeringLight>().ToList();
+    }
+    private void Start()
+    {
+        if (_canHaveReward==false&&_roomSide!=Side.CORRIDOR)
+        {
+            CompletedLights();
+        }
     }
     private void Update()
     {
@@ -77,6 +86,7 @@ public class Room : MonoBehaviour
         GameManager.Instance.ValidatedRooom++;
         Debug.Log(GameManager.Instance.ValidatedRooom);
         OnCompletedRoom?.Invoke();
+        CompletedLights();
         FindObjectOfType<RoomGeneration>().LockedDoor();
         if(GameManager.Instance.ValidatedRooom==6|| GameManager.Instance.ValidatedRooom == 10)
         {
@@ -99,5 +109,12 @@ public class Room : MonoBehaviour
             pInRoom++;
         }
         return pInRoom;
+    }
+    private void CompletedLights()
+    {
+        foreach(FlickeringLight l in _lights)
+        {
+            l.Complete();
+        }
     }
 }
