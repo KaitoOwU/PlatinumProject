@@ -75,7 +75,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.9425623, b: 0.7294118, a: 1}
+  m_Color: {r: 0.8190287, g: 0.8301887, b: 0.73933786, a: 1}
   m_Intensity: 10
   m_Range: 17.26
   m_SpotAngle: 30
@@ -193,7 +193,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.9425623, b: 0.7294118, a: 1}
+  m_Color: {r: 0.8190287, g: 0.8301887, b: 0.73933786, a: 1}
   m_Intensity: 10
   m_Range: 17.26
   m_SpotAngle: 30
@@ -311,7 +311,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.9425623, b: 0.7294118, a: 1}
+  m_Color: {r: 0.8190287, g: 0.8301887, b: 0.73933786, a: 1}
   m_Intensity: 10
   m_Range: 17.26
   m_SpotAngle: 30
@@ -17716,6 +17716,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 3067002fc4b36a04cbf130cc3eb13244, type: 2}
+    - target: {fileID: 8234364589270612660, guid: c870671ee6471bb49827e26d1cbc2960,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8277905828560068147, guid: c870671ee6471bb49827e26d1cbc2960,
         type: 3}
       propertyPath: room
@@ -21016,6 +21021,7 @@ MonoBehaviour:
   _isRewardClue: 0
   _canHaveReward: 0
   _discovered: 0
+  _hasSearchable: 0
   _roomLeft: {fileID: 0}
   _roomRight: {fileID: 0}
   _roomDoorLeft: {fileID: 8000977509149704310}
