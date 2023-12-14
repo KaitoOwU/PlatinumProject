@@ -6,6 +6,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
@@ -16,7 +17,6 @@ public class UIPauseMenu : MonoBehaviour
     [SerializeField] private GameObject _firstSelected, _currentSelected;
     [SerializeField] private TextMeshProUGUI _player;
     [SerializeField] private Image _selector;
-    [SerializeField] private EventSystem _eventSystem;
 
     private void Awake()
     {
@@ -28,12 +28,13 @@ public class UIPauseMenu : MonoBehaviour
 
     public void InitUI(Player player)
     {
-        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList()
-            .ForEach(p => p.PlayerController.Inputs.InputLocked = true);
+        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null && p.PlayerRef != player).ToList()
+            .ForEach(p => p.PlayerController.Inputs.gameObject.SetActive(false));
+        player.PlayerController.Inputs.InputLocked = true;
 
         _player.text = "Player " + player.Index;
         _group.DOFade(1f, 1.5f);
-        _eventSystem.SetSelectedGameObject(_firstSelected);
+        EventSystem.current.SetSelectedGameObject(_firstSelected);
         SelectButton(_firstSelected);
     }
 
@@ -70,7 +71,11 @@ public class UIPauseMenu : MonoBehaviour
     public void Close()
     {
         GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList()
-            .ForEach(p => p.PlayerController.Inputs.InputLocked = true);
+            .ForEach(p =>
+            {
+                p.PlayerController.Inputs.gameObject.SetActive(true);
+            p.PlayerController.Inputs.InputLocked = false;
+        });
         _group.DOFade(0f, 1f);
     }
 }

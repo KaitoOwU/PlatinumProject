@@ -50,7 +50,7 @@ public class UIValidateInputs : MonoBehaviour
 }
 
 [Serializable]
-public class InputAwaiter
+public class InputAwaiter   
 {
     public int index;
     public TextMeshProUGUI inputTxt;
@@ -79,6 +79,7 @@ public class InputAwaiter
             p.PlayerRef.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].started -= InputValidate;
             p.PlayerRef.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].canceled -= InputCanceled;
         }
+        _activated = false;
     }
 
     internal void ResetVFX()
