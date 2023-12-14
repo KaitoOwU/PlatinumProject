@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     public EMoveState MoveState => _moveState;
     public Animator Animator => _animator;
     public Furniture PushedFurniture { get => _pushedFurniture; set => _pushedFurniture = value; }
+    public Rigidbody Rigidbody { get => _rigidbody; set => _rigidbody = value; }
+
     private Furniture _pushedFurniture;
 
     [Header("Parameters")]
@@ -67,7 +69,13 @@ public class PlayerController : MonoBehaviour
         PUSH,
         PUSH_BLOCKED,
     }
+    private void Start()
+    {
+        _rigidbody = GetComponent<Rigidbody>();
 
+        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+
+    }
     private void OnDisable() => _CleanUp();
 
     public bool IsButtonHeld(EButtonType buttonType)
@@ -103,7 +111,6 @@ public class PlayerController : MonoBehaviour
         _inputs = inputs;
         playerController.SetParent(transform);
 
-        _rigidbody = GetComponent<Rigidbody>();
 
         GetComponent<Player>().Index = _playerIndex;
 
@@ -117,6 +124,8 @@ public class PlayerController : MonoBehaviour
 
         _moveSpeed = GameManager.Instance.PlayerConstants.NormalMoveSpeed;
         _moveState = EMoveState.NORMAL;
+
+        _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 
     private void _CleanUp()
@@ -172,6 +181,14 @@ public class PlayerController : MonoBehaviour
                 _animator.SetBool("IsMoving", false);
             }
         }
+    }
+    public IEnumerator Fall()
+    {
+        _animator.SetTrigger("Fall");
+        Inputs.InputLocked = true;
+
+        yield return new WaitForSeconds(5.65f);
+        Inputs.InputLocked = false;
     }
 
     #region Player Actions Methods

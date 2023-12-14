@@ -47,7 +47,7 @@ public class Paints : Interactable
 
         if (_message != null && _message.gameObject.activeSelf && _onRangeMessage != "")
         {
-            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+            TutorialManager.Instance.HideBubble(_message, 0);
         }
     }
     protected override void OnInteract(Player player)

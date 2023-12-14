@@ -121,8 +121,9 @@ public class GameManager : MonoBehaviour
     private GamePhase _currentGamePhase;
     private TimerPhase _currentTimerPhase;
     private CameraState _currentCameraState;
+    private int _shuffleCount=0;
     private float _timer;
-    private bool _isTimerGoing;
+    private bool _isTimerGoing=false;
     private List<PickableData> _items = new();
     public List<Player> NonSelectedPlayers { get=> _nonSelectedPlayers; set=> _nonSelectedPlayers = value; }
     private List<Player> _nonSelectedPlayers = new();
@@ -211,29 +212,29 @@ public class GameManager : MonoBehaviour
         _items = Helper.GetAllItemDatas().OrderBy(value => value.ID).ToList();
         _nonSelectedPlayers = PlayerList.Select(p => p.PlayerRef).ToList();
         OnEachEndPhase.AddListener(TPAllPlayersToHub);
-        OnEachEndPhase.AddListener(RandomMessage);
     }
 
     private void RandomMessage()
     {
-        int i = UnityEngine.Random.Range(0, 2);
-        switch (i)
+        Debug.Log(_shuffleCount);
+        switch (_shuffleCount)
         {
             case 0:
                 StartCoroutine(UIMessageGenerator.instance.Init(false,
-                    new UIMessageData("The Manor", "You've been brought back here? How strange...", 0.03f, 5f)));
+                    new UIMessageData("The Manor", "Not so fast! Let me shuffle the rooms around a bit for you so it's not too easy. Wouldn't want you to get bored to death...", 0.03f, 5f)));
                 break;
             
             case 1:
                 StartCoroutine(UIMessageGenerator.instance.Init(false,
-                    new UIMessageData("The Manor", "Strange, someone must be behind this teleportation.", 0.03f, 5f)));
+                    new UIMessageData("The Manor", "Aaand let me shuffle the rooms again. You only got 5 minutes left to find the murderer, sounds good for me..", 0.03f, 5f)));
                 break;
             
             case 2:
                 StartCoroutine(UIMessageGenerator.instance.Init(false,
-                    new UIMessageData("The Manor", "Hehehe, back here? I'm going to believe you love this room.", 0.03f, 5f)));
+                    new UIMessageData("The Manor", "Time's up! You can't explore the manor anymore so look at what you've found and then enter the vestibule to give me your final answer.", 0.03f, 5f)));
                 break;
         }
+        _shuffleCount++;
     }
 
     void Start()
@@ -343,7 +344,8 @@ public class GameManager : MonoBehaviour
     private IEnumerator CR_TPAllPlayersToHub()
     {
         PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
-        
+        _hub.Doors[0].IsLocked = false;
+        _hub.Doors[1].IsLocked = false;
         StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
         yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
         
@@ -367,12 +369,15 @@ public class GameManager : MonoBehaviour
     public void TPPlayerPostTrap(Player[] players)
     {
         StartCoroutine(CR_TPPlayerPostTrap(players));
+        foreach(Player p in players)
+        {
+            StartCoroutine(p.PlayerController.Fall());
+        }
     }
 
     private IEnumerator CR_TPPlayerPostTrap(Player[] players)
     {
         Image imgToCancel;
-        players.ToList().Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
         
         if (players[0].RelativePos == HubRelativePosition.RIGHT_WING)
         {
@@ -400,7 +405,6 @@ public class GameManager : MonoBehaviour
         }
 
         yield return StartCoroutine(_transitions.EndTransition(imgToCancel));
-        players.ToList().Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
     }
 
     void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
@@ -444,6 +448,7 @@ public class GameManager : MonoBehaviour
                     StartCoroutine(ShuffleTimer());
                     Debug.LogError("<color=cyan>First Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.SECOND_PHASE;
+                    RandomMessage();
                 }
                 break;
             case TimerPhase.SECOND_PHASE:
@@ -461,6 +466,7 @@ public class GameManager : MonoBehaviour
                     StartCoroutine(ShuffleTimer());
                     Debug.LogError("<color=cyan>Second Phase End </color>" + _timer);
                     _currentTimerPhase = TimerPhase.THIRD_PHASE;
+                    RandomMessage();
                 }
                 break;
             case TimerPhase.THIRD_PHASE:
@@ -489,6 +495,7 @@ public class GameManager : MonoBehaviour
                     _isTimerGoing = false;
                     _timer = 0;
                     _currentTimerPhase = TimerPhase.END;
+                    RandomMessage();
                 }
                 break;
             case TimerPhase.END:
@@ -549,18 +556,20 @@ public class GameManager : MonoBehaviour
 
     IEnumerator VestibuleMessages()
     {
-        //UIMessageGenerator.instance.messages = StartCoroutine(UIMessageGenerator.instance.Init(true,
-        //    new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.05f, 3f),
-        //    new UIMessageData("The Manor",
-        //        "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
-        //        0.05f, 3f),
-        //    new UIMessageData("The Manor",
-        //        "You'll have to find clues about the murder that took place here and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
-        //        0.05f, 3f),
-        //    new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.05f,
-        //        3f),
-        //    new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.2f, 3f)
-        //));
+        UIMessageGenerator.instance.messages = StartCoroutine(UIMessageGenerator.instance.Init(true,
+            new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.0f, 2f),
+            new UIMessageData("The Manor",
+                "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
+                0.02f, 2f),
+            new UIMessageData("The Manor",
+                "You'll have to find clues about the murder that took place here and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
+                0.02f, 2f),
+            new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.02f,
+                2f),
+            new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.02f, 3f),
+            new UIMessageData("The Manor", "You can't be more than 3 in a wing so you'll have to split into teams.", 0.02f, 3f),
+            new UIMessageData("The Manor", "The upper hall in the hall is blocked until midnight.", 0.02f, 3f)
+        ));
         yield return UIMessageGenerator.instance.messages;
 
         yield return new WaitForSecondsRealtime(2f);
@@ -575,7 +584,7 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(UIMessageGenerator.instance.Init(false,
-            new UIMessageData("", "Press A and use your Left Joystick to select and awake your puppet.", 0.01f, 10f)));
+            new UIMessageData("", "Press any key and use your Left Joystick to select your puppet.<br>Press A to awake it.", 0.01f, 10f)));
     } 
 }
 

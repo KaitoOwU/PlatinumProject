@@ -81,8 +81,9 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
 
     public IEnumerator AwaiterCompleted()
     {
-        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.Unsetup(PlayerController.EButtonType.INTERACT));
+        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.UnsetupInputs(PlayerController.EButtonType.INTERACT));
         yield return new WaitForSecondsRealtime(1.5f);
+        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
         ClearUI();
     }
 }

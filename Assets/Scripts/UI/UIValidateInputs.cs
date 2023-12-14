@@ -45,7 +45,7 @@ public class UIValidateInputs : MonoBehaviour
 
     public void Unsetup(PlayerController.EButtonType input)
     {
-        _inputAwaiters.ToList().ForEach(awaiter => awaiter.Unsetup(input));
+        _inputAwaiters.ToList().ForEach(awaiter => awaiter.UnsetupInputs(input));
     }
 }
 
@@ -72,14 +72,17 @@ public class InputAwaiter
         player.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].canceled += InputCanceled;
     }
     
-    internal void Unsetup(PlayerController.EButtonType buttonType)
+    internal void UnsetupInputs(PlayerController.EButtonType buttonType)
     {
         foreach (PlayerInfo p in GameManager.Instance.PlayerList) if (p.PlayerRef.PlayerController.Inputs != null)
         {
             p.PlayerRef.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].started -= InputValidate;
             p.PlayerRef.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].canceled -= InputCanceled;
         }
+    }
 
+    internal void ResetVFX()
+    {
         inputTxt.color = new Color(0, 0, 0, 1);
         surround.color = new Color(1, 1, 1, 1);
         button.color = new Color(1, 1, 1, 1);

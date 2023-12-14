@@ -50,14 +50,15 @@ public class UIHubTpManager : MonoBehaviour, IInputAwaiterReactive
 
     public IEnumerator AwaiterCompleted()
     {
-        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.Unsetup(PlayerController.EButtonType.ASK_TP_HUB));
+        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.UnsetupInputs(PlayerController.EButtonType.ASK_TP_HUB));
         _timer.DOKill();
         _timer.DOColor(new Color(0, 0.7f, 0, 0.4f), .5f);
 
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSecondsRealtime(1.5f);
 
         GameManager.Instance.TPAllPlayersToHub();
         
+        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
         yield return transform.DOMoveY(-190f, .5f).SetEase(Ease.InExpo).WaitForCompletion();
         _isActive = false;
     }
@@ -65,11 +66,12 @@ public class UIHubTpManager : MonoBehaviour, IInputAwaiterReactive
 
     private IEnumerator PlayUncompleteAnimation()
     {
-        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.Unsetup(PlayerController.EButtonType.ASK_TP_HUB));
+        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.UnsetupInputs(PlayerController.EButtonType.ASK_TP_HUB));
         _timer.DOKill();
         _timer.DOColor(new Color(0.7f, 0, 0, 0.4f), .5f);
 
-        yield return new WaitForSecondsRealtime(3f);
+        yield return new WaitForSecondsRealtime(1.5f);
+        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
         yield return transform.DOMoveY(-190f, .5f).SetEase(Ease.InExpo).WaitForCompletion();
         _isActive = false;
     }

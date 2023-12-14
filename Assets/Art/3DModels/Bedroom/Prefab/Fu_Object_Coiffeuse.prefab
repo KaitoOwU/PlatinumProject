@@ -63,6 +63,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fu_Object_Coiffeuse
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 11101821fe77cbd4ea4cc99810d4aa75,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -75,6 +80,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -8967954648558136318}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 11101821fe77cbd4ea4cc99810d4aa75,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1731723444098926994}
   m_SourcePrefab: {fileID: 100100000, guid: 11101821fe77cbd4ea4cc99810d4aa75, type: 3}
 --- !u!1 &3008824714136023783 stripped
 GameObject:
@@ -115,6 +124,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2331c27cfe58a1d419546d8354e578dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onRangeMessage: 
+  _onInteractMessage: 
+  OnSearchFurniture:
+    m_PersistentCalls:
+      m_Calls: []
   OnClueFoundInFurniture:
     m_PersistentCalls:
       m_Calls: []
@@ -134,3 +148,26 @@ MonoBehaviour:
   _3Dmodel: {fileID: 919132149155446097, guid: 11101821fe77cbd4ea4cc99810d4aa75, type: 3}
   _playersNeededNumber: 0
   _clue: {fileID: 0}
+  _playersPushing: []
+  _onTooHeavyMessage: 
+--- !u!135 &1731723444098926994
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3008824714136023783}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.03
+  m_Center: {x: 0, y: 0, z: 0.03}

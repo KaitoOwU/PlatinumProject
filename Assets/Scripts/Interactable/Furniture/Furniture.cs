@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,6 +54,16 @@ public class Furniture : Interactable
         _furnitureModelCollider = _3Dmodel.GetComponent<Collider>();
         _room = GetComponentInParent<Room>();
         GameManager.Instance.OnEachEndPhase.AddListener(ForceStopPush);
+
+        switch (_furnitureType)
+        {
+            case EFurnitureType.MOVABLE:
+                _onRangeMessage = "RT";
+                break;
+            case EFurnitureType.SEARCHABLE:
+                _onRangeMessage = "A";
+                break;
+        }
     }
 
     #region Overridden methods
@@ -107,7 +118,7 @@ public class Furniture : Interactable
 
         if (_message != null && _message.gameObject.activeSelf && _onRangeMessage != "")
         {
-            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+            TutorialManager.Instance.HideBubble(_message, 0);
         }
     }
     #endregion
@@ -124,7 +135,8 @@ public class Furniture : Interactable
             {
                 GameManager.Instance.FoundClues.Add(_clue);
                 OnClueFoundInFurniture?.Invoke();
-                if (player.RelativePos == HubRelativePosition.LEFT_WING)
+                UIItemFrameManager.instance.ClueAcquired(_clue.Data);
+                if (player.RelativePos == HubRelativePosition.LEFT_WING /*Retirer*/|| player.RelativePos == HubRelativePosition.HUB)
                     UIClue.left.Init(_clue.Data);
                 else if (player.RelativePos == HubRelativePosition.RIGHT_WING)
                     UIClue.right.Init(_clue.Data);
@@ -136,6 +148,7 @@ public class Furniture : Interactable
                 Debug.Log("No Clue Found!");
             }
             _searched = true;
+            transform.GetComponentInParent<Room>().CompletedRoom();
         }
     }
 
@@ -144,7 +157,7 @@ public class Furniture : Interactable
     {
         if (_message != null && _message.gameObject.activeSelf)
         {
-            StartCoroutine(TutorialManager.Instance._HideBubble(_message, 0));
+            TutorialManager.Instance.HideBubble(_message, 0);
             _message = null;
         }
         if (_playersPushing.Contains(player))
@@ -238,9 +251,17 @@ public class Furniture : Interactable
     private void ForceStopPush()
     {
         transform.parent = _room.transform;
-        foreach (Player p in _playersPushing)
+        for (var index = 0; index < _playersPushing.Count; index++)
         {
-            OnPushCanceled(p);
+            try
+            {
+                Player p = _playersPushing[index];
+                OnPushCanceled(p);
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                continue;
+            }
         }
     }
 }
