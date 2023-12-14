@@ -457,7 +457,7 @@ public class RoomGeneration : MonoBehaviour
         {
             _maxRooms = 5;
         }
-        else if (validated > 12)
+        else if (validated < 12)
         {
             _maxRooms = _roomsInPlay.Count / 2;
         }

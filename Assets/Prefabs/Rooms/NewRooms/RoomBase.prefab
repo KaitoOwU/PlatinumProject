@@ -162,6 +162,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39bdc959fba8c09418c497f9bd6e9606, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnClueSpawn:
+    m_PersistentCalls:
+      m_Calls: []
   _reward: {fileID: 0}
   _room: {fileID: 0}
   _enigmaCount: 0
@@ -698,6 +701,12 @@ MonoBehaviour:
   OnCompletedRoom:
     m_PersistentCalls:
       m_Calls: []
+  OnUnlocked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnNewRoom:
+    m_PersistentCalls:
+      m_Calls: []
   _doors: []
   _linkedRooms: []
   _roomSide: 0
@@ -706,6 +715,7 @@ MonoBehaviour:
   _cameraPoint: {fileID: 5128783077591038199}
   _isRewardClue: 0
   _canHaveReward: 0
+  _discovered: 0
 --- !u!1 &5712469277784657438
 GameObject:
   m_ObjectHideFlags: 0

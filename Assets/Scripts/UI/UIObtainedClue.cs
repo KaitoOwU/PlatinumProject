@@ -41,5 +41,6 @@ public class UIObtainedClue : MonoBehaviour, IInputAwaiterReactive
         _inputValidator.Unsetup(PlayerController.EButtonType.INTERACT);
         GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
         yield return _group.DOFade(0f, 1f).WaitForCompletion();
+        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
     }
 }

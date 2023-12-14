@@ -58,7 +58,7 @@ public class Furniture : Interactable
         switch (_furnitureType)
         {
             case EFurnitureType.MOVABLE:
-                _onRangeMessage = "LR";
+                _onRangeMessage = "RT";
                 break;
             case EFurnitureType.SEARCHABLE:
                 _onRangeMessage = "A";
@@ -148,6 +148,7 @@ public class Furniture : Interactable
                 Debug.Log("No Clue Found!");
             }
             _searched = true;
+            transform.GetComponentInParent<Room>().CompletedRoom();
         }
     }
 

@@ -344,7 +344,8 @@ public class GameManager : MonoBehaviour
     private IEnumerator CR_TPAllPlayersToHub()
     {
         PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
-        
+        _hub.Doors[0].IsLocked = false;
+        _hub.Doors[1].IsLocked = false;
         StartCoroutine(_transitions.StartTransition(_transitions.RightTransition));
         yield return StartCoroutine(_transitions.StartTransition(_transitions.LeftTransition));
         
@@ -555,18 +556,20 @@ public class GameManager : MonoBehaviour
 
     IEnumerator VestibuleMessages()
     {
-        //UIMessageGenerator.instance.messages = StartCoroutine(UIMessageGenerator.instance.Init(true,
-        //    new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.05f, 3f),
-        //    new UIMessageData("The Manor",
-        //        "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
-        //        0.05f, 3f),
-        //    new UIMessageData("The Manor",
-        //        "You'll have to find clues about the murder that took place here and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
-        //        0.05f, 3f),
-        //    new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.05f,
-        //        3f),
-        //    new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.2f, 3f)
-        //));
+        UIMessageGenerator.instance.messages = StartCoroutine(UIMessageGenerator.instance.Init(true,
+            new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.0f, 2f),
+            new UIMessageData("The Manor",
+                "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
+                0.02f, 2f),
+            new UIMessageData("The Manor",
+                "You'll have to find clues about the murder that took place here and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
+                0.02f, 2f),
+            new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.02f,
+                2f),
+            new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.02f, 3f),
+            new UIMessageData("The Manor", "You can't be more than 3 in a wing so you'll have to split into teams.", 0.02f, 3f),
+            new UIMessageData("The Manor", "The upper hall in the hall is blocked until midnight.", 0.02f, 3f)
+        ));
         yield return UIMessageGenerator.instance.messages;
 
         yield return new WaitForSecondsRealtime(2f);
@@ -581,7 +584,7 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(UIMessageGenerator.instance.Init(false,
-            new UIMessageData("", "Press A and use your Left Joystick to select and awake your puppet.", 0.01f, 10f)));
+            new UIMessageData("", "Press any key and use your Left Joystick to select your puppet.<br>Press A to awake it.", 0.01f, 10f)));
     } 
 }
 

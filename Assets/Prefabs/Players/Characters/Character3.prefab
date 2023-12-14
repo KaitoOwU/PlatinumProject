@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8245125849448980084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2281753041086709642}
+  m_Layer: 0
+  m_Name: ItemPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2281753041086709642
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8245125849448980084}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.01880466, y: 0.03563173, z: 0.12089895, w: -0.9918469}
+  m_LocalPosition: {x: -0.216, y: 0.196, z: -0.011}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2788963549244859843}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1785911859386353936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -235,7 +266,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -4720697313668813613, guid: 2d27de76781a62c41b41b076e250830a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2281753041086709642}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d27de76781a62c41b41b076e250830a,
         type: 3}
@@ -272,6 +307,12 @@ Animator:
 --- !u!4 &2252481660217782011 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2d27de76781a62c41b41b076e250830a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1785911859386353936}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2788963549244859843 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4720697313668813613, guid: 2d27de76781a62c41b41b076e250830a,
     type: 3}
   m_PrefabInstance: {fileID: 1785911859386353936}
   m_PrefabAsset: {fileID: 0}
@@ -373,6 +414,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 5466743820657936919, guid: 0ef5c17df4d8ce84280a9a684dea1f28,
+        type: 3}
+      propertyPath: _itemPos
+      value: 
+      objectReference: {fileID: 2281753041086709642}
     - target: {fileID: 6266720918998195142, guid: 0ef5c17df4d8ce84280a9a684dea1f28,
         type: 3}
       propertyPath: _animator
