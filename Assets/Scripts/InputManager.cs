@@ -227,6 +227,7 @@ public class InputManager : MonoBehaviour
     {
         if (_inputLocked)
             return;
+        UIPauseMenu.instance.InitUI(_players[_playerSelectedIndex]);
         OnPause?.Invoke();
     }
 

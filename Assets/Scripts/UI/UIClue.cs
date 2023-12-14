@@ -68,7 +68,7 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
     
     private void ClearUI()
     {
-        _group.DOFade(0f, 1.5f);
+        _group.DOFade(0f, 1.5f).OnComplete(() => _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX()));
         if (_position == HubRelativePosition.LEFT_WING)
         {
             GameManager.Instance.LeftPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
@@ -83,7 +83,6 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
     {
         _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.UnsetupInputs(PlayerController.EButtonType.INTERACT));
         yield return new WaitForSecondsRealtime(1.5f);
-        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
         ClearUI();
     }
 }

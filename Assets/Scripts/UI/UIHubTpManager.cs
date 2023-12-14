@@ -58,8 +58,8 @@ public class UIHubTpManager : MonoBehaviour, IInputAwaiterReactive
 
         GameManager.Instance.TPAllPlayersToHub();
         
-        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
         yield return transform.DOMoveY(-190f, .5f).SetEase(Ease.InExpo).WaitForCompletion();
+        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
         _isActive = false;
     }
 
@@ -71,8 +71,8 @@ public class UIHubTpManager : MonoBehaviour, IInputAwaiterReactive
         _timer.DOColor(new Color(0.7f, 0, 0, 0.4f), .5f);
 
         yield return new WaitForSecondsRealtime(1.5f);
-        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
         yield return transform.DOMoveY(-190f, .5f).SetEase(Ease.InExpo).WaitForCompletion();
+        _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
         _isActive = false;
     }
 }
