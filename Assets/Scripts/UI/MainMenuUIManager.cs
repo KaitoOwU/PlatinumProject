@@ -74,8 +74,9 @@ public class MainMenuUIManager : MonoBehaviour
     IEnumerator CR_LoadCredits()
     {
         _background.transform.DOScale(1.4f, 5f).SetEase(Ease.OutExpo);
+        _events.SetSelectedGameObject(null);
         yield return _mainMenu.DOFade(0f, 1f).WaitForCompletion();
-
+        
         _events.SetSelectedGameObject(_buttonCredit.gameObject);
         _credits.DOFade(1f, 1f);
     }
@@ -83,6 +84,7 @@ public class MainMenuUIManager : MonoBehaviour
     IEnumerator CR_UnloadCredits()
     {
         _background.transform.DOScale(1f, 5f).SetEase(Ease.OutExpo);
+        _events.SetSelectedGameObject(null);
         yield return _credits.DOFade(0f, 1f).WaitForCompletion();
         
         _events.SetSelectedGameObject(_buttons[1].gameObject);
