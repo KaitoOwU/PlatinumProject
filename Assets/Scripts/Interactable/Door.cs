@@ -69,6 +69,9 @@ public class Door : Interactable
         {
             
             OnChangeRoom?.Invoke();
+            player.CurrentRoom.OnExitRoom?.Invoke();
+            _linkedDoor.room.OnEnterRoom?.Invoke();
+
             if (player.CurrentRoom is Hub) // IF PLAYERS IN HUB
             {
 

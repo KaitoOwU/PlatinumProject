@@ -2,12 +2,8 @@ using System;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SocialPlatforms;
-using static Furniture;
 public class Furniture : Interactable
 {
     #region Fields
@@ -29,6 +25,7 @@ public class Furniture : Interactable
     [SerializeField] private GameObject _3Dmodel;
     [SerializeField] private int _playersNeededNumber;
     [SerializeField] private Clue _clue;
+    [SerializeField] private float _timeBetweenVibration = 2;
     private Room _room;
 
     [SerializeField]
@@ -38,6 +35,8 @@ public class Furniture : Interactable
     private Collider _furnitureModelCollider;
     [SerializeField]
     protected string _onTooHeavyMessage;
+    private Coroutine _loopVibrationCoroutine;
+    Tweener _vibrateTween;
 
     #endregion
     public enum EFurnitureType
@@ -61,9 +60,12 @@ public class Furniture : Interactable
                 _onRangeMessage = "RT";
                 break;
             case EFurnitureType.SEARCHABLE:
+                _SetupRoomEvents();
                 _onRangeMessage = "A";
                 break;
         }
+        _vibrateTween = _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
+        _SetupRoomEvents();
     }
 
     #region Overridden methods
@@ -129,7 +131,7 @@ public class Furniture : Interactable
 
         if (_furnitureType == EFurnitureType.SEARCHABLE && !_searched)
         {
-            _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
+            _vibrateTween.Restart();
             OnSearchFurniture?.Invoke();
             if (_clue != null)
             {
@@ -262,6 +264,28 @@ public class Furniture : Interactable
             {
                 continue;
             }
+        }
+    }
+    private void _SetupRoomEvents()
+    {
+        _room.OnEnterRoom.AddListener(_StartLoopedVibration);
+        _room.OnExitRoom.AddListener(_StopLoopedVibration);
+    }
+
+    private void _StartLoopedVibration()
+    {
+        _loopVibrationCoroutine = StartCoroutine(_LoopVibration());
+    }
+    private void _StopLoopedVibration()
+    {
+        StopCoroutine(_loopVibrationCoroutine);
+    }
+    private IEnumerator _LoopVibration()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(_timeBetweenVibration);
+            _vibrateTween.Restart();
         }
     }
 }
