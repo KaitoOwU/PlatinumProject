@@ -1396,11 +1396,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 179.703
       objectReference: {fileID: 0}
-    - target: {fileID: 5247559634944239544, guid: 96d1a6be2b9b65e429303aecba0062e7,
-        type: 3}
-      propertyPath: m_Radius
-      value: 2.5
-      objectReference: {fileID: 0}
     - target: {fileID: 5285594342563020258, guid: 96d1a6be2b9b65e429303aecba0062e7,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -1451,15 +1446,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: -- HUB --
       objectReference: {fileID: 0}
-    - target: {fileID: 6419715002052403783, guid: 96d1a6be2b9b65e429303aecba0062e7,
-        type: 3}
-      propertyPath: m_Radius
-      value: 3.4
-      objectReference: {fileID: 0}
     - target: {fileID: 7047460424812915604, guid: 96d1a6be2b9b65e429303aecba0062e7,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.011
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083947969125805094, guid: 96d1a6be2b9b65e429303aecba0062e7,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9137053503113512329, guid: 96d1a6be2b9b65e429303aecba0062e7,
         type: 3}
@@ -2926,7 +2921,7 @@ PrefabInstance:
     - target: {fileID: 947611687431112723, guid: 59f68adff5a10b4408d033c6e3e1fa4b,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1709303127673497528, guid: 59f68adff5a10b4408d033c6e3e1fa4b,
         type: 3}
@@ -2937,7 +2932,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 29c8b2d3d42cd384b97fb7b15b6c98bd, type: 3}
+      objectReference: {fileID: 8300000, guid: 7c8a6518468ce9c4a9e4895d5d11101b, type: 3}
     - target: {fileID: 3074014337039176224, guid: 59f68adff5a10b4408d033c6e3e1fa4b,
         type: 3}
       propertyPath: _camera

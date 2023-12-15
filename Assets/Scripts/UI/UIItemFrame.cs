@@ -15,10 +15,9 @@ public class UIItemFrame : MonoBehaviour
 
     public void Add(ClueData clue)
     {
-        UIItem item = Instantiate(Resources.Load<GameObject>("Item/ItemsUI/UIItem"), transform).GetComponent<UIItem>();
+        UIItem item = Instantiate(Resources.Load<GameObject>("Item/ItemsUI/UIItem"), transform).transform.GetChild(1).GetComponent<UIItem>();
 
         item.transform.localPosition = Vector3.zero;
-        item.transform.localRotation = Quaternion.Euler(0, 0, Random.Range(-90f, 90f));
         item.Init(clue);
 
         ++_current;
