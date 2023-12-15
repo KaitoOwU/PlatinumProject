@@ -8,7 +8,6 @@ using UnityEngine.Events;
 
 public class Room : MonoBehaviour
 {
-
     /*[SerializeField] private Room _nextRoom;
     [SerializeField] private Room _previousRoom;
 
@@ -17,6 +16,8 @@ public class Room : MonoBehaviour
     [HideInInspector] public UnityEvent OnCompletedRoom;
     [HideInInspector] public UnityEvent OnUnlocked;
     [HideInInspector] public UnityEvent OnNewRoom;
+    [HideInInspector] public UnityEvent OnEnterRoom;
+    [HideInInspector] public UnityEvent OnExitRoom;
 
     [SerializeField] private  List<Door> _doors =new List<Door>();
     [SerializeField] private List<Room> _linkedRooms = new List<Room>();
@@ -75,6 +76,8 @@ public class Room : MonoBehaviour
             Debug.Log(name);
             CompletedLights();
         }
+        OnEnterRoom.AddListener(()=> Debug.Log("Enter room : "+ name));
+        OnExitRoom.AddListener(()=> Debug.Log("Exit room : "+ name));
     }
     private void Update()
     {
