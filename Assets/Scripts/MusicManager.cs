@@ -12,10 +12,16 @@ public class MusicManager : MonoBehaviour
 
     void Start()
     {
+        UIPauseMenu.instance.OnMusicVolumeChange.AddListener(UpdateVolume);
         _audioSource = GetComponent<AudioSource>();
         _audioSource.clip = _music;
         //GameManager.Instance.OnEachMinute.AddListener(StartMusic);
         //GameManager.Instance.OnFadeMusic.AddListener(StopMusic);
+    }
+
+    void UpdateVolume(float volume)
+    {
+        _audioSource.volume = volume;
     }
 
 //    private void StartMusic()

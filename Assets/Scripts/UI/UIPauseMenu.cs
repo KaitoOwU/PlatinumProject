@@ -5,6 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -15,8 +16,14 @@ public class UIPauseMenu : MonoBehaviour
     public static UIPauseMenu instance;
     [SerializeField] private CanvasGroup _group;
     [SerializeField] private GameObject _firstSelected, _currentSelected;
+    [SerializeField] private Slider _music, _sound;
     [SerializeField] private TextMeshProUGUI _player;
     [SerializeField] private Image _selector;
+    
+    public UnityEvent<float> OnMusicVolumeChange, OnSFXVolumeChange;
+
+    public float MusicMultiplicator => _music.value;
+    public float SFXMultiplicator => _sound.value;
 
     private void Awake()
     {
@@ -77,5 +84,15 @@ public class UIPauseMenu : MonoBehaviour
             p.PlayerController.Inputs.InputLocked = false;
         });
         _group.DOFade(0f, 1f);
+    }
+
+    public void MusicValueChange()
+    {
+        OnMusicVolumeChange?.Invoke(MusicMultiplicator);
+    }
+
+    public void SFXValueChange()
+    {
+        OnSFXVolumeChange?.Invoke(SFXMultiplicator);
     }
 }

@@ -147,7 +147,7 @@ public class UnityEventManager : MonoBehaviour
         AudioSource newAudioSource = _audioSourcesStorage.AddComponent<AudioSource>();
         newAudioSource.loop = true;
         newAudioSource.clip = audioClip.Audioclip;
-        newAudioSource.volume = audioClip.Volume;
+        newAudioSource.volume = audioClip.Volume * UIPauseMenu.instance.SFXMultiplicator;
         newAudioSource.Play();
         _soundsPlaying.Add(new SSoundRef(newAudioSource, instance, newAudioSource.clip));
     }
