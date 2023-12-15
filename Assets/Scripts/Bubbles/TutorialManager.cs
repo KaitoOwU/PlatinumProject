@@ -116,6 +116,8 @@ public class TutorialManager : MonoBehaviour
     }
     public void HideBubble(Bubble bubble, float waitTime)
     {
+        if (bubble == null)
+            return;
         StartCoroutine(_HideBubbleCoroutine(bubble, waitTime));
     }
     private IEnumerator _HideBubbleCoroutine(Bubble bubble, float waitTime)
@@ -159,11 +161,11 @@ public class TutorialManager : MonoBehaviour
                         return Vector3.zero;
                     if(otherSidePlayer.RelativePos == HubRelativePosition.LEFT_WING)
                     {
-                        SetLeftUIPosition(ref ViewportPosition, ref WorldObject_ScreenPosition, worldPos);
+                        SetRightUIPosition(ref ViewportPosition, ref WorldObject_ScreenPosition, worldPos);
                     }
                     else
                     {
-                        SetRightUIPosition(ref ViewportPosition, ref WorldObject_ScreenPosition, worldPos);
+                        SetLeftUIPosition(ref ViewportPosition, ref WorldObject_ScreenPosition, worldPos);
                     }
                 }
                 break;
