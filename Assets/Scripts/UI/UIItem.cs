@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class UIItem : Interactable
 {
     [SerializeField] private Image _image;
+    [SerializeField] private Transform _vfx;
     private ClueData _data;
     private Material _outlineMat;
     [SerializeField] private Color _outlineColor;
@@ -16,7 +17,7 @@ public class UIItem : Interactable
 
     private void Start()
     {
-        _outlineMat = GetComponent<Image>().material;
+        _outlineMat = _image.material;
         _outlineMat.SetFloat("_BaseContourSize", 0f);
         _outlineMat.SetColor("_Color", Color.white);
         _isOutlined = false;
@@ -24,15 +25,13 @@ public class UIItem : Interactable
 
     protected override void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(other);
-        if(_isOutlined == false && _currentFade == null)
+        if(!_isOutlined && _currentFade == null)
         {
             _currentFade = StartCoroutine(AddOutline(_outlineColor));   
         }
     }
     protected override void OnTriggerExit(Collider other)
     {
-        base.OnTriggerExit(other);
         if (_isOutlined == true)
         {
             if(_currentFade != null)
@@ -52,6 +51,7 @@ public class UIItem : Interactable
     {
         _data = item;
         _image.sprite = item.Sprite;
+        _vfx.localRotation = Quaternion.Euler(0, 0, Random.Range(-90f, 90f));
     }
     private IEnumerator AddOutline(Color newColor)
     {
