@@ -32,8 +32,13 @@ public class UIItem : Interactable
     }
     protected override void OnTriggerExit(Collider other)
     {
-        if (_isOutlined && _currentFade == null)
+        if (_isOutlined == true)
         {
+            if(_currentFade != null)
+            {
+                StopCoroutine(_currentFade);
+                _currentFade = null;
+            }
             _currentFade = StartCoroutine(RemoveOutline());
         }
     }

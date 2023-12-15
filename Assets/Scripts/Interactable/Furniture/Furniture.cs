@@ -141,7 +141,7 @@ public class Furniture : Interactable
             OnSearchFurniture?.Invoke();
             if (_clue != null)
             {
-                GameManager.Instance.FoundClues.Add(_clue);
+                GameManager.Instance.FoundClues.Add(_clue.Data);
                 OnClueFoundInFurniture?.Invoke();
                 UIItemFrameManager.instance.ClueAcquired(_clue.Data);
                 if (player.RelativePos == HubRelativePosition.LEFT_WING /*Retirer*/|| player.RelativePos == HubRelativePosition.HUB)
@@ -156,7 +156,10 @@ public class Furniture : Interactable
                 Debug.Log("No Clue Found!");
             }
             _searched = true;
-            transform.GetComponentInParent<Room>().CompletedRoom();
+            if (!GetComponent<Room>().CanHaveReward)
+            {
+                transform.GetComponentInParent<Room>().CompletedRoom();
+            }
         }
     }
 

@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         set => _corridorChance = value;
     }
     
-    public List<Clue> FoundClues
+    public List<ClueData> FoundClues
     {
         get => _foundClues;
         set => _foundClues = value;
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
     public List<Player> NonSelectedPlayers { get=> _nonSelectedPlayers; set=> _nonSelectedPlayers = value; }
     private List<Player> _nonSelectedPlayers = new();
 
-    private List<Clue> _foundClues = new();
+    private List<ClueData> _foundClues = new();
 
    [SerializeField] private RoomGeneration _roomGenerator;
 
@@ -350,7 +350,11 @@ public class GameManager : MonoBehaviour
             p.CurrentRoom = _hub;
             i++;
         }
-        
+        if (CurrentGamePhase == GamePhase.EARLY_GUESS)
+        {
+            Hub.RoomDoorRight.LinkedDoor.IsLocked=true;
+            Hub.RoomDoorLeft.LinkedDoor.IsLocked=true;
+        }
         StartCoroutine(_transitions.EndTransition(_transitions.RightTransition));
         yield return StartCoroutine(_transitions.EndTransition(_transitions.LeftTransition));
         
