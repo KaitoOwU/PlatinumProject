@@ -101,6 +101,7 @@ public class Door : Interactable
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
                     {
                         p.PlayerController.Inputs.InputLocked = true;
+                        p.PlayerController.Animator.SetBool("IsMoving", false);
                         p.PlayerController.Rigidbody.velocity = Vector3.zero;
                     });
                     hub.RoomDoorLeft.OpenDoor();
@@ -141,6 +142,7 @@ public class Door : Interactable
                         GameManager.Instance.LeftPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
                         {
                             p.PlayerController.Inputs.InputLocked = true;
+                            p.PlayerController.Animator.SetBool("IsMoving", false);
                             p.PlayerController.Rigidbody.velocity = Vector3.zero;
                         });
                         GameManager.Instance.SplitCameraLeftBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p=> p.gameObject).ToArray());
@@ -160,6 +162,7 @@ public class Door : Interactable
                         GameManager.Instance.RightPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
                         {
                             p.PlayerController.Inputs.InputLocked = true;
+                            p.PlayerController.Animator.SetBool("IsMoving", false);
                             p.PlayerController.Rigidbody.velocity = Vector3.zero;
                         });
                         GameManager.Instance.SplitCameraRightBehaviour.ChangeCameraState(ECameraBehaviourState.STILL, _playersInRange.Select(p=> p.gameObject).ToArray());
@@ -185,6 +188,7 @@ public class Door : Interactable
                         GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
                         {
                             p.PlayerController.Inputs.InputLocked = true;
+                            p.PlayerController.Animator.SetBool("IsMoving", false);
                             p.PlayerController.Rigidbody.velocity = Vector3.zero;
                         });
                         OpenDoor();

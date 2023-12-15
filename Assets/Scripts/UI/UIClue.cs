@@ -56,11 +56,19 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
         
         if (_position == HubRelativePosition.LEFT_WING)
         {
-            GameManager.Instance.LeftPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
+            GameManager.Instance.LeftPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
+            {
+                p.PlayerController.Inputs.InputLocked = true;
+                p.PlayerController.Animator.SetBool("IsMoving", false);
+            });
         }
         else
         {
-            GameManager.Instance.RightPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
+            GameManager.Instance.RightPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
+            {
+                p.PlayerController.Inputs.InputLocked = true;
+                p.PlayerController.Animator.SetBool("IsMoving", false);
+            });
         }
 
         _group.DOFade(1f, 1.5f);
