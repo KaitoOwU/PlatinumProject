@@ -87,6 +87,9 @@ public class Furniture : Interactable
         p.Inputs.OnPush.AddListener(OnPush);
         p.Inputs.OnPushCanceled.AddListener(OnPushCanceled);
 
+        if (_searched)
+            return;
+
         if ((_message == null || !_message.gameObject.activeSelf) && _onRangeMessage != "")
         {
             _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage, TutorialManager.E_DisplayStyle.STAY);
@@ -117,6 +120,9 @@ public class Furniture : Interactable
         p.Inputs.OnPushCanceled?.RemoveListener(OnPushCanceled);
 
         _onPlayerExitRange?.Invoke();
+
+        if (_searched)
+            return;
 
         if (_message != null && _message.gameObject.activeSelf && _onRangeMessage != "")
         {
@@ -285,7 +291,7 @@ public class Furniture : Interactable
     }
     private IEnumerator _LoopVibration()
     {
-        while(true)
+        while(!_searched)
         {
             yield return new WaitForSeconds(_timeBetweenVibration);
             _vibrateTween.Restart();
