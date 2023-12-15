@@ -5,7 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad82a591-267b-454e-8808-fec20011c7ba" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PlatinumProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PlatinumProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Shaders/M_UIOutline.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/Shaders/M_UIOutline.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefabs/UI/-- UI --.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/UI/-- UI --.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Item/ItemsUI/UIItem.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Item/ItemsUI/UIItem.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Proto1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Proto1.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Bubbles/TutorialManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Bubbles/TutorialManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Interactable/Door.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Interactable/Door.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/UIClue.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/UIClue.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/UIItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/UIItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/UIMessageGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/UIMessageGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/UIObtainedClue.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/UIObtainedClue.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/UIPauseMenu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/UIPauseMenu.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/UIPortrait.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/UIPortrait.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +30,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3b24cc7fa9794ed8ab04312c53e6dedd172c00/f0/5deb0f83/MonoBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/3b24cc7fa9794ed8ab04312c53e6dedd172c00/fc/b2e1b984/SetupCoroutine.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fe7039efe678478d9c83e73bc6a6566d94b400/29/a84b123d/SerializedObject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Clues/Clue.cs" root0="FORCE_HIGHLIGHTING" />
@@ -87,7 +102,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="$PROJECT_DIR$/../../Unity Build/PlatinumProject 0.2.8\PlatinumProject.exe" />
+      <option name="EXE_PATH" value="$PROJECT_DIR$/../../Unity Build/PlatinumProject 0.4.2\WhispersOfTheDollHouse.exe" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="C:\Users\adves\Documents\Unity\Unity Builds\PlatinumProject" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -120,10 +135,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="2544">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="2544" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -203,6 +218,7 @@
       <workItem from="1702399314368" duration="2578000" />
       <workItem from="1702480988168" duration="487000" />
       <workItem from="1702505102498" duration="2119000" />
+      <workItem from="1702648827347" duration="3938000" />
     </task>
     <servers />
   </component>
@@ -236,18 +252,38 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UI/UIItemFrame.cs</url>
-          <line>17</line>
-          <properties documentPath="D:\Unity\Unity Projects\PlatinumProject\Assets\Scripts\UI\UIItemFrame.cs" initialLine="17" containingFunctionPresentation="Method 'Add'" />
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UI/UIObtainedClue.cs</url>
           <line>31</line>
           <properties documentPath="C:\Users\adves\Documents\Unity\Unity Projects\PlatinumProject\Assets\Scripts\UI\UIObtainedClue.cs" initialLine="31" isMultiMethodBreakpoint="true">
             <option name="multiMethodBreakpoint" value="true" />
           </properties>
           <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Bubbles/TutorialManager.cs</url>
+          <line>132</line>
+          <properties documentPath="D:\Unity\Unity Projects\PlatinumProject\Assets\Scripts\Bubbles\TutorialManager.cs" initialLine="130" containingFunctionPresentation="Method '_HideAllBubbles'">
+            <startOffsets>
+              <option value="4310" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4311" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Bubbles/TutorialManager.cs</url>
+          <line>151</line>
+          <properties documentPath="D:\Unity\Unity Projects\PlatinumProject\Assets\Scripts\Bubbles\TutorialManager.cs" initialLine="151" containingFunctionPresentation="Method '_GetCanvasPos'">
+            <startOffsets>
+              <option value="4867" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4942" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

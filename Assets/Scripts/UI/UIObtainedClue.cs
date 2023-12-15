@@ -31,7 +31,11 @@ public class UIObtainedClue : MonoBehaviour, IInputAwaiterReactive
         _description.text = clue.Description;
         _sprite.sprite = clue.Sprite;
         _inputValidator.Setup(PlayerController.EButtonType.INTERACT, "A", GameManager.Instance.PlayerList.ToArray());
-        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
+        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
+        {
+            p.PlayerController.Inputs.InputLocked = true;
+            p.PlayerController.Animator.SetBool("IsMoving", false);
+        });
 
         _group.DOFade(1f, 1f);
     }
