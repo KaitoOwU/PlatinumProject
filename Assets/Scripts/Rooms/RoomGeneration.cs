@@ -25,7 +25,7 @@ public class RoomGeneration : MonoBehaviour
     private List<GameObject> _rewards= new List<GameObject>();
     [SerializeField] private GameObject arm;
     private List<GameObject> _rewardClueOnly = new List<GameObject>();
-    [SerializeField] private List<Material> _doormattMaterials = new List<Material>();
+    //[SerializeField] private List<Material> _doormattMaterials = new List<Material>();
 
     [HideInInspector] public UnityEvent OnAllClueFound;
 
@@ -407,29 +407,29 @@ public class RoomGeneration : MonoBehaviour
     }
     private void LinkRoom(Room room, Room roomToLink, Door door)
     {
-        Material doorMat = _doormattMaterials[0];
-        foreach(Material material in _doormattMaterials)
-        {
-            if (!room.UsedDoormats.Contains(material) && !roomToLink.UsedDoormats.Contains(material))
-            {
-                doorMat = material;
-                break;
-            }
-        }
+        //Material doorMat = _doormattMaterials[0];
+        //foreach(Material material in _doormattMaterials)
+        //{
+        //    if (!room.UsedDoormats.Contains(material) && !roomToLink.UsedDoormats.Contains(material))
+        //    {
+        //        doorMat = material;
+        //        break;
+        //    }
+        //}
         foreach (Door doorToLink in roomToLink.Doors)
         {
             if (doorToLink.LinkedDoor == null)
             {
-                room.UsedDoormats.Add(doorMat);
-                roomToLink.UsedDoormats.Add(doorMat);
-                door.DoormatMat = doorMat;
-                doorToLink.DoormatMat = doorMat;
+                //room.UsedDoormats.Add(doorMat);
+                //roomToLink.UsedDoormats.Add(doorMat);
+                //door.DoormatMat = doorMat;
+                //doorToLink.DoormatMat = doorMat;
                 room.LinkedRooms.Add(roomToLink);
                roomToLink.LinkedRooms.Add(room);
                 door.LinkedDoor = doorToLink;
                 doorToLink.LinkedDoor = door;
-                door.UpdateDoormat();
-                doorToLink.UpdateDoormat();
+                //door.UpdateDoormat();
+                //doorToLink.UpdateDoormat();
                 break;
             }
         }

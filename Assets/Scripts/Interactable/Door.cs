@@ -341,10 +341,10 @@ public class Door : Interactable
             UpdateRoom(_linkedDoor.room);
         }
     }
-    public void UpdateDoormat()
-    {
-        _doormat.material = _doormatMat;
-    }
+    //public void UpdateDoormat()
+    //{
+    //    _doormat.material = _doormatMat;
+    //}
     private void LockedFeedback(Player p)
     {
         _doorModel.transform.DOShakePosition(1f, new Vector3(0f, 0, 0.05f),20);
