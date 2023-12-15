@@ -140,30 +140,62 @@ public class TutorialManager : MonoBehaviour
 
     private Vector3 _GetCanvasPos(int playerIndex, Vector3 worldPos)
     {
-        Vector2 WorldObject_ScreenPosition;
-        Vector2 ViewportPosition;
-        switch (GameManager.Instance.PlayerList[playerIndex - 1].PlayerRef.RelativePos)
+        Vector2 WorldObject_ScreenPosition = new();
+        Vector2 ViewportPosition = new();
+        Player p = GameManager.Instance.PlayerList[playerIndex - 1].PlayerRef;
+        switch (p.RelativePos)
         {
             default:
             case HubRelativePosition.HUB:
-                ViewportPosition = GameManager.Instance.FullCamera.WorldToViewportPoint(worldPos);
-                WorldObject_ScreenPosition = new Vector2(
-                (ViewportPosition.x * _canvasRect.sizeDelta.x) - (_canvasRect.sizeDelta.x * 0.5f),
-                (ViewportPosition.y * _canvasRect.sizeDelta.y) - (_canvasRect.sizeDelta.y * 0.5f) + _bubbleYOffset);
+                if(GameManager.Instance.CurrentCameraState == GameManager.CameraState.FULL)
+                {
+                    SetFullUIPosition(ref ViewportPosition, ref WorldObject_ScreenPosition, worldPos);
+
+                }
+                else
+                {
+                    Player otherSidePlayer = GameManager.Instance.PlayerList.FirstOrDefault(p => p.PlayerRef.RelativePos != HubRelativePosition.HUB).PlayerRef;
+                    if (otherSidePlayer is null)
+                        return Vector3.zero;
+                    if(otherSidePlayer.RelativePos == HubRelativePosition.LEFT_WING)
+                    {
+                        SetLeftUIPosition(ref ViewportPosition, ref WorldObject_ScreenPosition, worldPos);
+                    }
+                    else
+                    {
+                        SetRightUIPosition(ref ViewportPosition, ref WorldObject_ScreenPosition, worldPos);
+                    }
+                }
                 break;
             case HubRelativePosition.LEFT_WING:
-                ViewportPosition = GameManager.Instance.CameraLeft.WorldToViewportPoint(worldPos);
-                WorldObject_ScreenPosition = new Vector2(
-                (ViewportPosition.x * _canvasRect.sizeDelta.x / 2) - (_canvasRect.sizeDelta.x / 2 * 0.5f) - _canvasRect.sizeDelta.x / 4,
-                (ViewportPosition.y * _canvasRect.sizeDelta.y) - (_canvasRect.sizeDelta.y * 0.5f) + _bubbleYOffset);
+                SetLeftUIPosition(ref ViewportPosition, ref WorldObject_ScreenPosition, worldPos);
                 break;
             case HubRelativePosition.RIGHT_WING:
-                ViewportPosition = GameManager.Instance.CameraRight.WorldToViewportPoint(worldPos);
-                WorldObject_ScreenPosition = new Vector2(
-                (ViewportPosition.x * _canvasRect.sizeDelta.x / 2) - (_canvasRect.sizeDelta.x / 2 * 0.5f) + _canvasRect.sizeDelta.x/4,
-                (ViewportPosition.y * _canvasRect.sizeDelta.y) - (_canvasRect.sizeDelta.y * 0.5f) + _bubbleYOffset);
+                SetRightUIPosition(ref ViewportPosition, ref WorldObject_ScreenPosition, worldPos);
                 break;
         }
         return WorldObject_ScreenPosition;
+    }
+
+    void SetLeftUIPosition(ref Vector2 ViewportPosition, ref Vector2 WorldObject_ScreenPosition, Vector3 worldPos)
+    {
+        ViewportPosition = GameManager.Instance.CameraLeft.WorldToViewportPoint(worldPos);
+        WorldObject_ScreenPosition = new Vector2(
+        (ViewportPosition.x * _canvasRect.sizeDelta.x / 2) - (_canvasRect.sizeDelta.x / 2 * 0.5f) - _canvasRect.sizeDelta.x / 4,
+        (ViewportPosition.y * _canvasRect.sizeDelta.y) - (_canvasRect.sizeDelta.y * 0.5f) + _bubbleYOffset);
+    }
+    void SetRightUIPosition(ref Vector2 ViewportPosition, ref Vector2 WorldObject_ScreenPosition, Vector3 worldPos)
+    {
+        ViewportPosition = GameManager.Instance.CameraRight.WorldToViewportPoint(worldPos);
+        WorldObject_ScreenPosition = new Vector2(
+        (ViewportPosition.x * _canvasRect.sizeDelta.x / 2) - (_canvasRect.sizeDelta.x / 2 * 0.5f) + _canvasRect.sizeDelta.x / 4,
+        (ViewportPosition.y * _canvasRect.sizeDelta.y) - (_canvasRect.sizeDelta.y * 0.5f) + _bubbleYOffset);
+    }
+    void SetFullUIPosition(ref Vector2 ViewportPosition, ref Vector2 WorldObject_ScreenPosition, Vector3 worldPos)
+    {
+        ViewportPosition = GameManager.Instance.FullCamera.WorldToViewportPoint(worldPos);
+        WorldObject_ScreenPosition = new Vector2(
+        (ViewportPosition.x * _canvasRect.sizeDelta.x) - (_canvasRect.sizeDelta.x * 0.5f),
+        (ViewportPosition.y * _canvasRect.sizeDelta.y) - (_canvasRect.sizeDelta.y * 0.5f) + _bubbleYOffset);
     }
 }
