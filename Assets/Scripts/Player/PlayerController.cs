@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Windows;
@@ -126,6 +127,13 @@ public class PlayerController : MonoBehaviour
         _moveState = EMoveState.NORMAL;
 
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+        if (/*GameManager.Instance.PlayerList.All(p => p.PlayerController.Inputs != null)*/ GameManager.Instance.PlayerList.FindAll(p => p.PlayerController.Inputs != null).Count == 1)
+        {
+            StartCoroutine(UIMessageGenerator.instance.Init(false,
+                new UIMessageData("",
+                    "Split into teams of 2 and 2 or 3 and 1 to go to the doors and press A together !", 0.02f)));
+        }
     }
 
     private void _CleanUp()
