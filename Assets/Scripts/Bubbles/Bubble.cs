@@ -13,6 +13,7 @@ public class Bubble : MonoBehaviour
     [SerializeField] CanvasGroup _canvasGroup;
     [SerializeField] GameObject _shortBackground;
     [SerializeField] GameObject _longBackground;
+    [SerializeField] GameObject _lockIcon;
 
     public CanvasGroup CanvasGroup { get => _canvasGroup; set => _canvasGroup = value; }
     public GameObject ShortBackground { get => _shortBackground; set => _shortBackground = value; }
@@ -29,7 +30,8 @@ public class Bubble : MonoBehaviour
     public enum EBubbleType
     {
         TEXT,
-        PLAYER
+        PLAYER,
+        LOCK
     }
     private void Start()
     {
@@ -39,9 +41,23 @@ public class Bubble : MonoBehaviour
 
     public Bubble InitText(int triggerPlayer, string text)
     {
-        _text.text = text;
         controllerIndexRef = triggerPlayer;
         _bubbleType = EBubbleType.TEXT;
+        _text.gameObject.SetActive(true);
+        _lockIcon.gameObject.SetActive(false);
+        _text.text = text;
+        
+        return this;
+    }
+    public Bubble InitLock(int triggerPlayer)
+    {
+        controllerIndexRef = triggerPlayer;
+        _bubbleType = EBubbleType.LOCK;
+        _text.gameObject.SetActive(false);
+        _lockIcon.gameObject.SetActive(true);
+        _shortBackground.SetActive(true);
+        _longBackground.SetActive(false);
+
         return this;
     }
     public Bubble InitPlayer(int targetPlayerIndex, int targetControllerIndex)

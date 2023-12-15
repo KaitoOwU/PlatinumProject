@@ -151,8 +151,8 @@ public class InputManager : MonoBehaviour
         _map.actions["Move"].started += _SwitchCharacter;
         _map.actions["Interact"].started += _PickCharacter;
         _players = _gm.PlayerList.Select(p => p.PlayerRef).ToArray();
-        _playerSelectedIndex = 0;
-        _playerSelectedBubbleManager = _gm.NonSelectedPlayers[_playerSelectedIndex].GetComponent<BubbleManager>();
+        _playerSelectedIndex = _GetFirstNonSelectedPlayer();
+        _playerSelectedBubbleManager = _players[_playerSelectedIndex].GetComponent<BubbleManager>();
         _playerSelectedBubbleManager?.AddControllerIcon(_controllerIndex);
     }
 
@@ -285,6 +285,15 @@ public class InputManager : MonoBehaviour
             _SetupEvents();
             _AddController();
         }
+    }
+    private int _GetFirstNonSelectedPlayer()
+    {
+        for (int i = 0; i < _players.Length; i++)
+        {
+            if (_gm.NonSelectedPlayers.Contains(_players[i]))
+                return i;
+        }
+        return 0;
     }
     #endregion
 }

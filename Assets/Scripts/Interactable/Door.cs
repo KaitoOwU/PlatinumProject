@@ -34,6 +34,9 @@ public class Door : Interactable
     public Room Room { get => room;}
     public Material DoormatMat { get => _doormatMat; set => _doormatMat = value; }
 
+    private Bubble _lockedIcon;
+
+
     private void Start()
     {
         _corridors= FindObjectsOfType<Corridor>().ToList();
@@ -55,21 +58,24 @@ public class Door : Interactable
 
     private IEnumerator DoorInteraction(Player player)
     {
-        if (_isLocked && _linkedDoor.room is Vestibule)
+        if(_linkedDoor._isLocked && _linkedDoor.room is Vestibule)
         {
             if (_message != null && _message.gameObject.activeSelf)
             {
                 TutorialManager.Instance.HideBubble(_message, 0);
                 _message = null;
             }
-            if ((_message == null || !_message.gameObject.activeSelf) && _onInteractMessage != "")
+            if ((_message == null || !_message.gameObject.activeSelf) && _onInteractLockedVestibuleMessage != "")
             {
-                _message = TutorialManager.Instance.ShowBubbleMessage(player.Index, transform, player.PlayerController.Inputs.ControllerIndex, _onInteractLockedVestibuleMessage, TutorialManager.E_DisplayStyle.FADE);
+                _message = TutorialManager.Instance.ShowBubbleMessage(player.Index, transform, player.PlayerController.Inputs.ControllerIndex, _onInteractLockedVestibuleMessage, TutorialManager.E_DisplayStyle.FADE, new Vector3(0,50,0));
             }
         }
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
             OnChangeRoom?.Invoke();
+            player.CurrentRoom.OnExitRoom?.Invoke();
+            _linkedDoor.room.OnEnterRoom?.Invoke();
+
             if (player.CurrentRoom is Hub) // IF PLAYERS IN HUB
             {
 //#if UNITY_EDITOR
@@ -263,7 +269,7 @@ public class Door : Interactable
         else
         {
             OnLockedDoorInterract?.Invoke();
-            StartCoroutine(LockedFeedback());
+            LockedFeedback(player);
         }
     }
 
@@ -339,11 +345,19 @@ public class Door : Interactable
     {
         _doormat.material = _doormatMat;
     }
-    private IEnumerator LockedFeedback()
+    private void LockedFeedback(Player p)
     {
         _doorModel.transform.DOShakePosition(1f, new Vector3(0f, 0, 0.05f),20);
-        yield return null;
-            
+
+        if (_lockedIcon != null && _lockedIcon.gameObject.activeSelf)
+        {
+            TutorialManager.Instance.HideBubble(_message, 0);
+            _lockedIcon = null;
+        }
+        if (_lockedIcon == null || !_lockedIcon.gameObject.activeSelf)
+        {
+            _lockedIcon = TutorialManager.Instance.ShowLockedBubble(p.Index, transform, p.PlayerController.Inputs.ControllerIndex, TutorialManager.E_DisplayStyle.FADE);
+        }     
     }
     public void OpenDoor()
     {
