@@ -350,7 +350,11 @@ public class GameManager : MonoBehaviour
             p.CurrentRoom = _hub;
             i++;
         }
-        
+        if (CurrentGamePhase == GamePhase.EARLY_GUESS)
+        {
+            Hub.RoomDoorRight.LinkedDoor.IsLocked=true;
+            Hub.RoomDoorLeft.LinkedDoor.IsLocked=true;
+        }
         StartCoroutine(_transitions.EndTransition(_transitions.RightTransition));
         yield return StartCoroutine(_transitions.EndTransition(_transitions.LeftTransition));
         
