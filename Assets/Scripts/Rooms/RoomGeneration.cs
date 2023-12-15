@@ -80,7 +80,7 @@ public class RoomGeneration : MonoBehaviour
             GameObject roomToBe = remainingRooms[positionsList.DoorNumber-1].Rooms[rand];
             remainingRooms[positionsList.DoorNumber - 1].Rooms.RemoveAt(rand);
             Room roomTo = roomToBe.GetComponent<Room>();
-            if (roomTo.Tandem != null && positionsList.DoorNumber == 2)
+            if (roomTo.Tandem != null && positionsList.DoorNumber == 3)
             {
                     _tandemToPlace.Add(roomTo.Tandem);
                     
@@ -97,7 +97,7 @@ public class RoomGeneration : MonoBehaviour
             GameObject roomObj= Instantiate(roomToBe, positionsList.Position,transform.rotation, _generationParent);
             Room room = roomObj.GetComponent<Room>(); 
             room.RoomSide = Room.Side.LEFT;
-            if (roomTo.Tandem != null && positionsList.DoorNumber  == 2)
+            if (roomTo.Tandem != null && positionsList.DoorNumber  == 3)
             {
                 _tandemRoom.Add(room);
             }
@@ -127,7 +127,7 @@ public class RoomGeneration : MonoBehaviour
             int rand = Random.Range(0, remainingRooms[positionsList.DoorNumber - 1].Rooms.Count);
             int rand2 = Random.Range(0, _layout.AisleRight[positionsList.DoorNumber - 1].Count -count);
            
-            if (positionsList.DoorNumber == 2 && _tandemToPlace.Count > 0 && (rand2 == 0 || _layout.AisleRight[positionsList.DoorNumber - 1].Count - count == _tandemToPlace.Count))
+            if (positionsList.DoorNumber == 3 && _tandemToPlace.Count > 0 && (rand2 == 0 || _layout.AisleRight[positionsList.DoorNumber - 1].Count - count == _tandemToPlace.Count))
             {
                 roomObj = Instantiate(_tandemToPlace[0].gameObject, positionsList.Position, transform.rotation, _generationParent);
                  room = roomObj.GetComponent<Room>();
