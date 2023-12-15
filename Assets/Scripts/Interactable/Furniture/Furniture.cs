@@ -278,7 +278,10 @@ public class Furniture : Interactable
     }
     private void _StopLoopedVibration()
     {
-        StopCoroutine(_loopVibrationCoroutine);
+        if( _loopVibrationCoroutine != null )
+        {
+            StopCoroutine(_loopVibrationCoroutine);
+        }
     }
     private IEnumerator _LoopVibration()
     {

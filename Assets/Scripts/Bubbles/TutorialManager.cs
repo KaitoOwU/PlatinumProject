@@ -60,13 +60,13 @@ public class TutorialManager : MonoBehaviour
         return null;
     }
 
-    public Bubble ShowBubbleMessage(int playerIndex, Transform objectPosition, int triggerController, string message, E_DisplayStyle displayStyle)
+    public Bubble ShowBubbleMessage(int playerIndex, Transform objectPosition, int triggerController, string message, E_DisplayStyle displayStyle, Vector3 offset = default)
     {
-        Bubble bubble = GetPoolBubble().InitText(triggerController, message);
+        Bubble bubble = GetPoolBubble();
         if (bubble == null)
             return null;
         bubble.InitText(triggerController, message);
-        bubble.transform.localPosition = _GetCanvasPos(playerIndex, objectPosition.position);
+        bubble.transform.localPosition = _GetCanvasPos(playerIndex, objectPosition.position) + offset;
         if(message.Count() <= 2) //if message short
         {
             bubble.ShortBackground.SetActive(true);
@@ -79,6 +79,19 @@ public class TutorialManager : MonoBehaviour
             bubble.LongBackground.SetActive(true);
             _ShowLongMessage(bubble);
         }
+        if (displayStyle == E_DisplayStyle.FADE)
+            HideBubble(bubble, 1f);
+        return bubble;
+    }
+    public Bubble ShowLockedBubble(int playerIndex, Transform objectPosition, int triggerController, E_DisplayStyle displayStyle)
+    {
+        Bubble bubble = GetPoolBubble();
+        if (bubble == null)
+            return null;
+        bubble.InitLock(triggerController);
+        bubble.transform.localPosition = _GetCanvasPos(playerIndex, objectPosition.position);
+
+        _ShowShortMessage(bubble);
         if (displayStyle == E_DisplayStyle.FADE)
             HideBubble(bubble, 1f);
         return bubble;
@@ -97,7 +110,7 @@ public class TutorialManager : MonoBehaviour
     {
         bubble.transform.localScale = new Vector3(0,0,0);
         bubble.CanvasGroup.alpha = 0;
-        bubble.gameObject.SetActive(true);
+        bubble.gameObject.SetActive(true); 
         bubble.CanvasGroup.DOFade(1, 0.1f);
         bubble.transform.DOScale(0.8f, 0.5f).SetEase(_elasticIn);
     }
@@ -108,10 +121,9 @@ public class TutorialManager : MonoBehaviour
     private IEnumerator _HideBubbleCoroutine(Bubble bubble, float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        if(bubble.Text.text.Count() <= 2)
+        if(bubble.Text.text.Count() <= 2 || bubble.BubbleType == Bubble.EBubbleType.LOCK)
             bubble.transform.DOScale(0, 0.5f).SetEase(Ease.InExpo);
-        yield return new WaitForSeconds(0.4f);
-        yield return bubble.CanvasGroup.DOFade(0, 0.1f).WaitForCompletion();
+        yield return bubble.CanvasGroup.DOFade(0, 0.5f).WaitForCompletion();
         bubble.gameObject.SetActive(false);
     }
 
