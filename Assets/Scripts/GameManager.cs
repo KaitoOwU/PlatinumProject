@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -244,9 +245,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(VestibuleMessages());
         TP_Camera(_fullCamera.gameObject, Vestibule.CameraPoint);
         StartCoroutine(StartTimer());
-        _onWin.AddListener(Win);
-        _onLose.AddListener(Lose);
-        
     }
 
     public void LoadMainMenu()
@@ -327,8 +325,6 @@ public class GameManager : MonoBehaviour
     }    
     private void OnDisable()
     {
-        _onWin.RemoveListener(Win);
-        _onLose.RemoveListener(Lose);
         OnEachEndPhase.RemoveListener(TPAllPlayersToHub);
     }
 
@@ -402,9 +398,6 @@ public class GameManager : MonoBehaviour
 
         yield return StartCoroutine(_transitions.EndTransition(imgToCancel));
     }
-
-    void Win() => Debug.LogError("<color:cyan> YOU WIN ! </color>");
-    void Lose() => Debug.LogError("<color:cyan> YOU LOSE ! </color>");
 
     #region Timer
     private IEnumerator IncrementTimer()
@@ -552,23 +545,27 @@ public class GameManager : MonoBehaviour
 
     IEnumerator VestibuleMessages()
     {
-        //UIMessageGenerator.instance.messages = StartCoroutine(UIMessageGenerator.instance.Init(true,
-        //  new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.0f, 2f),
-        //  new UIMessageData("The Manor",
-        //      "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
-        //      0.02f, 2f),
-        //  new UIMessageData("The Manor",
-        //      "You'll have to find clues about the murder that took place here and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
-        //      0.02f, 2f),
-        //  new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.02f,
-        //      2f),
-        //  new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.02f, 3f),
-        //  new UIMessageData("The Manor", "You can't be more than 3 in a wing so you'll have to split into teams.", 0.02f, 3f),
-        //  new UIMessageData("The Manor", "The upper hall in the hall is blocked until midnight.", 0.02f, 3f)
-        //));
-        yield return UIMessageGenerator.instance.messages;
-
-        yield return new WaitForSecondsRealtime(2f);
+        Coroutine message = StartCoroutine(UIMessageGenerator.instance.Init(true,
+          new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.02f, 2f),
+          new UIMessageData("The Manor",
+              "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
+              0.02f, 2f),
+          new UIMessageData("The Manor",
+              "You'll have to find clues about the murder that took place here and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
+              0.02f, 2f),
+          new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.02f,
+             2f),
+          new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.02f, 3f),
+          new UIMessageData("The Manor", "You can't be more than 3 in a wing so you'll have to split into teams.", 0.02f, 3f),
+          new UIMessageData("The Manor", "The upper hall in the hall is blocked until midnight.", 0.02f, 3f)
+        ));
+        yield return new WaitUntil(() => UIMessageGenerator.instance.Skip);
+        StopCoroutine(message);
+        if (UIMessageGenerator.instance.Group.alpha >= 0f)
+        {
+            yield return UIMessageGenerator.instance.Group.DOFade(0f, 1f).WaitForCompletion();
+        }
+        
         yield return UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition);
         TP_Camera(_fullCamera.gameObject, Hub.CameraPoint);
         yield return UIRoomTransition.current.EndTransition(UIRoomTransition.current.HubTransition);

@@ -17,7 +17,6 @@ public class UIPauseMenu : MonoBehaviour
     [SerializeField] private CanvasGroup _group;
     [SerializeField] private GameObject _firstSelected, _currentSelected;
     [SerializeField] private Slider _music, _sound;
-    [SerializeField] private TextMeshProUGUI _player;
     [SerializeField] private Image _selector;
     
     public UnityEvent<float> OnMusicVolumeChange, OnSFXVolumeChange;
@@ -35,11 +34,12 @@ public class UIPauseMenu : MonoBehaviour
 
     public void InitUI(Player player)
     {
-        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null && p.PlayerRef != player).ToList()
-            .ForEach(p => p.PlayerController.Inputs.gameObject.SetActive(false));
-        player.PlayerController.Inputs.InputLocked = true;
-
-        _player.text = "Player " + player.Index;
+        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
+        {
+            p.PlayerController.Inputs.InputLocked = true;
+            p.PlayerController.Animator.SetBool("IsMoving", false);
+        });
+        
         _group.DOFade(1f, 1.5f);
         EventSystem.current.SetSelectedGameObject(_firstSelected);
         SelectButton(_firstSelected);
@@ -78,11 +78,7 @@ public class UIPauseMenu : MonoBehaviour
     public void Close()
     {
         GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList()
-            .ForEach(p =>
-            {
-                p.PlayerController.Inputs.gameObject.SetActive(true);
-            p.PlayerController.Inputs.InputLocked = false;
-        });
+            .ForEach(p => p.PlayerController.Inputs.InputLocked = false);
         _group.DOFade(0f, 1f);
     }
 

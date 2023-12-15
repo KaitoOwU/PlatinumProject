@@ -1261,6 +1261,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 338249945}
     m_Modifications:
+    - target: {fileID: 254900960666964730, guid: 96d1a6be2b9b65e429303aecba0062e7,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 679896283007718442, guid: 96d1a6be2b9b65e429303aecba0062e7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3694,7 +3699,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _itemPos
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2065440380}
     - target: {fileID: 6546939303665376129, guid: 2806766ec833a2045ac56a2c5157895a,
         type: 3}
       propertyPath: m_Layer
@@ -3797,6 +3802,12 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 5962674641380624789, guid: 7fe78c014f023df4ab0fe1346751b6b9,
     type: 3}
   m_PrefabInstance: {fileID: 2120400642}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2065440380 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4422766054712238601, guid: 2806766ec833a2045ac56a2c5157895a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1908348851}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2111794989
 PrefabInstance:

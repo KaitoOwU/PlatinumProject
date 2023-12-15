@@ -80,7 +80,7 @@ public class RoomGeneration : MonoBehaviour
             GameObject roomToBe = remainingRooms[positionsList.DoorNumber-1].Rooms[rand];
             remainingRooms[positionsList.DoorNumber - 1].Rooms.RemoveAt(rand);
             Room roomTo = roomToBe.GetComponent<Room>();
-            if (roomTo.Tandem != null && positionsList.DoorNumber == 3)
+            if (roomTo.Tandem != null && positionsList.DoorNumber == 3&& _layout.AisleRight[2].Count>_tandemToPlace.Count)
             {
                     _tandemToPlace.Add(roomTo.Tandem);
                     
@@ -169,6 +169,16 @@ public class RoomGeneration : MonoBehaviour
         {
             _tandemRoom[j].Tandem = _tandemRoom[j + _tandemRoom.Count / 2];
             _tandemRoom[_tandemRoom.Count / 2 + j].Tandem = _tandemRoom[j];
+            PaintManager[] m= FindObjectsOfType<PaintManager>();
+            PaintSoluce[] s = FindObjectsOfType<PaintSoluce>();
+            foreach(PaintManager pM in m)
+            {
+                pM.Set();
+            }
+            foreach(PaintSoluce pS in s)
+            {
+                pS.Set();
+            }
         }
         SetRooms();
         LockedDoor();
@@ -404,6 +414,7 @@ public class RoomGeneration : MonoBehaviour
                 }
             }
         }
+        
     }
     private void LinkRoom(Room room, Room roomToLink, Door door)
     {

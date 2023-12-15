@@ -41,7 +41,11 @@ public class UIPortrait : MonoBehaviour, IInputAwaiterReactive
             _portrait.color = Color.white;
         }
 
-        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
+        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
+        {
+            p.PlayerController.Inputs.InputLocked = true;
+            p.PlayerController.Animator.SetBool("IsMoving", false);
+        });
         _validator.Setup(PlayerController.EButtonType.INTERACT, "A", GameManager.Instance.PlayerList.ToArray());
         _group.DOFade(1f, 1.5f);
     }

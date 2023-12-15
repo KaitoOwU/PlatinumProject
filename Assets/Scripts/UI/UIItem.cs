@@ -24,6 +24,7 @@ public class UIItem : Interactable
 
     protected override void OnTriggerEnter(Collider other)
     {
+        base.OnTriggerEnter(other);
         if(_isOutlined == false && _currentFade == null)
         {
             _currentFade = StartCoroutine(AddOutline(_outlineColor));   
@@ -31,6 +32,7 @@ public class UIItem : Interactable
     }
     protected override void OnTriggerExit(Collider other)
     {
+        base.OnTriggerExit(other);
         if (_isOutlined == true && _currentFade == null)
         {
             _currentFade = StartCoroutine(RemoveOutline());
