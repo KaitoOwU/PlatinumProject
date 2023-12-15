@@ -18,7 +18,6 @@ public class DimmingLight : MonoBehaviour
     {
         GameManager.Instance.OnEachEndPhase.AddListener(ResetTimer);
         _volumes = FindObjectsOfType<Volume>();
-        Debug.Log(_volumes.Length);
         _timer = 0;
     }
 

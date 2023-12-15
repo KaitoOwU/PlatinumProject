@@ -63,7 +63,6 @@ public class Room : MonoBehaviour
     private void Start()
     { 
          _hasSearchable = false;
-        Debug.Log(name + "  " + GetComponentsInChildren<Furniture>().Length);
         foreach (Furniture f in GetComponentsInChildren<Furniture>())
         {
             if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
@@ -73,11 +72,8 @@ public class Room : MonoBehaviour
         }
         if ((_canHaveReward==false&&!_hasSearchable)&&_roomSide!=Side.CORRIDOR)
         {
-            Debug.Log(name);
             CompletedLights();
         }
-        OnEnterRoom.AddListener(()=> Debug.Log("Enter room : "+ name));
-        OnExitRoom.AddListener(()=> Debug.Log("Exit room : "+ name));
     }
     private void Update()
     {
@@ -91,14 +87,12 @@ public class Room : MonoBehaviour
     {
         if (!_doors[0].IsLocked && !_canHaveReward && (RoomSide != Side.HUB && RoomSide != Side.CORRIDOR))
         {
-            Debug.Log(GameManager.Instance.ValidatedRooom);
             GameManager.Instance.ValidatedRooom++;
         }
     }
     public void CompletedRoom()
     {
         GameManager.Instance.ValidatedRooom++;
-        Debug.Log(GameManager.Instance.ValidatedRooom);
         OnCompletedRoom?.Invoke();
         CompletedLights();
         FindObjectOfType<RoomGeneration>().LockedDoor();

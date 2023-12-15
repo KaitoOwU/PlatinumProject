@@ -504,7 +504,6 @@ public class RoomGeneration : MonoBehaviour
         {
             int rand = Random.Range(0, rewardRoom.Count);
             rewardRoom[rand].Reward = reward;
-            Debug.Log(rewardRoom[rand].Reward);
             rewardRoom.RemoveAt(rand);
             if (rewardRoom.Count == 0)
                 break;
