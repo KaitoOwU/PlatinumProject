@@ -156,7 +156,10 @@ public class Furniture : Interactable
                 Debug.Log("No Clue Found!");
             }
             _searched = true;
-            transform.GetComponentInParent<Room>().CompletedRoom();
+            if (!GetComponent<Room>().CanHaveReward)
+            {
+                transform.GetComponentInParent<Room>().CompletedRoom();
+            }
         }
     }
 
