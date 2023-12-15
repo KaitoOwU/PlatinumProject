@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.Rendering.DebugUI;
 
 public class Clue : Interactable
 {
@@ -17,7 +18,8 @@ public class Clue : Interactable
     {
         base.OnInteract(player);
 
-        
+        GameManager.Instance.FoundClues.Add(_data);
+
         if (player.CurrentRoom.RoomSide == Room.Side.LEFT)
         {
             UIItemFrameManager.instance.ClueAcquired(_data);
