@@ -15,17 +15,15 @@ public class PaintManager : Puzzle
     [SerializeField] private List<NestedSpriteLIst> _imagesVar = new();
     [SerializeField]private bool _tandemDiscovered;
 
-    public bool IsComplete { get => _isComplete; }
-    public bool TandemDiscovered { get => _tandemDiscovered; }
-
-    private void Start()
+    public void Set()
     {
         _paints = GetComponentsInChildren<Paints>().ToList();
         _soluceRoom = GetComponentInParent<Room>().Tandem;
         _soluce = _soluceRoom.GetComponentInChildren<PaintSoluce>();
-
-        SetPaint();
     }
+    public bool IsComplete { get => _isComplete; }
+    public bool TandemDiscovered { get => _tandemDiscovered; }
+
     private void Update()
     {
         if (_soluceRoom.PlayerInRoom() > 0 && !_tandemDiscovered)
@@ -43,8 +41,9 @@ public class PaintManager : Puzzle
         OnPuzzleUpdate -= PuzzleUpdateCheck;
     }
 
-    private void SetPaint()
+    public void SetPaint()
     {
+        
         List<Sprite> spriteCopy = new List<Sprite>();
         foreach(Sprite sp in _imagesVar[_soluce.PaintSelected].sprites)
         {
@@ -52,7 +51,7 @@ public class PaintManager : Puzzle
         }
         for (int i = 0; i < _paints.Count; i++)
         {
-            int rand = UnityEngine.Random.Range(0, _imagesVar[_soluce.PaintSelected].sprites.Count);
+            int rand = UnityEngine.Random.Range(0,spriteCopy.Count);
             _paints[i].GetComponentInChildren<Image>().sprite = spriteCopy[rand];
             spriteCopy.RemoveAt(rand);
         }

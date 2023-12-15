@@ -15,8 +15,9 @@ public class PaintSoluce : MonoBehaviour
         _paintSelected = Random.Range(0, _paints.Count);
     }
     // Start is called before the first frame update
-    void Start()
+    public void Set()
     {
         GetComponentInChildren<Image>().sprite = _paints[_paintSelected];
+        GetComponentInParent<Room>().Tandem.GetComponentInChildren<PaintManager>().SetPaint();
     }
 }
