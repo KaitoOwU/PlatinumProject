@@ -85,10 +85,7 @@ public class InputManager : MonoBehaviour
     private int _playerSelectedIndex;
     private BubbleManager _playerSelectedBubbleManager;
     private Player[] _players;
-    [SerializeField]
-    //private static List<Player> _gm.NonSelectedPlayers;
     GameManager _gm;
-    //private Bubble _playerSelectedBubble;
 
     private void Start()
     {
@@ -98,14 +95,9 @@ public class InputManager : MonoBehaviour
         else
             InputLocked = false;
 
-        //_SetupEvents();
-        //_AddController();
-
         _controllerIndex = _map.playerIndex;
         ControllerManager.current.Connected(Gamepad.all[_controllerIndex]);
         _SetupSelectEvents();
-        //Gamepad.all[_index].SetMotorSpeeds(1f, 1f);
-        //Gamepad.all[_index + 1].SetMotorSpeeds(1f, 1f);
     }
 
     private void OnDisable() => _CleanEvents();
@@ -113,7 +105,7 @@ public class InputManager : MonoBehaviour
     private void _AddController()
     {
         //Get right character depending on controller index and launch set up (= controller corresponding character)
-        StartCoroutine(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerController.SetUp(this, _map, transform));
+        StartCoroutine(_gm.PlayerList[_playerSelectedIndex].PlayerController.SetUp(this, _map, transform));
     }
 
     #region Subscription Setup & Cleanup
@@ -199,21 +191,21 @@ public class InputManager : MonoBehaviour
     {
         if (_inputLocked)
             return;
-        OnInteract?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+        OnInteract?.Invoke(_gm.PlayerList[_playerSelectedIndex].PlayerRef);
     }
 
     private void _Push_performed(InputAction.CallbackContext obj)
     {
         if (_inputLocked)
             return;
-        OnPush?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+        OnPush?.Invoke(_gm.PlayerList[_playerSelectedIndex].PlayerRef);
     }
 
     private void _Push_canceled(InputAction.CallbackContext obj)
     {
         if (_inputLocked)
             return;
-        OnPushCanceled?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+        OnPushCanceled?.Invoke(_gm.PlayerList[_playerSelectedIndex].PlayerRef);
     }
 
     private void _Tool_performed(InputAction.CallbackContext obj)
@@ -235,14 +227,14 @@ public class InputManager : MonoBehaviour
     {
         if (_inputLocked)
             return;
-        OnAskTPHubCanceled?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+        OnAskTPHubCanceled?.Invoke(_gm.PlayerList[_playerSelectedIndex].PlayerRef);
     }
 
     private void _AskTPHub_started(InputAction.CallbackContext obj)
     {
         if (_inputLocked)
             return;
-        OnAskTPHubStarted?.Invoke(GameManager.Instance.PlayerList[_playerSelectedIndex].PlayerRef);
+        OnAskTPHubStarted?.Invoke(_gm.PlayerList[_playerSelectedIndex].PlayerRef);
         UIHubTpManager.instance.PrintUI(_players[_playerSelectedIndex], 8, "X");
     }
     
@@ -280,7 +272,7 @@ public class InputManager : MonoBehaviour
             _gm.NonSelectedPlayers.Remove(_players[_playerSelectedIndex]);
             ControllerManager.current.Link(_players[_playerSelectedIndex], Gamepad.all[_controllerIndex]);
             if(_gm.NonSelectedPlayers.Count == 0/*_gm.NonSelectedPlayers.Count == 0*/)
-                GameManager.Instance.CurrentGamePhase = GamePhase.HUB;
+                _gm.CurrentGamePhase = GamePhase.HUB;
             _CleanSelectEvents();
             _SetupEvents();
             _AddController();

@@ -8,6 +8,7 @@ using UnityEngine.Windows;
 using UnityEngine.InputSystem;
 using static PlayerController;
 using UnityEngine.Events;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
@@ -75,8 +76,8 @@ public class PlayerController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
 
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-
     }
+
     private void OnDisable() => _CleanUp();
 
     public bool IsButtonHeld(EButtonType buttonType)
@@ -103,7 +104,6 @@ public class PlayerController : MonoBehaviour
                 break;
 
         }
-        //Debug.Log("WakeUP");
         _animator.SetTrigger("WakeUp");
         yield return new WaitForSeconds(2f); // Wait for end of animation
 
@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
         _animator.SetTrigger("Fall");
         Inputs.InputLocked = true;
 
-        yield return new WaitForSeconds(5.65f);
+        yield return new WaitForSeconds(3.75f);
         Inputs.InputLocked = false;
     }
 
