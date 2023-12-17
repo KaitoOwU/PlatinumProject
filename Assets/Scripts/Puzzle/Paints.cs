@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Paints : Interactable
 {
@@ -27,9 +28,13 @@ public class Paints : Interactable
             _onPlayerEnterRange?.Invoke();
             p.Inputs.OnInteract.AddListener(OnInteract);
 
-            if ((_message == null || !_message.gameObject.activeSelf) && _onRangeMessage != "")
+            if ((_message == null || !_message.gameObject.activeSelf) && _onRangeMessage != ""&& _manager.TandemDiscovered)
             {
                 _message = TutorialManager.Instance.ShowBubbleMessage(p.PlayerIndex, transform, p.Inputs.ControllerIndex, _onRangeMessage, TutorialManager.E_DisplayStyle.STAY);
+            }
+            else if (!_manager.TandemDiscovered)
+            {
+                GetComponentInChildren<Image>().color = new Color(.5f, .5f, .5f);
             }
         }
     }
@@ -49,6 +54,7 @@ public class Paints : Interactable
         {
             TutorialManager.Instance.HideBubble(_message, 0);
         }
+        GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f);
     }
     protected override void OnInteract(Player player)
     {
