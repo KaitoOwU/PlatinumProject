@@ -6,12 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ad82a591-267b-454e-8808-fec20011c7ba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PlatinumProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PlatinumProject/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/LT Funk SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/LT Funk SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/Type Machine SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/Type Machine SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/UnfinishedScreamAlternative SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/UnfinishedScreamAlternative SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/UnfinishedScreamRegular SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/UnfinishedScreamRegular SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Item/ItemsUI/UIItem.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Item/ItemsUI/UIItem.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScenes/Loading.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScenes/Loading.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/LoadingText.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/LoadingText.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScenes/MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Proto1.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Proto1.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UI/UIItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UI/UIItem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
     </list>
@@ -130,10 +130,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="22036">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="22036" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -214,7 +214,7 @@
       <workItem from="1702480988168" duration="487000" />
       <workItem from="1702505102498" duration="2119000" />
       <workItem from="1702648827347" duration="3938000" />
-      <workItem from="1702893057786" duration="2043000" />
+      <workItem from="1702893057786" duration="3455000" />
     </task>
     <servers />
   </component>
@@ -242,12 +242,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Rooms/Corridor.cs</url>
-          <line>7</line>
-          <properties documentPath="C:\Users\adves\Documents\Unity\Unity Projects\PlatinumProject\Assets\Scripts\Rooms\Corridor.cs" initialLine="7" containingFunctionPresentation="Method 'SetCorridor'" />
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UI/UIObtainedClue.cs</url>
           <line>31</line>
           <properties documentPath="C:\Users\adves\Documents\Unity\Unity Projects\PlatinumProject\Assets\Scripts\UI\UIObtainedClue.cs" initialLine="31" isMultiMethodBreakpoint="true">
@@ -267,19 +261,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Bubbles/TutorialManager.cs</url>
-          <line>151</line>
-          <properties documentPath="D:\Unity\Unity Projects\PlatinumProject\Assets\Scripts\Bubbles\TutorialManager.cs" initialLine="151" containingFunctionPresentation="Method '_GetCanvasPos'">
-            <startOffsets>
-              <option value="4867" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4942" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

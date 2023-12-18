@@ -89,7 +89,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Hub _hub;
     [SerializeField] private UIRoomTransition _transitions;
-    [SerializeField] private TMP_Text _timerUI;
     public UIRoomTransition Transitions => _transitions;
     private Vestibule _vestibule;
 
@@ -420,7 +419,6 @@ public class GameManager : MonoBehaviour
     }
     private void _AnalyseTimer()
     {
-        _timerUI.text = _timer.ToString();
         if (_timer % 60 == 0)
         {
             OnEachMinute?.Invoke();
