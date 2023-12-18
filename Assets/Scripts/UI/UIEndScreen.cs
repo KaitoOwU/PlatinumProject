@@ -50,6 +50,7 @@ public class UIEndScreen : MonoBehaviour
 
     public void GoMainMenu()
     {
+        Destroy(GameManager.Instance.gameObject);
         SceneManager.LoadScene("MainMenu");
     }
 }
