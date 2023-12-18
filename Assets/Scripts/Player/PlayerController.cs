@@ -8,7 +8,6 @@ using UnityEngine.Windows;
 using UnityEngine.InputSystem;
 using static PlayerController;
 using UnityEngine.Events;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
@@ -128,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-        if (/*GameManager.Instance.PlayerList.All(p => p.PlayerController.Inputs != null)*/ GameManager.Instance.PlayerList.FindAll(p => p.PlayerController.Inputs != null).Count == 1)
+        if (GameManager.Instance.PlayerList.All(p => p.PlayerController.Inputs != null))
         {
             StartCoroutine(UIMessageGenerator.instance.Init(false,
                 new UIMessageData("",

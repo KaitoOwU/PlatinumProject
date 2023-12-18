@@ -77,6 +77,7 @@ public class UIClue : MonoBehaviour, IInputAwaiterReactive
     private void ClearUI()
     {
         _group.DOFade(0f, 1.5f).OnComplete(() => _inputValidator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX()));
+        GameManager.Instance.OnEachEndPhase.RemoveListener(ClearUI);
         if (_position == HubRelativePosition.LEFT_WING)
         {
             GameManager.Instance.LeftPlayers.ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
