@@ -83,9 +83,14 @@ public class RoomGeneration : MonoBehaviour
             if (roomTo.Tandem != null && positionsList.DoorNumber == 3&& _layout.AisleRight[2].Count>_tandemToPlace.Count)
             {
                 _tandemToPlace.Add(roomTo.Tandem);
-                Debug.Log(remainingRooms[2].Rooms.Count);
-                remainingRooms[2].Rooms.Remove(roomTo.Tandem.gameObject);
-                Debug.Log(remainingRooms[2].Rooms.Count);
+                List<GameObject> tandemToRemove = new();
+                foreach(GameObject r in _roomsLists.Floors[positionsList.DoorNumber - 1].Rooms)
+                {
+                    if (r.GetComponent<Room>().Tandem != null)
+                    {
+                        remainingRooms[positionsList.DoorNumber - 1].Rooms.Remove(r);
+                    }
+                }
             }
             else if (roomTo.Tandem != null)
             {
