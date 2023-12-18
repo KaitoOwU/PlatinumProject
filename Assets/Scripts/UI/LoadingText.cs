@@ -12,10 +12,11 @@ using UnityEngine.UI;
 public class LoadingText : MonoBehaviour
 {
     [SerializeField] private InputAction _action;
+    [SerializeField] private Image _img, _textZone;
     [SerializeField] private TextMeshProUGUI _text, _pressA;
     [SerializeField] private float _timeBetweenTexts, _timeCharacterPrinting;
     [SerializeField] private Slider _loadingBar;
-    [SerializeField, TextArea] private List<string> _loadingTexts = new();
+    [SerializeField] private List<TextData> _loadingTexts = new();
 
     private bool _allTextPrinted = false;
     private bool _sceneMustLoad = false;
@@ -59,23 +60,42 @@ public class LoadingText : MonoBehaviour
 
     IEnumerator PrintTexts()
     {
+        yield return _textZone.DOFade(1f, 1f).WaitForCompletion();
+        
         for (var index = 0; index < _loadingTexts.Count; index++)
         {
-            var text = _loadingTexts[index];
-            string[] splitedTexts = text.Split("<stop>");
-            foreach (string splitedText in splitedTexts)
+            TextData text = _loadingTexts[index];
+            if (text.Sprite != null)
             {
-                string printableSplitedText = splitedText.Replace("<stop>", "");
-                _text.text += printableSplitedText;
-                yield return new WaitForSecondsRealtime(_timeBetweenTexts);
+                _img.sprite = text.Sprite;
+            }
+            else
+            {
+                _img.sprite = null;
+                _img.color = new Color(0, 0, 0, 0);
             }
 
-            if (index < _loadingTexts.Count - 1)
-            {
-                yield return _text.DOColor(new(0, 0, 0, 1), _timeBetweenTexts).WaitForCompletion();
-                _text.text = "";
-                _text.color = new Color(1, 1, 1, 1);
-            }
+            _img.DOFade(1f, 1.5f);
+            _text.text = string.Empty;
+            yield return _text.DOText(text.Text, text.Text.Length * _timeCharacterPrinting).SetEase(Ease.Linear).WaitForCompletion();
+            yield return new WaitForSecondsRealtime(_timeBetweenTexts);
+            
+            _img.DOFade(0f, 1.5f).WaitForCompletion();
+            yield return _text.DOColor(new(1, 1, 1, 0), _timeBetweenTexts).WaitForCompletion();
+            _text.text = "";
+            _text.color = new Color(1, 1, 1, 1);
         }
+
+        _text.DOColor(new Color(1, 1, 1, 0), 1f);
+        yield return _textZone.DOFade(0f, 1f).WaitForCompletion();
+
+        _allTextPrinted = true;
     }
+}
+
+[Serializable]
+public struct TextData
+{
+    [TextArea] public string Text;
+    public Sprite Sprite;
 }
