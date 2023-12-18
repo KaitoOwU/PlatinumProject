@@ -151,6 +151,7 @@ public class Door : Interactable
                             UIRoomTransition.current.StartTransition(UIRoomTransition.current.LeftTransition));
                         TP_Players(LinkedDoor.TpPoint);
                         TP_Camera(LinkedDoor.room);
+                        UpdateRoom(LinkedDoor.room);
                         LinkedDoor.OpenDoor();
                         LinkedDoor.Room.EnterRoom();
                         yield return StartCoroutine(
