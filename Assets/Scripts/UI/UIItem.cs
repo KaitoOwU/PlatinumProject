@@ -25,6 +25,20 @@ public class UIItem : Interactable
 
     protected override void OnTriggerEnter(Collider other)
     {
+        if (other.GetComponent<PlayerController>() == null)
+            return;
+
+        PlayerController p = other.GetComponent<PlayerController>();
+
+        if (p.Inputs == null)
+            return;
+        
+        _playersInRange.Add(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+
+        p.Inputs.OnInteract.AddListener(OnInteract);
+        
+        _onPlayerEnterRange?.Invoke();
+        
         if(!_isOutlined && _currentFade == null)
         {
             _currentFade = StartCoroutine(AddOutline(_outlineColor));   
@@ -32,6 +46,20 @@ public class UIItem : Interactable
     }
     protected override void OnTriggerExit(Collider other)
     {
+        if (other.GetComponent<PlayerController>() == null)
+            return;
+        
+        PlayerController p = other.GetComponent<PlayerController>();
+        
+        if (p.Inputs == null)
+            return;
+        
+        _playersInRange.Remove(GameManager.Instance.PlayerList[p.PlayerIndex - 1].PlayerRef);
+        
+        p.Inputs.OnInteract?.RemoveListener(OnInteract);
+
+        _onPlayerExitRange?.Invoke();
+        
         if (_isOutlined == true)
         {
             if(_currentFade != null)
