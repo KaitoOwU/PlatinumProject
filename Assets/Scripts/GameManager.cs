@@ -286,7 +286,7 @@ public class GameManager : MonoBehaviour
                 allSearchableFurnitures.Add(f);
             }
         }
-        if (FindObjectsOfType<Furniture>().Length > 0)
+        if (allSearchableFurnitures.Count > 0)
         {
             List<Clue> furnitureClues = new();
             for (int i = 0; i < _gameData.FurnitureCluesCount; i++)
@@ -294,16 +294,9 @@ public class GameManager : MonoBehaviour
                 int randomIndex = UnityEngine.Random.Range(0, puzzleClues.Count);
                 furnitureClues.Add(puzzleClues[randomIndex]);
                 puzzleClues.RemoveAt(randomIndex);
-                if (puzzleClues.Count == 0||furnitureClues.Count== FindObjectsOfType<Furniture>().Length)
+                if (puzzleClues.Count == 0||furnitureClues.Count== allSearchableFurnitures.Count)
                 {
                     break;
-                }
-            }
-            foreach (Furniture f in FindObjectsOfType<Furniture>())
-            {
-                if (f.FurnitureType == Furniture.EFurnitureType.SEARCHABLE)
-                {
-                    allSearchableFurnitures.Add(f);
                 }
             }
             for (int i= furnitureClues.Count-1; i>=0; i--) 
