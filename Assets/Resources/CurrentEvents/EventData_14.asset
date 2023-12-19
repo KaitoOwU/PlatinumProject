@@ -313,7 +313,16 @@ MonoBehaviour:
   - scriptName: Door
     events:
     - eventName: OnChangeRoom
-      eventActions: []
+      eventActions:
+      - eventType: 2
+        debugMessage: 
+        clipAudio:
+          audioclip: {fileID: 8300000, guid: f0be1266beae88745a54ef757053d882, type: 3}
+          volume: 0.2
+        clipsAudio: []
+        intensity: 1
+        intensityRight: 1
+        duration: 1
     - eventName: OnLockedDoorInterract
       eventActions:
       - eventType: 2
@@ -492,7 +501,7 @@ MonoBehaviour:
         debugMessage: 
         clipAudio:
           audioclip: {fileID: 8300000, guid: 51e01ef5d01b4bb41a05dc93b3cb2451, type: 3}
-          volume: 0.8
+          volume: 0.4
         clipsAudio: []
         intensity: 1
         intensityRight: 1
@@ -513,7 +522,7 @@ MonoBehaviour:
         debugMessage: 
         clipAudio:
           audioclip: {fileID: 8300000, guid: a257d8f8add96544aafbc7bccdbb1b09, type: 3}
-          volume: 1
+          volume: 0.8
         clipsAudio: []
         intensity: 1
         intensityRight: 1
