@@ -32,6 +32,7 @@ public class MainMenuUIManager : MonoBehaviour
     {
         _events.gameObject.SetActive(false);
 
+        _transition.color = new Color(0, 0, 0, 0);
         _background.DOColor(Color.white, 4f);
         yield return _logo.DOColor(new(1, 1, 1, 1), 4f).WaitForCompletion();
 
