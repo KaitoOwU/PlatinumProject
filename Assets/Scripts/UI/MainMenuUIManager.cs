@@ -25,6 +25,8 @@ public class MainMenuUIManager : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         StartCoroutine(StartAnim());
     }
 
