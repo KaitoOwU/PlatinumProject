@@ -14,6 +14,8 @@ public class Bubble : MonoBehaviour
     [SerializeField] GameObject _shortBackground;
     [SerializeField] GameObject _longBackground;
     [SerializeField] GameObject _lockIcon;
+    [SerializeField] GameObject _AIcon;
+    [SerializeField] GameObject _RTIcon;
 
     public CanvasGroup CanvasGroup { get => _canvasGroup; set => _canvasGroup = value; }
     public GameObject ShortBackground { get => _shortBackground; set => _shortBackground = value; }
@@ -46,7 +48,23 @@ public class Bubble : MonoBehaviour
         _text.gameObject.SetActive(true);
         _lockIcon.gameObject.SetActive(false);
         _text.text = text;
-        
+
+        if (text == "A")
+        {
+            _AIcon.SetActive(true);
+            _RTIcon.SetActive(false);
+        }
+        else if (text == "RT")
+        {
+            _AIcon.SetActive(false);
+            _RTIcon.SetActive(true);
+        }
+        else
+        {
+            _AIcon.SetActive(false);
+            _RTIcon.SetActive(false);
+        }
+
         return this;
     }
     public Bubble InitLock(int triggerPlayer)
