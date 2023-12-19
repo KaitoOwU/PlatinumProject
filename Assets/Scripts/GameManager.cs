@@ -543,17 +543,14 @@ public class GameManager : MonoBehaviour
         Coroutine message = StartCoroutine(UIMessageGenerator.instance.Init(true,
           new UIMessageData("The Manor", "You, who dare disturb my sleep, pay the price for your imprudence!", 0.02f, 2f),
           new UIMessageData("The Manor",
-              "Explore the manor in which I've spent all my lonely life and uncover the truth behind the story I've created for you.",
+              "Explore the manor and uncover the truth behind the story I've created for you.",
               0.02f, 2f),
           new UIMessageData("The Manor",
-              "You'll have to find clues about the murder that took place here and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
+              "Find clues about the murder and give me the culprit before midnight strikes. It has to be one of the four people painted here.",
               0.02f, 2f),
-          new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever, so I'll never be alone again !", 0.02f,
-             2f),
-          new UIMessageData("The Manor", "But remember, I won't make it easy for you...", 0.02f, 3f),
-          new UIMessageData("The Manor", "You can't be more than 3 in a wing so you'll have to split into teams.", 0.02f, 3f),
-          new UIMessageData("The Manor", "The upper hall in the hall is blocked until midnight.", 0.02f, 3f)
-        ));
+          new UIMessageData("The Manor", "If you fail, you'll be stuck with me forever!", 0.02f,
+             2f)
+          ));
         yield return new WaitUntil(() => UIMessageGenerator.instance.Skip);
         StopCoroutine(message);
         if (UIMessageGenerator.instance.Group.alpha >= 0f)
