@@ -117,9 +117,9 @@ public class GuessManager : MonoBehaviour
         {
             OnVoteWrong?.Invoke();
             yield return StartCoroutine(UIMessageGenerator.instance.Init(false,
-                new UIMessageData("The Manor", "Obviously, you didn't got it right.\nI don't even know why you tried."),
+                new UIMessageData("The Manor", "Obviously, you didn't get it right.\nI don't even know why you tried."),
                 new UIMessageData("The Manor", "Don't try to escape, the door is locked..."),
-                new UIMessageData("The Manor", "It will be forever.", 0.2f, 1f)));
+                new UIMessageData("The Manor", "It will forever be ...", 0.2f, 1f)));
             GameManager.Instance.OnLose?.Invoke();
             _endScreen.Init(false);
         }

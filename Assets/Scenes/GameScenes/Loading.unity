@@ -339,17 +339,17 @@ MonoBehaviour:
   _textZone: {fileID: 310191299}
   _text: {fileID: 1030712719}
   _pressA: {fileID: 1308442225}
-  _timeBetweenTexts: 2
-  _timeCharacterPrinting: 0.04
+  _timeBetweenTexts: 2.5
+  _timeCharacterPrinting: 0.02
   _loadingBar: {fileID: 1324276918}
   _loadingTexts:
-  - Text: "October 31 1972, 11:45 pm<br>\r\nFour teenagers decide to venture into
-      the recently deceased Henry Wilson's manor.\r"
+  - Text: "October 31 1972, 11:45 pm\r\nFour teenagers decide to venture into the
+      recently deceased Henry Wilson's manor.\r"
     Sprite: {fileID: 21300000, guid: 9d0f257815a6a9148be961ee93fdc247, type: 3}
+  - Text: Upon entering the manor, they stumble upon a dark and dusty hall.
+    Sprite: {fileID: 21300000, guid: 9748b351b3b733842a74f1d1c27b0df1, type: 3}
   - Text: Inside, they discover a dim, dusty room housing an eerily pristine Doll
       House with four dolls lying on the floor.
-    Sprite: {fileID: 21300000, guid: 9748b351b3b733842a74f1d1c27b0df1, type: 3}
-  - Text: Upon entering the manor, they stumble upon a dark and dusty room.
     Sprite: {fileID: 21300000, guid: e1e6cfd8e55b46d4a8d768fb245373a7, type: 3}
   - Text: Succumbing to curiosity, they each grabbed a doll, triggering a disorienting
       whirlwind that plunged them into darkness.
@@ -709,8 +709,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -745,7 +745,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 23.508484, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
