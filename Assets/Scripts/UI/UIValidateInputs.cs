@@ -53,7 +53,7 @@ public class UIValidateInputs : MonoBehaviour
 public class InputAwaiter   
 {
     public int index;
-    public TextMeshProUGUI inputTxt;
+    public Image input;
     public Image surround;
     public Image validator;
     public Image button;
@@ -64,10 +64,16 @@ public class InputAwaiter
     public bool Activated => _activated;
     public bool IsActiveInHierarchy => surround.transform.parent.gameObject.activeInHierarchy;
 
-    public void Setup(UIValidateInputs inputAwaiter, string input, PlayerController.EButtonType buttonType, Player player)
+    public void Setup(UIValidateInputs inputAwaiter, string inputTxt, PlayerController.EButtonType buttonType, Player player)
     {
         _inputAwaiter = inputAwaiter;
-        inputTxt.text = input;
+        input.transform.localRotation = inputTxt switch
+        {
+            "B" => Quaternion.Euler(new Vector3(0, 0, 90)),
+            "X" => Quaternion.Euler(new Vector3(0, 0, 270)),
+            "Y" => Quaternion.Euler(new Vector3(0, 0, 180)),
+            _ => Quaternion.Euler(Vector3.zero)
+        };
         player.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].started += InputValidate;
         player.PlayerController.Inputs.Map.actions[PlayerController.INPUT_NAMES[buttonType]].canceled += InputCanceled;
     }
@@ -84,7 +90,7 @@ public class InputAwaiter
 
     internal void ResetVFX()
     {
-        inputTxt.color = new Color(0, 0, 0, 1);
+        input.color = new Color(0, 0, 0, 1);
         surround.color = new Color(1, 1, 1, 1);
         button.color = new Color(1, 1, 1, 1);
         validator.color = new Color(1, 1, 1, 0);
@@ -110,14 +116,14 @@ public class InputAwaiter
     {
         if (state)
         {
-            inputTxt.DOColor(new Color(0, 0, 0, 0), .25f);
+            input.DOColor(new Color(0, 0, 0, 0), .25f);
             surround.DOColor(new Color(1, 1, 1, 0), .25f);
             button.DOColor(new Color(1, 1, 1, 0), .25f);
             validator.DOColor(pColor, .25f);
         }
         else
         {
-            inputTxt.DOColor(new Color(0, 0, 0, 1), .25f);
+            input.DOColor(new Color(0, 0, 0, 1), .25f);
             surround.DOColor(new Color(1, 1, 1, 1), .25f);
             button.DOColor(new Color(1, 1, 1, 1), .25f);
             validator.DOColor(new Color(pColor.r, pColor.g, pColor.b, 0), .25f);
