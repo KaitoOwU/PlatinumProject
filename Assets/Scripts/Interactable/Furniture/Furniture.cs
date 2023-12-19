@@ -25,7 +25,7 @@ public class Furniture : Interactable
     [SerializeField] private GameObject _3Dmodel;
     [SerializeField] private int _playersNeededNumber;
     [SerializeField] private Clue _clue;
-    [SerializeField] private float _timeBetweenVibration = 2;
+    [SerializeField] private float _timeBetweenShake = 4;
     private Room _room;
 
     [SerializeField]
@@ -36,7 +36,7 @@ public class Furniture : Interactable
     [SerializeField]
     protected string _onTooHeavyMessage;
     private Coroutine _loopVibrationCoroutine;
-    Tweener _vibrateTween;
+    //Tweener _vibrateTween;
 
     #endregion
     public enum EFurnitureType
@@ -64,8 +64,7 @@ public class Furniture : Interactable
                 _onRangeMessage = "A";
                 break;
         }
-        _vibrateTween = _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
-        _SetupRoomEvents();
+        //_vibrateTween = _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
     }
 
     #region Overridden methods
@@ -137,7 +136,7 @@ public class Furniture : Interactable
 
         if (_furnitureType == EFurnitureType.SEARCHABLE && !_searched)
         {
-            _vibrateTween.Restart();
+            _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
             OnSearchFurniture?.Invoke();
             if (_clue != null)
             {
@@ -261,6 +260,9 @@ public class Furniture : Interactable
     }
     private void ForceStopPush()
     {
+        if (_playersPushing.Count == 0)
+            return;
+        OnStopPushingFurniture?.Invoke();
         transform.parent = _room.transform;
         for (var index = 0; index < _playersPushing.Count; index++)
         {
@@ -284,11 +286,15 @@ public class Furniture : Interactable
     private void _StartLoopedVibration()
     {
         _loopVibrationCoroutine = StartCoroutine(_LoopVibration());
+        Debug.Log("_StartLoopedVibration", this);
     }
     private void _StopLoopedVibration()
     {
         if( _loopVibrationCoroutine != null )
         {
+            Debug.Log("_StopLoopedVibration", this);
+
+
             StopCoroutine(_loopVibrationCoroutine);
         }
     }
@@ -296,8 +302,8 @@ public class Furniture : Interactable
     {
         while(!_searched)
         {
-            yield return new WaitForSeconds(_timeBetweenVibration);
-            _vibrateTween.Restart();
+            yield return new WaitForSeconds(_timeBetweenShake);
+            _3Dmodel.transform.DOShakePosition(1f, new Vector3(0.1f, 0, 0.1f));
         }
     }
 }

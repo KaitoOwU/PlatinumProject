@@ -73,8 +73,6 @@ public class Door : Interactable
         if (!_isLocked && !_linkedDoor.IsLocked)
         {
             OnChangeRoom?.Invoke();
-            player.CurrentRoom.OnExitRoom?.Invoke();
-            _linkedDoor.room.OnEnterRoom?.Invoke();
 
             if (player.CurrentRoom is Hub) // IF PLAYERS IN HUB
             {
@@ -96,7 +94,7 @@ public class Door : Interactable
                 if (hub.RoomDoorRight.PlayersInRange.Count >= 1 && hub.RoomDoorLeft.PlayersInRange.Count >= 1 && count == 4  && countInHub == 4 && hub.RoomDoorRight.PlayersInRange.Count + hub.RoomDoorLeft.PlayersInRange.Count == 4) 
                 {
 //#endif
-                    OnLeavingHub?.Invoke();
+                    OnLeavingHub?.Invoke();              
 
                     GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p =>
                     {
@@ -177,7 +175,7 @@ public class Door : Interactable
                         yield return StartCoroutine(
                             UIRoomTransition.current.EndTransition(UIRoomTransition.current.RightTransition));
                         GameManager.Instance.RightPlayers.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
-                    }
+                    }                
 
                     hub.RoomDoorLeft._isLocked = false;
                     hub.RoomDoorRight._isLocked = false;
@@ -306,6 +304,8 @@ public class Door : Interactable
     {
         foreach(Player p in _playersInRange)
         {
+            p.CurrentRoom.OnExitRoom?.Invoke();
+            _linkedDoor.room.OnEnterRoom?.Invoke();
             p.PlayerController.Animator.SetBool("IsMoving", false);
             if (p.CurrentRoom is Hub)
             {
