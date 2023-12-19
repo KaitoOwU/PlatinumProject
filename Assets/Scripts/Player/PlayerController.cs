@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(UIMessageGenerator.instance.Init(false,
                 new UIMessageData("",
-                    "Split into teams of 2 and 2 or 3 and 1 to go to the doors and hold A together !", 0.02f)));
+                    "Split into teams of 2 and 2 or 3 and 1 to go to the doors and hold <sButton> together !", 0.02f)));
         }
     }
 
