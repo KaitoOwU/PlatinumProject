@@ -347,6 +347,11 @@ public class GameManager : MonoBehaviour
             Hub.RoomDoorRight.LinkedDoor.IsLocked=true;
             Hub.RoomDoorLeft.LinkedDoor.IsLocked=true;
         }
+        else
+        {
+            Hub.RoomDoorRight.LinkedDoor.IsLocked = false;
+            Hub.RoomDoorLeft.LinkedDoor.IsLocked = false;
+        }
         StartCoroutine(_transitions.EndTransition(_transitions.RightTransition));
         yield return StartCoroutine(_transitions.EndTransition(_transitions.LeftTransition));
         
@@ -356,8 +361,23 @@ public class GameManager : MonoBehaviour
     
     public void TPPlayerPostTrap(Player[] players)
     {
-        StartCoroutine(CR_TPPlayerPostTrap(players));
-        foreach(Player p in players)
+        bool pInHub = false;
+        foreach(Player p in PlayerList.Select(data => data.PlayerRef))
+        {
+            if (p.RelativePos == HubRelativePosition.HUB)
+            {
+                pInHub = true;
+            }
+        }
+        if (pInHub == true)
+        {
+            StartCoroutine(CR_TPAllPlayersToHub());
+        }
+        else
+        {
+            StartCoroutine(CR_TPPlayerPostTrap(players));
+        }
+        foreach (Player p in players)
         {
             StartCoroutine(p.PlayerController.Fall());
         }
