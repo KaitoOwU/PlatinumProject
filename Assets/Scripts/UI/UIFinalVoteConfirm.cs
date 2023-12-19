@@ -31,7 +31,6 @@ public class UIFinalVoteConfirm : MonoBehaviour, IInputAwaiterReactive
     public IEnumerator AwaiterCompleted()
     {
         yield return _group.DOFade(0f, 1.5f);
-        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = true);
         IsValid = true;
     }
 }

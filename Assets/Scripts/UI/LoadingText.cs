@@ -12,7 +12,7 @@ using UnityEngine.UI;
 public class LoadingText : MonoBehaviour
 {
     [SerializeField] private InputAction _action;
-    [SerializeField] private Image _img;
+    [SerializeField] private Image _img, _transition;
     [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private CanvasGroup _pressA, _textZone;
     [SerializeField] private float _timeBetweenTexts, _timeCharacterPrinting;
@@ -58,11 +58,13 @@ public class LoadingText : MonoBehaviour
 
         yield return new WaitUntil(() => _sceneMustLoad);
         
+        yield return _transition.DOFade(1f, 0.5f).WaitForCompletion();
         operation.allowSceneActivation = true;
     }
 
     IEnumerator PrintTexts()
     {
+        yield return _transition.DOFade(0f, 0.5f).WaitForCompletion();
         yield return _textZone.DOFade(1f, 1f).WaitForCompletion();
         
         for (var index = 0; index < _loadingTexts.Count; index++)

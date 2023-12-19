@@ -60,6 +60,11 @@ public class UIMessageGenerator : MonoBehaviour
 
     public IEnumerator Init(bool skippable, params UIMessageData[] messages)
     {
+        if (_group.alpha > 0f)
+        {
+            yield return _group.DOFade(0f, 1f).WaitForCompletion();
+        }
+        
         Skip = false;
         _state.fillAmount = 0f;
         _skipGroup.alpha = 0f;

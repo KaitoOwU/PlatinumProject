@@ -72,6 +72,11 @@ public class DebugMenu : MonoBehaviour
         _multiplayerRestrictionsText.text = data.multiplayerRestrictions.ToString();
     }
 
+    public void UnlockInputs()
+    {
+        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
+    }
+
     private void DebugMenuNavigate(InputAction.CallbackContext obj)
     {
         bool goingRight = obj.ReadValue<float>() > 0f;

@@ -49,16 +49,17 @@ public class UIPortrait : MonoBehaviour, IInputAwaiterReactive
             p.PlayerController.Inputs.InputLocked = true;
             p.PlayerController.Animator.SetBool("IsMoving", false);
         });
+
         _validator.Setup(PlayerController.EButtonType.INTERACT, "A", GameManager.Instance.PlayerList.ToArray());
-        _group.DOFade(1f, 1.5f);
+        _group.DOFade(1f, 1f);
     }
     
     public IEnumerator AwaiterCompleted()
     {
         _validator.Unsetup(PlayerController.EButtonType.INTERACT);
-        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
         yield return new WaitForSecondsRealtime(1f);
-        yield return _group.DOFade(0f, 1.5f).WaitForCompletion();
+        yield return _group.DOFade(0f, .25f).WaitForCompletion();
         _validator.InputAwaiters.ToList().ForEach(awaiter => awaiter.ResetVFX());
+        GameManager.Instance.PlayerList.Where(p => p.PlayerController.Inputs != null).ToList().ForEach(p => p.PlayerController.Inputs.InputLocked = false);
     }
 }

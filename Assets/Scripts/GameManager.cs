@@ -130,7 +130,8 @@ public class GameManager : MonoBehaviour
 
     private List<ClueData> _foundClues = new();
 
-   [SerializeField] private RoomGeneration _roomGenerator;
+    [SerializeField] private RoomGeneration _roomGenerator;
+    [SerializeField] private Image _transition;
 
     [SerializeField] private UnityEvent<Door> _onBackToHubRefused;
     public UnityEvent<Door> OnBackToHubRefused => _onBackToHubRefused;
@@ -244,6 +245,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(VestibuleMessages());
         TP_Camera(_fullCamera.gameObject, Vestibule.CameraPoint);
         StartCoroutine(StartTimer());
+        _transition.DOFade(0f, .5f);
     }
 
     public void LoadMainMenu()

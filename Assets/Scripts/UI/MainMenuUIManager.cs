@@ -13,7 +13,7 @@ public class MainMenuUIManager : MonoBehaviour
 {
     private MainMenuButton[] _buttons;
     [SerializeField] private Button _buttonCredit;
-    [SerializeField] private Image _background, _transition, _selection, _logo;
+    [SerializeField] private Image _background, _transition, _selection, _logo, _studioLogo;
     [SerializeField] private RectTransform _firstSelected;
     [SerializeField] private EventSystem _events;
     [SerializeField] private CanvasGroup _mainMenu, _credits;
@@ -33,6 +33,11 @@ public class MainMenuUIManager : MonoBehaviour
     IEnumerator StartAnim()
     {
         _events.gameObject.SetActive(false);
+
+        _studioLogo.transform.DOScale(1.15f, 4f);
+        yield return _studioLogo.DOFade(1f, 0.5f).WaitForCompletion();
+        yield return new WaitForSecondsRealtime(3f);
+        yield return _studioLogo.DOFade(0f, 0.5f).WaitForCompletion();
 
         _transition.color = new Color(0, 0, 0, 0);
         _background.DOColor(Color.white, 4f);
