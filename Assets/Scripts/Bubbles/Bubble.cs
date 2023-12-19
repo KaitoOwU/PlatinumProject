@@ -45,7 +45,6 @@ public class Bubble : MonoBehaviour
     {
         controllerIndexRef = triggerPlayer;
         _bubbleType = EBubbleType.TEXT;
-        _text.gameObject.SetActive(true);
         _lockIcon.gameObject.SetActive(false);
         _text.text = text;
 
@@ -53,15 +52,18 @@ public class Bubble : MonoBehaviour
         {
             _AIcon.SetActive(true);
             _RTIcon.SetActive(false);
+            _text.gameObject.SetActive(false);
         }
         else if (text == "RT")
         {
             _AIcon.SetActive(false);
             _RTIcon.SetActive(true);
+            _text.gameObject.SetActive(false);
         }
         else
         {
             _AIcon.SetActive(false);
+            _text.gameObject.SetActive(true);
             _RTIcon.SetActive(false);
         }
 
@@ -71,7 +73,11 @@ public class Bubble : MonoBehaviour
     {
         controllerIndexRef = triggerPlayer;
         _bubbleType = EBubbleType.LOCK;
+
         _text.gameObject.SetActive(false);
+        _AIcon.SetActive(false);
+        _RTIcon.SetActive(false);
+
         _lockIcon.gameObject.SetActive(true);
         _shortBackground.SetActive(true);
         _longBackground.SetActive(false);

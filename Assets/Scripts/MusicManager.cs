@@ -26,15 +26,15 @@ public class MusicManager : MonoBehaviour
         _audioSourceMusic.volume = volume;
     }
 
-    private void AnalyseMinute()
+    public void AnalyseMinute()
     {
         int count = GameManager.Instance.GameData.TimerValues.FirstPhaseTime
         + GameManager.Instance.GameData.TimerValues.SecondPhaseTime
         + GameManager.Instance.GameData.TimerValues.ThirdPhaseTime;
 
         if (GameManager.Instance.Timer == 60
-            || GameManager.Instance.Timer == GameManager.Instance.GameData.TimerValues.FirstPhaseTime + 60
-            || GameManager.Instance.Timer == GameManager.Instance.GameData.TimerValues.FirstPhaseTime + GameManager.Instance.GameData.TimerValues.SecondPhaseTime + 60
+            || GameManager.Instance.Timer == GameManager.Instance.GameData.TimerValues.ThirdPhaseTime + 60
+            || GameManager.Instance.Timer == GameManager.Instance.GameData.TimerValues.ThirdPhaseTime + GameManager.Instance.GameData.TimerValues.SecondPhaseTime + 60
             )
         {
             StartMusic();
