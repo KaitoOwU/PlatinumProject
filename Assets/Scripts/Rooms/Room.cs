@@ -74,6 +74,8 @@ public class Room : MonoBehaviour
         {
             CompletedLights();
         }
+        OnEnterRoom.AddListener(DebugFunc);
+        OnExitRoom.AddListener(DebugFunc);
     }
     private void Update()
     {
@@ -90,6 +92,7 @@ public class Room : MonoBehaviour
             GameManager.Instance.ValidatedRooom++;
         }
     }
+    void DebugFunc() => Debug.LogError("Room " + gameObject.name);
     public void CompletedRoom()
     {
         GameManager.Instance.ValidatedRooom++;

@@ -19,7 +19,7 @@ public class UIItem : Interactable
     {
         _outlineMat = _image.material;
         _outlineMat.SetFloat("_BaseContourSize", 0f);
-        _outlineMat.SetColor("_Color", Color.white);
+        _outlineMat.SetColor("_Color", Color.black);
         _isOutlined = false;
     }
 
@@ -92,7 +92,7 @@ public class UIItem : Interactable
     private IEnumerator RemoveOutline()
     {
         DOTween.To(x => _outlineMat.SetFloat("_BaseContourSize", x), 0.01f, 0f, _outlineFadeDuration);
-        yield return _outlineMat.DOColor(Color.white, "_Color", _outlineFadeDuration).WaitForCompletion();
+        yield return _outlineMat.DOColor(Color.black, "_Color", _outlineFadeDuration).WaitForCompletion();
         _isOutlined = false;
         _currentFade = null;
         yield return null;
