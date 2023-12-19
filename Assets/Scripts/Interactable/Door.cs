@@ -218,6 +218,7 @@ public class Door : Interactable
                 if (_linkedDoor.room is Hub)
                 {
                     GameManager.Instance.OnBackToHubRefused?.Invoke(this);
+                    LockedFeedback(player);
                     yield break;
                 }
                 if (room.RoomSide == Room.Side.RIGHT)
