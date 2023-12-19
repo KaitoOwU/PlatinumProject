@@ -9,17 +9,24 @@ public class UIItem : Interactable
     [SerializeField] private Image _image;
     [SerializeField] private Transform _vfx;
     private ClueData _data;
-    private Material _outlineMat;
+    //private Material _outlineMat;
     [SerializeField] private Color _outlineColor;
     [SerializeField] private float _outlineFadeDuration = 0.1f;
     private bool _isOutlined;
     private Coroutine _currentFade;
 
-    private void Start()
+    [SerializeField]
+    Material _material;
+    Material _materialInstance;
+
+    void Start()
     {
-        _outlineMat = _image.material;
-        _outlineMat.SetFloat("_BaseContourSize", 0f);
-        _outlineMat.SetColor("_Color", Color.black);
+        _materialInstance = new Material(_material);
+
+        _materialInstance.SetFloat("_BaseContourSize", 0f);
+        _materialInstance.SetColor("_Color", Color.black);
+        _image.material = _materialInstance;
+
         _isOutlined = false;
     }
 
@@ -83,16 +90,16 @@ public class UIItem : Interactable
     }
     private IEnumerator AddOutline(Color newColor)
     {
-        DOTween.To(x => _outlineMat.SetFloat("_BaseContourSize",x), 0f, 0.01f, _outlineFadeDuration);
-        yield return _outlineMat.DOColor(newColor, "_Color", _outlineFadeDuration).WaitForCompletion();
+        DOTween.To(x => _materialInstance.SetFloat("_BaseContourSize",x), 0f, 0.01f, _outlineFadeDuration);
+        yield return _materialInstance.DOColor(newColor, "_Color", _outlineFadeDuration).WaitForCompletion();
         _isOutlined = true;
         _currentFade = null;
         yield return null;
     }
     private IEnumerator RemoveOutline()
     {
-        DOTween.To(x => _outlineMat.SetFloat("_BaseContourSize", x), 0.01f, 0f, _outlineFadeDuration);
-        yield return _outlineMat.DOColor(Color.black, "_Color", _outlineFadeDuration).WaitForCompletion();
+        DOTween.To(x => _materialInstance.SetFloat("_BaseContourSize", x), 0.01f, 0f, _outlineFadeDuration);
+        yield return _materialInstance.DOColor(Color.black, "_Color", _outlineFadeDuration).WaitForCompletion();
         _isOutlined = false;
         _currentFade = null;
         yield return null;
