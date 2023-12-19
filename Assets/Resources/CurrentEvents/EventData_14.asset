@@ -181,9 +181,9 @@ MonoBehaviour:
           audioclip: {fileID: 0}
           volume: 1
         clipsAudio: []
-        intensity: 0.7
+        intensity: 0.8
         intensityRight: 1
-        duration: 0.2
+        duration: 0.4
     - eventName: OnChangeToSplitScreen
       eventActions:
       - eventType: 2
@@ -313,16 +313,7 @@ MonoBehaviour:
   - scriptName: Door
     events:
     - eventName: OnChangeRoom
-      eventActions:
-      - eventType: 2
-        debugMessage: 
-        clipAudio:
-          audioclip: {fileID: 8300000, guid: f0be1266beae88745a54ef757053d882, type: 3}
-          volume: 0.4
-        clipsAudio: []
-        intensity: 1
-        intensityRight: 1
-        duration: 1
+      eventActions: []
     - eventName: OnLockedDoorInterract
       eventActions:
       - eventType: 2
