@@ -27,6 +27,9 @@ public class UIObtainedClue : MonoBehaviour, IInputAwaiterReactive
 
     public void Init(ClueData clue)
     {
+        if (GameManager.Instance.PlayerList.Any(p => p.PlayerRef.RelativePos != HubRelativePosition.HUB))
+            return;
+        
         _textOnSprite.text = clue.Content;
         _description.text = clue.Description;
         _sprite.sprite = clue.Sprite;

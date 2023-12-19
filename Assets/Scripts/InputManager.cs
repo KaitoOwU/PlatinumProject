@@ -270,7 +270,6 @@ public class InputManager : MonoBehaviour
         if (_gm.NonSelectedPlayers.Contains(_players[_playerSelectedIndex]))
         {
             _gm.NonSelectedPlayers.Remove(_players[_playerSelectedIndex]);
-            ControllerManager.current.Link(_players[_playerSelectedIndex], Gamepad.all[_controllerIndex]);
             if(_gm.NonSelectedPlayers.Count == 0/*_gm.NonSelectedPlayers.Count == 0*/)
                 _gm.CurrentGamePhase = GamePhase.HUB;
             _CleanSelectEvents();

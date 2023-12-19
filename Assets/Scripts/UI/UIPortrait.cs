@@ -26,6 +26,9 @@ public class UIPortrait : MonoBehaviour, IInputAwaiterReactive
 
     public void Init(SuspectData suspect)
     {
+        if (GameManager.Instance.PlayerList.Any(p => p.PlayerRef.RelativePos != HubRelativePosition.HUB))
+            return;
+        
         _portrait.sprite = suspect.Image;
         _name.text = suspect.Name;
         _description.text = suspect.Description;

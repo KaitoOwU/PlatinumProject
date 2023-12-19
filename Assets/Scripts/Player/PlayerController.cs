@@ -111,6 +111,7 @@ public class PlayerController : MonoBehaviour
         _inputs = inputs;
         playerController.SetParent(transform);
 
+        ControllerManager.current.Link(GameManager.Instance.PlayerList[_playerIndex-1].PlayerRef, Gamepad.all[Inputs.ControllerIndex]);
 
         GetComponent<Player>().Index = _playerIndex;
 

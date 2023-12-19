@@ -44,8 +44,8 @@ public class UIEndScreen : MonoBehaviour
         yield return new WaitForSecondsRealtime(.5f);
         yield return _culpritG.DOFade(1f, 1f).WaitForCompletion();
 
-        yield return _backG.DOFade(1f, 1f).WaitForCompletion();
         EventSystem.current.SetSelectedGameObject(_button.gameObject);
+        yield return _backG.DOFade(1f, 1f).WaitForCompletion();
     }
 
     public void GoMainMenu()
