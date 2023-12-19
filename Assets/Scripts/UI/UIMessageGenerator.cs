@@ -82,6 +82,7 @@ public class UIMessageGenerator : MonoBehaviour
         yield return _group.DOFade(1f, 1f).WaitForCompletion();
         foreach (UIMessageData message in messages)
         {
+            string messageFix = message.text.Replace("<sButton>", "");
             _narrator.text = message.narrator;
             _message.text = string.Empty;
             _message.color = Color.white;

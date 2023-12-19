@@ -12,8 +12,9 @@ using UnityEngine.UI;
 public class LoadingText : MonoBehaviour
 {
     [SerializeField] private InputAction _action;
-    [SerializeField] private Image _img, _textZone;
-    [SerializeField] private TextMeshProUGUI _text, _pressA;
+    [SerializeField] private Image _img;
+    [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private CanvasGroup _pressA, _textZone;
     [SerializeField] private float _timeBetweenTexts, _timeCharacterPrinting;
     [SerializeField] private Slider _loadingBar;
     [SerializeField] private List<TextData> _loadingTexts = new();
@@ -44,14 +45,16 @@ public class LoadingText : MonoBehaviour
         }
         
         yield return _loadingBar.DOValue(1f, 0.5f).WaitForCompletion();
-        _pressA.DOColor(new Color(1, 1, 1, 1), 0.5f);
+        _pressA.DOFade(1f, 0.5f);
+        _textZone.DOFade(1f, 0.5f);
 
         yield return new WaitUntil(() => _allTextPrinted || _action.ReadValue<float>() > 0);
         
-        _text.DOColor(new Color(0, 0, 0, 1), 1f);
-        _loadingBar.fillRect.GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 1f);
+        _text.DOFade(0f, 1f);
+        _loadingBar.fillRect.GetComponent<Image>().DOFade(0f, 1f);
+        _textZone.DOFade(0f, 1f);
         _pressA.DOKill();
-        _pressA.DOColor(new Color(0, 0, 0, 1), 1f).OnComplete(() => _sceneMustLoad = true);
+        _pressA.DOFade(0f, 1f).OnComplete(() => _sceneMustLoad = true);
 
         yield return new WaitUntil(() => _sceneMustLoad);
         
@@ -75,13 +78,13 @@ public class LoadingText : MonoBehaviour
                 _img.color = new Color(0, 0, 0, 0);
             }
 
-            _img.DOFade(1f, 1.5f);
+            _img.DOFade(1f, 2f);
             _text.text = string.Empty;
             yield return _text.DOText(text.Text, text.Text.Length * _timeCharacterPrinting).SetEase(Ease.Linear).WaitForCompletion();
             yield return new WaitForSecondsRealtime(_timeBetweenTexts);
             
-            _img.DOFade(0f, 1.5f).WaitForCompletion();
-            yield return _text.DOColor(new(1, 1, 1, 0), _timeBetweenTexts).WaitForCompletion();
+            _text.DOColor(new(1, 1, 1, 0), 1f).WaitForCompletion();
+            yield return _img.DOFade(0f, 2f).WaitForCompletion();
             _text.text = "";
             _text.color = new Color(1, 1, 1, 1);
         }
