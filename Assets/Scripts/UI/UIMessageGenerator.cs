@@ -82,12 +82,15 @@ public class UIMessageGenerator : MonoBehaviour
         yield return _group.DOFade(1f, 1f).WaitForCompletion();
         foreach (UIMessageData message in messages)
         {
-            string messageFix = message.text.Replace("<sButton>", "");
+            string messageFix = message.text.Replace("<sButton>", "<font=\"promptfont 1 SDF\">\u21a7</font>")
+                .Replace("<nButton>", "<font=\"promptfont 1 SDF\">\u21a5</font>")
+                .Replace("<wButton>", "<font=\"promptfont 1 SDF\">\u21a4</font>")
+                .Replace("<eButton>", "<font=\"promptfont 1 SDF\">\u21a6</font>");
             _narrator.text = message.narrator;
             _message.text = string.Empty;
             _message.color = Color.white;
 
-            yield return _message.DOText(message.text, message.printDurationPerLetter * message.text.Length)
+            yield return _message.DOText(messageFix, message.printDurationPerLetter * message.text.Length)
                 .SetEase(Ease.Linear).WaitForCompletion();
             yield return new WaitForSecondsRealtime(message.stayDuration);
             yield return _message.DOColor(new Color(1, 1, 1, 0), 1f).WaitForCompletion();

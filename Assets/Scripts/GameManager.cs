@@ -569,7 +569,7 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(UIMessageGenerator.instance.Init(false,
-            new UIMessageData("", "Press any key and use your Left Joystick to select your puppet.<br>Press A to awake it.", 0.01f, 10f)));
+            new UIMessageData("", "Press any key and use your Left Joystick to select your puppet.<br>Press <sButton> to awake it.", 0.01f, 10f)));
     } 
 }
 
