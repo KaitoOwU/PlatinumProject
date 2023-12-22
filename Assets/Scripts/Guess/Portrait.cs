@@ -26,7 +26,6 @@ public class Portrait : Interactable
     {
         _blood.gameObject.SetActive(true);
         _imageComponent.color = Color.gray;
-        GetComponent<Collider>().enabled = false;
     }
 
     public void UpdateVote(int playerIndex, bool isVoted) => _votesIndicators[playerIndex].SetActive(isVoted);

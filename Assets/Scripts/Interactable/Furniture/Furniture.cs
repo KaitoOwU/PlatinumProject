@@ -271,7 +271,7 @@ public class Furniture : Interactable
                 Player p = _playersPushing[index];
                 OnPushCanceled(p);
             }
-            catch (IndexOutOfRangeException ex)
+            catch (IndexOutOfRangeException)
             {
                 continue;
             }

@@ -51,6 +51,21 @@ public class ScenarioEditorWindow : EditorWindow
             }
 
             GUI.backgroundColor = Color.white;
+        } else if (_murderScenarios.Count < 16)
+        {
+            GUILayout.Space(20);
+            GUI.color = new Color(1f, .3f, .3f);
+            GUILayout.Label("Scénario(s) manquant(s) detecté(s)", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 25});
+            GUI.color = Color.white;
+            
+            GUILayout.Space(10);
+            GUI.backgroundColor = Color.magenta;
+            if (GUILayout.Button("Regenérer", new GUIStyle(GUI.skin.button) {margin = new RectOffset(100, 100, 0, 0), padding = new RectOffset(0, 0, 10, 10), alignment = TextAnchor.MiddleCenter, fontSize = 20, fontStyle = FontStyle.Bold}))
+            {
+                GenerateScenarios();
+            }
+
+            GUI.backgroundColor = Color.white;
         }
         else
         {
@@ -64,8 +79,8 @@ public class ScenarioEditorWindow : EditorWindow
             }
             EditorGUILayout.EndHorizontal();
 
-            MurderScenario scenario = _murderScenarios.FindAll(scenario => scenario.DuoSuspect.Murderer == _murderer)
-                .Find(scenario => scenario.DuoSuspect.Victim == _victim);
+            MurderScenario scenario = _murderScenarios.
+                Find(scenario => scenario.DuoSuspect.Murderer == _murderer && scenario.DuoSuspect.Victim == _victim);
             if (_victim == null || _murderer == null || scenario == null)
             {
                 EditorGUILayout.HelpBox("Aucun scénario ne correspond à ces paramètres", MessageType.Warning, true);
@@ -118,26 +133,25 @@ public class ScenarioEditorWindow : EditorWindow
 
     private void GenerateScenarios()
     {
+        _murderScenarios.ForEach(ms => AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(ms)));
+        
         List<SuspectData> _suspects = ItemManagerEditor.FindAllScriptableObjectsOfType<SuspectData>("t:SuspectData", "Assets/Datas/Suspects").ToList();
         int i = 0;
         
         EditorUtility.DisplayProgressBar("Création des Intéractions", "Démarrage", 0f);
-        int total = _suspects.Count * (_suspects.Count - 1);
+        int total = (int)Math.Pow(_suspects.Count, 2);
         
         foreach (SuspectData murderer in _suspects)
         {
             foreach (SuspectData victim in _suspects)
             {
-                if (murderer != victim)
-                {
-                    EditorUtility.DisplayProgressBar("Création des Interactions", "Création de \"Interaction " + i + "\"", ((float)i+1f)/(float)total);
+                EditorUtility.DisplayProgressBar("Création des Interactions", "Création de \"Interaction " + i + "\"", ((float)i+1f)/(float)total);
                     
-                    MurderScenario scenario = CreateInstance<MurderScenario>();
-                    scenario.SaveData(new MurderScenario.SuspectDuo(victim, murderer));
-                    AssetDatabase.CreateAsset(scenario, "Assets/Resources/Clues/Interactions/Interaction" + i + ".asset");
-                    AssetDatabase.SaveAssets();
-                    i++;
-                }
+                MurderScenario scenario = CreateInstance<MurderScenario>();
+                scenario.SaveData(new MurderScenario.SuspectDuo(victim, murderer));
+                AssetDatabase.CreateAsset(scenario, "Assets/Resources/Clues/Interactions/Interaction" + i + ".asset");
+                AssetDatabase.SaveAssets();
+                i++;
             }
         }
         EditorUtility.ClearProgressBar();

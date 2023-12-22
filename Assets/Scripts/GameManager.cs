@@ -257,10 +257,10 @@ public class GameManager : MonoBehaviour
     {
         CurrentGamePhase = GamePhase.INTRO;
 
-        //_murderer = GameData.SuspectsDatas[UnityEngine.Random.Range(1, GameData.SuspectsDatas.Length)];
-        //_victim = GameData.SuspectsDatas[0]; //temporary
-        _murderer = GameData.SuspectsDatas[0];
-        _victim = GameData.SuspectsDatas[2]; //temporary
+        var availableScenarios = MurderScenarios.ToList().FindAll(ms => ms.Clues.Count == 10);
+        var scenario = availableScenarios[UnityEngine.Random.Range(0, availableScenarios.Count)];
+        _murderer = scenario.DuoSuspect.Murderer;
+        _victim = scenario.DuoSuspect.Victim;
         //init game accordingly;
         
         CurrentClues = MurderScenarios.ToList()
