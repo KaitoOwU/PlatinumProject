@@ -195,7 +195,20 @@ public class Door : Interactable
 
                         yield return StartCoroutine(
                         UIRoomTransition.current.StartTransition(UIRoomTransition.current.HubTransition));
-                    
+                        if (_linkedDoor.Room.RoomSide == Room.Side.LEFT)
+                        {
+                            GameManager.Instance.PlayerList.Where(p => p.PlayerRef.RelativePos == HubRelativePosition.HUB).ToList().ForEach(p =>
+                            {
+                                p.PlayerRef.RelativePos = HubRelativePosition.LEFT_WING;
+                            });
+                        }
+                        else if (_linkedDoor.Room.RoomSide == Room.Side.RIGHT)
+                        {
+                            GameManager.Instance.PlayerList.Where(p => p.PlayerRef.RelativePos == HubRelativePosition.HUB).ToList().ForEach(p =>
+                            {
+                                p.PlayerRef.RelativePos = HubRelativePosition.RIGHT_WING;
+                            });
+                        }
                         TP_Players(LinkedDoor.TpPoint);
                         TP_Camera(LinkedDoor.room);
 
