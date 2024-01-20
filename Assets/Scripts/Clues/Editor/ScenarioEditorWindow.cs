@@ -93,12 +93,12 @@ public class ScenarioEditorWindow : EditorWindow
                 EditorGUILayout.BeginHorizontal();
                 {
                     GUI.backgroundColor = Color.green;
-                    if (scenario.Clues.Count > 0 && GUILayout.Button("+", new GUIStyle(GUI.skin.button){fixedHeight = 20, fixedWidth = 20, fontSize = 20, alignment = TextAnchor.MiddleCenter}))
+                    if (GUILayout.Button("+", new GUIStyle(GUI.skin.button){fixedHeight = 20, fixedWidth = 20, fontSize = 20, alignment = TextAnchor.MiddleCenter}))
                     {
                         scenario.Clues.Add(null);
                     }
                     GUI.backgroundColor = Color.red;
-                    if (GUILayout.Button("-", new GUIStyle(GUI.skin.button){fixedHeight = 20, fixedWidth = 20, fontSize = 20, alignment = TextAnchor.MiddleCenter}))
+                    if (scenario.Clues.Count > 0 && GUILayout.Button("-", new GUIStyle(GUI.skin.button){fixedHeight = 20, fixedWidth = 20, fontSize = 20, alignment = TextAnchor.MiddleCenter}))
                     {
                         scenario.Clues.Remove(scenario.Clues[^1]);
                     }
