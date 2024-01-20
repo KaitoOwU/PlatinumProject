@@ -46,5 +46,6 @@ public class MurderScenario : ScriptableObject
     public void SaveData(SuspectDuo duo)
     {
         _suspectDuo = duo;
+        _clues = new();
     }
 }
